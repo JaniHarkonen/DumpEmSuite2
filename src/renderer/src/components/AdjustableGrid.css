@@ -1,0 +1,12 @@
+.adjustable-grid {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.adjustable-grid-vertical-item {
+  min-width: 0px;
+  flex-grow: 1;
+  flex-shrink: 100;
+  min-width: 0px;
+}
