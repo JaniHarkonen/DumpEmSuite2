@@ -1,0 +1,9 @@
+.tabbed-view-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.tabbed-view-tab-container {
+  display: flex;
+}

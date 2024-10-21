@@ -1,6 +1,6 @@
 import "./AdjustableGrid.css";
 
-type AdjustableGridDirection = {
+export type AdjustableGridDirection = {
   flexDirection: "row" | "column";
   resize: "horizontal" | "vertical";
 };
@@ -33,8 +33,8 @@ export default function AdjustableGrid(props: AdjustableGridProps) {
       className="adjustable-grid" 
       style={{ flexDirection: pDirection.flexDirection }}
     >
-      <div className="adjustable-div debug-bg-green" style={{ resize: pDirection.resize }}>myy waaayy test</div>
-      <div className="adjustable-grid-vertical-item debug-bg-blue">dsaasdas</div>
+      <div className="adjustable-div debug-bg-green" style={{ resize: pDirection.resize }}></div>
+      <div className="adjustable-grid-vertical-item debug-bg-blue"></div>
     </div>
   );
 }
