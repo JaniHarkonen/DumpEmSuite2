@@ -23,18 +23,25 @@ export const DIRECTIONS: AdjustableGridDirections = {
 
 type AdjustableGridProps = {
   direction?: AdjustableGridDirection;
+  children?: React.ReactNode | React.ReactNode[];
 };
 
 export default function AdjustableGrid(props: AdjustableGridProps) {
-  const pDirection: AdjustableGridDirection = props.direction || DIRECTIONS.horizontal;
+  const pDirection: AdjustableGridDirection = props?.direction || DIRECTIONS.horizontal;
+  const pChildren: React.ReactNode | React.ReactNode[] = props?.children || <></>;
 
   return (
     <div 
       className="adjustable-grid" 
       style={{ flexDirection: pDirection.flexDirection }}
     >
-      <div className="adjustable-div debug-bg-green" style={{ resize: pDirection.resize }}></div>
-      <div className="adjustable-grid-vertical-item debug-bg-blue"></div>
+      <div 
+        className="adjustable-div debug-bg-green w-100" 
+        style={{ resize: pDirection.resize }}
+      >
+        {pChildren[0] || pChildren || <></>}
+      </div>
+      <div className="adjustable-grid-vertical-item debug-bg-blue">{pChildren[1] || <></>}</div>
     </div>
   );
 }
