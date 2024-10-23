@@ -25,6 +25,7 @@ type TabbedViewProps = {
   tabs: TabbedViewTab[];
   classNames?: TabbedViewClassNames;
   onTabDrop?: OnTabDrop;
+  allowMinimization?: boolean;
 };
 
 export function Tab(
@@ -48,11 +49,13 @@ export default function TabbedView(props: TabbedViewProps): JSX.Element {
   const pTabs: TabbedViewTab[] = props.tabs || [];
   const pClassNames: TabbedViewClassNames = props.classNames || defaultClassNames;
   const pOnTabDrop: OnTabDrop = props.onTabDrop || function() {}
+  const pAllowMinimization: boolean = props.allowMinimization || false;
 
   const {views} = useContext(GlobalContext);
   const [activeTab, setActiveTab] = useState<TabbedViewTab | null>(null);
+  const [isTabClosed, setTabClosed] = useState<boolean>(true);
 
-  const renderTabs = (tabs: TabbedViewTab[]): React.ReactNode => {
+  const renderTabs = (tabs: TabbedViewTab[]): JSX.Element[] => {
     return tabs.map((tab: TabbedViewTab) => {
       return (
         <button 
@@ -78,9 +81,20 @@ export default function TabbedView(props: TabbedViewProps): JSX.Element {
         onMouseUp={() => pOnTabDrop(views.selection!)}
       >
         {renderTabs(pTabs)}
+        {
+          pAllowMinimization && (
+            <button 
+              className={
+                (pClassNames.button || defaultClassNames.button) + 
+                " tabbed-view-tab-button-minimize"
+              }
+              onClick={() => setTabClosed(!isTabClosed)}
+            >{"_"}</button>
+          )
+        }
       </div>
       <div className={pClassNames.contentContainer}>
-        {activeTab?.content || <></>}
+        {isTabClosed && (activeTab?.content || <></>)}
       </div>
     </div>
   );

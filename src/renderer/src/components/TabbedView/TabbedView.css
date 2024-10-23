@@ -24,6 +24,10 @@
   background-color: #C1C1C1;
 }
 
+.tabbed-view-tab-button-minimize {
+  margin-left: auto;
+}
+
 .tabbed-view-tab-button-active {
   background-color: #E0E0E0;
 }

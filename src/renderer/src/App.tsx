@@ -17,6 +17,7 @@ export default function App(): JSX.Element {
             Tab("ws-16889", "Test workspace 1", WorkspaceView),
             Tab("ws-23147", "Test again", WorkspaceView)
           ]}
+          allowMinimization={true}
         ></TabbedView>
       </div>
     </GlobalContext.Provider>
