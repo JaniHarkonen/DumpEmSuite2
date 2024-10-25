@@ -1,100 +1,130 @@
-import { GlobalContext } from "@renderer/context/GlobalContext";
 import "./TabbedView.css";
 
-import { ViewProps } from "@renderer/views";
-import { useContext, useState } from "react";
+import { Tab } from "@renderer/model/view";
+import { ReactNode, useEffect, useState } from "react";
+import Divider from "../AdjustableGrid/Divider";
+import { getView } from "@renderer/views/views.config";
+import { CURRENT_APP_VERSION } from "@renderer/app.config";
+import keyConstructor from "@renderer/utils/keyConstructor";
 
-export type TabbedViewTab = {
-  id: string;
-  caption: string;
-  content?: JSX.Element;
-};
+type OnTabMinimize = (isMinimized: boolean) => void;
 
-type OnTabDrop = (tab: TabbedViewTab) => void;
-
-type TabbedViewClassNames = {
-  container?: string;
-  tabContainer?: string;
-  contentContainer?: string;
-  button?: string;
-  buttonActive?: string;
-};
+type OnTabOpen = (wasOpen: boolean, tab: Tab) => void;
 
 type TabbedViewProps = {
-  height: number;
-  tabs: TabbedViewTab[];
-  classNames?: TabbedViewClassNames;
-  onTabDrop?: OnTabDrop;
+  view: Tab;
+  tabHeight: number;
   allowMinimization?: boolean;
+  onTabMinimize?: OnTabMinimize;
+  onTabOpen?: OnTabOpen;
 };
 
-export function Tab(
-  id: string, caption: string, Content: (props: ViewProps) => JSX.Element
-): TabbedViewTab {
-  return {
-    id, caption, content: <Content key={id} parentID={id}/>
-  };
-}
+const keyTabButton = keyConstructor("tab-button");
+const keyTabContent = keyConstructor("tab-content");
+const keyTabMainContent = keyConstructor("tab-main");
+const keyTabAlternateContent = keyConstructor("tab-alternate");
 
-const defaultClassNames: TabbedViewClassNames = {
-  container: "tabbed-view-container",
-  tabContainer: "tabbed-view-tab-container",
-  contentContainer: "tabbed-view-content-container",
-  button: "tabbed-view-tab-button",
-  buttonActive: "tabbed-view-tab-button-active"
-}
-
-export default function TabbedView(props: TabbedViewProps): JSX.Element {
-  const pHeight: number = props.height;
-  const pTabs: TabbedViewTab[] = props.tabs || [];
-  const pClassNames: TabbedViewClassNames = props.classNames || defaultClassNames;
-  const pOnTabDrop: OnTabDrop = props.onTabDrop || function() {}
+export default function TabbedView(props: TabbedViewProps): ReactNode {
+  const pTabConfig: Tab = props.view;
+  const pIsMinimized: boolean = pTabConfig.isMinimized || false;
+  const pTabHeight: number = props.tabHeight;
   const pAllowMinimization: boolean = props.allowMinimization || false;
+  const pOnTabMinimize: OnTabMinimize = props.onTabMinimize || function() {};
+  const pOnTabOpen: OnTabOpen = props.onTabOpen || function() {};
 
-  const {views} = useContext(GlobalContext);
-  const [activeTab, setActiveTab] = useState<TabbedViewTab | null>(null);
-  const [isTabClosed, setTabClosed] = useState<boolean>(true);
+  const [isMinimized, setMinimized] = useState<boolean>(pIsMinimized);
+  const [activeTab, setActiveTab] = useState<Tab | null>(null);
 
-  const renderTabs = (tabs: TabbedViewTab[]): JSX.Element[] => {
-    return tabs.map((tab: TabbedViewTab) => {
+  useEffect(() => {
+    setMinimized(pIsMinimized);
+  }, [pTabConfig.isMinimized]);
+
+  const toggleMinimize = () => {
+    const minimize = !isMinimized;
+    setMinimized(minimize);
+    pOnTabMinimize(minimize);
+  };
+
+  const handleOpenTab = (tab: Tab) => {
+    const wasOpen: boolean = (tab === activeTab);
+    setActiveTab(tab);
+    pOnTabOpen(wasOpen, tab);
+  };
+
+  const renderTabs = (tabs: Tab[]): ReactNode[] => {
+    return tabs.map((tab: Tab) => {
       return (
         <button 
-          key={tab.id}
-          className={
-            (pClassNames.button || defaultClassNames.button) + " " +
-            (tab === activeTab ? (pClassNames.buttonActive || defaultClassNames.buttonActive ) : "")
-          }
-          onClick={() => setActiveTab(tab)}
-          onMouseDown={() => views.setSelection(tab) }
-          onMouseUp={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => e.stopPropagation()}
+          key={keyTabButton(pTabConfig.workspace, pTabConfig.id, tab.id)}
+          className="tabbed-view-tab-button tabbed-view-tab-button-active"
+          onClick={() => handleOpenTab(tab)}
+          //onMouseDown={() => views.setSelection(tab) }
+          //onMouseUp={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => e.stopPropagation()}
         >{tab.caption}
         </button>
       );
     });
   };
 
+  const renderTabbedViewOrContent = (tab: Tab): ReactNode[] | ReactNode => {
+    const contents: ReactNode[] = [];
+
+    if( tab.tabs.length === 0 ) {
+      if( tab.content.main ) {
+        contents.push(getView(
+          CURRENT_APP_VERSION, 
+          tab.content.main, 
+          keyTabMainContent(pTabConfig.workspace, pTabConfig.id, tab.id)
+        ));
+      }
+      if( tab.content.alternate ) {
+        contents.push(getView(
+          CURRENT_APP_VERSION, 
+          tab.content.alternate, 
+          keyTabAlternateContent(pTabConfig.workspace, pTabConfig.id, tab.id)
+        ));
+      }
+      return contents;
+    }
+
+    return (
+      <TabbedView
+        view={tab}
+        tabHeight={24}
+      />
+    );
+  };
+
   return (
-    <div className={pClassNames.container || defaultClassNames.container}>
+    <div className="tabbed-view-container">
       <div
-        className={pClassNames.tabContainer || defaultClassNames.tabContainer}
-        style={{height: pHeight}}
-        onMouseUp={() => pOnTabDrop(views.selection!)}
+        className={"tabbed-view-tab-contaienr"}
+        style={{height: pTabHeight}}
+        //onMouseUp={() => pOnTabDrop(views.selection!)}
       >
-        {renderTabs(pTabs)}
+        {renderTabs(pTabConfig.tabs)}
         {
           pAllowMinimization && (
             <button 
-              className={
-                (pClassNames.button || defaultClassNames.button) + 
-                " tabbed-view-tab-button-minimize"
-              }
-              onClick={() => setTabClosed(!isTabClosed)}
-            >{"_"}</button>
+              className="tabbed-view-tab-button tabbed-view-tab-button-minimize"
+              onClick={toggleMinimize}
+            >
+              {"_"}
+            </button>
           )
         }
       </div>
-      <div className={pClassNames.contentContainer}>
-        {isTabClosed && (activeTab?.content || <></>)}
+      <div className="tabbed-view-content-container">
+        {
+          activeTab && (
+            <Divider 
+              key={keyTabContent(pTabConfig.workspace, pTabConfig.id, activeTab.id)}
+              direction={activeTab.content.direction}
+            >
+              {renderTabbedViewOrContent(activeTab)}
+            </Divider>
+          )
+        }
       </div>
     </div>
   );

@@ -1,12 +1,9 @@
 body {
-  padding: 0px;
-  margin: 0px;
-  min-height: 100dvh;
   height: 100dvh;
   width: 100dvw;
   overflow: hidden;
-  color: var(--color-text);
-  background: var(--color-background);
+  padding: 0px;
+  margin: 0px;
   line-height: 1.6;
   font-family:
     Inter,

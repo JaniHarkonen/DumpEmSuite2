@@ -1,4 +1,4 @@
-import AdjustableGrid from "@renderer/components/AdjustableGrid/AdjustableGrid";
+import AdjustableGrid from "@renderer/components/AdjustableGrid/Divider";
 import TabbedView, { Tab, TabbedViewTab } from "@renderer/components/TabbedView/TabbedView";
 import { GlobalContext } from "@renderer/context/GlobalContext";
 import AnalysisModule from "@renderer/modules/AnalysisModule/AnalysisModule";
