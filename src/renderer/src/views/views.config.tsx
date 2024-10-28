@@ -31,8 +31,12 @@ const APP_VIEWS: ViewsConfig = {
   "v1.0.0": {
     workspace: (): ReactNode => <>workspace</>,
     companies: (): ReactNode => <>companies</>,
-    analysis: (): ReactNode => <>analysis</>,
-    macro: (): ReactNode => <>macro</>,
+    analysis: (): ReactNode => {
+      return <>analysis</>;
+    },
+    macro: (): ReactNode => {
+      return <><button onClick={() => console.log("test")}>test button</button></>;
+    },
     scraper: (): ReactNode => <>scraper</>,
     listings: (): ReactNode => <>listings</>,
     profiles: (): ReactNode => <>profiles</>,

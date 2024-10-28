@@ -7,18 +7,27 @@ export type DividerDirection = {
   resize: "horizontal" | "vertical";
 };
 
-type Content = {
+export type Section = {
+  hasTabs: boolean;
+  //parentTabID: string;
+  //parentTabWorkspace: string;
+  //placement: "main" | "alternative";
+  content: Tab[] | AppViewTemplate;
+};
+
+export type SectionPlacement = "main" | "alternative";
+
+export type TabSections = {
   direction: ContentDirection;
-  main: AppViewTemplate | null;
-  alternate?: AppViewTemplate | null;
+  main: Section;
+  alternate?: Section;
 };
 
 export type Tab = {
   id: string;
   workspace: string;
   caption: string;
-  tabs: Tab[]; // Tabs are accessible through the tab bar
-  content: Content;
+  sections: TabSections;
   activeTab?: string | null; // Tab that is active when this tab is opened
   isMinimized: boolean;
 };

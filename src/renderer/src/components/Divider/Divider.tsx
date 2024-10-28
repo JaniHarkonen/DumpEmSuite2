@@ -40,17 +40,16 @@ export default function Divider(props: DividerProps): ReactNode {
       <div 
         className="adjustable-div debug-bg-green w-100" 
         style={{ 
-          resize: (pChildren.length > 1) ? pDirection.resize : "none" 
+          resize: alternateContent ? pDirection.resize : "none" 
         }}
       >
         {mainContent || <></>}
       </div>
-      {
-        pChildren.length > 1 && (
-        <div className="divider-content debug-bg-blue">
+      {alternateContent && (
+        <div className="divider-content debug-bg-blue w-100">
           {alternateContent || <></>}
-        </div>)
-      }
+        </div>
+      )}
     </div>
   );
 }
