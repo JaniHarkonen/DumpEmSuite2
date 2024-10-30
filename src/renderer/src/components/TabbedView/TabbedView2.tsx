@@ -1,43 +1,17 @@
-import { ReactNode, useState } from "react";
-import Tabs, { Tab } from "./Tabs";
+import { ReactNode } from "react";
+import Tabs from "./Tabs";
 import Divider from "../Divider/Divider";
 import { ContentDirection } from "@renderer/model/view";
+import useFlexibleSplits from "@renderer/hook/useFlexibleTabs";
+import { SplitSide, SplitTree, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
+import { Tab } from "@renderer/model/tabs";
 
 
 type Props = {
   //views: View[]
 };
 
-export type SplitSide = "left" | "right";
 
-type TabSelection = {
-  selectedTab: Tab;
-  sourceSplit: SplitTreeFork;
-  sourceSplitSide: SplitSide;
-  parentSplit: SplitTreeFork | null;
-  parentSplitSide: SplitSide | null;
-} | null;
-
-interface SplitTreeItem {
-  isFork: boolean;
-  side: SplitSide | null;
-}
-
-type SplitTreeNode = SplitTreeFork | SplitTreeValue;
-
-interface SplitTreeFork extends SplitTreeItem {
-  direction: ContentDirection;
-  left: SplitTreeNode;
-  right?: SplitTreeNode | null;
-}
-
-interface SplitTreeValue extends SplitTreeItem {
-  value: Tab[];
-}
-
-type SplitTree = {
-  root: SplitTreeNode;
-};
 
 const testSplitTree: SplitTree = {
   root: {
@@ -56,6 +30,9 @@ const testSplitTree: SplitTree = {
           {id: "another-test", workspace: "test", caption: "Another Test", content: <>another test.... works</>},
           {id: "new-test", workspace: "test", caption: "New Test", content: <>new test works</>},
           {id: "third-test", workspace: "test", caption: "third Test", content: <>third test here</>},
+          {id: "test-test", workspace: "test", caption: "TEST Test", content: <>test of tests</>},
+          {id: "final-test", workspace: "test", caption: "FINAL Test", content: <>final test</>},
+          {id: "last-test", workspace: "test", caption: "last Test", content: <>actual last test</>},
         ]
       }
     }
@@ -63,153 +40,13 @@ const testSplitTree: SplitTree = {
 };
 
 export default function TabbedView(props: Props): ReactNode {
-  const [splitTree, setSplitTree] = useState<SplitTree>(testSplitTree);
-  const [tabSelection, setTabSelection] = useState<TabSelection>(null);
-
-  const handleTabSelection = (selection: TabSelection) => {
-    setTabSelection(selection);
-  };
-
-  const handleTabRelocation = (targetSplit: SplitTreeFork, targetSplitSide: SplitSide) => {
-    setSplitTree((prevTree: SplitTree) => {
-        // No tab selected
-      if( !tabSelection ) return prevTree;
-
-      const {
-        selectedTab, 
-        sourceSplit, 
-        sourceSplitSide, 
-        parentSplit: sourceParentSplit, 
-        parentSplitSide: sourceParentSplitSide
-      } = tabSelection;
-      const sourceNode: SplitTreeNode | null | undefined = sourceSplit[sourceSplitSide];
-
-        // Attempting to relocate to the same tab (not a relocation)
-      if( targetSplit === sourceSplit && sourceSplitSide === targetSplitSide ) return prevTree;
-
-        // Invalid source node
-      if( !sourceNode || sourceNode.isFork ) return prevTree;
-
-      const sourceTabs: SplitTreeValue = sourceNode as SplitTreeValue;
-      const sourceTabIndex = sourceTabs.value.indexOf(selectedTab);
-
-        // Selected tab no longer exists in the source split
-      if( sourceTabIndex < 0 ) return prevTree;
-
-      const targetNode: SplitTreeNode | null | undefined = targetSplit[targetSplitSide];
-
-        // Invalid target node
-      if( !targetNode || targetNode.isFork ) return prevTree;
-
-        // Relocate the tab
-      const targetTabs: SplitTreeValue = targetNode as SplitTreeValue;
-      targetTabs.value.push(selectedTab);
-      sourceTabs.value.splice(sourceTabIndex, 1);
-
-        // Consume split tree nodes
-      if( sourceTabs.value.length === 0 ) {
-        if( sourceSplitSide === "right" ) { // If right is empty, consume
-          sourceSplit[sourceSplitSide] = null;
-        } else if( sourceSplit.right ) { // If left is empty, move right to left, consume right
-          sourceSplit[sourceSplitSide] = sourceSplit.right;
-          sourceSplit.right = null;
-        } else {
-            // If left and right are empty, consume node
-          if( sourceParentSplitSide === "left" ) {
-            sourceParentSplit!.left = sourceParentSplit!.right!;
-            sourceParentSplit!.left.side = "left";
-          } else {
-            sourceParentSplit!.right = null;
-          }
-        }
-      }
-
-      return {...prevTree};
-    });
-  };
-
-  //const handleTabSplit = (targetFork: SplitTreeFork, targetNodeSplitSide: SplitSide, targetSide: SplitSide, direction: ContentDirection) => {
-  const handleTabSplit = (targetFork: SplitTreeFork, requestedSide: SplitSide, requestedDirection: ContentDirection) => {
-    setSplitTree((prevTree: SplitTree) => {
-      
-        // No tab selected
-      if( !tabSelection ) return prevTree;
-
-      const {
-        selectedTab, 
-        sourceSplit, 
-        sourceSplitSide, 
-        parentSplit: sourceParentSplit, 
-        parentSplitSide: sourceParentSplitSide
-      } = tabSelection;
-      const sourceNode: SplitTreeNode | null | undefined = sourceSplit[sourceSplitSide];
-
-        // Invalid source node
-      if( !sourceNode || sourceNode.isFork ) return prevTree;
-      const sourceTabs: SplitTreeValue = sourceNode as SplitTreeValue;
-      const sourceTabIndex = sourceTabs.value.indexOf(selectedTab);
-
-        // Selected tab no longer exists in the source split
-      if( sourceTabIndex < 0 ) return prevTree;
-
-      sourceTabs.value.splice(sourceTabIndex, 1);
-
-        // Consume split tree nodes
-      if( sourceTabs.value.length === 0 ) {
-        if( sourceSplitSide === "right" ) { // If right is empty, consume
-          sourceSplit[sourceSplitSide] = null;
-        } else if( sourceSplit.right ) { // If left is empty, move right to left, consume right
-          sourceSplit[sourceSplitSide] = sourceSplit.right;
-          sourceSplit.right = null;
-        } else {
-            // If left and right are empty, consume node
-          if( sourceParentSplitSide === "left" ) {
-            sourceParentSplit!.left = sourceParentSplit!.right!;
-            sourceParentSplit!.left.side = "left";
-          } else {
-            sourceParentSplit!.right = null;
-          }
-        }
-      }
-
-        // Split the tab
-      if( targetFork[requestedSide] ) {
-        targetFork[(requestedSide === "left") ? "right" : "left"] = targetFork[requestedSide];
-      }
-
-      targetFork[requestedSide] = {
-        isFork: false,
-        side: requestedSide,
-        value: [selectedTab]
-      };
-
-      targetFork.direction = requestedDirection;
-
-        // Ensure that there is only one set of tabs per fork, split fork when left and right are full
-        // (not null)
-      targetFork.left = {
-        isFork: true,
-        side: "left",
-        direction: "horizontal",
-        left: {
-          ...targetFork.left
-        }
-      };
-
-      targetFork.right = {
-        isFork: true,
-        side: "right",
-        direction: "horizontal",
-        left: {
-          ...targetFork.right!
-        }
-      };
-
-      return {...prevTree};
-    });
-
-    setTabSelection(null);
-  };
+  const {
+    splitTree, 
+    tabSelection, 
+    handleTabSelection, 
+    handleTabRelocation, 
+    handleTabSplit
+  } = useFlexibleSplits({splitTreeRoot: testSplitTree});
 
   const renderSplits = (
     root: SplitTreeNode, 
@@ -233,7 +70,9 @@ export default function TabbedView(props: Props): ReactNode {
             parentSplitSide: greatParentSide
           })}
           onDrop={() => handleTabRelocation(parent!, splitSide)}
-          onSplit={(requestedDirection: ContentDirection, requestedSide: SplitSide) => handleTabSplit(parent!, requestedSide, requestedDirection)}
+          onSplit={(requestedDirection: ContentDirection, requestedSide: SplitSide) => {
+            handleTabSplit(parent!, requestedSide, requestedDirection);
+          }}
           isTabDragging={!!tabSelection}
         />
       );
