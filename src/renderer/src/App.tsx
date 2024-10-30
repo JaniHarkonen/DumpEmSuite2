@@ -91,14 +91,7 @@ export default function App(): ReactNode {
   return (
     <GlobalContext.Provider value={{ viewRef: null, tabManager: testTabManager, flexibleTabs }}>
       <div className="w-100 h-100 overflow-hidden">
-        {/*<TabbedView 
-          parentSections={testTabs.sections}
-          sectionConfig={testTabs.sections.main}
-          tabConfig={testTabs} 
-          tabHeight={24} 
-        />*/}
-        <TabbedView
-        />
+        <TabbedView/>
       </div>
     </GlobalContext.Provider>
   );

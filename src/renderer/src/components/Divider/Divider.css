@@ -6,7 +6,8 @@
 }
 
 .divider-content {
-  min-width: 0px;
+  min-width: max-content;
+  min-height: max-content;
   flex-grow: 1;
   flex-shrink: 100;
   max-width: 100%;

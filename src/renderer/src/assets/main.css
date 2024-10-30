@@ -63,6 +63,10 @@ body {
   overflow: hidden;
 }
 
+.p-absolute {
+  position: absolute;
+}
+
 .debug-bg-red {
   background-color: red;
 }
