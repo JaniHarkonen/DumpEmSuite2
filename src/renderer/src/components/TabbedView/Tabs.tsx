@@ -1,8 +1,7 @@
 import "./Tabs.css";
-import { ContentDirection } from "@renderer/model/view";
 import { MouseEvent, ReactNode, useState } from "react";
 import { Tab } from "@renderer/model/tabs";
-import { SplitSide } from "@renderer/model/splits";
+import { ContentDirection, SplitSide } from "@renderer/model/splits";
 
 type OnSelect = (tab: Tab) => void;
 type OnSplit = (direction: ContentDirection, side: SplitSide) => void;

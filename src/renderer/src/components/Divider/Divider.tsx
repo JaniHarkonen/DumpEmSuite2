@@ -1,6 +1,6 @@
+import { ContentDirection, DividerDirection } from "@renderer/model/splits";
 import "./Divider.css";
 
-import { DividerDirection, ContentDirection } from "@renderer/model/view";
 import reactNodeToArray from "@renderer/utils/reactNodeToArray";
 import { ReactNode } from "react";
 
