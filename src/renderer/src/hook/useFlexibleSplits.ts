@@ -19,7 +19,11 @@ type Returns = {
   tabSelection: TabSelection;
   setTabSelection: Dispatch<SetStateAction<TabSelection>>;
   handleTabSelection: (selection: TabSelection) => void;
-  handleTabRelocation: (targetParentFork: SplitTreeFork, targetParentSide: SplitSide, targetSide: SplitSide) => void;
+  handleTabRelocation: (
+    targetParentFork: SplitTreeFork, 
+    targetParentSide: SplitSide, 
+    targetSide: SplitSide
+  ) => void;
   handleTabSplit: (
     targetParentFork: SplitTreeFork,
     targetParentSide: SplitSide,
@@ -27,6 +31,7 @@ type Returns = {
     requestedSide: SplitSide, 
     requestedDirection: ContentDirection
   ) => void;
+  handleDividerMove: (targetFork: SplitTreeFork, newValue: number) => void;
 };
 
 export default function useFlexibleSplits(props: Props): Returns {
@@ -121,12 +126,19 @@ export default function useFlexibleSplits(props: Props): Returns {
         // Split the target view and place the tab into the new view
       splitTab(
         removeResult.trackedFork!, requestedSide, requestedDirection, selectedTab
-        //removeResult.trackedFork || targetFork, requestedSide, requestedDirection, selectedTab
       );
 
       return {...prevTree};
     });
 
+    setTabSelection(null);
+  };
+
+  const handleDividerMove = (targetFork: SplitTreeFork, newValue: number) => {
+    setSplitTree((prevTree: SplitTree) => {
+      targetFork.divider.value = newValue;
+      return {...prevTree};
+    });
     setTabSelection(null);
   };
 
@@ -136,6 +148,7 @@ export default function useFlexibleSplits(props: Props): Returns {
     setTabSelection,
     handleTabSelection,
     handleTabRelocation,
-    handleTabSplit
+    handleTabSplit,
+    handleDividerMove
   };
 }

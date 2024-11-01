@@ -3,11 +3,6 @@ import { Tab } from "./tabs";
 
 export type ContentDirection = "horizontal" | "vertical";
 
-export type DividerDirection = {
-  flexDirection: "row" | "column";
-  resize: "horizontal" | "vertical";
-};
-
 export type SplitSide = "left" | "right";
 
 export interface SplitTreeItem {
@@ -17,8 +12,13 @@ export interface SplitTreeItem {
 
 export type SplitTreeNode = SplitTreeFork | SplitTreeValue;
 
-export interface SplitTreeFork extends SplitTreeItem {
+export type DividerSettings = {
   direction: ContentDirection;
+  value: number;
+};
+
+export interface SplitTreeFork extends SplitTreeItem {
+  divider: DividerSettings;
   left: SplitTreeNode;
   right?: SplitTreeNode | null;
 }
@@ -42,6 +42,8 @@ export type RemoveResult = {
   failed: boolean;
   trackedFork: SplitTreeFork | null;
 };
+
+const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
 
 /**
  * Removes a tab from a given fork and shifts around nodes if any value node runs out 
@@ -138,14 +140,21 @@ export function splitTab(
     value: [tab]
   };
 
-  targetFork.direction = requestedDirection;
+  targetFork.divider = {
+    direction: requestedDirection,
+    value: DEFAULT_DIVIDER_VALUE_PERCENT
+  };
 
     // Ensure that there is only one set of tabs per fork, split fork when left and right are full
     // (not null)
   targetFork.left = {
     isFork: true,
     side: "left",
-    direction: "horizontal",
+    //direction: "horizontal",
+    divider: {
+      direction: "horizontal",
+      value: DEFAULT_DIVIDER_VALUE_PERCENT
+    },
     left: {
       ...targetFork.left
     }
@@ -154,7 +163,11 @@ export function splitTab(
   targetFork.right = {
     isFork: true,
     side: "right",
-    direction: "horizontal",
+    //direction: "horizontal",
+    divider: {
+      direction: "horizontal",
+      value: DEFAULT_DIVIDER_VALUE_PERCENT
+    },
     left: {
       ...targetFork.right!
     }

@@ -10,11 +10,19 @@ const testSplitTree: SplitTree = {
   root: {
     isFork: true,
     side: null,
-    direction: "horizontal",
+    //direction: "horizontal",
+    divider: {
+      direction: "horizontal",
+        value: 0.5
+    },
     left: {
       isFork: true,
       side: null,
-      direction: "horizontal",
+      //direction: "horizontal",
+      divider: {
+        direction: "horizontal",
+        value: 0.5
+      },
       left: {
         isFork: false,
         side: "left",
@@ -42,7 +50,8 @@ export default function TabbedView(props: Props): ReactNode {
     tabSelection, 
     handleTabSelection, 
     handleTabRelocation, 
-    handleTabSplit
+    handleTabSplit,
+    handleDividerMove
   } = useFlexibleSplits({splitTreeRoot: testSplitTree});
 
   const renderSplits = (
@@ -80,7 +89,11 @@ export default function TabbedView(props: Props): ReactNode {
 
     const fork: SplitTreeFork = root as SplitTreeFork;
     return (
-      <Divider direction={fork.direction}>
+      <Divider
+        /*direction={fork.direction}*/ 
+        dividerSettings={fork.divider}
+        onDividerMove={(newValue: number) => handleDividerMove(fork, newValue)}
+      >
         {renderSplits(fork.left, "left", fork, parent, splitSide)}
         {fork.right && renderSplits(fork.right, "right", fork, parent, splitSide)}
       </Divider>
