@@ -10,7 +10,7 @@ type Props = {
   tree: SplitTree;
 };
 
-export default function TabbedView(props: Props): ReactNode {
+export default function SplitView(props: Props): ReactNode {
   const pTree = props.tree;
 
   const {
