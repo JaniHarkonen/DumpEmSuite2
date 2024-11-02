@@ -1,6 +1,5 @@
-import { ContentDirection, DividerSettings } from "@renderer/model/splits";
 import "./Divider.css";
-
+import { ContentDirection, DividerSettings } from "@renderer/model/splits";
 import reactNodeToArray from "@renderer/utils/reactNodeToArray";
 import { MutableRefObject, ReactNode, useRef } from "react";
 import useDraggable from "@renderer/hook/useDraggable";
@@ -19,8 +18,8 @@ export default function Divider(props: Props): ReactNode {
   const pDividerSettings: DividerSettings = props.dividerSettings;
   const pOnDividerMove: OnDividerMove = props.onDividerMove || function() {};
   const pChildren: ReactNode[] = reactNodeToArray(props?.children) || [<></>];
-  const {direction, value} = pDividerSettings;
 
+  const {direction, value} = pDividerSettings;
   const mainContent: ReactNode = pChildren[0];
   const alternativeContent: ReactNode = pChildren[1];
 
@@ -46,7 +45,7 @@ export default function Divider(props: Props): ReactNode {
         pOnDividerMove(clamp(10, (mouseSnapY - y) / height * 100, 90));
       }
     }
-  }, [direction]);
+  }, [pDividerSettings]);
 
   /**
    * Returns either the given value as a CSS percentage, if the content direction of the

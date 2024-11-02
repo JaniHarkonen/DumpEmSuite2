@@ -6,45 +6,13 @@ import { ContentDirection, SplitSide, SplitTree, SplitTreeFork, SplitTreeNode, S
 import { Tab } from "@renderer/model/tabs";
 
 
-const testSplitTree: SplitTree = {
-  root: {
-    isFork: true,
-    side: null,
-    //direction: "horizontal",
-    divider: {
-      direction: "horizontal",
-        value: 0.5
-    },
-    left: {
-      isFork: true,
-      side: null,
-      //direction: "horizontal",
-      divider: {
-        direction: "horizontal",
-        value: 0.5
-      },
-      left: {
-        isFork: false,
-        side: "left",
-        value: [
-          {id: "left-side", workspace: "test", caption: "Left side", content: <>left side works</>},
-          {id: "another-test", workspace: "test", caption: "Another Test", content: <>another test.... works</>},
-          {id: "new-test", workspace: "test", caption: "New Test", content: <>new test works</>},
-          {id: "third-test", workspace: "test", caption: "third Test", content: <>third test here</>},
-          {id: "test-test", workspace: "test", caption: "TEST Test", content: <>test of tests</>},
-          {id: "final-test", workspace: "test", caption: "FINAL Test", content: <>final test</>},
-          {id: "last-test", workspace: "test", caption: "last Test", content: <>actual last test</>},
-        ]
-      }
-    }
-  }
-};
-
 type Props = {
-  //views: View[]
+  tree: SplitTree;
 };
 
 export default function TabbedView(props: Props): ReactNode {
+  const pTree = props.tree;
+
   const {
     splitTree, 
     tabSelection, 
@@ -52,7 +20,7 @@ export default function TabbedView(props: Props): ReactNode {
     handleTabRelocation, 
     handleTabSplit,
     handleDividerMove
-  } = useFlexibleSplits({splitTreeRoot: testSplitTree});
+  } = useFlexibleSplits({splitTreeRoot: pTree});
 
   const renderSplits = (
     root: SplitTreeNode, 
@@ -90,7 +58,6 @@ export default function TabbedView(props: Props): ReactNode {
     const fork: SplitTreeFork = root as SplitTreeFork;
     return (
       <Divider
-        /*direction={fork.direction}*/ 
         dividerSettings={fork.divider}
         onDividerMove={(newValue: number) => handleDividerMove(fork, newValue)}
       >

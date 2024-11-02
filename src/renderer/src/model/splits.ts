@@ -63,9 +63,10 @@ const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
  * @param parentSide Branch in the parent that contains the fork.
  * @param targetSide Branch in the fork that contains the tabs (the value node).
  * @param targetTab Tab to be removed.
- * @param pivotFork Fork 
+ * @param pivotFork Fork whose shifts should be tracked.
  * 
- * @returns 
+ * @returns Whether the removal was succesful as well as the tracked fork, if a pivot 
+ * fork was provided.
  */
 export function removeTab(
   parentFork: SplitTreeFork, 
@@ -110,11 +111,15 @@ export function removeTab(
     }
     
     if( parentSide === "right" ) {
-      parentFork.left = (parentFork.left as SplitTreeFork).left;
-      parentFork.right = (parentFork.left as SplitTreeFork).right;
+      const parentLeft: SplitTreeFork = (parentFork.left as SplitTreeFork);
+      parentFork.right = parentLeft.right;
+      parentFork.left = parentLeft.left;
     } else if( parentFork.right ) {
-      parentFork.left = (parentFork.right as SplitTreeFork).left;
-      parentFork.right = (parentFork.right as SplitTreeFork).right;
+      const parentRight: SplitTreeFork = (parentFork.right as SplitTreeFork);
+      parentFork.left = parentRight.left;
+      parentFork.right = parentRight.right;
+    } else {
+      parentFork.right = null;
     }
   }
   
@@ -150,7 +155,6 @@ export function splitTab(
   targetFork.left = {
     isFork: true,
     side: "left",
-    //direction: "horizontal",
     divider: {
       direction: "horizontal",
       value: DEFAULT_DIVIDER_VALUE_PERCENT
@@ -163,7 +167,6 @@ export function splitTab(
   targetFork.right = {
     isFork: true,
     side: "right",
-    //direction: "horizontal",
     divider: {
       direction: "horizontal",
       value: DEFAULT_DIVIDER_VALUE_PERCENT
@@ -171,5 +174,29 @@ export function splitTab(
     left: {
       ...targetFork.right!
     }
+  };
+}
+
+export function copySplitTreeNode(node: SplitTreeNode | null | undefined): SplitTreeNode | null | undefined {
+  if( !node ) {
+    return node;
+  }
+
+  if( node.isFork ) {
+    const fork: SplitTreeFork = node as SplitTreeFork;
+    return {
+      ...fork,
+      divider: {
+        ...fork.divider
+      },
+      left: copySplitTreeNode(fork.left)!,
+      right: copySplitTreeNode(fork.right)
+    };
+  }
+
+  const valueNode: SplitTreeValue = node as SplitTreeValue;
+  return {
+    ...valueNode,
+    value: [...valueNode.value] // Tabs have nothing to deep copy as of now
   };
 }

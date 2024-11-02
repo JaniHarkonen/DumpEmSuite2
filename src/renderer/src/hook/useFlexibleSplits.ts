@@ -125,7 +125,7 @@ export default function useFlexibleSplits(props: Props): Returns {
 
         // Split the target view and place the tab into the new view
       splitTab(
-        removeResult.trackedFork!, requestedSide, requestedDirection, selectedTab
+        removeResult.trackedFork! as SplitTreeFork, requestedSide, requestedDirection, selectedTab
       );
 
       return {...prevTree};
