@@ -1,144 +1,107 @@
-import { addTab, ContentDirection, RemoveResult, removeTab, SplitSide, splitTab, SplitTree, SplitTreeFork } from "@renderer/model/splits";
+import { DividerDirection, SplitBranch, SplitTree, SplitTreeFork, SplitTreeManager, SplitTreeValue } from "@renderer/model/splits";
 import { Tab } from "@renderer/model/tabs";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from "react";
 
 export type TabSelection = {
   selectedTab: Tab;
   sourceFork: SplitTreeFork;
-  sourceSplitSide: SplitSide;
-  parentFork: SplitTreeFork | null;
-  parentSplitSide: SplitSide | null;
+  sourceValueNode: SplitTreeValue;
 } | null;
 
 type Props = {
-  splitTreeRoot: SplitTree;
+  splitTree: SplitTree;
 };
 
 type Returns = {
-  splitTree: SplitTree;
+  splitTree: SplitTree | null;
   tabSelection: TabSelection;
   setTabSelection: Dispatch<SetStateAction<TabSelection>>;
   handleTabSelection: (selection: TabSelection) => void;
-  handleTabRelocation: (
-    targetParentFork: SplitTreeFork, 
-    targetParentSide: SplitSide, 
-    targetSide: SplitSide
-  ) => void;
+  handleTabRelocation: (toNode: SplitTreeValue) => void;
   handleTabSplit: (
-    targetParentFork: SplitTreeFork,
-    targetParentSide: SplitSide,
-    targetSide: SplitSide,
-    requestedSide: SplitSide, 
-    requestedDirection: ContentDirection
+    toFork: SplitTreeFork, 
+    requestedDirection: DividerDirection, 
+    requestedBranch: SplitBranch
   ) => void;
   handleDividerMove: (targetFork: SplitTreeFork, newValue: number) => void;
 };
 
+
 export default function useFlexibleSplits(props: Props): Returns {
-  const pSplitTreeRoot: SplitTree = props.splitTreeRoot;
-  const [splitTree, setSplitTree] = useState<SplitTree>(pSplitTreeRoot);
+  const pSplitTree: SplitTree = props.splitTree;
+  const [splitTree, setSplitTree] = useState<SplitTree | null>(null);
   const [tabSelection, setTabSelection] = useState<TabSelection>(null);
+  const treeManager: MutableRefObject<SplitTreeManager | null> = useRef(null);
+
+  useEffect(() => {
+    treeManager.current = new SplitTreeManager(pSplitTree);
+    setSplitTree(treeManager.current.snapshot());
+  }, [pSplitTree]);
 
   const handleTabSelection = (selection: TabSelection) => {
     setTabSelection(selection);
   };
 
-  const handleTabRelocation = (
-    targetParentFork: SplitTreeFork, targetParentSide: SplitSide, targetSide: SplitSide
-  ) => {
-    setSplitTree((prevTree: SplitTree) => {
-      if( !tabSelection ) return prevTree;
+  const handleTabRelocation = (toNode: SplitTreeValue) => {
+    setSplitTree((prev: SplitTree | null) => {
+      if( !treeManager.current || !tabSelection ) {
+        return prev;
+      }
 
-      const {
-        selectedTab, 
-        sourceSplitSide, 
-        parentFork: sourceParentFork, 
-        parentSplitSide: sourceParentSplitSide
-      } = tabSelection;
-
-      if( 
-        !sourceParentFork || 
-        !sourceParentSplitSide || 
-        !sourceSplitSide || 
-        !targetParentFork[targetParentSide] 
-      ) return prevTree;
+      const successful: boolean = treeManager.current.relocateTab(
+        tabSelection.sourceValueNode, toNode, tabSelection.selectedTab
+      );
+      if( !successful ) {
+        return prev;
+      }
       
-        // Attempting to relocate to the same tab (not a relocation)
-      if( 
-        sourceParentFork[sourceParentSplitSide]![sourceSplitSide] === 
-        targetParentFork[targetParentSide][targetSide] 
-      ) return prevTree;
-
-        // Add tab to the target view
-      addTab(
-        targetParentFork[targetParentSide] as SplitTreeFork, 
-        targetSide, selectedTab
-      );
-
-        // Remove tab from the source view
-      removeTab(
-        sourceParentFork, sourceParentSplitSide, sourceSplitSide, selectedTab
-      );
-
-      return {...prevTree};
+      return treeManager.current.snapshot();
     });
 
     setTabSelection(null);
   };
 
   const handleTabSplit = (
-    targetParentFork: SplitTreeFork,
-    targetParentSide: SplitSide,
-    targetSide: SplitSide,
-    requestedSide: SplitSide, 
-    requestedDirection: ContentDirection
+    toFork: SplitTreeFork, 
+    requestedDirection: DividerDirection, 
+    requestedBranch: SplitBranch
   ) => {
-    setSplitTree((prevTree: SplitTree) => {
-      if( !tabSelection ) return prevTree;
+    setSplitTree((prev: SplitTree | null) => {
+      if( !treeManager.current || !tabSelection ) {
+        return prev;
+      }
 
-      const {
-        selectedTab, 
-        sourceSplitSide, 
-        parentFork: sourceParentFork, 
-        parentSplitSide: sourceParentSplitSide
-      } = tabSelection;
-
-      if( 
-        !sourceParentFork || 
-        !sourceParentSplitSide || 
-        !sourceSplitSide ||
-        !targetParentFork[targetParentSide] ||
-        !targetParentFork[targetParentSide][targetSide]
-      ) return prevTree;
-
-        // Remove tab from the source view
-      const targetFork: SplitTreeFork = targetParentFork[targetParentSide] as SplitTreeFork;
-      const removeResult: RemoveResult = removeTab(
-        sourceParentFork, 
-        sourceParentSplitSide, 
-        sourceSplitSide, 
-        selectedTab, 
-        targetFork
+      const successful: boolean = treeManager.current.splitTab(
+        tabSelection.sourceValueNode, 
+        toFork, 
+        requestedDirection, 
+        requestedBranch, 
+        tabSelection.selectedTab
       );
-
-      if( removeResult.failed ) return prevTree;
-
-        // Split the target view and place the tab into the new view
-      splitTab(
-        removeResult.trackedFork! as SplitTreeFork, requestedSide, requestedDirection, selectedTab
-      );
-
-      return {...prevTree};
+      if( !successful ) {
+        return prev;
+      }
+      
+      return treeManager.current.snapshot();
     });
 
     setTabSelection(null);
   };
 
   const handleDividerMove = (targetFork: SplitTreeFork, newValue: number) => {
-    setSplitTree((prevTree: SplitTree) => {
-      targetFork.divider.value = newValue;
-      return {...prevTree};
+    setSplitTree((prev: SplitTree | null) => {
+      if( !treeManager.current ) {
+        return prev;
+      }
+
+      const successful: boolean = treeManager.current.moveDivider(targetFork, newValue);
+      if( !successful ) {
+        return prev;
+      }
+      
+      return treeManager.current.snapshot();
     });
+
     setTabSelection(null);
   };
 

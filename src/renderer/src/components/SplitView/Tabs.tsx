@@ -1,10 +1,11 @@
 import "./Tabs.css";
 import { MouseEvent, ReactNode, useState } from "react";
 import { Tab } from "@renderer/model/tabs";
-import { ContentDirection, SplitSide } from "@renderer/model/splits";
+import { DividerDirection, SplitBranch } from "@renderer/model/splits";
 
 type OnSelect = (tab: Tab) => void;
-type OnSplit = (direction: ContentDirection, side: SplitSide) => void;
+//type OnSplit = (direction: ContentDirection, side: SplitSide) => void;
+type OnSplit = (direction: DividerDirection, branch: SplitBranch) => void;
 
 type Props = {
   tabHeight: number;
@@ -21,8 +22,8 @@ type SplitActivation = {
   y: number;
   width: number;
   height: number;
-  splitDirection: ContentDirection;
-  splitSide: SplitSide;
+  splitDirection: DividerDirection;
+  splitSide: SplitBranch;
 }
 
 const SPLIT_ACTIVATIONS: SplitActivation[] = [

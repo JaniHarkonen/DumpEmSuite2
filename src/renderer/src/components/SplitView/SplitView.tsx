@@ -2,17 +2,62 @@ import { ReactNode } from "react";
 import Tabs from "./Tabs";
 import Divider from "../Divider/Divider";
 import useFlexibleSplits from "@renderer/hook/useFlexibleSplits";
-import { ContentDirection, SplitSide, SplitTree, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
-import { Tab } from "@renderer/model/tabs";
+import { Tab, TabContentProvider } from "@renderer/model/tabs";
+import { DividerDirection, SplitBranch, SplitTree, SplitTreeBlueprint, SplitTreeFork, SplitTreeManager, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
 
 
 type Props = {
-  tree: SplitTree;
+  //tree: SplitTree;
 };
 
-export default function SplitView(props: Props): ReactNode {
-  const pTree = props.tree;
+const testBlueprint: SplitTreeBlueprint = {
+  root: {
+    isFork: true,
+    divider: { direction: "horizontal", value: 50 },
+    left: {
+      isFork: true,
+      divider: {direction: "vertical", value: 33},
+      left: {
+        isFork: true,
+        divider: {direction: "horizontal", value: 100},
+        left: {
+          isFork: false,
+          value: [
+            {id: "left-left-left", caption: "left left left", workspace: "ws", contentTemplate: "template1"},
+            // {id: "left-left-left2", caption: "left left left2", workspace: "ws", contentTemplate: "template2"},
+            // {id: "left-left-left3", caption: "left left left3", workspace: "ws", contentTemplate: "template3"},
+          ]
+        }
+      },
+      right: {
+        isFork: true,
+        divider: {direction: "vertical", value: 10},
+        left: {
+          isFork: false,
+          value: [
+            {id: "left-right-left", caption: "left right left", workspace: "ws", contentTemplate: "template4"},
+            // {id: "left-right-left2", caption: "left right left2", workspace: "ws", contentTemplate: "template5"},
+          ]
+        }
+      }
+    }
+  }
+};
+const testContentProvider: TabContentProvider = {
+  getContent: (contentTemplate: string) => {
+    switch(contentTemplate) {
+      case "template1": <>test template1 working</>; break;
+      case "template2": <>template2 working</>; break;
+      case "template3": <>temp3</>; break;
+      case "template4": <>t4 works as well</>; break;
+      case "template5": <>final template works too</>; break;
+    }
+    return <>FAILED</>;
+  }
+}
+const testTreeBuilt: SplitTree = SplitTreeManager.buildTree(testBlueprint, testContentProvider)!;
 
+export default function SplitView(props: Props): ReactNode {
   const {
     splitTree, 
     tabSelection, 
@@ -20,15 +65,9 @@ export default function SplitView(props: Props): ReactNode {
     handleTabRelocation, 
     handleTabSplit,
     handleDividerMove
-  } = useFlexibleSplits({splitTreeRoot: pTree});
+  } = useFlexibleSplits({ splitTree: testTreeBuilt });
 
-  const renderSplits = (
-    root: SplitTreeNode, 
-    splitSide: SplitSide = "left", 
-    parent: SplitTreeFork | null = null, 
-    grandParent: SplitTreeFork | null = null, 
-    grandParentSide: SplitSide | null = null
-  ): ReactNode => {
+  const renderSplits = (root: SplitTreeNode): ReactNode => {
     if( !root.isFork ) {
       const valueNode: SplitTreeValue = root as SplitTreeValue;
 
@@ -38,17 +77,13 @@ export default function SplitView(props: Props): ReactNode {
           tabs={valueNode.value}
           activeTab={null}
           onSelect={(tab: Tab) => handleTabSelection({
-            selectedTab: tab, 
-            sourceFork: parent!,
-            sourceSplitSide: splitSide,
-            parentFork: grandParent,
-            parentSplitSide: grandParentSide
+            selectedTab: tab,
+            sourceFork: valueNode.parent!,
+            sourceValueNode: valueNode
           })}
-          onDrop={() => handleTabRelocation(grandParent!, grandParentSide!, splitSide)}
-          onSplit={(requestedDirection: ContentDirection, requestedSide: SplitSide) => {
-            handleTabSplit(
-              grandParent!, grandParentSide!, splitSide, requestedSide, requestedDirection
-            )
+          onDrop={() => handleTabRelocation(valueNode)}
+          onSplit={(requestedDirection: DividerDirection, requestedBranch: SplitBranch) => {
+            handleTabSplit(valueNode.parent!, requestedDirection, requestedBranch);
           }}
           isTabDragging={!!tabSelection}
         />
@@ -61,15 +96,15 @@ export default function SplitView(props: Props): ReactNode {
         dividerSettings={fork.divider}
         onDividerMove={(newValue: number) => handleDividerMove(fork, newValue)}
       >
-        {renderSplits(fork.left, "left", fork, parent, splitSide)}
-        {fork.right && renderSplits(fork.right, "right", fork, parent, splitSide)}
+        {renderSplits(fork.left)}
+        {fork.right && renderSplits(fork.right)}
       </Divider>
     );
   };
 
   return (
     <div className="w-100 h-100 overflow-hidden">
-      {renderSplits(splitTree.root)}
+      {splitTree && renderSplits(splitTree.root)}
     </div>
   );
 }

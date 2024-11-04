@@ -1,202 +1,359 @@
-import { Tab } from "./tabs";
+import { buildTab, TabContentProvider, Tab, TabBlueprint, blueprintTab } from "./tabs";
 
+  //////////////////// DIVIDER ///////////////////////
+export const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
+export type DividerDirection = "horizontal" | "vertical";
+export type SplitBranch = "left" | "right";
 
-export type ContentDirection = "horizontal" | "vertical";
-
-export type SplitSide = "left" | "right";
-
-export interface SplitTreeItem {
-  isFork: boolean;
-  side: SplitSide | null;
-}
-
-export type SplitTreeNode = SplitTreeFork | SplitTreeValue;
-
-export type DividerSettings = {
-  direction: ContentDirection;
+type DividerSettings = {
+  direction: DividerDirection;
   value: number;
 };
 
-export interface SplitTreeFork extends SplitTreeItem {
-  divider: DividerSettings;
-  left: SplitTreeNode;
-  right?: SplitTreeNode | null;
+  //////////////////// BLUEPRINTS ///////////////////////
+type SplitTreeNodeBlueprint = SplitTreeValueBlueprint | SplitTreeForkBlueprint;
+
+interface SplitTreeItemBlueprint {
+  isFork: boolean;
 }
 
-export interface SplitTreeValue extends SplitTreeItem {
+interface SplitTreeValueBlueprint extends SplitTreeItemBlueprint {
+  value: TabBlueprint[];
+}
+
+interface SplitTreeForkBlueprint extends SplitTreeItemBlueprint {
+  divider: DividerSettings;
+  left: SplitTreeNodeBlueprint;
+  right?: SplitTreeNodeBlueprint;
+}
+
+export type SplitTreeBlueprint = {
+  root: SplitTreeForkBlueprint;
+}
+
+  //////////////////// BUILT ///////////////////////
+export type SplitTreeNode = SplitTreeValue | SplitTreeFork;
+interface SplitTreeItem<T> {
+  isFork: boolean;
+  parent: SplitTreeFork | null;
+  liveNode?: T;
+}
+
+export interface SplitTreeValue extends SplitTreeItem<SplitTreeValue> {
   value: Tab[];
+  parent: SplitTreeFork | null;
+}
+
+export interface SplitTreeFork extends SplitTreeItem<SplitTreeFork> {
+  divider: DividerSettings;
+  left: SplitTreeNode;
+  right?: SplitTreeNode;
 }
 
 export type SplitTree = {
-  root: SplitTreeNode;
+  root: SplitTreeFork;
 };
 
-export function addTab(targetFork: SplitTreeFork, targetSide: SplitSide, tab: Tab): void {
-  if( !targetFork[targetSide] || targetFork[targetSide].isFork ) {
-    return;
-  };
-  (targetFork[targetSide] as SplitTreeValue).value.push(tab);
-}
+type LiveNodeOperation<T> = (liveNodes: SplitTreeNode[] | null) => T;
 
-export type RemoveResult = {
-  failed: boolean;
+type RemoveResult = {
+  wasSuccessful: boolean;
   trackedFork: SplitTreeFork | null;
 };
 
-const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
-
-/**
- * Removes a tab from a given fork and shifts around nodes if any value node runs out 
- * of tabs in the process. In order to track changes to a given fork, a 'pivot fork' can
- * be provided. The function will check any of the shifted nodes matches the pivot and 
- * returns the node that has now taken the place of the pivot fork (the 'tracked fork'). 
- * This is used when splitting tabs to keep track of the fork that the tab will be split
- * into (the target fork), because the target may shift when being deleted from the 
- * source fork.
- * 
- * **Notice:** this operation assumes the given forks to be a part 
- * of a valid SplitTree where there is an unchanging root fork with a single left branch,
- * and where no two value nodes share the same parent (although they may have a common 
- * ancestor). This operation does **NOT** introduce new nodes to the tree.
- * 
- * @param parentFork Fork that contains the fork where the tab is to be deleted from.
- * @param parentSide Branch in the parent that contains the fork.
- * @param targetSide Branch in the fork that contains the tabs (the value node).
- * @param targetTab Tab to be removed.
- * @param pivotFork Fork whose shifts should be tracked.
- * 
- * @returns Whether the removal was succesful as well as the tracked fork, if a pivot 
- * fork was provided.
- */
-export function removeTab(
-  parentFork: SplitTreeFork, 
-  parentSide: SplitSide, 
-  targetSide: SplitSide, 
-  targetTab: Tab,
-  pivotFork?: SplitTreeFork
-): RemoveResult {
-  const failed = (): RemoveResult => {
-    return {
-      failed: true,
-      trackedFork: null
-    };
-  };
-
-  if( !parentFork[parentSide] || !parentFork[parentSide].isFork ) {
-    return failed();
-  };
-
-  const targetFork: SplitTreeFork = parentFork[parentSide] as SplitTreeFork;
-  const targetNode: SplitTreeNode | null | undefined = targetFork[targetSide];
-  if( !targetNode || targetNode.isFork ) {
-    return failed();
-  }
-
-  const targetTabs: Tab[] = (targetNode as SplitTreeValue).value;
-  const targetTabIndex: number = targetTabs.indexOf(targetTab);
-  if( targetTabIndex < 0 ) {
-    return failed();
-  }
-
-  let trackedFork: SplitTreeFork | undefined = pivotFork;
-  targetTabs.splice(targetTabIndex, 1);
-
-    // Consume split tree nodes
-  if( targetTabs.length === 0 ) {
-      // Consuming a fork leads to its nodes being copied to its parent fork.
-      // Sometimes the consumed fork is the also the target fork -> update the
-      // tracked fork
-    if( pivotFork && (parentFork.left === pivotFork || parentFork.right === pivotFork) ) {
-      trackedFork = parentFork;
-    }
-    
-    if( parentSide === "right" ) {
-      const parentLeft: SplitTreeFork = (parentFork.left as SplitTreeFork);
-      parentFork.right = parentLeft.right;
-      parentFork.left = parentLeft.left;
-    } else if( parentFork.right ) {
-      const parentRight: SplitTreeFork = (parentFork.right as SplitTreeFork);
-      parentFork.left = parentRight.left;
-      parentFork.right = parentRight.right;
-    } else {
-      parentFork.right = null;
-    }
-  }
-  
-  return {
-    failed: false,
-    trackedFork: trackedFork ?? null
-  };
-}
-
-export function splitTab(
-  targetFork: SplitTreeFork,
-  requestedSide: SplitSide,
-  requestedDirection: ContentDirection,
-  tab: Tab
-): void {
-  if( targetFork[requestedSide] ) {
-    targetFork[(requestedSide === "left") ? "right" : "left"] = targetFork[requestedSide];
-  }
-
-  targetFork[requestedSide] = {
-    isFork: false,
-    side: requestedSide,
-    value: [tab]
-  };
-
-  targetFork.divider = {
-    direction: requestedDirection,
-    value: DEFAULT_DIVIDER_VALUE_PERCENT
-  };
-
-    // Ensure that there is only one set of tabs per fork, split fork when left and right are full
-    // (not null)
-  targetFork.left = {
-    isFork: true,
-    side: "left",
-    divider: {
-      direction: "horizontal",
-      value: DEFAULT_DIVIDER_VALUE_PERCENT
-    },
-    left: {
-      ...targetFork.left
-    }
-  };
-
-  targetFork.right = {
-    isFork: true,
-    side: "right",
-    divider: {
-      direction: "horizontal",
-      value: DEFAULT_DIVIDER_VALUE_PERCENT
-    },
-    left: {
-      ...targetFork.right!
-    }
-  };
-}
-
-export function copySplitTreeNode(node: SplitTreeNode | null | undefined): SplitTreeNode | null | undefined {
+const snapshotNode = (
+  node: SplitTreeNode | null | undefined,
+  parent: SplitTreeFork | null = null,
+): SplitTreeNode | null | undefined => {
   if( !node ) {
     return node;
-  }
-
-  if( node.isFork ) {
+  } else if( node.isFork ) {
     const fork: SplitTreeFork = node as SplitTreeFork;
+    const result: SplitTreeFork = {
+      isFork: true,
+      divider: {...fork.divider},
+      parent,
+      liveNode: fork
+    } as SplitTreeFork;
+    result.left = snapshotNode(fork.left, result)!;
+    result.right = snapshotNode(fork.right, result) ?? undefined;
+    return result;
+  } else {
+    const valueNode: SplitTreeValue = node as SplitTreeValue;
     return {
-      ...fork,
-      divider: {
-        ...fork.divider
-      },
-      left: copySplitTreeNode(fork.left)!,
-      right: copySplitTreeNode(fork.right)
+      isFork: false,
+      parent,
+      liveNode: valueNode,
+      value: [...valueNode.value]
+    };
+  }
+};
+
+export class SplitTreeManager {
+  static buildTree(
+    treeBlueprint: SplitTreeBlueprint, contentProvider: TabContentProvider
+  ): SplitTree | null {
+    if( !treeBlueprint.root.isFork ) {
+      return null;
+    }
+
+    const buildNode = (
+      nodeBlueprint: SplitTreeNodeBlueprint | null | undefined,
+      parent: SplitTreeFork | null = null
+    ): SplitTreeNode | null | undefined => {
+      if( !nodeBlueprint ) {  // Handle undefined
+        return nodeBlueprint;
+      } else if( nodeBlueprint.isFork ) { // Handle forks
+        const fork: SplitTreeForkBlueprint = nodeBlueprint as SplitTreeForkBlueprint;
+        const result: SplitTreeFork = {
+          isFork: true,
+          divider: {...fork.divider},
+          parent
+        } as SplitTreeFork;
+        result.left = buildNode(fork.left, result)!;
+        result.right = buildNode(fork.right, result) ?? undefined;
+        return result;
+      } else {  // Handle value nodes
+        return {
+          isFork: false,
+          parent,
+          value: (nodeBlueprint as SplitTreeValueBlueprint).value.map(
+            (tabBlueprint: TabBlueprint) => buildTab(tabBlueprint, contentProvider)
+          )
+        };
+      }
+    };
+
+    return {
+      root: buildNode(treeBlueprint.root) as SplitTreeFork
     };
   }
 
-  const valueNode: SplitTreeValue = node as SplitTreeValue;
-  return {
-    ...valueNode,
-    value: [...valueNode.value] // Tabs have nothing to deep copy as of now
-  };
+
+  private tree: SplitTree;
+
+  constructor(tree: SplitTree) {
+    this.tree = tree;
+  }
+
+
+  public snapshot(): SplitTree {
+    return {
+      root: snapshotNode(this.tree.root) as SplitTreeFork
+    };
+  }
+
+  public blueprint(): SplitTreeBlueprint {
+    const blueprintNode = (
+      node: SplitTreeNode | null | undefined
+    ): SplitTreeNodeBlueprint | null | undefined => {
+      if( !node ) {
+        return node;
+      } else if( node.isFork ) {
+        const fork: SplitTreeFork = node as SplitTreeFork;
+        return {
+          isFork: true,
+          divider: {...fork.divider},
+          left: blueprintNode(fork.left)!,
+          right: blueprintNode(fork.right) ?? undefined
+        };
+      } else {
+        const valueNode: SplitTreeValue = node as SplitTreeValue;
+        return {
+          isFork: false,
+          value: valueNode.value.map((tab: Tab) => blueprintTab(tab))
+        };
+      }
+    };
+
+    return {
+      root: blueprintNode(this.snapshot().root) as SplitTreeForkBlueprint
+    };
+  }
+
+  private getLiveNodeAnd<T>(operation: LiveNodeOperation<T>, ...targetNode: SplitTreeNode[]): T {
+    let liveNodes: SplitTreeNode[] | null = [];
+    for( let i = 0; i < targetNode.length; i++ ) {
+      const live: SplitTreeNode | undefined = targetNode[i].liveNode;
+      if( !live ) {
+        liveNodes = null;
+        break;
+      }
+      liveNodes.push(live);
+    }
+    return operation(liveNodes);
+  }
+
+  private setChild(parent: SplitTreeFork, branch: SplitBranch, child: SplitTreeNode | undefined): void {
+    if( child ) {
+      parent[branch] = child;
+      child.parent = parent;
+    } else if( branch === "right" ) {
+      parent.right = undefined;
+    }
+  }
+
+  private addTabToLive(liveNode: SplitTreeValue, tab: Tab): void {
+    (liveNode as SplitTreeValue).value.push(tab);
+  }
+
+  private removeTabFromLive(targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork): RemoveResult {
+      // Find tab index, and remove from target
+    const resolvedTargetNode: SplitTreeValue = targetNode;
+    const targetTabs: Tab[] = resolvedTargetNode.value;
+    const tabIndex: number = targetTabs.indexOf(remove);
+    if( tabIndex < 0 ) {
+      return {
+        wasSuccessful: false,
+        trackedFork: null
+      };
+    }
+    targetTabs.splice(tabIndex, 1);
+
+      // Rearrange the tree, if the tabs were depleted after removal
+    if( targetTabs.length === 0 ) {
+      const targetFork: SplitTreeFork = resolvedTargetNode.parent!;
+      const targetParent: SplitTreeFork = targetFork.parent!;
+      const branch: SplitBranch = (targetParent.left === targetFork) ? "left" : "right";
+
+      if( trackedFork && (targetParent.left === trackedFork || targetParent.right === trackedFork) ) {
+        trackedFork = targetParent;
+        console.log("track")
+      }
+
+      if( branch === "right" ) {
+        const parentLeft: SplitTreeFork = (targetParent.left as SplitTreeFork);
+        this.setChild(targetParent, "right", parentLeft.right);
+        this.setChild(targetParent, "left", parentLeft.left);
+        console.log("branch right")
+      } else if( targetParent.right ) {
+        console.log("branch left")
+        const parentRight: SplitTreeFork = (targetParent.right as SplitTreeFork);
+        this.setChild(targetParent, "left", parentRight.left);
+        this.setChild(targetParent, "right", parentRight.right);
+      } else {
+        targetParent.right = undefined;
+      }
+    }
+
+    return {
+      wasSuccessful: true,
+      trackedFork: trackedFork ?? null
+    };
+  }
+
+  public addTab(targetNode: SplitTreeValue, tab: Tab): boolean {
+    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
+      if( !liveNodes ) {
+        return false;
+      }
+
+      const [liveNode] = liveNodes;
+      this.addTabToLive(liveNode as SplitTreeValue, tab);
+      return true;
+    }, targetNode);
+  }
+
+  public removeTab(targetNode: SplitTreeValue, remove: Tab): RemoveResult {
+    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): RemoveResult => {
+      if( !liveNodes ) {
+        return {
+          wasSuccessful: false,
+          trackedFork: null
+        };
+      }
+
+      const [liveNode] = liveNodes;
+      return this.removeTabFromLive(liveNode as SplitTreeValue, remove);
+    }, targetNode);
+  }
+
+  public relocateTab(fromNode: SplitTreeValue, toNode: SplitTreeValue, tab: Tab): boolean {
+      // Can't relocate to the same tab
+    if( fromNode === toNode ) {
+      return false;
+    }
+
+    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
+      if( !liveNodes ) {
+        return false;
+      }
+
+      const [liveFrom, liveTo] = liveNodes;
+      this.addTabToLive(liveTo as SplitTreeValue, tab);
+      return this.removeTabFromLive(liveFrom as SplitTreeValue, tab).wasSuccessful;
+    }, fromNode, toNode);
+  }
+
+  public splitTab(
+    fromNode: SplitTreeValue, 
+    toFork: SplitTreeFork, 
+    requestedDirection: DividerDirection, 
+    requestedBranch: SplitBranch,
+    tab: Tab
+  ): boolean {
+    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
+      if( !liveNodes ) {
+        return false;
+      }
+
+      const [liveFrom, liveTo] = liveNodes;
+
+      const targetFork: SplitTreeFork = liveTo as SplitTreeFork;
+      if( targetFork[requestedBranch] ) {
+        targetFork[(requestedBranch === "left") ? "right" : "left"] = targetFork[requestedBranch];
+      }
+    
+      targetFork[requestedBranch] = {
+        isFork: false,
+        parent: targetFork,
+        value: [tab]
+      };
+
+      targetFork.divider = {
+        direction: requestedDirection,
+        value: DEFAULT_DIVIDER_VALUE_PERCENT
+      };
+    
+        // Ensure that there is only one set of tabs per fork, split fork when left and right are full
+        // (not null)
+      targetFork.left = {
+        isFork: true,
+        divider: {
+          direction: "horizontal",
+          value: DEFAULT_DIVIDER_VALUE_PERCENT
+        },
+        parent: targetFork,
+        left: targetFork.left
+      };
+      targetFork.left.left.parent = targetFork.left;
+      
+      targetFork.right = {
+        isFork: true,
+        divider: {
+          direction: "horizontal",
+          value: DEFAULT_DIVIDER_VALUE_PERCENT
+        },
+        parent: targetFork,
+        left: targetFork.right!
+      };
+      targetFork.right.left.parent = targetFork.right;
+
+      this.removeTabFromLive(liveFrom as SplitTreeValue, tab, liveTo as SplitTreeFork);
+
+      return true;
+    }, fromNode, toFork);
+  }
+
+  public moveDivider(targetFork: SplitTreeFork, newValue: number): boolean {
+    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
+      if( !liveNodes ) {
+        return false;
+      }
+
+      const [live] = liveNodes;
+      (live as SplitTreeFork).divider.value = newValue;
+      return true;
+    }, targetFork);
+  }
 }
