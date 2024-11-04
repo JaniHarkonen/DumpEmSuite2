@@ -9,8 +9,13 @@
   position: absolute;
   background-color: red;
   opacity: 0%;
+  pointer-events: none;
 
   &:hover {
     opacity: 50%;
   }
+}
+
+.tab-drop-area {
+  
 }

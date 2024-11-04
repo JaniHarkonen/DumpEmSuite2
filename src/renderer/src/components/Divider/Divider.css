@@ -1,14 +1,35 @@
 .divider-container {
-  display: flex;
+  position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
-.divider-content {
-  min-width: max-content;
-  min-height: max-content;
-  flex-grow: 1;
-  flex-shrink: 100;
-  max-width: 100%;
+.divider-panel {
+  display: inline-block;
+}
+
+.divider-handle {
+  position: absolute;
+}
+
+.horizontal {
+  right: 0px;
+  top: 0px;
+  width: 5px;
+  height: 100%;
+
+  &:hover {
+    cursor: e-resize;
+  }
+}
+
+.vertical {
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 5px;
+
+  &:hover {
+    cursor: n-resize;
+  }
 }

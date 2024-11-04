@@ -1,11 +1,11 @@
 import "./Tabs.css";
-import { ContentDirection } from "@renderer/model/view";
 import { MouseEvent, ReactNode, useState } from "react";
 import { Tab } from "@renderer/model/tabs";
-import { SplitSide } from "@renderer/model/splits";
+import { DividerDirection, SplitBranch } from "@renderer/model/splits";
 
 type OnSelect = (tab: Tab) => void;
-type OnSplit = (direction: ContentDirection, side: SplitSide) => void;
+//type OnSplit = (direction: ContentDirection, side: SplitSide) => void;
+type OnSplit = (direction: DividerDirection, branch: SplitBranch) => void;
 
 type Props = {
   tabHeight: number;
@@ -22,13 +22,13 @@ type SplitActivation = {
   y: number;
   width: number;
   height: number;
-  splitDirection: ContentDirection;
-  splitSide: SplitSide;
+  splitDirection: DividerDirection;
+  splitSide: SplitBranch;
 }
 
 const SPLIT_ACTIVATIONS: SplitActivation[] = [
-  { x: 0, y: 0, width: 50, height: 50, splitDirection: "horizontal", splitSide: "left" }, // Split left
-  { x: 50, y: 50, width: 50, height: 50, splitDirection: "horizontal", splitSide: "right" }, // Split right
+  { x: 0, y: 0, width: 100, height: 50, splitDirection: "horizontal", splitSide: "left" }, // Split left
+  { x: 50, y: 50, width: 50, height: 100, splitDirection: "horizontal", splitSide: "right" }, // Split right
   { x: 50, y: 0, width: 50, height: 50, splitDirection: "vertical", splitSide: "left" }, // Split top
   { x: 0, y: 50, width: 50, height: 50, splitDirection: "vertical", splitSide: "right" } // Split bottom
 ];
@@ -62,7 +62,7 @@ export default function Tabs(props: Props): ReactNode {
   };
 
   return (
-    <div className="tabs-container">
+    <div className="p-relative tabs-container">
       <div 
         className="w-100" 
         style={{ height: pTabHeight + "px" }}
