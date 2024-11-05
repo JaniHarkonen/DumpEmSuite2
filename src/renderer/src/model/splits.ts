@@ -61,10 +61,10 @@ type RemoveResult = {
   trackedFork: SplitTreeFork | null;
 };
 
-const snapshotNode = (
+export function snapshotNode (
   node: SplitTreeNode | null | undefined,
   parent: SplitTreeFork | null = null,
-): SplitTreeNode | null | undefined => {
+): SplitTreeNode | null | undefined {
   if( !node ) {
     return node;
   } else if( node.isFork ) {
@@ -87,7 +87,7 @@ const snapshotNode = (
       value: [...valueNode.value]
     };
   }
-};
+}
 
 export class SplitTreeManager {
   static buildTree(
@@ -135,7 +135,6 @@ export class SplitTreeManager {
   constructor(tree: SplitTree) {
     this.tree = tree;
   }
-
 
   public snapshot(): SplitTree {
     return {
@@ -218,16 +217,13 @@ export class SplitTreeManager {
 
       if( trackedFork && (targetParent.left === trackedFork || targetParent.right === trackedFork) ) {
         trackedFork = targetParent;
-        console.log("track")
       }
 
       if( branch === "right" ) {
         const parentLeft: SplitTreeFork = (targetParent.left as SplitTreeFork);
         this.setChild(targetParent, "right", parentLeft.right);
         this.setChild(targetParent, "left", parentLeft.left);
-        console.log("branch right")
       } else if( targetParent.right ) {
-        console.log("branch left")
         const parentRight: SplitTreeFork = (targetParent.right as SplitTreeFork);
         this.setChild(targetParent, "left", parentRight.left);
         this.setChild(targetParent, "right", parentRight.right);
