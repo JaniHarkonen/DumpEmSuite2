@@ -1,63 +1,12 @@
 import { ReactNode } from "react";
 import Divider from "../Divider/Divider";
 import useFlexibleSplits from "@renderer/hook/useFlexibleSplits";
-import { Tab, TabContentProvider } from "@renderer/model/tabs";
-import { DividerDirection, SplitBranch, SplitTree, SplitTreeBlueprint, SplitTreeFork, SplitTreeManager, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
+import { Tab } from "@renderer/model/tabs";
+import { DividerDirection, SplitBranch, SplitTree, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
 import TabsWithDropArea from "../TabsWithDropArea/TabsWithDropArea";
 import { DropAreaSettings } from "../DropArea/DropArea";
 import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
 
-
-type Props = {
-  //tree: SplitTree;
-};
-
-const testBlueprint: SplitTreeBlueprint = {
-  root: {
-    isFork: true,
-    divider: { direction: "horizontal", value: 50 },
-    left: {
-      isFork: true,
-      divider: {direction: "vertical", value: 33},
-      left: {
-        isFork: true,
-        divider: {direction: "horizontal", value: 100},
-        left: {
-          isFork: false,
-          value: [
-            {id: "left-left-left", caption: "left left left", workspace: "ws", contentTemplate: "template1"},
-            // {id: "left-left-left2", caption: "left left left2", workspace: "ws", contentTemplate: "template2"},
-            // {id: "left-left-left3", caption: "left left left3", workspace: "ws", contentTemplate: "template3"},
-          ]
-        }
-      },
-      right: {
-        isFork: true,
-        divider: {direction: "vertical", value: 10},
-        left: {
-          isFork: false,
-          value: [
-            {id: "left-right-left", caption: "left right left", workspace: "ws", contentTemplate: "template4"},
-            // {id: "left-right-left2", caption: "left right left2", workspace: "ws", contentTemplate: "template5"},
-          ]
-        }
-      }
-    }
-  }
-};
-const testContentProvider: TabContentProvider = {
-  getContent: (contentTemplate: string) => {
-    switch(contentTemplate) {
-      case "template1": return <>test template1 working</>;
-      case "template2": return <>template2 working</>;
-      case "template3": return <>temp3</>;
-      case "template4": return <>t4 works as well</>;
-      case "template5": return <>final template works too</>;
-    }
-    return <>FAILED</>;
-  }
-};
-const testTreeBuilt: SplitTree = SplitTreeManager.buildTree(testBlueprint, testContentProvider)!;
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
   <div 
@@ -70,7 +19,13 @@ const dropAreas: DropAreaSettings[] = quadrantDropAreas(
   />
 );
 
+type Props = {
+  splitTree: SplitTree;
+};
+
 export default function SplitView(props: Props): ReactNode {
+  const pSplitTree: SplitTree = props.splitTree;
+
   const {
     splitTree, 
     tabSelection, 
@@ -78,11 +33,11 @@ export default function SplitView(props: Props): ReactNode {
     handleTabRelocation, 
     handleTabSplit,
     handleDividerMove
-  } = useFlexibleSplits({ splitTree: testTreeBuilt });
+  } = useFlexibleSplits({ splitTree: pSplitTree });
 
   const handleTabContentDrop = (dropArea: DropAreaSettings, toFork: SplitTreeFork) => {
       // Maps drop areas to DividerDirections and DividerDirections to SplitBranches
-    const json = {
+    const branchings = {
       "top-left": "horizontal",
       "top-right": "vertical",
       "bottom-left": "vertical",
@@ -96,8 +51,8 @@ export default function SplitView(props: Props): ReactNode {
         "bottom-left": "right"
       }
     };
-    const requestedDirection: DividerDirection = json[dropArea.id];
-    const requestedBranch: SplitBranch = json[requestedDirection][dropArea.id];
+    const requestedDirection: DividerDirection = branchings[dropArea.id];
+    const requestedBranch: SplitBranch = branchings[requestedDirection][dropArea.id];
     handleTabSplit(toFork, requestedDirection, requestedBranch);
   };
 
@@ -140,36 +95,3 @@ export default function SplitView(props: Props): ReactNode {
     </div>
   );
 }
-
-
-        // {/*<Tabs
-        //   tabHeight={24}
-        //   tabs={valueNode.value}
-        //   activeTab={null}
-        //   onSelect={(tab: Tab) => handleTabSelection({
-        //     selectedTab: tab,
-        //     sourceFork: valueNode.parent!,
-        //     sourceValueNode: valueNode
-        //   })}
-        //   onTabDrop={() => handleTabRelocation(valueNode)}
-        //   onContentDrop={(dropArea: DropArea) => handleTabContentDrop(dropArea, valueNode.parent!)}
-        //   isDropActive={!!tabSelection}
-        //   dropAreaHighlights={{
-        //     "top-left": {
-        //       enabled: true,
-        //       element: <div style={{backgroundColor: "red", opacity: "25%", width: "100%", height: "100%"}}></div>
-        //     },
-        //     "top-right": {
-        //       enabled: true,
-        //       element: <div style={{backgroundColor: "red", opacity: "25%", width: "100%", height: "100%"}}></div>
-        //     },
-        //     "bottom-left": {
-        //       enabled: true,
-        //       element: <div style={{backgroundColor: "red", opacity: "25%", width: "100%", height: "100%"}}></div>
-        //     },
-        //     "bottom-right": {
-        //       enabled: true,
-        //       element: <div style={{backgroundColor: "red", opacity: "25%", width: "100%", height: "100%"}}></div>
-        //     }
-        //   }}
-        // />*/}

@@ -51,19 +51,17 @@ export default function TabsWithDropArea(props: Props): ReactNode {
         onMouseUp={handleContentDrop}
         onMouseLeave={() => setActiveDropArea(null)}
       >
-        <div>
-          {pTabs.map((tab: Tab) => {
-            return (
-              <TabPanel
-                key={`drop-area-panel-ws-${tab.workspace}-id-${tab.id}`}
-                isActive={activeTab === tab}
-              >
-                {tab.content}
-              </TabPanel>
-            );
-          })}
-        </div>
-        <div id="clay" className="drop-area">
+        {pTabs.map((tab: Tab) => {
+          return (
+            <TabPanel
+              key={`drop-area-panel-ws-${tab.workspace}-id-${tab.id}`}
+              isActive={activeTab === tab}
+            >
+              {tab.content}
+            </TabPanel>
+          );
+        })}
+        <div className="drop-area">
           {pIsDropActive && activeDropArea && (
             <DropArea highlight={activeDropArea.highlight} />
           )}
