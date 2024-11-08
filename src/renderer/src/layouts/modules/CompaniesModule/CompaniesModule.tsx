@@ -1,42 +1,30 @@
-import SplitView from "@renderer/components/SplitView/SplitView";
-import { SplitTree, SplitTreeBlueprint, SplitTreeManager } from "@renderer/model/splits";
+import ModuleView from "@renderer/components/ModuleView/ModuleView";
+import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
 
 
-const testBlueprint: SplitTreeBlueprint = {
-  root: {
-    isFork: true,
-    divider: { direction: "horizontal", value: 50 },
-    left: {
-      isFork: true,
-      divider: { direction: "horizontal", value: 50 },
-      left: {
-        isFork: false,
-        value: [
-          {id: "view-scraper", caption: "Scraper", workspace: "ws-test", contentTemplate: "template1"},
-          {id: "view-listings", caption: "Listings", workspace: "ws-test", contentTemplate: "template2"},
-          {id: "view-profiles", caption: "Profiles", workspace: "ws-test", contentTemplate: "template3"},
-        ]
-      }
-    }
-  }
-};
-const testContentProvider: TabContentProvider = {
+const CONTENT_PROVIDER: TabContentProvider = {
   getContent: (contentTemplate: string) => {
     switch(contentTemplate) {
-      case "template1": return <>test template1 working</>;
-      case "template2": return <>template2 working</>;
-      case "template3": return <>temp3</>;
-      case "template4": return <>t4 works as well</>;
-      case "template5": return <>final template works too</>;
+      case "tab-scraper": return <>tab-scraper</>;
+      case "tab-listings": return <>tab-listings</>;
+      case "tab-profiles": return <>tab-profiles</>;
     }
     return <>FAILED</>;
   }
 };
-const testTreeBuilt: SplitTree = SplitTreeManager.buildTree(testBlueprint, testContentProvider)!;
 
-export default function CompaniesModule() {
+type Props = {
+  sceneBlueprint: SplitTreeBlueprint;
+};
+
+export default function CompaniesModule(props: Props) {
+  const pSceneBlueprint: SplitTreeBlueprint = props.sceneBlueprint;
+
   return (
-    <SplitView splitTree={testTreeBuilt} />
+    <ModuleView
+      sceneBlueprint={pSceneBlueprint}
+      contentProvider={CONTENT_PROVIDER}
+    />
   );
 }

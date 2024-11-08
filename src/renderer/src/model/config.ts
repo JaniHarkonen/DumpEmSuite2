@@ -1,14 +1,23 @@
 import { SplitTreeBlueprint } from "./splits";
 
+export type SplitTreeConfig = {
+  splitTree: SplitTreeBlueprint;
+};
 
-type WorkspaceSceneConfig = {
+export type WorkspaceViewsConfig = {
+  [key in string]: SplitTreeConfig;
+};
+
+export type WorkspaceConfig = {
   id: string;
   caption: string;
   scene: {
-    splitTree: SplitTreeBlueprint;
+    modules: SplitTreeConfig;
+    views: WorkspaceViewsConfig;
   };
 };
 
 export type AppStateConfig = {
-  workspaces: WorkspaceSceneConfig[];
+  activeWorkspaceIndex: number;
+  workspaces: WorkspaceConfig[];
 };

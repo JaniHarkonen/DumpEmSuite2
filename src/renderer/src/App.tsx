@@ -3,6 +3,7 @@ import Workspace from "./layouts/Workspace/Workspace";
 import { AppStateConfig } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
 
+
 const {filesAPI} = window.api;
 
 export default function App(): ReactNode {
@@ -26,7 +27,14 @@ export default function App(): ReactNode {
       }}
     >
       <div className="w-100 h-100 overflow-hidden">
-        <Workspace sceneBlueprint={configuration?.workspaces[0].scene.splitTree ?? null} />
+        {configuration && (
+          <Workspace
+            sceneBlueprint={
+              configuration.workspaces[configuration.activeWorkspaceIndex]
+              .scene.modules.splitTree
+            }
+          />
+        )}
       </div>
     </GlobalContext.Provider>
   );
