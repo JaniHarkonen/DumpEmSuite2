@@ -1,28 +1,11 @@
 import SplitView from "@renderer/components/SplitView/SplitView";
-import { SplitTree, SplitTreeBlueprint, SplitTreeManager } from "@renderer/model/splits";
+import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
 import CompaniesModule from "../modules/CompaniesModule/CompaniesModule";
 import AnalysisModule from "../modules/AnalysisModule/AnalysisModule";
+import useSplitTreeManager from "@renderer/hook/useSplitTreeManager";
 
 
-const testBlueprint: SplitTreeBlueprint = {
-  root: {
-    isFork: true,
-    divider: { direction: "horizontal", value: 50 },
-    left: {
-      isFork: true,
-      divider: { direction: "horizontal", value: 50 },
-      left: {
-        isFork: false,
-        value: [
-          {id: "module-companies", caption: "Companies", workspace: "ws-test", contentTemplate: "template1"},
-          {id: "module-analysis", caption: "Analysis", workspace: "ws-test", contentTemplate: "template2"},
-          {id: "module-macro", caption: "Macro", workspace: "ws-test", contentTemplate: "template3"},
-        ]
-      }
-    }
-  }
-};
 const testContentProvider: TabContentProvider = {
   getContent: (contentTemplate: string) => {  
     switch(contentTemplate) {
@@ -35,10 +18,23 @@ const testContentProvider: TabContentProvider = {
     return <>FAILED</>;
   }
 };
-const testTreeBuilt: SplitTree = SplitTreeManager.buildTree(testBlueprint, testContentProvider)!;
 
-export default function Workspace() {
+type Props = {
+  sceneBlueprint: SplitTreeBlueprint | null;
+}
+
+export default function Workspace(props: Props) {
+  const pSceneBlueprint: SplitTreeBlueprint | null = props.sceneBlueprint;
+
+  const [splitTree] = useSplitTreeManager({
+    sceneBlueprint: pSceneBlueprint,
+    contentProvider: testContentProvider
+  });
+
+  
   return (
-    <SplitView splitTree={testTreeBuilt} />
+    <>
+      {splitTree && <SplitView splitTree={splitTree} />}
+    </>
   );
 }

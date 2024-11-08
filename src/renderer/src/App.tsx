@@ -1,12 +1,33 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Workspace from "./layouts/Workspace/Workspace";
+import { AppStateConfig } from "./model/config";
+import { GlobalContext } from "./context/GlobalContext";
+
+const {filesAPI} = window.api;
 
 export default function App(): ReactNode {
-  //const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  // ipcHandle();
+  const [configuration, setConfiguration] = useState<AppStateConfig | null>(null);
+
+  useEffect(() => {
+    filesAPI.readJSON<AppStateConfig>(
+      filesAPI.getWorkingDirectory() + "\\test-data\\config.json"
+    ).then((result) => setConfiguration(result.result))
+    .catch((err) => console.log(err));
+  }, []);
 
   return (
-    <div className="w-100 h-100 overflow-hidden">
-      <Workspace />
-    </div>
+    <GlobalContext.Provider value={{
+        config: {
+          configuration,
+          setConfiguration
+        }
+      }}
+    >
+      <div className="w-100 h-100 overflow-hidden">
+        <Workspace sceneBlueprint={configuration?.workspaces[0].scene.splitTree ?? null} />
+      </div>
+    </GlobalContext.Provider>
   );
 }

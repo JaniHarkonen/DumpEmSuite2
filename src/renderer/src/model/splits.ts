@@ -61,6 +61,24 @@ type RemoveResult = {
   trackedFork: SplitTreeFork | null;
 };
 
+export function defaultSplitTree(): SplitTree {
+  return {
+    root: {
+      isFork: true,
+      divider: {
+        direction: "horizontal",
+        value: 50
+      },
+      parent: null,
+      left: {
+        isFork: false,
+        parent: null,
+        value: []
+      }
+    }
+  };
+}
+
 export function snapshotNode (
   node: SplitTreeNode | null | undefined,
   parent: SplitTreeFork | null = null,
