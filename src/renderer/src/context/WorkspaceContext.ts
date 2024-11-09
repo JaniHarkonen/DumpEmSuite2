@@ -1,4 +1,4 @@
-import { nullWorkspaceConfig, WorkspaceConfig } from "@renderer/model/config";
+import { defaultWorkspaceConfig, WorkspaceConfig } from "@renderer/model/config";
 import { createContext } from "react";
 
 
@@ -7,5 +7,5 @@ type WorkspaceContextType = {
 };
 
 export const WorkspaceContext = createContext<WorkspaceContextType>({
-  workspaceConfig: nullWorkspaceConfig()
+  workspaceConfig: defaultWorkspaceConfig()
 });

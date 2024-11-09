@@ -1,45 +1,32 @@
-import ModuleView, { ModuleProps } from "@renderer/components/ModuleView/ModuleView";
+import ModuleView from "@renderer/components/ModuleView/ModuleView";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode, useContext } from "react";
 import CompaniesModule from "../modules/CompaniesModule/CompaniesModule";
-import { WorkspaceViewsConfig } from "@renderer/model/config";
 import AnalysisModule from "../modules/AnalysisModule/AnalysisModule";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
+import { SceneTabsConfig } from "@renderer/model/config";
+import { createTabContentProvider } from "../layoutUtils";
 
 
-export default function Workspace(props: ModuleProps): ReactNode {
-   const pSceneBlueprint: SplitTreeBlueprint | null = props.sceneBlueprint;
-
+export default function Workspace(): ReactNode {
   const {workspaceConfig} = useContext(WorkspaceContext);
-  const viewsConfig: WorkspaceViewsConfig = workspaceConfig.scene.views;
+  const sceneBluePrint: SplitTreeBlueprint | null = workspaceConfig.scene.splitTree;
+  const tabsConfig: SceneTabsConfig = workspaceConfig.scene.tabs!;
 
-  const modulesProvider: TabContentProvider = {
-    getContent: (contentTemplate: string) => {
-      switch( contentTemplate ) {
-        case "module-companies": {
-          return (
-            <CompaniesModule
-              sceneBlueprint={viewsConfig[contentTemplate].splitTree}
-            />
-          );
-        }
-        case "module-analysis": {
-          return (
-            <AnalysisModule
-              sceneBlueprint={viewsConfig[contentTemplate].splitTree}
-            />
-          );
-        };
-        case "module-macro": return <>macro module</>;
-      }
-      return <>FAILED</>;
-    }
-  };
+  const modulesProvider: TabContentProvider = createTabContentProvider(
+    tabsConfig, 
+    {
+      "module-companies": () => <CompaniesModule />,
+      "module-analysis": () => <AnalysisModule />,
+      "module-macro": () => <>macro module</>
+    },
+    <>FAILED</>
+  );
 
   return (
     <ModuleView 
-      sceneBlueprint={pSceneBlueprint} 
+      sceneBlueprint={sceneBluePrint} 
       contentProvider={modulesProvider}
     />
   );

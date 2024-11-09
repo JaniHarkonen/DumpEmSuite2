@@ -19,6 +19,7 @@ export default function App(): ReactNode {
     .catch((err) => console.log(err));
   }, []);
 
+  configuration?.workspaces[0].scene
   return (
     <GlobalContext.Provider value={{
         config: {
@@ -30,7 +31,7 @@ export default function App(): ReactNode {
       <div className="w-100 h-100 overflow-hidden">
         {configuration && (
           <WorkspaceContext.Provider value={{ workspaceConfig: configuration.workspaces[0] }}>
-            <Workspace sceneBlueprint={configuration.workspaces[0].scene.modules.splitTree} />
+            <Workspace />
           </WorkspaceContext.Provider>
         )}
       </div>
