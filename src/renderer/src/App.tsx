@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import Workspace from "./layouts/Workspace/Workspace";
 import { AppStateConfig } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
+import { WorkspaceContext } from "./context/WorkspaceContext";
 
 
 const {filesAPI} = window.api;
@@ -28,12 +29,9 @@ export default function App(): ReactNode {
     >
       <div className="w-100 h-100 overflow-hidden">
         {configuration && (
-          <Workspace
-            sceneBlueprint={
-              configuration.workspaces[configuration.activeWorkspaceIndex]
-              .scene.modules.splitTree
-            }
-          />
+          <WorkspaceContext.Provider value={{ workspaceConfig: configuration.workspaces[0] }}>
+            <Workspace sceneBlueprint={configuration.workspaces[0].scene.modules.splitTree} />
+          </WorkspaceContext.Provider>
         )}
       </div>
     </GlobalContext.Provider>

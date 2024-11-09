@@ -5,6 +5,10 @@ import SplitView from "../SplitView/SplitView";
 import { ReactNode } from "react";
 
 
+export type ModuleProps = {
+  sceneBlueprint: SplitTreeBlueprint;
+};
+
 export default function ModuleView(props: SplitTreeManagerProps): ReactNode {
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.sceneBlueprint;

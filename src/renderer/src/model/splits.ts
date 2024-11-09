@@ -5,7 +5,7 @@ export const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
 export type DividerDirection = "horizontal" | "vertical";
 export type SplitBranch = "left" | "right";
 
-type DividerSettings = {
+export type DividerSettings = {
   direction: DividerDirection;
   value: number;
 };

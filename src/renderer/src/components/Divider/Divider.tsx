@@ -1,10 +1,11 @@
 import "./Divider.css";
-import { ContentDirection, DividerSettings } from "@renderer/model/splits";
+
 import reactNodeToArray from "@renderer/utils/reactNodeToArray";
 import { MutableRefObject, ReactNode, useRef } from "react";
 import useDraggable from "@renderer/hook/useDraggable";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import clamp from "@renderer/utils/clamp";
+import { DividerDirection, DividerSettings } from "@renderer/model/splits";
 
 type OnDividerMove = (newValue: number) => void;
 
@@ -57,7 +58,7 @@ export default function Divider(props: Props): ReactNode {
    * 
    * @returns Given value as a CSS percentage string or "100%".
    */
-  const valueOrFill = (dir: ContentDirection, val: number): string => {
+  const valueOrFill = (dir: DividerDirection, val: number): string => {
     return (alternativeContent && direction === dir ? val : 100) + "%";
   };
 
@@ -67,7 +68,7 @@ export default function Divider(props: Props): ReactNode {
       id={idContainer.current}
     >
       <div
-        className="p-absolute debug-bg-green"
+        className="p-absolute"
         style={{
           width: valueOrFill("horizontal", value),
           height: valueOrFill("vertical", value),
@@ -76,7 +77,7 @@ export default function Divider(props: Props): ReactNode {
         {mainContent}
         {alternativeContent && (
           <div 
-            className={`divider-handle debug-bg-red ${pDividerSettings.direction}`}
+            className={`divider-handle ${pDividerSettings.direction}`}
             onMouseDown={handleDragStart}
           />
         )}

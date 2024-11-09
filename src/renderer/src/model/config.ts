@@ -1,4 +1,4 @@
-import { SplitTreeBlueprint } from "./splits";
+import { defaultSplitTree, SplitTreeBlueprint } from "./splits";
 
 export type SplitTreeConfig = {
   splitTree: SplitTreeBlueprint;
@@ -18,6 +18,18 @@ export type WorkspaceConfig = {
 };
 
 export type AppStateConfig = {
-  activeWorkspaceIndex: number;
   workspaces: WorkspaceConfig[];
 };
+
+export function nullWorkspaceConfig(): WorkspaceConfig {
+  return {
+    id: "",
+    caption: "",
+    scene: {
+      modules: {
+        splitTree: defaultSplitTree()
+      },
+      views: {}
+    }
+  };
+}

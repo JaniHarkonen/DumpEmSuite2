@@ -1,6 +1,8 @@
 import "./TabControls.css";
+
 import { Tab } from "@renderer/model/tabs";
 import { ReactNode } from "react";
+
 
 export type OnSelect = (selectedTab: Tab) => void;
 

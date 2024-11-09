@@ -1,24 +1,18 @@
-import ModuleView from "@renderer/components/ModuleView/ModuleView";
-import { SplitTreeBlueprint } from "@renderer/model/splits";
+import ModuleView, { ModuleProps } from "@renderer/components/ModuleView/ModuleView";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode, useContext } from "react";
 import CompaniesModule from "../modules/CompaniesModule/CompaniesModule";
-import { GlobalContext } from "@renderer/context/GlobalContext";
 import { WorkspaceViewsConfig } from "@renderer/model/config";
 import AnalysisModule from "../modules/AnalysisModule/AnalysisModule";
+import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
+import { SplitTreeBlueprint } from "@renderer/model/splits";
 
 
-type Props = {
-  sceneBlueprint: SplitTreeBlueprint | null;
-};
+export default function Workspace(props: ModuleProps): ReactNode {
+   const pSceneBlueprint: SplitTreeBlueprint | null = props.sceneBlueprint;
 
-export default function Workspace(props: Props): ReactNode {
-  const pSceneBlueprint: SplitTreeBlueprint | null = props.sceneBlueprint;
-
-  const {config} = useContext(GlobalContext);
-  const configuration = config.configuration!;
-  const viewsConfig: WorkspaceViewsConfig = 
-    configuration.workspaces[configuration.activeWorkspaceIndex].scene.views;
+  const {workspaceConfig} = useContext(WorkspaceContext);
+  const viewsConfig: WorkspaceViewsConfig = workspaceConfig.scene.views;
 
   const modulesProvider: TabContentProvider = {
     getContent: (contentTemplate: string) => {
