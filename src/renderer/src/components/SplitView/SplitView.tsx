@@ -30,6 +30,7 @@ export default function SplitView(props: Props): ReactNode {
     splitTree, 
     tabSelection, 
     handleTabSelection, 
+    handleTabOpen,
     handleTabRelocation, 
     handleTabSplit,
     handleDividerMove
@@ -62,16 +63,21 @@ export default function SplitView(props: Props): ReactNode {
 
       return (
         <TabsWithDropArea
-          tabs={valueNode.value}
-          activeTab={null}
+          tabs={valueNode.value.tabs}
+          activeTabIndex={valueNode.value.activeTabIndex}
           onSelect={(tab: Tab) => handleTabSelection({
             selectedTab: tab,
             sourceFork: valueNode.parent!,
             sourceValueNode: valueNode
           })}
+          onOpen={(openedTab: Tab) => {
+            handleTabOpen(valueNode, valueNode.value.tabs.indexOf(openedTab));
+          }}
           isDropActive={!!tabSelection}
           onTabDrop={() => handleTabRelocation(valueNode)}
-          onContentDrop={(dropArea: DropAreaSettings) => handleTabContentDrop(dropArea, valueNode.parent!)}
+          onContentDrop={(dropArea: DropAreaSettings) => {
+            handleTabContentDrop(dropArea, valueNode.parent!);
+          }}
           dropAreas={dropAreas}
         />
       );
