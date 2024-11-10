@@ -12,6 +12,16 @@ export interface Tab extends TabBlueprint {
   content: ReactNode;
 };
 
+export type TabSettingsBlueprint = {
+  tabs: TabBlueprint[];
+  activeTabIndex: number;
+};
+
+export type TabSettings = {
+  tabs: Tab[];
+  activeTabIndex: number;
+}
+
 export interface TabContentProvider {
   getContent: (contentTemplate: string) => ReactNode;
 }

@@ -4,30 +4,32 @@
   height: 100%;
 }
 
-.divider-panel {
-  display: inline-block;
-}
-
 .divider-handle {
   position: absolute;
+  border-width: 1px;
+  border-color: dimgray;
 }
 
-.horizontal {
+.divider-handle.horizontal {
   right: 0px;
   top: 0px;
   width: 5px;
   height: 100%;
+
+  border-right-style: solid;
 
   &:hover {
     cursor: e-resize;
   }
 }
 
-.vertical {
+.divider-handle.vertical {
   left: 0px;
   bottom: 0px;
   width: 100%;
   height: 5px;
+
+  border-bottom-style: solid;
 
   &:hover {
     cursor: n-resize;

@@ -1,23 +1,25 @@
 import "./TabControls.css";
+
 import { Tab } from "@renderer/model/tabs";
 import { ReactNode } from "react";
 
-export type OnSelect = (selectedTab: Tab) => void;
 
-type OnClick = (openedTab: Tab) => void;
+export type OnSelect = (selectedTab: Tab) => void;
+export type OnOpen = (openedTab: Tab) => void;
+
 type OnDrop = () => void;
 
 type Props = {
   tabs: Tab[];
   onSelect?: OnSelect;
-  onClick?: OnClick;
+  onOpen?: OnOpen;
   onDrop?: OnDrop;
 };
 
 export default function TabControls(props: Props): ReactNode {
   const pTabs: Tab[] = props.tabs;
   const pOnSelect: OnSelect = props.onSelect || function() {};
-  const pOnClick: OnClick = props.onClick || function() {};
+  const pOnOpen: OnOpen = props.onOpen || function() {};
   const pOnDrop: OnDrop = props.onDrop || function() {};
 
   return (
@@ -30,7 +32,7 @@ export default function TabControls(props: Props): ReactNode {
           <button
             key={tab.workspace + "-tab-button-" + tab.id}
             onMouseDown={() => pOnSelect(tab)}
-            onClick={() => pOnClick(tab)}
+            onClick={() => pOnOpen(tab)}
           >
             {tab.caption}
           </button>

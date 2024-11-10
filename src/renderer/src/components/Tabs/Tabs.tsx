@@ -1,15 +1,16 @@
 import "./Tabs.css";
 import { ReactNode } from "react";
 import { Tab } from "@renderer/model/tabs";
-import TabControls, { OnSelect } from "./TabControls/TabControls";
+import TabControls, { OnOpen, OnSelect } from "./TabControls/TabControls";
 import useTabs from "@renderer/hook/useTabs";
 import TabPanel from "./TabPanel/TabPanel";
 
 
 type Props = {
   tabs: Tab[];
-  activeTab?: Tab | null;
+  activeTabIndex?: number;
   onSelect?: OnSelect;
+  onOpen?: OnOpen;
 };
 
 export type TabsProps = Props;
@@ -17,15 +18,21 @@ export type TabsProps = Props;
 export default function Tabs(props: Props): ReactNode {
   const pTabs: Tab[] = props.tabs;
   const pOnSelect: OnSelect = props.onSelect || function() {};
+  const pOnOpen: OnOpen = props.onOpen || function() {};
 
   const {activeTab, setActiveTab} = useTabs({ activeTab: null });
+
+  const handleOpenTab = (openedTab: Tab) => {
+    setActiveTab(openedTab);
+    pOnOpen(openedTab);
+  };
 
   return (
     <div className="tabs-container">
       <TabControls
         tabs={pTabs}
         onSelect={(selectedTab: Tab) => pOnSelect(selectedTab)}
-        onClick={(openedTab: Tab) => setActiveTab(openedTab)}
+        onOpen={handleOpenTab}
       />
       {pTabs.map((tab: Tab) => {
         return (

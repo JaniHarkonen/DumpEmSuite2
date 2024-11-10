@@ -1,11 +1,11 @@
-import { buildTab, TabContentProvider, Tab, TabBlueprint, blueprintTab } from "./tabs";
+import { buildTab, TabContentProvider, Tab, TabBlueprint, blueprintTab, TabSettingsBlueprint, TabSettings } from "./tabs";
 
   //////////////////// DIVIDER ///////////////////////
 export const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
 export type DividerDirection = "horizontal" | "vertical";
 export type SplitBranch = "left" | "right";
 
-type DividerSettings = {
+export type DividerSettings = {
   direction: DividerDirection;
   value: number;
 };
@@ -18,7 +18,7 @@ interface SplitTreeItemBlueprint {
 }
 
 interface SplitTreeValueBlueprint extends SplitTreeItemBlueprint {
-  value: TabBlueprint[];
+  value: TabSettingsBlueprint;
 }
 
 interface SplitTreeForkBlueprint extends SplitTreeItemBlueprint {
@@ -40,7 +40,7 @@ interface SplitTreeItem<T> {
 }
 
 export interface SplitTreeValue extends SplitTreeItem<SplitTreeValue> {
-  value: Tab[];
+  value: TabSettings;
   parent: SplitTreeFork | null;
 }
 
@@ -60,6 +60,27 @@ type RemoveResult = {
   wasSuccessful: boolean;
   trackedFork: SplitTreeFork | null;
 };
+
+export function defaultSplitTree(): SplitTree {
+  return {
+    root: {
+      isFork: true,
+      divider: {
+        direction: "horizontal",
+        value: 50
+      },
+      parent: null,
+      left: {
+        isFork: false,
+        parent: null,
+        value: {
+          tabs: [],
+          activeTabIndex: -1
+        }
+      }
+    }
+  };
+}
 
 export function snapshotNode (
   node: SplitTreeNode | null | undefined,
@@ -84,7 +105,10 @@ export function snapshotNode (
       isFork: false,
       parent,
       liveNode: valueNode,
-      value: [...valueNode.value]
+      value: {
+        tabs: [...valueNode.value.tabs],
+        activeTabIndex: valueNode.value.activeTabIndex
+      }
     };
   }
 }
@@ -114,12 +138,16 @@ export class SplitTreeManager {
         result.right = buildNode(fork.right, result) ?? undefined;
         return result;
       } else {  // Handle value nodes
+        const valueNode: SplitTreeValueBlueprint = nodeBlueprint as SplitTreeValueBlueprint;
         return {
           isFork: false,
           parent,
-          value: (nodeBlueprint as SplitTreeValueBlueprint).value.map(
-            (tabBlueprint: TabBlueprint) => buildTab(tabBlueprint, contentProvider)
-          )
+          value: {
+            tabs: valueNode.value.tabs.map(
+              (tabBlueprint: TabBlueprint) => buildTab(tabBlueprint, contentProvider)
+            ),
+            activeTabIndex: valueNode.value.activeTabIndex
+          }
         };
       }
     };
@@ -160,7 +188,10 @@ export class SplitTreeManager {
         const valueNode: SplitTreeValue = node as SplitTreeValue;
         return {
           isFork: false,
-          value: valueNode.value.map((tab: Tab) => blueprintTab(tab))
+          value: {
+            tabs: valueNode.value.tabs.map((tab: Tab) => blueprintTab(tab)),
+            activeTabIndex: valueNode.value.activeTabIndex
+          }
         };
       }
     };
@@ -193,13 +224,13 @@ export class SplitTreeManager {
   }
 
   private addTabToLive(liveNode: SplitTreeValue, tab: Tab): void {
-    (liveNode as SplitTreeValue).value.push(tab);
+    (liveNode as SplitTreeValue).value.tabs.push(tab);
   }
 
   private removeTabFromLive(targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork): RemoveResult {
       // Find tab index, and remove from target
     const resolvedTargetNode: SplitTreeValue = targetNode;
-    const targetTabs: Tab[] = resolvedTargetNode.value;
+    const targetTabs: Tab[] = resolvedTargetNode.value.tabs;
     const tabIndex: number = targetTabs.indexOf(remove);
     if( tabIndex < 0 ) {
       return {
@@ -236,6 +267,24 @@ export class SplitTreeManager {
       wasSuccessful: true,
       trackedFork: trackedFork ?? null
     };
+  }
+
+  public openTab(targetNode: SplitTreeValue, tabIndex: number): boolean {
+    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
+      if( !liveNodes ) {
+        return false;
+      }
+
+      const [targetValueNode] = liveNodes;
+      const tabSettings: TabSettings = (targetValueNode as SplitTreeValue).value;
+      
+      if( tabIndex < 0 || tabIndex >= tabSettings.tabs.length ) {
+        return false;
+      }
+      
+      tabSettings.activeTabIndex = tabIndex;
+      return true;
+    }, targetNode);
   }
 
   public addTab(targetNode: SplitTreeValue, tab: Tab): boolean {
@@ -303,7 +352,10 @@ export class SplitTreeManager {
       targetFork[requestedBranch] = {
         isFork: false,
         parent: targetFork,
-        value: [tab]
+        value: {
+          tabs: [tab],
+          activeTabIndex: -1
+        }
       };
 
       targetFork.divider = {

@@ -1,6 +1,6 @@
 import "../Tabs/Tabs.css";
 import "../DropArea/DropArea.css";
-import TabControls, { OnSelect } from "../Tabs/TabControls/TabControls";
+import TabControls, { OnOpen, OnSelect } from "../Tabs/TabControls/TabControls";
 import { TabsProps } from "../Tabs/Tabs";
 import { ReactNode } from "react";
 import { Tab } from "@renderer/model/tabs";
@@ -22,14 +22,15 @@ type Props = {
 
 export default function TabsWithDropArea(props: Props): ReactNode {
   const pTabs: Tab[] = props.tabs;
-  const pActiveTab: Tab | null = props.activeTab ?? null;
+  const pActiveTabIndex: number = props.activeTabIndex ?? -1;
   const pOnSelect: OnSelect = props.onSelect || function() {};
+  const pOnOpen: OnOpen = props.onOpen || function() {};
   const pDropAreas: DropAreaSettings[] = props.dropAreas;
   const pIsDropActive: boolean = props.isDropActive;
   const pOnTabDrop: OnTabDrop = props.onTabDrop || function() {};
   const pOnContentDrop: OnContentDrop = props.onContentDrop || function() {};
 
-  const {activeTab, setActiveTab} = useTabs({ activeTab: pActiveTab });
+  const {activeTab, setActiveTab} = useTabs({ activeTab: pTabs[pActiveTabIndex] || null });
   const {
     handleDropAreaHighlight, 
     handleContentDrop, 
@@ -37,12 +38,17 @@ export default function TabsWithDropArea(props: Props): ReactNode {
     activeDropArea
   } = useDropAreas({ dropAreas: pDropAreas, onDrop: pOnContentDrop });
 
+  const handleOpenTab = (openedTab: Tab) => {
+    setActiveTab(openedTab);
+    pOnOpen(openedTab);
+  };
+
   return (
     <div className="tabs-container">
       <TabControls
         tabs={pTabs}
         onSelect={pOnSelect}
-        onClick={(openedTab: Tab) => setActiveTab(openedTab)}
+        onOpen={handleOpenTab}
         onDrop={pOnTabDrop}
       />
       <div
@@ -51,19 +57,17 @@ export default function TabsWithDropArea(props: Props): ReactNode {
         onMouseUp={handleContentDrop}
         onMouseLeave={() => setActiveDropArea(null)}
       >
-        <div>
-          {pTabs.map((tab: Tab) => {
-            return (
-              <TabPanel
-                key={`drop-area-panel-ws-${tab.workspace}-id-${tab.id}`}
-                isActive={activeTab === tab}
-              >
-                {tab.content}
-              </TabPanel>
-            );
-          })}
-        </div>
-        <div id="clay" className="drop-area">
+        {pTabs.map((tab: Tab) => {
+          return (
+            <TabPanel
+              key={`drop-area-panel-ws-${tab.workspace}-id-${tab.id}`}
+              isActive={activeTab === tab}
+            >
+              {tab.content}
+            </TabPanel>
+          );
+        })}
+        <div className="drop-area">
           {pIsDropActive && activeDropArea && (
             <DropArea highlight={activeDropArea.highlight} />
           )}

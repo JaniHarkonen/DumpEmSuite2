@@ -11,11 +11,7 @@ export default function TabPanel(props: Props): ReactNode {
 
   return (
     <>
-      {pIsActive && (
-        <div>
-          {pChildren}
-        </div>
-      )}
+      {pIsActive && <>{pChildren}</>}
     </>
   );
 }
