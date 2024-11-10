@@ -5,7 +5,9 @@ import { SceneTabsConfig } from "@renderer/model/config";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode, useContext } from "react";
-import ListingsView from "../AnalysisModule/views/ListingsView/ListingsView";
+import ListingsTab from "./tabs/ListingsTab/ListingsTab";
+import ProfilesTab from "./tabs/ProfilesTab/ProfilesTab";
+import ScraperTab from "./tabs/ScraperTab/ScraperTab";
 
 
 export default function CompaniesModule(): ReactNode {
@@ -13,12 +15,13 @@ export default function CompaniesModule(): ReactNode {
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;
   const tabsConfig: SceneTabsConfig = sceneConfig.tabs!;
 
+
   const tabsProvider: TabContentProvider = createTabContentProvider(
     tabsConfig, 
     {
-      "tab-scraper": () => <ListingsView />,
-       "view-listings": () => <ListingsView />,
-      // "view-profiles": () => <>macro module</>
+      "tab-scraper": () => <ScraperTab />,
+      "tab-listings": () => <ListingsTab />,
+      "tab-profiles": () => <ProfilesTab />
     },
     <>FAILED</>
   );
