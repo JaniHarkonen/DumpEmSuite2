@@ -1,0 +1,297 @@
+{
+  "workspaces": [
+    {
+      "id": "ws-test",
+      "caption": "Test workspace 1",
+      "scene": {
+        "splitTree": {
+          "root": {
+            "isFork": true,
+            "divider": {
+              "direction": "horizontal",
+              "value": 50
+            },
+            "left": {
+              "isFork": true,
+              "divider": {
+                "direction": "horizontal",
+                "value": 50
+              },
+              "left": {
+                "isFork": false,
+                "value": {
+                  "tabs": [
+                    {
+                      "id": "module-companies", 
+                      "caption": "Companies", 
+                      "workspace": "ws-test", 
+                      "contentTemplate": "module-companies"
+                    },
+                    {
+                      "id": "module-analysis", 
+                      "caption": "Analysis", 
+                      "workspace": "ws-test", 
+                      "contentTemplate": "module-analysis"
+                    },
+                    {
+                      "id": "module-macro", 
+                      "caption": "Macro", 
+                      "workspace": "ws-test", 
+                      "contentTemplate": "module-macro"
+                    }
+                  ],
+                  "activeTabIndex": 0
+                }
+              }
+            }
+          }
+        },
+        "tabs": {
+          "module-companies": {
+            "splitTree": {
+              "root": {
+                "isFork": true,
+                "divider": {
+                  "direction": "horizontal",
+                  "value": 50
+                },
+                "left": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": false,
+                    "value": {
+                      "tabs": [
+                        {
+                          "id": "tab-scraper", 
+                          "caption": "Scraper", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-scraper"
+                        },
+                        {
+                          "id": "tab-listings", 
+                          "caption": "Listings", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-listings"
+                        },
+                        {
+                          "id": "tab-profiles", 
+                          "caption": "Profiles", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-profiles"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "tabs": {
+              "tab-listings": {
+                "splitTree": {
+                  "root": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": true,
+                      "divider": {
+                        "direction": "horizontal",
+                        "value": 50
+                      },
+                      "left": {
+                        "isFork": false,
+                        "value": {
+                          "tabs": []
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "tab-profiles": {
+                "splitTree": {
+                  "root": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": true,
+                      "divider": {
+                        "direction": "horizontal",
+                        "value": 50
+                      },
+                      "left": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "horizontal",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": false,
+                          "value": {
+                            "tabs": [
+                              {
+                                "id": "view-company-list", 
+                                "caption": "Companies", 
+                                "workspace": "ws-test", 
+                                "contentTemplate": "view-company-list"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "right": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "vertical",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": [
+                                {
+                                  "id": "view-chart", 
+                                  "caption": "Chart", 
+                                  "workspace": "ws-test", 
+                                  "contentTemplate": "view-chart"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "right": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": [
+                                {
+                                  "id": "view-company-profile", 
+                                  "caption": "Profile", 
+                                  "workspace": "ws-test", 
+                                  "contentTemplate": "view-company-profile"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "module-analysis": {
+            "splitTree": {
+              "root": {
+                "isFork": true,
+                "divider": {
+                  "direction": "horizontal",
+                  "value": 50
+                },
+                "left": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": false,
+                    "value": {
+                      "tabs": [
+                        {
+                          "id": "tab-volume", 
+                          "caption": "Scraper", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-volume"
+                        },
+                        {
+                          "id": "tab-price-action", 
+                          "caption": "Listings", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-price-action"
+                        },
+                        {
+                          "id": "tab-technical", 
+                          "caption": "Profiles", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-technical"
+                        },
+                        {
+                          "id": "tab-fundamental", 
+                          "caption": "Profiles", 
+                          "workspace": "ws-test", 
+                          "contentTemplate": "tab-fundamental"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "module-macro": {
+            "splitTree": {
+              "root": {
+                "isFork": true,
+                "divider": {
+                  "direction": "horizontal",
+                  "value": 50
+                },
+                "left": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": false,
+                    "value": {
+                      "tabs": [
+                        {
+                          "id": "tab-sector-kf894le83kltguiry7", 
+                          "caption": "Sector 1", 
+                          "workspace": "ws-test"
+                        },
+                        {
+                          "id": "tab-sector-lt894kf893pdf89423", 
+                          "caption": "Sector 2", 
+                          "workspace": "ws-test"
+                        },
+                        {
+                          "id": "tab-sector-vn38fnf0402ndo9weu", 
+                          "caption": "Sector 3", 
+                          "workspace": "ws-test"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
