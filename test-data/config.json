@@ -223,35 +223,30 @@
                           "id": "tab-volume", 
                           "caption": "Volume", 
                           "workspace": "ws-test", 
-                          "tabGroup": 0,
                           "contentTemplate": "tab-volume"
                         },
                         {
                           "id": "tab-price-action", 
                           "caption": "Price action", 
                           "workspace": "ws-test", 
-                          "tabGroup": 0,
                           "contentTemplate": "tab-price-action"
                         },
                         {
                           "id": "tab-technical", 
                           "caption": "TA 1", 
                           "workspace": "ws-test", 
-                          "tabGroup": 0,
                           "contentTemplate": "tab-technical"
                         },
                         {
                           "id": "add-filteration-tab", 
                           "caption": "+", 
                           "workspace": "ws-test", 
-                          "tabGroup": 1,
                           "contentTemplate": null
                         },
                         {
                           "id": "tab-fundamental", 
                           "caption": "Fundamental", 
                           "workspace": "ws-test", 
-                          "tabGroup": 1,
                           "contentTemplate": "tab-fundamental"
                         }
                       ]

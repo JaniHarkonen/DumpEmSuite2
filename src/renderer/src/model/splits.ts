@@ -143,14 +143,14 @@ export class SplitTreeManager {
           isFork: false,
           parent,
           value: {
-            tabs: valueNode.value.tabs.map(
-              (tabBlueprint: TabBlueprint) => buildTab(tabBlueprint, contentProvider)
-            ),
+            tabs: valueNode.value.tabs.map((tabBlueprint: TabBlueprint) => {
+              return buildTab(tabBlueprint, contentProvider);
+            }),
             activeTabIndex: valueNode.value.activeTabIndex
           }
-        };
+        }
       }
-    };
+    }
 
     return {
       root: buildNode(treeBlueprint.root) as SplitTreeFork
@@ -189,7 +189,9 @@ export class SplitTreeManager {
         return {
           isFork: false,
           value: {
-            tabs: valueNode.value.tabs.map((tab: Tab) => blueprintTab(tab)),
+            tabs: valueNode.value.tabs.map((tab: Tab) => {
+              return blueprintTab(tab);
+            }),
             activeTabIndex: valueNode.value.activeTabIndex
           }
         };
@@ -224,7 +226,8 @@ export class SplitTreeManager {
   }
 
   private addTabToLive(liveNode: SplitTreeValue, tab: Tab): void {
-    (liveNode as SplitTreeValue).value.tabs.push(tab);
+    const tabs: Tab[] = (liveNode as SplitTreeValue).value.tabs;
+    tabs.push(tab);
   }
 
   private removeTabFromLive(targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork): RemoveResult {

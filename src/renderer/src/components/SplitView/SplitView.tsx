@@ -63,27 +63,9 @@ export default function SplitView(props: Props): ReactNode {
 
   const renderTabControls = (tabs: Tab[]): ReactNode => {
       // Render and sort into tab groups
-    const tabGroups: Map<number, ReactNode[]> = new Map<number, ReactNode[]>();
-    tabs.forEach((tab: Tab) => {
-      const element: ReactNode = (
-        <TabButton
-          key={tab.workspace + "-tab-button-" + tab.id}
-          tab={tab}
-        />
-      );
-      let group: ReactNode[] | undefined = tabGroups.get(tab.tabGroup);
-      if( !group ) {
-        group = [];
-        tabGroups.set(tab.tabGroup, group);
-      }
-      group.push(element);
-    });
-
-    const tabsElement: ReactNode[] = [];
-    tabGroups.forEach((value: ReactNode[]) => tabsElement.push(value))
     return (
       <TabControls>
-        {tabsElement}
+        {tabs.map((tab: Tab) => <TabButton tab={tab}/>)}
       </TabControls>
     );
   };
