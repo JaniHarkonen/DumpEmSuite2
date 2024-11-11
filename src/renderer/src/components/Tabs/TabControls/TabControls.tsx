@@ -1,42 +1,47 @@
+import { TabsContext, TabsContextType } from "@renderer/context/TabsContext";
 import "./TabControls.css";
 
 import { Tab } from "@renderer/model/tabs";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 
 
-export type OnSelect = (selectedTab: Tab) => void;
-export type OnOpen = (openedTab: Tab) => void;
+type ItemConstructorProps = {
+  tab: Tab;
+};
 
-type OnDrop = () => void;
+function DefaultItemConstructor(props: ItemConstructorProps): ReactNode {
+  const pTab: Tab = props.tab;
+  const {onSelect, onOpen} = useContext(TabsContext);
+
+  return (
+    <button
+      key={pTab.workspace + "-tab-button-" + pTab.id}
+      onMouseDown={() => onSelect && onSelect(pTab)}
+      onClick={() => onOpen && onOpen(pTab)}
+    >
+      {pTab.caption}
+    </button>
+  );
+}
 
 type Props = {
-  tabs: Tab[];
-  onSelect?: OnSelect;
-  onOpen?: OnOpen;
-  onDrop?: OnDrop;
+  ItemConstructor?: (props: ItemConstructorProps) => ReactNode;
 };
 
 export default function TabControls(props: Props): ReactNode {
-  const pTabs: Tab[] = props.tabs;
-  const pOnSelect: OnSelect = props.onSelect || function() {};
-  const pOnOpen: OnOpen = props.onOpen || function() {};
-  const pOnDrop: OnDrop = props.onDrop || function() {};
+  const pItemConstructor = props.ItemConstructor || DefaultItemConstructor;
+  
+  const tabsContext: TabsContextType = useContext(TabsContext);
+  const {tabs, onDrop} = tabsContext;
+
 
   return (
     <div
       className="tab-controls-container"
-      onMouseUp={pOnDrop}
+      onMouseUp={onDrop}
     >
-      {pTabs.map((tab: Tab) => {
-        return (
-          <button
-            key={tab.workspace + "-tab-button-" + tab.id}
-            onMouseDown={() => pOnSelect(tab)}
-            onClick={() => pOnOpen(tab)}
-          >
-            {tab.caption}
-          </button>
-        );
+      {tabs.map((tab: Tab) => {
+        return pItemConstructor({ tab });
       })}
     </div>
   );

@@ -6,6 +6,9 @@ import { DividerDirection, SplitBranch, SplitTree, SplitTreeFork, SplitTreeNode,
 import TabsWithDropArea from "../TabsWithDropArea/TabsWithDropArea";
 import { DropAreaSettings } from "../DropArea/DropArea";
 import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
+import TabControls from "../Tabs/TabControls/TabControls";
+import { TabsContext } from "@renderer/context/TabsContext";
+import TabPanel from "../Tabs/TabPanel/TabPanel";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -60,26 +63,40 @@ export default function SplitView(props: Props): ReactNode {
   const renderSplits = (root: SplitTreeNode): ReactNode => {
     if( !root.isFork ) {
       const valueNode: SplitTreeValue = root as SplitTreeValue;
+      const nodeTabs: Tab[] = valueNode.value.tabs;
 
       return (
-        <TabsWithDropArea
-          tabs={valueNode.value.tabs}
-          activeTabIndex={valueNode.value.activeTabIndex}
-          onSelect={(tab: Tab) => handleTabSelection({
-            selectedTab: tab,
-            sourceFork: valueNode.parent!,
-            sourceValueNode: valueNode
-          })}
-          onOpen={(openedTab: Tab) => {
-            handleTabOpen(valueNode, valueNode.value.tabs.indexOf(openedTab));
+        <TabsContext.Provider value={{
+            tabs: nodeTabs,
+            activeTabIndex: valueNode.value.activeTabIndex,
+            onSelect: (tab: Tab) => handleTabSelection({
+              selectedTab: tab,
+              sourceFork: valueNode.parent!,
+              sourceValueNode: valueNode
+            }),
+            onOpen: (openedTab: Tab) => {
+              handleTabOpen(valueNode, nodeTabs.indexOf(openedTab));
+            },
+            onDrop: () => handleTabRelocation(valueNode)
           }}
-          isDropActive={!!tabSelection}
-          onTabDrop={() => handleTabRelocation(valueNode)}
-          onContentDrop={(dropArea: DropAreaSettings) => {
-            handleTabContentDrop(dropArea, valueNode.parent!);
-          }}
-          dropAreas={dropAreas}
-        />
+        >
+          <TabsWithDropArea
+            controls={<TabControls />}
+            dropAreas={dropAreas}
+            onContentDrop={(dropArea: DropAreaSettings) => {
+              handleTabContentDrop(dropArea, valueNode.parent!);
+            }}
+            isDropActive={!!tabSelection}
+          >
+            {nodeTabs.map((tab: Tab) => {
+              return (
+                <TabPanel tab={tab}>
+                  {tab.content}
+                </TabPanel>
+              );
+            })}
+          </TabsWithDropArea>
+        </TabsContext.Provider>
       );
     }
 
