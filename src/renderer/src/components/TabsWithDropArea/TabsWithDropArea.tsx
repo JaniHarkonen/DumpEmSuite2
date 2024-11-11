@@ -17,7 +17,7 @@ type Props = {
 } & TabsProps & PropsWithChildren;
 
 export default function TabsWithDropArea(props: Props): ReactNode {
-  const pControls: ReactNode[] | ReactNode | null | undefined = props.controls;
+  const pControls: ReactNode[] | ReactNode = props.controls;
   const pChildren: ReactNode[] = reactNodeToArray(props.children) || [];
   const pDropAreas: DropAreaSettings[] = props.dropAreas;
   const pIsDropActive: boolean = props.isDropActive;
@@ -32,7 +32,7 @@ export default function TabsWithDropArea(props: Props): ReactNode {
 
   return (
     <div className="tabs-container">
-      {pControls}
+      <div className="tab-controls-container">{pControls}</div>
       <div
         className="p-relative w-100 h-100"
         onMouseMove={handleDropAreaHighlight}

@@ -10,11 +10,11 @@ export type TabsProps = Props;
 
 export default function Tabs(props: Props): ReactNode {
   const pControls: ReactNode = props.controls;
-  const pChildren: ReactNode[] | ReactNode | null | undefined = props.children;
+  const pChildren: ReactNode[] | ReactNode = props.children;
 
   return (
     <div className="tabs-container">
-      {pControls}
+      <div className="tab-controls-container">{pControls}</div>
       {pChildren}
     </div>
   );

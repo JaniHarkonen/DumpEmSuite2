@@ -9,6 +9,7 @@ import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
 import TabControls from "../Tabs/TabControls/TabControls";
 import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
+import TabButton from "../Tabs/TabControls/TabButton/TabButton";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -60,6 +61,21 @@ export default function SplitView(props: Props): ReactNode {
     handleTabSplit(toFork, requestedDirection, requestedBranch);
   };
 
+  const renderTabControls = (tabs: Tab[]): ReactNode => {
+    return (
+      <TabControls>
+        {tabs.map((tab: Tab) => {
+          return (
+            <TabButton
+              key={tab.workspace + "-tab-button-" + tab.id}
+              tab={tab}
+            />
+          );
+        })}
+      </TabControls>
+    );
+  };
+
   const renderSplits = (root: SplitTreeNode): ReactNode => {
     if( !root.isFork ) {
       const valueNode: SplitTreeValue = root as SplitTreeValue;
@@ -81,7 +97,7 @@ export default function SplitView(props: Props): ReactNode {
           }}
         >
           <TabsWithDropArea
-            controls={<TabControls />}
+            controls={renderTabControls(nodeTabs)}
             dropAreas={dropAreas}
             onContentDrop={(dropArea: DropAreaSettings) => {
               handleTabContentDrop(dropArea, valueNode.parent!);
@@ -89,11 +105,7 @@ export default function SplitView(props: Props): ReactNode {
             isDropActive={!!tabSelection}
           >
             {nodeTabs.map((tab: Tab) => {
-              return (
-                <TabPanel tab={tab}>
-                  {tab.content}
-                </TabPanel>
-              );
+              return <TabPanel tab={tab}>{tab.content}</TabPanel>;
             })}
           </TabsWithDropArea>
         </TabsContext.Provider>

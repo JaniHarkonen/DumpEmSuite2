@@ -4,7 +4,6 @@ import { PropsWithChildren, ReactNode, useContext } from "react";
 
 
 type Props = {
-  // isActive: boolean;
   tab: Tab;
 } & PropsWithChildren;
 
