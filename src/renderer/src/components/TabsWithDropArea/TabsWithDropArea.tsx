@@ -30,6 +30,7 @@ export default function TabsWithDropArea(props: Props): ReactNode {
     activeDropArea
   } = useDropAreas({ dropAreas: pDropAreas, onDrop: pOnContentDrop });
 
+  
   return (
     <div className="tabs-container">
       <div className="tab-controls-container">{pControls}</div>

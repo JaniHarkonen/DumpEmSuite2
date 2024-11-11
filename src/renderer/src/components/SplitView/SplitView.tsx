@@ -62,16 +62,28 @@ export default function SplitView(props: Props): ReactNode {
   };
 
   const renderTabControls = (tabs: Tab[]): ReactNode => {
+      // Render and sort into tab groups
+    const tabGroups: Map<number, ReactNode[]> = new Map<number, ReactNode[]>();
+    tabs.forEach((tab: Tab) => {
+      const element: ReactNode = (
+        <TabButton
+          key={tab.workspace + "-tab-button-" + tab.id}
+          tab={tab}
+        />
+      );
+      let group: ReactNode[] | undefined = tabGroups.get(tab.tabGroup);
+      if( !group ) {
+        group = [];
+        tabGroups.set(tab.tabGroup, group);
+      }
+      group.push(element);
+    });
+
+    const tabsElement: ReactNode[] = [];
+    tabGroups.forEach((value: ReactNode[]) => tabsElement.push(value))
     return (
       <TabControls>
-        {tabs.map((tab: Tab) => {
-          return (
-            <TabButton
-              key={tab.workspace + "-tab-button-" + tab.id}
-              tab={tab}
-            />
-          );
-        })}
+        {tabsElement}
       </TabControls>
     );
   };
@@ -105,7 +117,14 @@ export default function SplitView(props: Props): ReactNode {
             isDropActive={!!tabSelection}
           >
             {nodeTabs.map((tab: Tab) => {
-              return <TabPanel tab={tab}>{tab.content}</TabPanel>;
+              return (
+                <TabPanel
+                  key={tab.workspace + "-tab-panel-" + tab.id}
+                  tab={tab}
+                >
+                  {tab.content}
+                </TabPanel>
+              );
             })}
           </TabsWithDropArea>
         </TabsContext.Provider>
@@ -123,6 +142,7 @@ export default function SplitView(props: Props): ReactNode {
       </Divider>
     );
   };
+
 
   return (
     <div className="w-100 h-100 overflow-hidden">

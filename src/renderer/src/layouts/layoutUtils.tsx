@@ -37,7 +37,11 @@ export function createTabContentProvider(
   defaultTemplate: ReactNode
 ): TabContentProvider {
   return {
-    getContent: (contentTemplate: string): ReactNode => {
+    getContent: (contentTemplate: string | null): ReactNode => {
+      if( !contentTemplate ) {
+        return null;
+      }
+      
       const Template: ProplessElementConstructor = mappings[contentTemplate];
       return (
         <SceneContext.Provider value={{ sceneConfig: tabConfigurations[contentTemplate] }}>

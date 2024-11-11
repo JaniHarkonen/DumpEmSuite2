@@ -221,29 +221,138 @@
                       "tabs": [
                         {
                           "id": "tab-volume", 
-                          "caption": "Scraper", 
+                          "caption": "Volume", 
                           "workspace": "ws-test", 
+                          "tabGroup": 0,
                           "contentTemplate": "tab-volume"
                         },
                         {
                           "id": "tab-price-action", 
-                          "caption": "Listings", 
+                          "caption": "Price action", 
                           "workspace": "ws-test", 
+                          "tabGroup": 0,
                           "contentTemplate": "tab-price-action"
                         },
                         {
                           "id": "tab-technical", 
-                          "caption": "Profiles", 
+                          "caption": "TA 1", 
                           "workspace": "ws-test", 
+                          "tabGroup": 0,
                           "contentTemplate": "tab-technical"
                         },
                         {
-                          "id": "tab-fundamental", 
-                          "caption": "Profiles", 
+                          "id": "add-filteration-tab", 
+                          "caption": "+", 
                           "workspace": "ws-test", 
+                          "tabGroup": 1,
+                          "contentTemplate": null
+                        },
+                        {
+                          "id": "tab-fundamental", 
+                          "caption": "Fundamental", 
+                          "workspace": "ws-test", 
+                          "tabGroup": 1,
                           "contentTemplate": "tab-fundamental"
                         }
                       ]
+                    }
+                  }
+                }
+              }
+            },
+            "tabs": {
+              "tab-volume": {
+                "splitTree": {
+                  "root": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": true,
+                      "divider": {
+                        "direction": "horizontal",
+                        "value": 50
+                      },
+                      "left": {
+                        "isFork": false,
+                        "value": {
+                          "tabs": []
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "tab-price-action": {
+                "splitTree": {
+                  "root": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": true,
+                      "divider": {
+                        "direction": "horizontal",
+                        "value": 50
+                      },
+                      "left": {
+                        "isFork": false,
+                        "value": {
+                          "tabs": []
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "tab-technical": {
+              "splitTree": {
+                "root": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": false,
+                      "value": {
+                        "tabs": []
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "tab-fundamental": {
+              "splitTree": {
+                "root": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": false,
+                      "value": {
+                        "tabs": []
+                      }
                     }
                   }
                 }

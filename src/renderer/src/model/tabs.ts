@@ -5,12 +5,13 @@ export interface TabBlueprint {
   id: string;
   workspace: string;
   caption: string;
-  contentTemplate: string;
+  tabGroup: number;
+  contentTemplate: string | null;
 }
 
 export interface Tab extends TabBlueprint {
   content: ReactNode;
-};
+}
 
 export type TabSettingsBlueprint = {
   tabs: TabBlueprint[];
@@ -20,10 +21,10 @@ export type TabSettingsBlueprint = {
 export type TabSettings = {
   tabs: Tab[];
   activeTabIndex: number;
-}
+};
 
 export interface TabContentProvider {
-  getContent: (contentTemplate: string) => ReactNode;
+  getContent: (contentTemplate: string | null) => ReactNode;
 }
 
 export function buildTab(tabBlueprint: TabBlueprint, contentProvider: TabContentProvider): Tab {
@@ -31,6 +32,7 @@ export function buildTab(tabBlueprint: TabBlueprint, contentProvider: TabContent
     id: tabBlueprint.id,
     workspace: tabBlueprint.workspace,
     caption: tabBlueprint.caption,
+    tabGroup: tabBlueprint.tabGroup ?? 0,
     contentTemplate: tabBlueprint.contentTemplate,
     content: contentProvider.getContent(tabBlueprint.contentTemplate)
   };
@@ -41,6 +43,7 @@ export function blueprintTab(tab: Tab): TabBlueprint {
     id: tab.id,
     workspace: tab.workspace,
     caption: tab.caption,
+    tabGroup: tab.tabGroup ?? 0,
     contentTemplate: tab.contentTemplate
   };
 }
