@@ -27,7 +27,7 @@ export default function AnalysisModule(): ReactNode {
 
   return (
     <ModuleView
-      sceneBlueprint={sceneBlueprint}
+      splitTreeBlueprint={sceneBlueprint}
       contentProvider={tabsProvider}
     />
   );

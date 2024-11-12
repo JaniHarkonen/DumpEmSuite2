@@ -15,7 +15,6 @@ export default function CompaniesModule(): ReactNode {
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;
   const tabsConfig: SceneTabsConfig = sceneConfig.tabs!;
 
-
   const tabsProvider: TabContentProvider = createTabContentProvider(
     tabsConfig, 
     {
@@ -29,7 +28,7 @@ export default function CompaniesModule(): ReactNode {
 
   return (
     <ModuleView
-      sceneBlueprint={sceneBlueprint}
+      splitTreeBlueprint={sceneBlueprint}
       contentProvider={tabsProvider}
     />
   );

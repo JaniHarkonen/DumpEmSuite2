@@ -6,6 +6,7 @@ export interface TabBlueprint {
   workspace: string;
   caption: string;
   contentTemplate: string | null;
+  tags: string[] | undefined;
 }
 
 export interface Tab extends TabBlueprint {
@@ -32,7 +33,8 @@ export function buildTab(tabBlueprint: TabBlueprint, contentProvider: TabContent
     workspace: tabBlueprint.workspace,
     caption: tabBlueprint.caption,
     contentTemplate: tabBlueprint.contentTemplate,
-    content: contentProvider.getContent(tabBlueprint.contentTemplate)
+    content: contentProvider.getContent(tabBlueprint.contentTemplate),
+    tags: [...(tabBlueprint.tags || [])]
   };
 }
 
@@ -41,6 +43,7 @@ export function blueprintTab(tab: Tab): TabBlueprint {
     id: tab.id,
     workspace: tab.workspace,
     caption: tab.caption,
-    contentTemplate: tab.contentTemplate
+    contentTemplate: tab.contentTemplate,
+    tags: [...(tab.tags || [])]
   };
 }

@@ -26,7 +26,7 @@ export default function Workspace(): ReactNode {
 
   return (
     <ModuleView 
-      sceneBlueprint={sceneBluePrint} 
+      splitTreeBlueprint={sceneBluePrint} 
       contentProvider={modulesProvider}
     />
   );

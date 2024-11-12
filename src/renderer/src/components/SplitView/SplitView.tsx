@@ -1,8 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import Divider from "../Divider/Divider";
-import useFlexibleSplits from "@renderer/hook/useFlexibleSplits";
 import { Tab } from "@renderer/model/tabs";
-import { DividerDirection, SplitBranch, SplitTree, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
+import { DividerDirection, SplitBranch, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
 import TabsWithDropArea from "../TabsWithDropArea/TabsWithDropArea";
 import { DropAreaSettings } from "../DropArea/DropArea";
 import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
@@ -10,6 +9,7 @@ import TabControls from "../Tabs/TabControls/TabControls";
 import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
 import TabButton from "../Tabs/TabControls/TabButton/TabButton";
+import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -23,13 +23,8 @@ const dropAreas: DropAreaSettings[] = quadrantDropAreas(
   />
 );
 
-type Props = {
-  splitTree: SplitTree;
-};
 
-export default function SplitView(props: Props): ReactNode {
-  const pSplitTree: SplitTree = props.splitTree;
-
+export default function SplitView(): ReactNode {
   const {
     splitTree, 
     tabSelection, 
@@ -37,8 +32,10 @@ export default function SplitView(props: Props): ReactNode {
     handleTabOpen,
     handleTabRelocation, 
     handleTabSplit,
-    handleDividerMove
-  } = useFlexibleSplits({ splitTree: pSplitTree });
+    handleDividerMove,
+    handleTabAdd,
+    handleTabRemove
+  } = useContext(FlexibleSplitsContext);
 
   const handleTabContentDrop = (dropArea: DropAreaSettings, toFork: SplitTreeFork) => {
       // Maps drop areas to DividerDirections and DividerDirections to SplitBranches
@@ -58,36 +55,56 @@ export default function SplitView(props: Props): ReactNode {
     };
     const requestedDirection: DividerDirection = branchings[dropArea.id];
     const requestedBranch: SplitBranch = branchings[requestedDirection][dropArea.id];
-    handleTabSplit(toFork, requestedDirection, requestedBranch);
+    handleTabSplit && handleTabSplit(toFork, requestedDirection, requestedBranch);
   };
 
   const renderTabControls = (tabs: Tab[]): ReactNode => {
-      // Render and sort into tab groups
     return (
       <TabControls>
-        {tabs.map((tab: Tab) => <TabButton tab={tab}/>)}
+        {tabs.map((tab: Tab) => {
+          return (
+            <TabButton
+              key={tab.workspace + "-tab-control-button-" + tab.id}
+              tab={tab}
+            />
+          );
+        })}
       </TabControls>
     );
+  };
+
+  const renderTabPanels = (tabs: Tab[]): ReactNode => {
+    return tabs.map((tab: Tab) => {
+      return (
+        <TabPanel
+          key={tab.workspace + "-tab-panel-" + tab.id}
+          tab={tab}
+        >
+          {tab.content}
+        </TabPanel>
+      );
+    });
   };
 
   const renderSplits = (root: SplitTreeNode): ReactNode => {
     if( !root.isFork ) {
       const valueNode: SplitTreeValue = root as SplitTreeValue;
       const nodeTabs: Tab[] = valueNode.value.tabs;
+      const activeTabIndex: number = valueNode.value.activeTabIndex;
 
       return (
         <TabsContext.Provider value={{
             tabs: nodeTabs,
-            activeTabIndex: valueNode.value.activeTabIndex,
-            onSelect: (tab: Tab) => handleTabSelection({
-              selectedTab: tab,
+            activeTabIndex,
+            onSelect: (selectedTab: Tab) => handleTabSelection && handleTabSelection({
+              selectedTab: selectedTab,
               sourceFork: valueNode.parent!,
               sourceValueNode: valueNode
             }),
             onOpen: (openedTab: Tab) => {
-              handleTabOpen(valueNode, nodeTabs.indexOf(openedTab));
+              handleTabOpen && handleTabOpen(valueNode, nodeTabs.indexOf(openedTab));
             },
-            onDrop: () => handleTabRelocation(valueNode)
+            onDrop: () => handleTabRelocation && handleTabRelocation(valueNode)
           }}
         >
           <TabsWithDropArea
@@ -98,16 +115,7 @@ export default function SplitView(props: Props): ReactNode {
             }}
             isDropActive={!!tabSelection}
           >
-            {nodeTabs.map((tab: Tab) => {
-              return (
-                <TabPanel
-                  key={tab.workspace + "-tab-panel-" + tab.id}
-                  tab={tab}
-                >
-                  {tab.content}
-                </TabPanel>
-              );
-            })}
+            {renderTabPanels(nodeTabs)}
           </TabsWithDropArea>
         </TabsContext.Provider>
       );
@@ -117,7 +125,9 @@ export default function SplitView(props: Props): ReactNode {
     return (
       <Divider
         dividerSettings={fork.divider}
-        onDividerMove={(newValue: number) => handleDividerMove(fork, newValue)}
+        onDividerMove={(newValue: number) => {
+          handleDividerMove && handleDividerMove(fork, newValue);
+        }}
       >
         {renderSplits(fork.left)}
         {fork.right && renderSplits(fork.right)}

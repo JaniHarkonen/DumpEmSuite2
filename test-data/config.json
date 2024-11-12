@@ -241,7 +241,8 @@
                           "id": "add-filteration-tab", 
                           "caption": "+", 
                           "workspace": "ws-test", 
-                          "contentTemplate": null
+                          "contentTemplate": null,
+                          "tags": ["add-filter"]
                         },
                         {
                           "id": "tab-fundamental", 
