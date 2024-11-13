@@ -24,6 +24,7 @@ export default function Workspace(): ReactNode {
     <>FAILED</>
   );
 
+  
   return (
     <ModuleView 
       splitTreeBlueprint={sceneBluePrint} 

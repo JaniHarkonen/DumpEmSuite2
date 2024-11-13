@@ -242,13 +242,14 @@
                           "caption": "+", 
                           "workspace": "ws-test", 
                           "contentTemplate": null,
-                          "tags": ["add-filter"]
+                          "tags": ["add-filter", "permanent"]
                         },
                         {
                           "id": "tab-fundamental", 
                           "caption": "Fundamental", 
                           "workspace": "ws-test", 
-                          "contentTemplate": "tab-fundamental"
+                          "contentTemplate": "tab-fundamental",
+                          "tags": ["permanent"]
                         }
                       ]
                     }

@@ -128,7 +128,8 @@ export class SplitTreeManager {
       if( !nodeBlueprint ) {  // Handle undefined
         return nodeBlueprint;
       } else if( nodeBlueprint.isFork ) { // Handle forks
-        const fork: SplitTreeForkBlueprint = nodeBlueprint as SplitTreeForkBlueprint;
+        const fork: SplitTreeForkBlueprint = 
+          nodeBlueprint as SplitTreeForkBlueprint;
         const result: SplitTreeFork = {
           isFork: true,
           divider: {...fork.divider},
@@ -138,7 +139,8 @@ export class SplitTreeManager {
         result.right = buildNode(fork.right, result) ?? undefined;
         return result;
       } else {  // Handle value nodes
-        const valueNode: SplitTreeValueBlueprint = nodeBlueprint as SplitTreeValueBlueprint;
+        const valueNode: SplitTreeValueBlueprint = 
+          nodeBlueprint as SplitTreeValueBlueprint;
         return {
           isFork: false,
           parent,
@@ -146,7 +148,7 @@ export class SplitTreeManager {
             tabs: valueNode.value.tabs.map((tabBlueprint: TabBlueprint) => {
               return buildTab(tabBlueprint, contentProvider);
             }),
-            activeTabIndex: valueNode.value.activeTabIndex
+            activeTabIndex: valueNode.value.activeTabIndex ?? -1
           }
         }
       }
@@ -192,7 +194,7 @@ export class SplitTreeManager {
             tabs: valueNode.value.tabs.map((tab: Tab) => {
               return blueprintTab(tab);
             }),
-            activeTabIndex: valueNode.value.activeTabIndex
+            activeTabIndex: valueNode.value.activeTabIndex ?? -1
           }
         };
       }
@@ -203,7 +205,9 @@ export class SplitTreeManager {
     };
   }
 
-  private getLiveNodeAnd<T>(operation: LiveNodeOperation<T>, ...targetNode: SplitTreeNode[]): T {
+  private getLiveNodeAnd<T>(
+    operation: LiveNodeOperation<T>, ...targetNode: SplitTreeNode[]
+  ): T {
     let liveNodes: SplitTreeNode[] | null = [];
     for( let i = 0; i < targetNode.length; i++ ) {
       const live: SplitTreeNode | undefined = targetNode[i].liveNode;
@@ -216,7 +220,11 @@ export class SplitTreeManager {
     return operation(liveNodes);
   }
 
-  private setChild(parent: SplitTreeFork, branch: SplitBranch, child: SplitTreeNode | undefined): void {
+  private setChild(
+    parent: SplitTreeFork,
+    branch: SplitBranch, 
+    child: SplitTreeNode | undefined
+  ): void {
     if( child ) {
       parent[branch] = child;
       child.parent = parent;
@@ -230,7 +238,9 @@ export class SplitTreeManager {
     tabs.push(tab);
   }
 
-  private removeTabFromLive(targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork): RemoveResult {
+  private removeTabFromLive(
+    targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork
+  ): RemoveResult {
       // Find tab index, and remove from target
     const resolvedTargetNode: SplitTreeValue = targetNode;
     const targetTabs: Tab[] = resolvedTargetNode.value.tabs;
@@ -247,9 +257,13 @@ export class SplitTreeManager {
     if( targetTabs.length === 0 ) {
       const targetFork: SplitTreeFork = resolvedTargetNode.parent!;
       const targetParent: SplitTreeFork = targetFork.parent!;
-      const branch: SplitBranch = (targetParent.left === targetFork) ? "left" : "right";
+      const branch: SplitBranch = 
+        (targetParent.left === targetFork) ? "left" : "right";
 
-      if( trackedFork && (targetParent.left === trackedFork || targetParent.right === trackedFork) ) {
+      if( 
+        trackedFork && 
+        (targetParent.left === trackedFork || targetParent.right === trackedFork) 
+      ) {
         trackedFork = targetParent;
       }
 
@@ -303,20 +317,25 @@ export class SplitTreeManager {
   }
 
   public removeTab(targetNode: SplitTreeValue, remove: Tab): RemoveResult {
-    return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): RemoveResult => {
-      if( !liveNodes ) {
-        return {
-          wasSuccessful: false,
-          trackedFork: null
-        };
-      }
+    return this.getLiveNodeAnd(
+      (liveNodes: SplitTreeNode[] | null): RemoveResult => {
+        if( !liveNodes ) {
+          return {
+            wasSuccessful: false,
+            trackedFork: null
+          };
+        }
 
-      const [liveNode] = liveNodes;
-      return this.removeTabFromLive(liveNode as SplitTreeValue, remove);
-    }, targetNode);
+        const [liveNode] = liveNodes;
+        return this.removeTabFromLive(liveNode as SplitTreeValue, remove);
+      },
+      targetNode
+    );
   }
 
-  public relocateTab(fromNode: SplitTreeValue, toNode: SplitTreeValue, tab: Tab): boolean {
+  public relocateTab(
+    fromNode: SplitTreeValue, toNode: SplitTreeValue, tab: Tab
+  ): boolean {
       // Can't relocate to the same tab
     if( fromNode === toNode ) {
       return false;
@@ -349,7 +368,8 @@ export class SplitTreeManager {
 
       const targetFork: SplitTreeFork = liveTo as SplitTreeFork;
       if( targetFork[requestedBranch] ) {
-        targetFork[(requestedBranch === "left") ? "right" : "left"] = targetFork[requestedBranch];
+        targetFork[(requestedBranch === "left") ? "right" : "left"] = 
+          targetFork[requestedBranch];
       }
     
       targetFork[requestedBranch] = {
@@ -366,8 +386,8 @@ export class SplitTreeManager {
         value: DEFAULT_DIVIDER_VALUE_PERCENT
       };
     
-        // Ensure that there is only one set of tabs per fork, split fork when left and right are full
-        // (not null)
+        // Ensure that there is only one set of tabs per fork,
+        // split fork when left and right are full (not null)
       targetFork.left = {
         isFork: true,
         divider: {
@@ -390,7 +410,9 @@ export class SplitTreeManager {
       };
       targetFork.right.left.parent = targetFork.right;
 
-      this.removeTabFromLive(liveFrom as SplitTreeValue, tab, liveTo as SplitTreeFork);
+      this.removeTabFromLive(
+        liveFrom as SplitTreeValue, tab, liveTo as SplitTreeFork
+      );
 
       return true;
     }, fromNode, toFork);
