@@ -18,13 +18,13 @@ type WriteResult = {
 };
 
 export type FilesAPI = {
-  writeJSON: (filePath: string, json: any) => Promise<WriteResult>;
+  writeJSON: <T>(filePath: string, json: T) => Promise<WriteResult>;
   readJSON: <T>(filePath: string) => Promise<ReadResult<T>>;
   getWorkingDirectory: () => string;
 };
 
 export const filesAPI: FilesAPI = {
-  writeJSON: (filePath: string, json: any) => {
+  writeJSON: <T>(filePath: string, json: T) => {
     return new Promise((resolve, reject) => {
       writeFile(filePath, JSON.stringify(json, null, DEFAULT_JSON_STRINGIFY_SETTINGS.space))
       .then(() => resolve({

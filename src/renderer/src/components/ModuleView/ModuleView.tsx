@@ -3,14 +3,16 @@ import { Tab, TabContentProvider } from "@renderer/model/tabs";
 import SplitView from "../SplitView/SplitView";
 import { ReactNode } from "react";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
-import useFlexibleSplits, { UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
+import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
 import TabControls from "../Tabs/TabControls/TabControls";
 import TabButton from "../Tabs/TabControls/TabButton/TabButton";
 
 
 export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
-  const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
+  const pSceneBlueprint: SplitTreeBlueprint | null | undefined = 
+    props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
+  const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
   const {
     splitTree, 
@@ -22,7 +24,8 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
     handleDividerMove
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
-    contentProvider: pContentProvider
+    contentProvider: pContentProvider,
+    onUpdate: pOnUpdate
   });
 
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {

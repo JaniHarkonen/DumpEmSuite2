@@ -1,17 +1,23 @@
-import { AppStateConfig } from "@renderer/model/config";
-import { createContext, Dispatch, SetStateAction } from "react";
+import { AppStateConfig, ConfigFileUpdater } from "@renderer/model/config";
+import { createContext, MutableRefObject } from "react";
 
 
-type GlobalContextType = {
-  config: {
-    configuration: AppStateConfig | null;
-    setConfiguration: Dispatch<SetStateAction<AppStateConfig | null>>;
-  };
+export type ConfigContextType = {
+  appStateConfigRef: MutableRefObject<AppStateConfig | null> | null;
+  configFileUpdater: ConfigFileUpdater;
 };
 
+export type GlobalContextType = {
+  config: ConfigContextType;
+};
+
+export function defaultConfigContext(): ConfigContextType {
+  return {
+    appStateConfigRef: null,
+    configFileUpdater: () => {}
+  };
+}
+
 export const GlobalContext = createContext<GlobalContextType>({
-  config: {
-    configuration: null,
-    setConfiguration: () => {}
-  }
+  config: defaultConfigContext()
 });

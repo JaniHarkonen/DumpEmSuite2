@@ -201,7 +201,7 @@ export class SplitTreeManager {
     };
 
     return {
-      root: blueprintNode(this.snapshot().root) as SplitTreeForkBlueprint
+      root: blueprintNode(this.tree.root) as SplitTreeForkBlueprint
     };
   }
 
@@ -365,8 +365,8 @@ export class SplitTreeManager {
       }
 
       const [liveFrom, liveTo] = liveNodes;
-
       const targetFork: SplitTreeFork = liveTo as SplitTreeFork;
+
       if( targetFork[requestedBranch] ) {
         targetFork[(requestedBranch === "left") ? "right" : "left"] = 
           targetFork[requestedBranch];
@@ -386,8 +386,8 @@ export class SplitTreeManager {
         value: DEFAULT_DIVIDER_VALUE_PERCENT
       };
     
-        // Ensure that there is only one set of tabs per fork,
-        // split fork when left and right are full (not null)
+        // Ensure that there is only one set of tabs per fork, split fork when 
+        // left and right are full (not null)
       targetFork.left = {
         isFork: true,
         divider: {

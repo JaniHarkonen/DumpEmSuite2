@@ -11,9 +11,7 @@ import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import { MouseEvent, ReactNode } from "react";
 
 
-export default function AnalysesView(
-  props: UseFlexibleSplitsProps
-): ReactNode {
+export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined 
     = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
@@ -45,50 +43,40 @@ export default function AnalysesView(
     return (
       <TabControls>
         {tabs.map((tab: Tab, tabIndex: number) => {
-          if( !tab.tags!.includes("permanent") ) {
-            return (
-              <TabButton
-                key={tab.workspace + "-tab-control-button-" + tab.id}
-                tab={tab}
-              >
-                <span className="tab-remove-button-container">
+          const tabTags: string[] = tab.tags!;
+          return (
+            <TabButton
+              key={tab.workspace + "-tab-control-button-" + tab.id}
+              tab={tab}
+            >
+              {!tabTags.includes("permanent") && (
+                <span className="tab-remove-icon-container">
                   <img
-                    className="tab-remove-button"
-                    src={ASSETS.icons.buttons.close.black}
+                    className="tab-remove-icon"
+                    src={ASSETS.icons.buttons.trashCan.white}
                     onClick={(e: MouseEvent<HTMLImageElement>) => {
                       handleTabRemove(e, targetNode, tabs[tabIndex]);
                     }}
                   />
                 </span>
-              </TabButton>
-            );
-          } else {
-            return (
-              <TabButton
-                key={tab.workspace + "-tab-control-button-" + tab.id}
-                tab={tab}
-              />
-            );
-          }
+              )}
+            </TabButton>
+          );
         })}
+        <button onClick={() => {
+          handleTabAdd(targetNode, buildTab({
+              id: "new-tab-test",
+              workspace: "ws-test",
+              caption: "New tab",
+              contentTemplate: "tab-volume",
+              tags: []
+            }, pContentProvider));
+          }}
+        >
+          +
+        </button>
       </TabControls>
     );
-  };
-
-  const openOrAddTab = (targetNode: SplitTreeValue, tabIndex: number) => {
-    const tab: Tab = targetNode.value.tabs[tabIndex];
-
-    if( tab.tags!.includes("add-filter") ) {
-      handleTabAdd(targetNode, buildTab({
-        id: "new-tab-test",
-        workspace: "ws-test",
-        caption: "New tab",
-        contentTemplate: "tab-volume",
-        tags: []
-      }, pContentProvider));
-    } else {
-      handleTabOpen(targetNode, tabIndex);
-    }
   };
 
   
@@ -98,7 +86,7 @@ export default function AnalysesView(
         splitTree, 
         tabSelection, 
         handleTabSelection, 
-        handleTabOpen: openOrAddTab,
+        handleTabOpen,
         handleTabRelocation, 
         handleTabSplit,
         handleDividerMove
