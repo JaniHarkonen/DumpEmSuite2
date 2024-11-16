@@ -2,8 +2,8 @@ import { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react"
 import Workspace from "./layouts/Workspace/Workspace";
 import { AppStateConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
-import { WorkspaceContext } from "./context/WorkspaceContext";
 import { RELATIVE_APP_PATHS } from "./app.config";
+import { SceneContext } from "./context/SceneContext";
 
 
 type ConfigFileInfo = {
@@ -55,13 +55,13 @@ export default function App(): ReactNode {
       }}
     >
       <div className="w-100 h-100 overflow-hidden">
-        <WorkspaceContext.Provider
+        <SceneContext.Provider
           value={{
-            workspaceConfig: appStateConfigRef.current.workspaces[0]
+            sceneConfig: appStateConfigRef.current.workspaces[0].scene
           }}
         >
           <Workspace />
-        </WorkspaceContext.Provider>
+        </SceneContext.Provider>
       </div>
     </GlobalContext.Provider>
   );

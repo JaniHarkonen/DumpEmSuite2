@@ -5,7 +5,7 @@ import SplitView from "@renderer/components/SplitView/SplitView";
 import TabButton from "@renderer/components/Tabs/TabControls/TabButton/TabButton";
 import TabControls from "@renderer/components/Tabs/TabControls/TabControls";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
-import useFlexibleSplits, { UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
+import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
 import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
 import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import { MouseEvent, ReactNode } from "react";
@@ -15,6 +15,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined 
     = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
+  const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
   const {
     splitTree, 
@@ -28,7 +29,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     handleTabRemove: removeTab
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
-    contentProvider: pContentProvider
+    contentProvider: pContentProvider,
+    onUpdate: pOnUpdate
   });
 
   const handleTabRemove = (
