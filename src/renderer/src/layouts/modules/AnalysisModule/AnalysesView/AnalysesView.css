@@ -1,0 +1,21 @@
+.tab-remove-icon {
+  width: 14px;
+  height: 14px;
+
+  vertical-align: middle;
+  filter: 
+    brightness(0) saturate(100%) invert(47%) sepia(1%) saturate(3362%) 
+    hue-rotate(59deg) brightness(97%) contrast(93%);
+}
+
+.tab-remove-icon-container {
+  margin-left: 5px;
+  padding: 1px;
+  border-radius: 2px;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: lightgray;
+  }
+}

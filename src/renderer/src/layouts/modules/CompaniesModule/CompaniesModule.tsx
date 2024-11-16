@@ -8,13 +8,14 @@ import { ReactNode, useContext } from "react";
 import ListingsTab from "./tabs/ListingsTab/ListingsTab";
 import ProfilesTab from "./tabs/ProfilesTab/ProfilesTab";
 import ScraperTab from "./tabs/ScraperTab/ScraperTab";
+import useSceneConfig from "@renderer/hook/useSceneConfig";
 
 
 export default function CompaniesModule(): ReactNode {
   const {sceneConfig} = useContext(SceneContext);
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;
   const tabsConfig: SceneTabsConfig = sceneConfig.tabs!;
-
+  const {handleSplitTreeUpdate} = useSceneConfig();
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
     tabsConfig, 
@@ -29,8 +30,9 @@ export default function CompaniesModule(): ReactNode {
 
   return (
     <ModuleView
-      sceneBlueprint={sceneBlueprint}
+      splitTreeBlueprint={sceneBlueprint}
       contentProvider={tabsProvider}
+      onUpdate={handleSplitTreeUpdate}
     />
   );
 }

@@ -1,29 +1,7 @@
-.tab-controls-container {
-  left: 0px;
+.tab-controls {
+  display: flex;
+  flex-direction: row;
+  position: relative;
   width: 100%;
-  min-width: max-content;
-
-
-  overflow: hidden;
-
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: dimgray;
-}
-
-button {
-  height: 24px;
-
-  border-style: solid;
-  border-color: dimgray;
-  border-left-width: 1px;
-  border-right-width: 0px;
-  border-top-width: 1px;
-  border-bottom-width: 0px;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-}
-
-button:last-child {
-  border-right-width: 1px;
+  height: auto;
 }

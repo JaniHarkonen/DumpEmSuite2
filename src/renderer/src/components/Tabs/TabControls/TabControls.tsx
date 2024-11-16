@@ -1,43 +1,21 @@
 import "./TabControls.css";
 
-import { Tab } from "@renderer/model/tabs";
-import { ReactNode } from "react";
+import { TabsContext } from "@renderer/context/TabsContext";
+
+import { PropsWithChildren, ReactNode, useContext } from "react";
 
 
-export type OnSelect = (selectedTab: Tab) => void;
-export type OnOpen = (openedTab: Tab) => void;
+export default function TabControls(props: PropsWithChildren): ReactNode {
+  const pChildren: ReactNode[] | ReactNode = props.children;
+  const {onDrop} = useContext(TabsContext);
 
-type OnDrop = () => void;
-
-type Props = {
-  tabs: Tab[];
-  onSelect?: OnSelect;
-  onOpen?: OnOpen;
-  onDrop?: OnDrop;
-};
-
-export default function TabControls(props: Props): ReactNode {
-  const pTabs: Tab[] = props.tabs;
-  const pOnSelect: OnSelect = props.onSelect || function() {};
-  const pOnOpen: OnOpen = props.onOpen || function() {};
-  const pOnDrop: OnDrop = props.onDrop || function() {};
 
   return (
     <div
-      className="tab-controls-container"
-      onMouseUp={pOnDrop}
+      className="tab-controls"
+      onMouseUp={onDrop}
     >
-      {pTabs.map((tab: Tab) => {
-        return (
-          <button
-            key={tab.workspace + "-tab-button-" + tab.id}
-            onMouseDown={() => pOnSelect(tab)}
-            onClick={() => pOnOpen(tab)}
-          >
-            {tab.caption}
-          </button>
-        );
-      })}
+      {pChildren}
     </div>
   );
 }

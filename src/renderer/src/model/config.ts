@@ -20,6 +20,12 @@ export type AppStateConfig = {
   workspaces: WorkspaceConfig[];
 };
 
+export function AppStateConfig(): AppStateConfig {
+  return {
+    workspaces: []
+  };
+}
+
 export function defaultWorkspaceConfig(): WorkspaceConfig {
   return {
     id: "",
@@ -34,4 +40,12 @@ export function defaultSceneConfig(): SceneConfig {
   return {
     splitTree: defaultSplitTree()
   };
+}
+
+export type ConfigFileUpdater = (appStateConfig: AppStateConfig) => void;
+
+export function createConfigFileUpdater(configPath: string): ConfigFileUpdater {
+  return (appStateConfig: AppStateConfig) => {
+    window.api.filesAPI.writeJSON<AppStateConfig>(configPath, appStateConfig);
+  }
 }

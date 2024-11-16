@@ -12,7 +12,7 @@ export default function ProfilesTab() {
   // const tabsConfig: SceneTabsConfig = sceneConfig.tabs!;
 
   const tabsProvider: TabContentProvider = {
-    getContent: (contentTemplate: string) => {
+    getContent: (contentTemplate: string | null) => {
       switch( contentTemplate ) {
         case "view-company-list": return <CompanyList />;
         case "view-chart": return <>chart</>;
@@ -25,7 +25,7 @@ export default function ProfilesTab() {
 
   return (
     <ModuleView
-      sceneBlueprint={sceneBlueprint}
+      splitTreeBlueprint={sceneBlueprint}
       contentProvider={tabsProvider}
     />
   );

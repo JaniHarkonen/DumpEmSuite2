@@ -1,31 +1,31 @@
-import ModuleView from "@renderer/components/ModuleView/ModuleView";
-import { SplitTreeBlueprint } from "@renderer/model/splits";
+import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode } from "react";
+import AnalysesView from "@renderer/layouts/modules/AnalysisModule/AnalysesView/AnalysesView";
+import useSceneConfig from "@renderer/hook/useSceneConfig";
 
 
-type Props = {
-  sceneBlueprint: SplitTreeBlueprint;
-};
+export default function AnalysisModule(): ReactNode {
+  const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
 
-export default function AnalysisModule(props: Props): ReactNode {
-  const pSceneBlueprint: SplitTreeBlueprint = props.sceneBlueprint;
-  const contentProvider: TabContentProvider = {
-    getContent: (contentTemplate: string) => {
-      switch( contentTemplate ) {
-        case "tab-volume": return <>tab-volume</>;
-        case "tab-price-action": return <>tab-price-action</>;
-        case "tab-technical": return <>tab-technical</>;
-        case "tab-fundamental": return <>tab-fundamental</>;
-      }
-      return <>FAILED</>;
-    }
-  };
+  const tabsProvider: TabContentProvider = createTabContentProvider(
+    sceneConfig.tabs!, 
+    {
+      "tab-volume": () => <>tab-volume</>,
+      "tab-price-action": () => <>tab-price-action</>,
+      "tab-technical": () => <>tab-technical</>,
+      "add-filteration-tab": () => <>add-filteration-tab</>,
+      "tab-fundamental": () => <>tab-fundamental</>
+    },
+    <>FAILED</>
+  );
 
+  
   return (
-    <ModuleView
-      sceneBlueprint={pSceneBlueprint}
-      contentProvider={contentProvider}
+    <AnalysesView
+      splitTreeBlueprint={sceneConfig.splitTree}
+      contentProvider={tabsProvider}
+      onUpdate={handleSplitTreeUpdate}
     />
   );
 }

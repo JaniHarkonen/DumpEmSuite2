@@ -22,22 +22,25 @@
                 "value": {
                   "tabs": [
                     {
-                      "id": "module-companies", 
-                      "caption": "Companies", 
-                      "workspace": "ws-test", 
-                      "contentTemplate": "module-companies"
+                      "id": "module-companies",
+                      "workspace": "ws-test",
+                      "caption": "Companies",
+                      "contentTemplate": "module-companies",
+                      "tags": []
                     },
                     {
-                      "id": "module-analysis", 
-                      "caption": "Analysis", 
-                      "workspace": "ws-test", 
-                      "contentTemplate": "module-analysis"
+                      "id": "module-analysis",
+                      "workspace": "ws-test",
+                      "caption": "Analysis",
+                      "contentTemplate": "module-analysis",
+                      "tags": []
                     },
                     {
-                      "id": "module-macro", 
-                      "caption": "Macro", 
-                      "workspace": "ws-test", 
-                      "contentTemplate": "module-macro"
+                      "id": "module-macro",
+                      "workspace": "ws-test",
+                      "caption": "Macro",
+                      "contentTemplate": "module-macro",
+                      "tags": []
                     }
                   ],
                   "activeTabIndex": 0
@@ -59,31 +62,35 @@
                   "isFork": true,
                   "divider": {
                     "direction": "horizontal",
-                    "value": 50
+                    "value": 56.25
                   },
                   "left": {
                     "isFork": false,
                     "value": {
                       "tabs": [
                         {
-                          "id": "tab-scraper", 
-                          "caption": "Scraper", 
-                          "workspace": "ws-test", 
-                          "contentTemplate": "tab-scraper"
+                          "id": "tab-scraper",
+                          "workspace": "ws-test",
+                          "caption": "Scraper",
+                          "contentTemplate": "tab-scraper",
+                          "tags": []
                         },
                         {
-                          "id": "tab-listings", 
-                          "caption": "Listings", 
-                          "workspace": "ws-test", 
-                          "contentTemplate": "tab-listings"
+                          "id": "tab-listings",
+                          "workspace": "ws-test",
+                          "caption": "Listings",
+                          "contentTemplate": "tab-listings",
+                          "tags": []
                         },
                         {
-                          "id": "tab-profiles", 
-                          "caption": "Profiles", 
-                          "workspace": "ws-test", 
-                          "contentTemplate": "tab-profiles"
+                          "id": "tab-profiles",
+                          "workspace": "ws-test",
+                          "caption": "Profiles",
+                          "contentTemplate": "tab-profiles",
+                          "tags": []
                         }
-                      ]
+                      ],
+                      "activeTabIndex": 0
                     }
                   }
                 }
@@ -139,9 +146,9 @@
                           "value": {
                             "tabs": [
                               {
-                                "id": "view-company-list", 
-                                "caption": "Companies", 
-                                "workspace": "ws-test", 
+                                "id": "view-company-list",
+                                "caption": "Companies",
+                                "workspace": "ws-test",
                                 "contentTemplate": "view-company-list"
                               }
                             ]
@@ -165,9 +172,9 @@
                             "value": {
                               "tabs": [
                                 {
-                                  "id": "view-chart", 
-                                  "caption": "Chart", 
-                                  "workspace": "ws-test", 
+                                  "id": "view-chart",
+                                  "caption": "Chart",
+                                  "workspace": "ws-test",
                                   "contentTemplate": "view-chart"
                                 }
                               ]
@@ -185,9 +192,9 @@
                             "value": {
                               "tabs": [
                                 {
-                                  "id": "view-company-profile", 
-                                  "caption": "Profile", 
-                                  "workspace": "ws-test", 
+                                  "id": "view-company-profile",
+                                  "caption": "Profile",
+                                  "workspace": "ws-test",
                                   "contentTemplate": "view-company-profile"
                                 }
                               ]
@@ -220,30 +227,131 @@
                     "value": {
                       "tabs": [
                         {
-                          "id": "tab-volume", 
-                          "caption": "Scraper", 
-                          "workspace": "ws-test", 
+                          "id": "tab-volume",
+                          "caption": "Volume",
+                          "workspace": "ws-test",
                           "contentTemplate": "tab-volume"
                         },
                         {
-                          "id": "tab-price-action", 
-                          "caption": "Listings", 
-                          "workspace": "ws-test", 
+                          "id": "tab-price-action",
+                          "caption": "Price action",
+                          "workspace": "ws-test",
                           "contentTemplate": "tab-price-action"
                         },
                         {
-                          "id": "tab-technical", 
-                          "caption": "Profiles", 
-                          "workspace": "ws-test", 
+                          "id": "tab-technical",
+                          "caption": "TA 1",
+                          "workspace": "ws-test",
                           "contentTemplate": "tab-technical"
                         },
                         {
-                          "id": "tab-fundamental", 
-                          "caption": "Profiles", 
-                          "workspace": "ws-test", 
-                          "contentTemplate": "tab-fundamental"
+                          "id": "tab-fundamental",
+                          "caption": "Fundamental",
+                          "workspace": "ws-test",
+                          "contentTemplate": "tab-fundamental",
+                          "tags": [
+                            "permanent"
+                          ]
                         }
                       ]
+                    }
+                  }
+                }
+              }
+            },
+            "tabs": {
+              "tab-volume": {
+                "splitTree": {
+                  "root": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": true,
+                      "divider": {
+                        "direction": "horizontal",
+                        "value": 50
+                      },
+                      "left": {
+                        "isFork": false,
+                        "value": {
+                          "tabs": []
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "tab-price-action": {
+                "splitTree": {
+                  "root": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": true,
+                      "divider": {
+                        "direction": "horizontal",
+                        "value": 50
+                      },
+                      "left": {
+                        "isFork": false,
+                        "value": {
+                          "tabs": []
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "tab-technical": {
+              "splitTree": {
+                "root": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": false,
+                      "value": {
+                        "tabs": []
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "tab-fundamental": {
+              "splitTree": {
+                "root": {
+                  "isFork": true,
+                  "divider": {
+                    "direction": "horizontal",
+                    "value": 50
+                  },
+                  "left": {
+                    "isFork": true,
+                    "divider": {
+                      "direction": "horizontal",
+                      "value": 50
+                    },
+                    "left": {
+                      "isFork": false,
+                      "value": {
+                        "tabs": []
+                      }
                     }
                   }
                 }
@@ -269,18 +377,18 @@
                     "value": {
                       "tabs": [
                         {
-                          "id": "tab-sector-kf894le83kltguiry7", 
-                          "caption": "Sector 1", 
+                          "id": "tab-sector-kf894le83kltguiry7",
+                          "caption": "Sector 1",
                           "workspace": "ws-test"
                         },
                         {
-                          "id": "tab-sector-lt894kf893pdf89423", 
-                          "caption": "Sector 2", 
+                          "id": "tab-sector-lt894kf893pdf89423",
+                          "caption": "Sector 2",
                           "workspace": "ws-test"
                         },
                         {
-                          "id": "tab-sector-vn38fnf0402ndo9weu", 
-                          "caption": "Sector 3", 
+                          "id": "tab-sector-vn38fnf0402ndo9weu",
+                          "caption": "Sector 3",
                           "workspace": "ws-test"
                         }
                       ]

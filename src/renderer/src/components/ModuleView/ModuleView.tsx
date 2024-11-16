@@ -1,22 +1,62 @@
-import useSplitTreeManager, { SplitTreeManagerProps } from "@renderer/hook/useSplitTreeManager";
-import { SplitTreeBlueprint } from "@renderer/model/splits";
-import { TabContentProvider } from "@renderer/model/tabs";
+import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
+import { Tab, TabContentProvider } from "@renderer/model/tabs";
 import SplitView from "../SplitView/SplitView";
 import { ReactNode } from "react";
+import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
+import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
+import TabControls from "../Tabs/TabControls/TabControls";
+import TabButton from "../Tabs/TabControls/TabButton/TabButton";
 
 
-export type ModuleProps = {
-  sceneBlueprint: SplitTreeBlueprint;
-};
-
-export default function ModuleView(props: SplitTreeManagerProps): ReactNode {
+export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
+  const pSceneBlueprint: SplitTreeBlueprint | null | undefined = 
+    props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
-  const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.sceneBlueprint;
+  const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
-  const [splitTree] = useSplitTreeManager({
+  const {
+    splitTree, 
+    tabSelection, 
+    handleTabSelection, 
+    handleTabOpen,
+    handleTabRelocation, 
+    handleTabSplit,
+    handleDividerMove
+  } = useFlexibleSplits({
+    splitTreeBlueprint: pSceneBlueprint,
     contentProvider: pContentProvider,
-    sceneBlueprint: pSceneBlueprint
+    onUpdate: pOnUpdate
   });
 
-  return <>{splitTree && <SplitView splitTree={splitTree} />}</>;
+  const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
+    return (
+      <TabControls>
+        {targetNode.value.tabs.map((tab: Tab) => {
+          return (
+            <TabButton
+              key={tab.workspace + "-tab-control-button-" + tab.id}
+              tab={tab}
+            />
+          );
+        })}
+      </TabControls>
+    );
+  };
+
+  
+  return (
+    <FlexibleSplitsContext.Provider
+      value={{
+        splitTree, 
+        tabSelection, 
+        handleTabSelection, 
+        handleTabOpen,
+        handleTabRelocation, 
+        handleTabSplit,
+        handleDividerMove
+      }}
+    >
+      {splitTree && <SplitView renderControls={renderTabControls} />}
+    </FlexibleSplitsContext.Provider>
+  );
 }
