@@ -1,5 +1,6 @@
-import { Tab } from "@renderer/model/tabs";
 import "./TabButton.css";
+
+import { Tab } from "@renderer/model/tabs";
 import { PropsWithChildren, ReactNode, useContext } from "react";
 import { TabsContext } from "@renderer/context/TabsContext";
 
@@ -17,6 +18,7 @@ export default function TabButton(props: Props): ReactNode {
   
   return (
     <button
+      className="tab-controls-button"
       onMouseDown={() => onSelect && onSelect(pTab)}
       onClick={() => onOpen && onOpen(pTab)}
     >

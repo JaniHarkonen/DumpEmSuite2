@@ -1,5 +1,5 @@
-import iconButtonCloseBlack from "./close-round-icon.svg";
-import iconButtonTrashCanWhite from "./trash-can-white-icon.svg";
+import iconButtonCloseBlack from "./icons/close-round-icon.svg";
+import iconButtonTrashCanWhite from "./icons/trash-can-white-icon.svg";
 
 
 export const ASSETS = {
