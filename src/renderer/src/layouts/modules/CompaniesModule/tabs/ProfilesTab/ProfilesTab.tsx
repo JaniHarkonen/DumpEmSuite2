@@ -14,7 +14,7 @@ export default function ProfilesTab() {
   const tabsProvider: TabContentProvider = {
     getContent: (contentTemplate: string | null) => {
       switch( contentTemplate ) {
-        case "view-company-list": return <CompanyList />;
+        case "view-company-list": return <CompanyList stocks={[]}/>;
         case "view-chart": return <>chart</>;
         case "view-company-profile": return <>profile</>;
       }

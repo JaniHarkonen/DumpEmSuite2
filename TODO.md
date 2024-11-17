@@ -8,6 +8,9 @@
 ### useFlexibleSplits.ts
 - only update the divider settings inside the config file when the divider is released, currently divider saving is disabled but would be saved each time the divider moves
 
+### CompanyList
+- the company list may contain stocks quoted at different currencies, consider auto conversion via the free API at https://www.exchangerate-api.com/docs/free (api: https://open.er-api.com/v6/latest/USD) (no api key required); NOTICE: Changes to content security policy are required in order to fetch()
+
 ### splits.ts
 - get rid of one-value-per-node principle
 - don't use interfaces

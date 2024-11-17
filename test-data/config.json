@@ -228,32 +228,36 @@
                       "tabs": [
                         {
                           "id": "tab-volume",
-                          "caption": "Volume",
                           "workspace": "ws-test",
-                          "contentTemplate": "tab-volume"
+                          "caption": "Volume",
+                          "contentTemplate": "tab-volume",
+                          "tags": []
                         },
                         {
                           "id": "tab-price-action",
-                          "caption": "Price action",
                           "workspace": "ws-test",
-                          "contentTemplate": "tab-price-action"
+                          "caption": "Price action",
+                          "contentTemplate": "tab-price-action",
+                          "tags": []
                         },
                         {
                           "id": "tab-technical",
-                          "caption": "TA 1",
                           "workspace": "ws-test",
-                          "contentTemplate": "tab-technical"
+                          "caption": "TA 1",
+                          "contentTemplate": "tab-technical",
+                          "tags": []
                         },
                         {
                           "id": "tab-fundamental",
-                          "caption": "Fundamental",
                           "workspace": "ws-test",
+                          "caption": "Fundamental",
                           "contentTemplate": "tab-fundamental",
                           "tags": [
                             "permanent"
                           ]
                         }
-                      ]
+                      ],
+                      "activeTabIndex": 3
                     }
                   }
                 }
