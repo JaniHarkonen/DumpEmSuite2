@@ -1,0 +1,5 @@
+.scraper-info-controls {
+  display: flex;
+  justify-content: end;
+  margin-top: var(--normal-margin);
+}

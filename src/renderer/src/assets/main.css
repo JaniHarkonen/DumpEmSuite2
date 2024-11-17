@@ -1,3 +1,7 @@
+:root {
+  --normal-margin: 5px;
+}
+
 body {
   height: 100dvh;
   width: 100dvw;
@@ -20,7 +24,11 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*user-select: none;*/
+  user-select: none;
+}
+
+button {
+  cursor: pointer;
 }
 
 #root {
@@ -28,19 +36,8 @@ body {
   height: 100%;
 }
 
-.adjustable-div {
-  resize: both;
-  overflow: auto;
-}
-
-.adjustable-div-horizontal {
-  resize: horizontal;
-  overflow: auto;
-}
-
-.adjustable-div-vertical {
-  resize: vertical;
-  overflow: auto;
+.float-right {
+  float: right;
 }
 
 .w-100 {
@@ -59,8 +56,28 @@ body {
   height: 50%;
 }
 
+.w-auto {
+  width: auto;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.w-max-content {
+  width: max-content;
+}
+
+.h-max-content {
+  height: max-content;
+}
+
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-auto {
+  overflow: auto;
 }
 
 .p-absolute {
@@ -69,6 +86,34 @@ body {
 
 .p-relative {
   position: relative;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-justify-end {
+  justify-content: end;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.ml-norm {
+  margin-left: var(--normal-margin);
+}
+
+.mr-norm {
+  margin-right: var(--normal-margin);
+}
+
+.mt-norm {
+  margin-top: var(--normal-margin);
+}
+
+.mb-norm {
+  margin-bottom: var(--normal-margin);
 }
 
 .debug-bg-red {

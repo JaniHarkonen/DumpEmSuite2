@@ -68,7 +68,7 @@ export default function Divider(props: Props): ReactNode {
       id={idContainer.current}
     >
       <div
-        className="p-absolute"
+        className="divider-content-container"
         style={{
           width: valueOrFill("horizontal", value),
           height: valueOrFill("vertical", value),

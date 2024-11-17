@@ -62,7 +62,7 @@
                   "isFork": true,
                   "divider": {
                     "direction": "horizontal",
-                    "value": 56.25
+                    "value": 50
                   },
                   "left": {
                     "isFork": false,

@@ -127,9 +127,17 @@ export default function useFlexibleSplits(props: Props): Returns {
   };
 
   const handleTabAdd = (targetValue: SplitTreeValue, newTab: Tab) => {
-    handleSplitsUpdate((manager: SplitTreeManager): boolean => {
-      return manager.addTab(targetValue, newTab);
+    setSplitTree((prev: SplitTree | null) => {
+      const manager: SplitTreeManager | null = treeManager.current;
+      if( manager ) {
+        manager.addTab(targetValue, newTab);
+        return manager.snapshot();
+      }
+      return prev;
     });
+    // handleSplitsUpdate((manager: SplitTreeManager): boolean => {
+    //   return manager.addTab(targetValue, newTab);
+    // });
   };
 
   const handleTabRemove = (targetValue: SplitTreeValue, remove: Tab) => {

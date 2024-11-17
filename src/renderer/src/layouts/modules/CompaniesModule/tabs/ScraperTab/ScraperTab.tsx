@@ -1,16 +1,36 @@
+import "./ScraperTab.css";
+import ScraperInfoTable from "@renderer/components/ScraperInfo/ScraperInfoTable";
+
+
 export default function ScraperTab() {
   return (
-    <div>
+    <div className="w-100 h-100 overflow-auto">
       <h3>Scraper configuration</h3>
-      <form>
-        <div>Scraper info</div>
-        <button>Change scraper</button>
+      <div>
         <div>
-        <span>Target: </span><input /><button>...</button>
-        <span>Output: </span><input /><button>...</button>
+          <ScraperInfoTable
+            scraperInfo={{
+              name: "Test scraper name",
+              scraperVersion: "v1.0.0",
+              scrapeScriptVersion: "v1.0.0",
+              goodForDate: "11-2024"
+            }}
+          >
+            <div className="scraper-info-controls">
+              <button>Change scraper</button>
+            </div>
+          </ScraperInfoTable>
         </div>
-      </form>
+      </div>
       <h3>Results</h3>
+      <div>
+        <div>
+          <span>Target: </span><input /><button>...</button>
+        </div>
+        <div>
+          <span>Output: </span><input /><button>...</button>
+        </div>
+      </div>
       Scraper status; results
     </div>
   );

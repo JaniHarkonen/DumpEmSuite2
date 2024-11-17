@@ -1,4 +1,4 @@
-button {
+.tab-controls-button {
   height: 24px;
 
   border-style: solid;
@@ -11,6 +11,6 @@ button {
   border-top-right-radius: 2px;
 }
 
-button:last-child {
+.tab-controls-button:last-child {
   border-right-width: 1px;
 }

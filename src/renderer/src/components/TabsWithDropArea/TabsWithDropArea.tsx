@@ -35,7 +35,7 @@ export default function TabsWithDropArea(props: Props): ReactNode {
     <div className="tabs-container">
       <div className="tab-controls-container">{pControls}</div>
       <div
-        className="p-relative w-100 h-100"
+        className="p-relative w-100 h-100 overflow-hidden"
         onMouseMove={handleDropAreaHighlight}
         onMouseUp={handleContentDrop}
         onMouseLeave={() => setActiveDropArea(null)}
