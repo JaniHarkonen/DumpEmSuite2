@@ -1,0 +1,18 @@
+.page-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  container-name: page-container;
+  container-type: inline-size;
+}
+
+.page-content-container {
+  width: 75%;
+}
+
+@container page-container (width < 500px) {
+  .page-content-container {
+    width: 100%;
+  }
+}

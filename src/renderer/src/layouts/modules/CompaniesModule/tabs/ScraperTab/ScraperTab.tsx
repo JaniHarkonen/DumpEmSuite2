@@ -1,3 +1,4 @@
+import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import "./ScraperTab.css";
 import ScraperInfoTable from "@renderer/components/ScraperInfo/ScraperInfoTable";
 
@@ -5,33 +6,35 @@ import ScraperInfoTable from "@renderer/components/ScraperInfo/ScraperInfoTable"
 export default function ScraperTab() {
   return (
     <div className="w-100 h-100 overflow-auto">
-      <h3>Scraper configuration</h3>
-      <div>
+      <PageContainer>
+        <h3>Scraper configuration</h3>
         <div>
-          <ScraperInfoTable
-            scraperInfo={{
-              name: "Test scraper name",
-              scraperVersion: "v1.0.0",
-              scrapeScriptVersion: "v1.0.0",
-              goodForDate: "11-2024"
-            }}
-          >
-            <div className="scraper-info-controls">
-              <button>Change scraper</button>
-            </div>
-          </ScraperInfoTable>
+          <div>
+            <ScraperInfoTable
+              scraperInfo={{
+                name: "Test scraper name",
+                scraperVersion: "v1.0.0",
+                scrapeScriptVersion: "v1.0.0",
+                goodForDate: "11-2024"
+              }}
+            >
+              <div className="scraper-info-controls">
+                <button>Change scraper</button>
+              </div>
+            </ScraperInfoTable>
+          </div>
         </div>
-      </div>
-      <h3>Results</h3>
-      <div>
+        <h3>Results</h3>
         <div>
-          <span>Target: </span><input /><button>...</button>
+          <div>
+            <span>Target: </span><input /><button>...</button>
+          </div>
+          <div>
+            <span>Output: </span><input /><button>...</button>
+          </div>
         </div>
-        <div>
-          <span>Output: </span><input /><button>...</button>
-        </div>
-      </div>
-      Scraper status; results
+        Scraper status; results
+      </PageContainer>
     </div>
   );
 }
