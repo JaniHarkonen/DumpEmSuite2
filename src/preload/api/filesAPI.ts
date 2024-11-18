@@ -7,11 +7,13 @@ const DEFAULT_JSON_STRINGIFY_SETTINGS = {
 
 export type ErrorCallback = (err: NodeJS.ErrnoException | null) => void;
 export type ParsedJSONCallback<T> = (json: T) => void;
+
 type ReadResult<T> = {
   wasSuccessful: boolean;
   result: T;
   info?: any;
 };
+
 type WriteResult = {
   wasSuccessful: boolean;
   info?: any;

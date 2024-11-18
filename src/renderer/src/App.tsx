@@ -40,7 +40,7 @@ export default function App(): ReactNode {
     })
     .catch((err) => console.log(err));
 
-    console.log(databaseAPI.test());
+    // databaseAPI.test((err, rows) => console.log(err, rows));
   }, []);
 
 

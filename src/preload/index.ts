@@ -1,7 +1,7 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { FilesAPI, filesAPI } from './api/filesAPI';
-import { DatabaseAPI, databaseAPI } from './api/databaseAPI';
+import { DatabaseAPI, databaseAPI } from './api/database/databaseAPI';
 
 
 export type APIs = {
