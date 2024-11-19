@@ -39,8 +39,6 @@ export default function App(): ReactNode {
       });
     })
     .catch((err) => console.log(err));
-
-    // databaseAPI.test((err, rows) => console.log(err, rows));
   }, []);
 
 

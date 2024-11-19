@@ -1,5 +1,5 @@
 import { Database, OPEN_READWRITE } from "sqlite3";
-import DatabaseManager, { ErrorCallback } from "./DatabaseManager";
+import { DatabaseManager, ErrorCallback } from "./database";
 
 
 export type DatabaseAPI = {
@@ -7,8 +7,6 @@ export type DatabaseAPI = {
   close: (databaseName: string, errorCallback?: ErrorCallback) => void;
   fetch: (databaseName: string) => void;
 };
-
-
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -20,12 +18,12 @@ export const databaseAPI: DatabaseAPI = {
     databaseManager.close(databaseName, errorCallback);
   },
   fetch: (databaseName: string) => {
-    
+
   }
   // test: (errorCallback?: ErrorCallback) => {
-  //   const db: Database = new Database("C:\\Users\\User\\Desktop\\test-db.db", OPEN_READWRITE);
+  //   const db: Database = new Database("test-db.db", OPEN_READWRITE);
   //   return db.all(`select * from TestTable;`, setter);
-  //   // const db = Database("C:\\Users\\User\\Desktop\\test-db.db", Database.OPEN_READWRITE);
+  //   // const db = Database("test-db.db", Database.OPEN_READWRITE);
   //   // const statement = db.prepare(`
   //   //   select * from TestTable;
   //   // `);

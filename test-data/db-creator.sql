@@ -37,11 +37,11 @@ CREATE TABLE company (
 	stock_price REAL,
 	volume_price REAL,
 	volume_quantity REAL,
-	company_currency_id TEXT,
 	scrape_date TEXT,
+	fk_company_currency_id TEXT,
 	
 	PRIMARY KEY (company_id),
-	FOREIGN KEY (company_currency_id) REFERENCES currency(currency_id)
+	FOREIGN KEY (fk_company_currency_id) REFERENCES currency(currency_id)
 );
 
 
@@ -63,48 +63,48 @@ CREATE TABLE color_code (
 
 
 	/* Company profiles */
-CREATE TABLE company_profile (
-	company_profile_company_id INT NOT NULL,
+CREATE TABLE profile (
 	sector TEXT,
 	presence TEXT,
 	investors_url TEXT,
-	description TEXT,
+	profile_description TEXT,
+	fk_profile_company_id INT NOT NULL,
 	
-	FOREIGN KEY (company_profile_company_id) REFERENCES company(company_id)
+	FOREIGN KEY (fk_profile_company_id) REFERENCES company(company_id)
 );
 
 
 	/* Filteration tabs in the order that they should appear in the app */
 CREATE TABLE filteration_step (
 	step_id TEXT NOT NULL,
-	previous_step_id TEXT,
 	caption TEXT, 
+	fk_previous_step_id TEXT,
 	
-	FOREIGN KEY (previous_step_id) REFERENCES filteration_step(step_id)
+	FOREIGN KEY (fk_previous_step_id) REFERENCES filteration_step(step_id)
 );
 
 
 	/* Company analyses paired with the filteration steps that they appear in */
 CREATE TABLE filteration (
-	filteration_step_step_id TEXT NOT NULL,
-	filteration_company_id INT NOT NULL,
 	notes TEXT,
-	color_code_code_id INT NOT NULL DEFAULT 0,
+	fk_filteration_step_id TEXT NOT NULL,
+	fk_filteration_company_id INT NOT NULL,
+	fk_filteration_code_id INT NOT NULL DEFAULT 0,
 	
-	FOREIGN KEY (filteration_step_step_id) REFERENCES filteration_step(step_id),
-	FOREIGN KEY (filteration_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (color_code_code_id) REFERENCES color_code(code_id)
+	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id),
+	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id),
+	FOREIGN KEY (fk_filteration_code_id) REFERENCES color_code(code_id)
 );
 
 
 	/* Fundamental analyses */
 CREATE TABLE fundamental (
-	company_company_id INT NOT NULL,
 	notes TEXT,
-	color_code_code_id INT NOT NULL DEFAULT 0,
+	fk_fundamental_company_id INT NOT NULL,
+	fk_fundamental_code_id INT NOT NULL DEFAULT 0,
 	
-	FOREIGN KEY (company_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (color_code_code_id) REFERENCES color_code(code_id)
+	FOREIGN KEY (fk_fundamental_company_id) REFERENCES company(company_id),
+	FOREIGN KEY (fk_fundamental_code_id) REFERENCES color_code(code_id)
 );
 
 
@@ -119,13 +119,13 @@ CREATE TABLE macro_sector (
 
 	/* Macro analyses (TO BE COMPLETED) */
 CREATE TABLE macro_analysis (
-	macro_analysis_sector_id TEXT NOT NULL,
+	fk_macro_analysis_sector_id TEXT NOT NULL,
 	
-	FOREIGN KEY (macro_analysis_sector_id) REFERENCES macro_sector(sector_id)
+	FOREIGN KEY (fk_macro_analysis_sector_id) REFERENCES macro_sector(sector_id)
 );
 
 
-/* INSERTS */
+	/* INSERTS */
 INSERT INTO metadata (dump_em_suite_version, workspace_id, workspace_name)
 VALUES
 ('v2.0.0', 'test-workspace', 'Testing');
@@ -139,7 +139,7 @@ INSERT INTO scraper (scraper_name, scraper_version, scrape_script_version, goodF
 VALUES
 ('test scrape', 'v1.0.0', 'v3.3.3', '2000-02-02');
 
-INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, company_currency_id, scrape_date)
+INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, scrape_date)
 VALUES
 (1, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01'),
 (2, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01'),
@@ -157,8 +157,8 @@ VALUES
 (3, '0000FF');
 
 
-/* DESCRIPTIONS GENERATED VIA CHATGPT */
-INSERT INTO company_profile (company_profile_company_id, sector, presence, investors_url, description)
+	/* DESCRIPTIONS GENERATED VIA CHATGPT */
+INSERT INTO profile (fk_profile_company_id, sector, presence, investors_url, profile_description)
 VALUES
 (1, 'Hospitality', 'Finland, Sweden', 'investors.pzza.not.a.link', 'Pizza Place serves delicious, handcrafted pizzas with fresh ingredients in a cozy, family-friendly setting. Delivery and takeout available.'),
 (2, 'Banking', 'Finland', 'investors.bank.not.a.link', 'Big Bank offers comprehensive financial services, including savings, loans, and investments, with a focus on customer trust and convenience.'),
