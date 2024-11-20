@@ -11,7 +11,7 @@ type ConfigFileInfo = {
   configFileUpdater: ConfigFileUpdater;
 } | null;
 
-const {filesAPI, databaseAPI} = window.api;
+const {filesAPI} = window.api;
 
 export default function App(): ReactNode {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')

@@ -61,7 +61,7 @@
                 "left": {
                   "isFork": true,
                   "divider": {
-                    "direction": "horizontal",
+                    "direction": "vertical",
                     "value": 50
                   },
                   "left": {
@@ -90,7 +90,7 @@
                           "tags": []
                         }
                       ],
-                      "activeTabIndex": 0
+                      "activeTabIndex": 1
                     }
                   }
                 }

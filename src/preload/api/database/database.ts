@@ -22,8 +22,8 @@ export function subquery(queryString: string): string {
   return " (" + queryString + ")";
 }
 
-export function col<T>(columnString: T, tableReference?: string): string {
-  return (tableReference ? tableReference + "." : "") + columnString;
+export function col<T>(columnString: keyof T, tableReference?: string): string {
+  return (tableReference ? tableReference + "." : "") + (columnString as string);
 }
 
 export function table(tableString: string, tableReference?: string): string {
@@ -50,12 +50,16 @@ export function and(conditionStringA: string, conditionStringB: string): string 
   return " " + conditionStringA + " AND " + conditionStringB;
 }
 
-export function insertInto(tableString: string, ...columnString: string[]): string {
+export function insertInto(
+  tableString: string, ...columnString: string[]
+): string {
   return "INSERT INTO " + tableString + "(" + compound(...columnString) + ")";
 }
 
 export function values(...valueString: string[]): string {
-  return " VALUES " + compound(...valueString.map((str: string) => "(" + str + ")"));
+  return (
+    " VALUES " + compound(...valueString.map((str: string) => "(" + str + ")"))
+  );
 }
 
 export function val(valueString?: string): string {
@@ -76,6 +80,9 @@ export class DatabaseManager {
 
   constructor() {
     this.openDatabases = new Map<string, DatabaseConnection>();
+    const name: string = "test";
+    const path: string = process.cwd() + "\\test-data\\test-database.db";
+    this.openDatabases.set(name, { name, path, database: new Database(path) });
   }
 
 
@@ -83,50 +90,61 @@ export class DatabaseManager {
     return this.openDatabases.get(databaseName);
   }
 
-  public open(databaseName: string, databasePath: string, callback?: ErrorCallback): void {
-    const database: Database = new Database(databasePath, OPEN_READWRITE, (err: Error | null) => {
-      if( !err ) {
-        this.openDatabases.set(
-          databaseName, 
-          {
+  public open(
+    databaseName: string, databasePath: string, callback?: ErrorCallback
+  ): void {
+    const database: Database = 
+      new Database(databasePath, OPEN_READWRITE, (err: Error | null) => {
+        if( !err ) {
+          this.openDatabases.set(databaseName, {
             name: databaseName,
             path: databasePath,
             database
-          }
-        );
-      }
+          });
+        }
 
-      callback && callback(err);
-    });
+        callback && callback(err);
+      });
   }
 
-  public query(databaseName: string): void {
-    let database: DatabaseConnection | undefined = this.openDatabases.get(databaseName);
+  public fetch<T>(
+    databaseName: string, 
+    preparedString: string, 
+    callback: (err: Error | null, rows: T[]) => void,
+    values: (number | string | boolean | null)[]
+  ): void {
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
+
+    if( !connection ) {
+      callback(new Error(
+        "Unable to connect to database! No database with name '" + databaseName + 
+        "' was registered."
+      ), []);
+    } else {
+      connection.database.prepare(preparedString, values).all<T>(callback);
+    }
   }
 
-  public fetch(databaseName: string): void {
+  public post(databaseName: string, preparedString: string): void {
 
   }
 
-  public post(databaseName: string): void {
-
-  }
-
-  public delete(databaseName: string): void {
+  public delete(databaseName: string, preparedString: string): void {
 
   }
 
   public close(databaseName: string, callback?: ErrorCallback): void {
-    const database: DatabaseConnection | undefined = this.getDatabase(databaseName);
+    const connection: DatabaseConnection | undefined = 
+      this.getDatabase(databaseName);
 
-    if( database ) {
-      database.database.close((err: Error | null) => {
+    if( connection ) {
+      connection.database.close((err: Error | null) => {
         if( !err ) {
           this.openDatabases.delete(databaseName);
         }
 
         callback && callback(err);
-      })
+      });
     }
   }
 }

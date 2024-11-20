@@ -1,17 +1,3 @@
-	/* DROPS */
-DROP TABLE metadata;
-DROP TABLE scraper;
-DROP TABLE company;
-DROP TABLE currency;
-DROP TABLE color_code;
-DROP TABLE company_profile;
-DROP TABLE filteration_step;
-DROP TABLE filteration;
-DROP TABLE fundamental;
-DROP TABLE macro_sector;
-DROP TABLE macro_analysis;
-
-
 	/* Workspace metadata */
 CREATE TABLE metadata (
 	dump_em_suite_version TEXT NOT NULL,
@@ -25,19 +11,20 @@ CREATE TABLE scraper (
 	scraper_name TEXT,
 	scraper_version TEXT,
 	scrape_script_version TEXT,
-	goodForDate TEXT
+	good_for TEXT,
+	scraper_path TEXT
 );
 
 
 	/* Company listings available on the workspace */
 CREATE TABLE company (
-	company_id INT NOT NULL,
+	company_id REAL NOT NULL,
 	company_name TEXT,
 	stock_ticker TEXT,
 	stock_price REAL,
 	volume_price REAL,
 	volume_quantity REAL,
-	scrape_date TEXT,
+	updated TEXT,
 	fk_company_currency_id TEXT,
 	
 	PRIMARY KEY (company_id),
@@ -48,6 +35,7 @@ CREATE TABLE company (
 	/* Available currencies */
 CREATE TABLE currency (
 	currency_id TEXT NOT NULL,
+	currency_symbol TEXT NOT NULL,
 	
 	PRIMARY KEY (currency_id)
 );
@@ -55,7 +43,7 @@ CREATE TABLE currency (
 
 	/* Available set of color codes on each analysis tab */
 CREATE TABLE color_code (
-	code_id INT NOT NULL,
+	code_id REAL NOT NULL,
 	code_hex TEXT NOT NULL,
 	
 	PRIMARY KEY (code_id)
@@ -68,7 +56,7 @@ CREATE TABLE profile (
 	presence TEXT,
 	investors_url TEXT,
 	profile_description TEXT,
-	fk_profile_company_id INT NOT NULL,
+	fk_profile_company_id REAL NOT NULL,
 	
 	FOREIGN KEY (fk_profile_company_id) REFERENCES company(company_id)
 );
@@ -88,8 +76,8 @@ CREATE TABLE filteration_step (
 CREATE TABLE filteration (
 	notes TEXT,
 	fk_filteration_step_id TEXT NOT NULL,
-	fk_filteration_company_id INT NOT NULL,
-	fk_filteration_code_id INT NOT NULL DEFAULT 0,
+	fk_filteration_company_id REAL NOT NULL,
+	fk_filteration_code_id REAL NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id),
 	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id),
@@ -100,8 +88,8 @@ CREATE TABLE filteration (
 	/* Fundamental analyses */
 CREATE TABLE fundamental (
 	notes TEXT,
-	fk_fundamental_company_id INT NOT NULL,
-	fk_fundamental_code_id INT NOT NULL DEFAULT 0,
+	fk_fundamental_company_id REAL NOT NULL,
+	fk_fundamental_code_id REAL NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_fundamental_company_id) REFERENCES company(company_id),
 	FOREIGN KEY (fk_fundamental_code_id) REFERENCES color_code(code_id)
@@ -130,16 +118,16 @@ INSERT INTO metadata (dump_em_suite_version, workspace_id, workspace_name)
 VALUES
 ('v2.0.0', 'test-workspace', 'Testing');
 
-INSERT INTO currency (currency_id)
+INSERT INTO currency (currency_id, currency_symbol)
 VALUES 
-('EUR'),
-('USD');
+('EUR', '€'),
+('USD', '$');
 
-INSERT INTO scraper (scraper_name, scraper_version, scrape_script_version, goodForDate)
+INSERT INTO scraper (scraper_name, scraper_version, scrape_script_version, good_for, scraper_path)
 VALUES
-('test scrape', 'v1.0.0', 'v3.3.3', '2000-02-02');
+('test scrape', 'v1.0.0', 'v3.3.3', '2000-02-02', 'XYZ:/not/a/path.scraper');
 
-INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, scrape_date)
+INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, updated)
 VALUES
 (1, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01'),
 (2, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01'),

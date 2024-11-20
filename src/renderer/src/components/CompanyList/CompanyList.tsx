@@ -1,5 +1,6 @@
 import { CompanyStock } from "@renderer/model/companies";
 
+
 type Props = {
   stocks: CompanyStock[];
 };
@@ -8,7 +9,7 @@ export default function CompanyList(props: Props) {
   const pStocks: CompanyStock[] = props.stocks;
 
   return (
-    <table className="text-align-left">
+    <table className="text-align-left w-100">
       <thead>
         <tr>
           <th>Name</th>
