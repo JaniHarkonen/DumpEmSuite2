@@ -25,6 +25,8 @@ CREATE TABLE company (
 	volume_price REAL,
 	volume_quantity REAL,
 	updated TEXT,
+	exchange TEXT,
+	chart_url TEXT,
 	fk_company_currency_id TEXT,
 	
 	PRIMARY KEY (company_id),
@@ -127,15 +129,15 @@ INSERT INTO scraper (scraper_name, scraper_version, scrape_script_version, good_
 VALUES
 ('test scrape', 'v1.0.0', 'v3.3.3', '2000-02-02', 'XYZ:/not/a/path.scraper');
 
-INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, updated)
+INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, updated, exchange, chart_url)
 VALUES
-(1, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01'),
-(2, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01'),
-(3, 'IT', 'IT', 1.0, 10000.00, 10000, 'USD', '2028-01-01'),
-(4, 'Steel Co', 'STL', 11.0, 11000.00, 1000, 'USD', '2028-01-01'),
-(5, 'Coke of cola', 'CC', 20.0, 2000.00, 100, 'EUR', '2028-01-01'),
-(6, 'Pep of si', 'PEP', 20.0, 2000.00, 100, 'EUR', '2028-01-01'),
-(7, 'Railroad', 'ROAD', 5.0, 5000.00, 1000, 'USD', '2028-01-01');
+(1, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pzza'),
+(2, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/bank'),
+(3, 'IT', 'IT', 1.0, 10000.00, 10000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/it'),
+(4, 'Steel Co', 'STL', 11.0, 11000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/stl'),
+(5, 'Coke of cola', 'CC', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/cc'),
+(6, 'Pep of si', 'PEP', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pep'),
+(7, 'Railroad', 'ROAD', 5.0, 5000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/road');
 
 INSERT INTO color_code (code_id, code_hex)
 VALUES

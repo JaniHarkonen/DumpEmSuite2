@@ -1,4 +1,4 @@
-import CompanyList from "@renderer/components/CompanyList/CompanyList";
+import TableList from "@renderer/components/TableList/TableList";
 import ModuleView from "@renderer/components/ModuleView/ModuleView";
 import { SceneContext } from "@renderer/context/SceneContext";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
@@ -14,7 +14,7 @@ export default function ProfilesTab() {
   const tabsProvider: TabContentProvider = {
     getContent: (contentTemplate: string | null) => {
       switch( contentTemplate ) {
-        case "view-company-list": return <CompanyList stocks={[]}/>;
+        case "view-company-list": return <TableList columns={[]} data={[]}/>;
         case "view-chart": return <>chart</>;
         case "view-company-profile": return <>profile</>;
       }

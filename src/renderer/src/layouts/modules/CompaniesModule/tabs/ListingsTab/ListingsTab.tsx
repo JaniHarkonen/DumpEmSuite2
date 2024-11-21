@@ -1,4 +1,4 @@
-import WorkspaceCompaniesList from "@renderer/components/CompanyList/WorkspaceCompaniesList";
+import WorkspaceCompaniesList from "@renderer/components/TableList/WorkspaceCompaniesList";
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 
 
