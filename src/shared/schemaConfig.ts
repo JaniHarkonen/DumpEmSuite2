@@ -1,3 +1,45 @@
+type DatabaseSchema = {
+  metadata: {
+    table: Metadata;
+  };
+  scraper: {
+    table: Scraper;
+  };
+  company: {
+    table: Company;
+    fk: FKCompany;
+  };
+  currency: {
+    table: Currency;
+  };
+  color_code: {
+    table: ColorCode;
+  };
+  profile: {
+    table: Profile;
+    fk: FKProfile;
+  };
+  filteration_step: {
+    table: FilterationStep;
+    fk: FKFilterationStep;
+  };
+  filteration: {
+    table: Filteration;
+    fk: FKFilteration;
+  };
+  fundamental: {
+    table: Fundamental;
+    fk: FKFundamental;
+  };
+  macro_sector: {
+    table: MacroSector;
+  };
+  macro_analysis: {
+    table: MacroAnalysis;
+    fk: FKMacroAnalysis;
+  };
+};
+
 export type Metadata = {
   dump_em_suite_version: string;
   workspace_id: string; 
@@ -28,7 +70,7 @@ export type FKCompany = {
 export type Currency = {
   currency_id: string;
   currency_symbol: string;
-}
+};
 
 export type ColorCode = {
   code_id: number;

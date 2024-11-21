@@ -1,9 +1,11 @@
 import { defaultWorkspaceConfig, WorkspaceConfig } from "@renderer/model/config";
 import { createContext } from "react";
+import { BoundDatabaseAPI } from "src/shared/database.type";
 
 
-type WorkspaceContextType = {
+export type WorkspaceContextType = {
   workspaceConfig: WorkspaceConfig;
+  databaseAPI?: BoundDatabaseAPI;
 };
 
 export const WorkspaceContext = createContext<WorkspaceContextType>({

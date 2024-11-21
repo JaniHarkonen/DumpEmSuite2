@@ -1,16 +1,10 @@
+import { DatabaseAPI } from "../../../shared/database.type";
 import { Company, Currency, FKCompany } from "../../../shared/schemaConfig";
-import { col, DatabaseManager, equals, from, query, select, table, where } from "./database";
+import { DatabaseManager } from "./database";
+import { col, equals, from, query, select, table, where } from "./sql";
 
 
-export type DatabaseAPI = {
-  open: (databaseName: string, databasePath: string) => Promise<Error | null>;
-  close: (databaseName: string) => Promise<Error | null>;
-  fetchAllCompanies: (
-    databaseName: string
-  ) => Promise<(Company & Currency)[]>;
-};
-
-const databaseManager: DatabaseManager = new DatabaseManager();
+const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
 
 export const databaseAPI: DatabaseAPI = {
   open: (databaseName: string, databasePath: string) => {
