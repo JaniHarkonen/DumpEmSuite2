@@ -1,5 +1,5 @@
 import { DatabaseAPI } from "../../../shared/database.type";
-import { Company, Currency, FKCompany } from "../../../shared/schemaConfig";
+import { Company, Currency, FKCompany, Scraper } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { col, equals, from, query, select, table, where } from "./sql";
 
@@ -28,6 +28,27 @@ export const databaseAPI: DatabaseAPI = {
         }
       });
     });
+  },
+  fetchScraperInfo: (databaseName: string) => {
+    return new Promise<Scraper[]>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          select(col("*")) + 
+          from(table("scraper"))
+        );
+        
+        databaseManager.fetch<Scraper>(
+          databaseName, preparedString,
+          (err: Error | null, rows: Scraper[]) => {
+            if( err ) {
+              reject(err);
+            } else {
+              resolve(rows);
+            }
+          }, []
+        );
+      }
+    );
   },
   fetchAllCompanies: (databaseName: string) => {
     return new Promise<(Company & Currency)[]>(

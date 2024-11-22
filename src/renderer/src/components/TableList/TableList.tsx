@@ -1,7 +1,7 @@
 type ListColumn<T> = {
   accessor: keyof T;
   caption: string;
-}
+};
 
 type Props<T> = {
   columns: ListColumn<T>[];
@@ -34,7 +34,7 @@ export default function TableList<T>(props: Props<T>) {
                 return (
                   <td key={"list-table-data-" + index}>
                     {index === 0 ? 
-                      (<><span><input type="checkbox" /></span>{data}</>) :
+                      (<><input type="checkbox" />{data}</>) :
                       (<>{data}</>)
                     }
                   </td>
