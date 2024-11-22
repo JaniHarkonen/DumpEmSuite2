@@ -124,6 +124,10 @@ button {
   margin-bottom: var(--normal-margin);
 }
 
+.user-select-text {
+  user-select: text;
+}
+
 .debug-bg-red {
   background-color: red;
 }

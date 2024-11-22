@@ -1,30 +1,13 @@
 import { readFile, writeFile } from "fs/promises";
+import { FilesAPI, ReadResult } from "../../shared/files.type";
 
 
 const DEFAULT_JSON_STRINGIFY_SETTINGS = {
   space: 2
 };
 
-export type ErrorCallback = (err: NodeJS.ErrnoException | null) => void;
-export type ParsedJSONCallback<T> = (json: T) => void;
-type ReadResult<T> = {
-  wasSuccessful: boolean;
-  result: T;
-  info?: any;
-};
-type WriteResult = {
-  wasSuccessful: boolean;
-  info?: any;
-};
-
-export type FilesAPI = {
-  writeJSON: <T>(filePath: string, json: T) => Promise<WriteResult>;
-  readJSON: <T>(filePath: string) => Promise<ReadResult<T>>;
-  getWorkingDirectory: () => string;
-};
-
 export const filesAPI: FilesAPI = {
-  writeJSON: <T>(filePath: string, json: T) => {
+  writeJSON: (filePath: string, json: any) => {
     return new Promise((resolve, reject) => {
       writeFile(filePath, JSON.stringify(json, null, DEFAULT_JSON_STRINGIFY_SETTINGS.space))
       .then(() => resolve({

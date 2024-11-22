@@ -60,7 +60,7 @@ export default function App(): ReactNode {
             sceneConfig: appStateConfigRef.current.workspaces[0].scene
           }}
         >
-          <Workspace />
+          <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />
         </SceneContext.Provider>
       </div>
     </GlobalContext.Provider>
