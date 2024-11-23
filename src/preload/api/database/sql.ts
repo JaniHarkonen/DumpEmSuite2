@@ -53,9 +53,13 @@ export function insertInto(
   return "INSERT INTO " + tableString + "(" + compound(...columnString) + ")";
 }
 
-export function values(...valueString: string[]): string {
+export function value(...valueString: string[]): string {
+  return "(" + compound(...valueString) + ")";
+}
+
+export function values(...value: string[]): string {
   return (
-    " VALUES " + compound(...valueString.map((str: string) => "(" + str + ")"))
+    " VALUES " + compound(...value)
   );
 }
 

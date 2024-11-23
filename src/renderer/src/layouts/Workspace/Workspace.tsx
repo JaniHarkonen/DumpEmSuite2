@@ -7,7 +7,7 @@ import { createTabContentProvider } from "../layoutUtils";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { WorkspaceContext, WorkspaceContextType } from "@renderer/context/WorkspaceContext";
 import { WorkspaceConfig } from "@renderer/model/config";
-import { bindAPIToWorkspace, BoundDatabaseAPI } from "../../../../shared/database.type";
+import { bindAPIToWorkspace, BoundDatabaseAPI, QueryResult } from "../../../../shared/database.type";
 
 
 type Props = {
@@ -30,8 +30,8 @@ export default function Workspace(props: Props): ReactNode {
     );
 
     boundDatabaseAPI.open()
-    .then((err: Error | null) => {
-      if( err ) {
+    .then((result: QueryResult) => {
+      if( !result.wasSuccessful ) {
         return;
       }
 

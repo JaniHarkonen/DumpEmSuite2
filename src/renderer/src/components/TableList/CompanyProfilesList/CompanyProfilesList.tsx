@@ -1,17 +1,20 @@
 import { ReactNode, useEffect, useState } from "react";
-import TableList from "./TableList";
+import TableList from "../TableList";
 import { Company, Currency } from "src/shared/schemaConfig";
 import useDatabase from "@renderer/hook/useDatabase";
+import { FetchResult } from "src/shared/database.type";
 
 
-export default function WorkspaceCompaniesList(): ReactNode {
+export default function CompanyProfilesList(): ReactNode {
   const [stocks, setStocks] = useState<(Company & Currency)[]>([]);
   const {databaseAPI} = useDatabase();
 
   useEffect(() => {
     databaseAPI!.fetchAllCompanies()
-    .then((result: (Company & Currency)[]) => {
-      setStocks(result);
+    .then((result: FetchResult<Company & Currency>) => {
+      if( result.wasSuccessful ) {
+        setStocks(result.rows);
+      }
     });
   }, []);
 
@@ -21,9 +24,6 @@ export default function WorkspaceCompaniesList(): ReactNode {
       columns={[
         { accessor: "company_name", caption: "Name" },
         { accessor: "stock_ticker", caption: "Ticker" },
-        { accessor: "volume_price", caption: "Volume ($)" },
-        { accessor: "volume_quantity", caption: "Volume (quant.)" },
-        { accessor: "stock_price", caption: "Share price ($)" },
         { accessor: "updated", caption: "Updated" }
       ]}
       data={stocks}

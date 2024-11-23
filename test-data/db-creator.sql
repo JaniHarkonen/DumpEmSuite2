@@ -18,7 +18,7 @@ CREATE TABLE scraper (
 
 	/* Company listings available on the workspace */
 CREATE TABLE company (
-	company_id REAL NOT NULL,
+	company_id INTEGER NOT NULL,
 	company_name TEXT,
 	stock_ticker TEXT,
 	stock_price REAL,
@@ -29,7 +29,7 @@ CREATE TABLE company (
 	chart_url TEXT,
 	fk_company_currency_id TEXT,
 	
-	PRIMARY KEY (company_id),
+	PRIMARY KEY (company_id AUTOINCREMENT),
 	FOREIGN KEY (fk_company_currency_id) REFERENCES currency(currency_id)
 );
 
@@ -45,10 +45,10 @@ CREATE TABLE currency (
 
 	/* Available set of color codes on each analysis tab */
 CREATE TABLE color_code (
-	code_id REAL NOT NULL,
+	code_id INTEGER NOT NULL,
 	code_hex TEXT NOT NULL,
 	
-	PRIMARY KEY (code_id)
+	PRIMARY KEY (code_id AUTOINCREMENT)
 );
 
 
@@ -58,7 +58,7 @@ CREATE TABLE profile (
 	presence TEXT,
 	investors_url TEXT,
 	profile_description TEXT,
-	fk_profile_company_id REAL NOT NULL,
+	fk_profile_company_id INTEGER NOT NULL,
 	
 	FOREIGN KEY (fk_profile_company_id) REFERENCES company(company_id)
 );
@@ -78,8 +78,8 @@ CREATE TABLE filteration_step (
 CREATE TABLE filteration (
 	notes TEXT,
 	fk_filteration_step_id TEXT NOT NULL,
-	fk_filteration_company_id REAL NOT NULL,
-	fk_filteration_code_id REAL NOT NULL DEFAULT 0,
+	fk_filteration_company_id INTEGER NOT NULL,
+	fk_filteration_code_id INTEGER NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id),
 	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id),
@@ -90,8 +90,8 @@ CREATE TABLE filteration (
 	/* Fundamental analyses */
 CREATE TABLE fundamental (
 	notes TEXT,
-	fk_fundamental_company_id REAL NOT NULL,
-	fk_fundamental_code_id REAL NOT NULL DEFAULT 0,
+	fk_fundamental_company_id INTEGER NOT NULL,
+	fk_fundamental_code_id INTEGER NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_fundamental_company_id) REFERENCES company(company_id),
 	FOREIGN KEY (fk_fundamental_code_id) REFERENCES color_code(code_id)
@@ -131,20 +131,20 @@ VALUES
 
 INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, updated, exchange, chart_url)
 VALUES
-(1, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pzza'),
-(2, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/bank'),
-(3, 'IT', 'IT', 1.0, 10000.00, 10000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/it'),
-(4, 'Steel Co', 'STL', 11.0, 11000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/stl'),
-(5, 'Coke of cola', 'CC', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/cc'),
-(6, 'Pep of si', 'PEP', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pep'),
-(7, 'Railroad', 'ROAD', 5.0, 5000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/road');
+(NULL, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pzza'),
+(NULL, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/bank'),
+(NULL, 'IT', 'IT', 1.0, 10000.00, 10000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/it'),
+(NULL, 'Steel Co', 'STL', 11.0, 11000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/stl'),
+(NULL, 'Coke of cola', 'CC', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/cc'),
+(NULL, 'Pep of si', 'PEP', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pep'),
+(NULL, 'Railroad', 'ROAD', 5.0, 5000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/road');
 
 INSERT INTO color_code (code_id, code_hex)
 VALUES
-(0, 'BCBCBC'),
-(1, 'FF0000'),
-(2, '00FF00'),
-(3, '0000FF');
+(NULL, 'BCBCBC'),
+(NULL, 'FF0000'),
+(NULL, '00FF00'),
+(NULL, '0000FF');
 
 
 	/* DESCRIPTIONS GENERATED VIA CHATGPT */

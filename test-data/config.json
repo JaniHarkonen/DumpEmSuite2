@@ -14,8 +14,8 @@
             "left": {
               "isFork": true,
               "divider": {
-                "direction": "horizontal",
-                "value": 50
+                "direction": "vertical",
+                "value": 47.1976401179941
               },
               "left": {
                 "isFork": false,
@@ -61,7 +61,7 @@
                 "left": {
                   "isFork": true,
                   "divider": {
-                    "direction": "vertical",
+                    "direction": "horizontal",
                     "value": 50
                   },
                   "left": {
@@ -147,11 +147,13 @@
                             "tabs": [
                               {
                                 "id": "view-company-list",
-                                "caption": "Companies",
                                 "workspace": "ws-test",
-                                "contentTemplate": "view-company-list"
+                                "caption": "Companies",
+                                "contentTemplate": "view-company-list",
+                                "tags": []
                               }
-                            ]
+                            ],
+                            "activeTabIndex": 0
                           }
                         }
                       },
@@ -173,11 +175,13 @@
                               "tabs": [
                                 {
                                   "id": "view-chart",
-                                  "caption": "Chart",
                                   "workspace": "ws-test",
-                                  "contentTemplate": "view-chart"
+                                  "caption": "Chart",
+                                  "contentTemplate": "view-chart",
+                                  "tags": []
                                 }
-                              ]
+                              ],
+                              "activeTabIndex": 0
                             }
                           }
                         },
@@ -193,11 +197,13 @@
                               "tabs": [
                                 {
                                   "id": "view-company-profile",
-                                  "caption": "Profile",
                                   "workspace": "ws-test",
-                                  "contentTemplate": "view-company-profile"
+                                  "caption": "Profile",
+                                  "contentTemplate": "view-company-profile",
+                                  "tags": []
                                 }
-                              ]
+                              ],
+                              "activeTabIndex": 0
                             }
                           }
                         }

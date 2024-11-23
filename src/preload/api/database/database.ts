@@ -1,4 +1,4 @@
-import { Database, OPEN_READWRITE } from "sqlite3";
+import { Database, OPEN_READWRITE, RunResult } from "sqlite3";
 
 
 type DatabaseConnection = {
@@ -6,6 +6,8 @@ type DatabaseConnection = {
   path: string;
   database: Database;
 };
+
+type DatabaseValue = number | string | boolean | null;
 
 export type ErrorCallback = (err: Error | null) => void;
 
@@ -42,7 +44,7 @@ export class DatabaseManager {
     databaseName: string, 
     preparedString: string, 
     callback: (err: Error | null, rows: T[]) => void,
-    values: (number | string | boolean | null)[]
+    values: DatabaseValue[]
   ): void {
     const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
 
@@ -56,8 +58,22 @@ export class DatabaseManager {
     }
   }
 
-  public post(databaseName: string, preparedString: string): void {
+  public post(
+    databaseName: string, 
+    preparedString: string, 
+    callback: (result: RunResult | null, err: Error | null) => void, 
+    values: DatabaseValue[]
+  ): void {
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
 
+    if( !connection ) {
+      callback(null, new Error(
+        "Unable to connect to database! No database with name '" + databaseName + 
+        "' was registered."
+      ));
+    } else {
+      connection.database.prepare(preparedString).run(values, callback);
+    }
   }
 
   public delete(databaseName: string, preparedString: string): void {
