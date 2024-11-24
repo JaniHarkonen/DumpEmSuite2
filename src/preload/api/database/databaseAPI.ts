@@ -1,8 +1,9 @@
 import { RunResult } from "sqlite3";
-import { DatabaseAPI, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
+import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
 import { Company, Currency, FKCompany, Scraper } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { col, equals, from, insertInto, query, select, table, val, value, values, where } from "./sql";
+import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, table, val, value, values, WHERE } from "./sql";
+import { ipcRenderer } from "electron/renderer";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -13,6 +14,22 @@ function createError(err: Error): QueryResult {
     error: err
   };
 }
+
+function destructureRunResult(runResult: RunResult | null): PostResult | DeleteResult {
+  if( !runResult ) {
+    return {
+      wasSuccessful: true,
+      lastID: -1,
+      changes: -1
+    };
+  } else {
+    return {
+      wasSuccessful: true,
+      lastID: runResult.lastID,
+      changes: runResult.changes
+    };
+  }
+};
 
 export const databaseAPI: DatabaseAPI = {
   open: ({
@@ -44,8 +61,8 @@ export const databaseAPI: DatabaseAPI = {
     return new Promise<FetchResult<Scraper>>(
       (resolve, reject) => {
         const preparedString: string = query(
-          select(col("*")) + 
-          from(table("scraper"))
+          SELECT(col("*")) + 
+          FROM(table("scraper"))
         );
         
         databaseManager.fetch<Scraper>(
@@ -68,7 +85,7 @@ export const databaseAPI: DatabaseAPI = {
     return new Promise<FetchResult<Company & Currency>>(
       (resolve, reject) => {
         const preparedString: string = query(
-          select(
+          SELECT(
             col<Company>("company_id", "c"), 
             col<Company>("company_name", "c"), 
             col<Company>("stock_ticker", "c"), 
@@ -79,10 +96,10 @@ export const databaseAPI: DatabaseAPI = {
             col<Company>("chart_url", "c"),
             col<Company>("updated", "c"),
             col<Currency>("currency_id", "cx")
-          ) + from(
+          ) + FROM(
             table("company", "c"), table("currency", "cx")
-          ) + where(
-            equals(col<FKCompany>("fk_company_currency_id", "c"), col<Currency>("currency_id"))
+          ) + WHERE(
+            equals(col<FKCompany>("fk_company_currency_id", "c"), col<Currency>("currency_id", "cx"))
           )
         );
 
@@ -128,11 +145,7 @@ export const databaseAPI: DatabaseAPI = {
           databaseName, preparedString,
           (runResult: RunResult | null, err: Error | null) => {
             if( !err ) {
-              resolve({
-                wasSuccessful: true,
-                lastID: runResult?.lastID ?? -1,
-                changes: runResult?.changes ?? -1
-              })
+              resolve(destructureRunResult(runResult));
             } else {
               reject(createError(err));
             }
@@ -148,6 +161,36 @@ export const databaseAPI: DatabaseAPI = {
             'EUR'
           ]
         );
+      }
+    );
+  },
+  deleteCompanies: ({
+    databaseName, 
+    companies
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const companyIDs: string[] = companies.map(
+          (company: Company) => company.company_id.toString()
+        );
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("company")) + 
+            WHERE(IN(col<Company>("company_id"), ...companies.map(() => val())))
+          )
+        );
+        ipcRenderer.send("debug", preparedString)
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, companyIDs
+        )
       }
     );
   }

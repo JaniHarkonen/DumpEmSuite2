@@ -3,7 +3,7 @@ import TableList, { ListColumn } from "../TableList";
 import { Company, Currency } from "src/shared/schemaConfig";
 import useDatabase from "@renderer/hook/useDatabase";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
-import { FetchResult, PostResult } from "src/shared/database.type";
+import { BoundDatabaseAPI, FetchResult, PostResult } from "src/shared/database.type";
 
 
 const COLUMNS: ListColumn<Company & Currency>[] = [
@@ -40,10 +40,10 @@ export default function WorkspaceCompaniesList(): ReactNode {
     updated: ""
   });
 
-  const {databaseAPI} = useDatabase();
+  const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const fetchAllCompanies = () => {
-    databaseAPI!.fetchAllCompanies()
+    databaseAPI.fetchAllCompanies()
     .then((result: FetchResult<Company & Currency>) => {
       if( result.wasSuccessful ) {
         setStocks(result.rows);
@@ -56,8 +56,25 @@ export default function WorkspaceCompaniesList(): ReactNode {
   }, []);
 
   const handleAddCompany = () => {
-    databaseAPI!.postNewCompany({ company: addCandidateCompany })
+    databaseAPI.postNewCompany({ company: addCandidateCompany })
     .then((result: PostResult) => {
+      console.log(result)
+      if( result.wasSuccessful ) {
+        fetchAllCompanies();
+      }
+    });
+  };
+
+  const handleCompanyRemove = () => {
+    const companies: Company[] = [];
+    for( let key of Object.keys(stockSelection) ) {
+      if( stockSelection[key].isSelected ) {
+        companies.push(stockSelection[key].item);
+      }
+    }
+    databaseAPI.deleteCompanies({ companies })
+    .then((result: PostResult) => {
+      setStockSelection({});
       if( result.wasSuccessful ) {
         fetchAllCompanies();
       }
@@ -65,19 +82,15 @@ export default function WorkspaceCompaniesList(): ReactNode {
   };
 
   const handleCompanySelection = (item: Company & Currency, isChecked: boolean) => {
-      setStockSelection((prev: Selection) => {
-        return {
-          ...prev,
-          [item.company_id]: {
-            isSelected: isChecked,
-            item
-          }
-        };
-      });
-  };
-
-  const handleCompanyRemove = () => {
-    
+    setStockSelection((prev: Selection) => {
+      return {
+        ...prev,
+        [item.company_id]: {
+          isSelected: isChecked,
+          item
+        }
+      };
+    });
   };
 
 
@@ -85,6 +98,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
     <div className="w-100">
       <CompanyControls
         onAdd={() => setDisplayAddControls(true)}
+        onRemove={handleCompanyRemove}
       />
       {displayAddControls && (
         <div className="d-flex">

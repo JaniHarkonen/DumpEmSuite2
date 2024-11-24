@@ -27,16 +27,24 @@ export function table(tableString: string, tableReference?: string): string {
   return tableString + (tableReference ? " " + tableReference : "");
 }
 
-export function select(...column: string[]): string {
+export function SELECT(...column: string[]): string {
   return "SELECT " + compound(...column);
 }
 
-export function from(...table: string[]): string {
+export function FROM(...table: string[]): string {
   return " FROM " + compound(...table);
 }
 
-export function where(whereString: string): string {
+export function WHERE(whereString: string): string {
   return " WHERE " + whereString;
+}
+
+export function DELETE(deleteString: string): string {
+  return "DELETE " + deleteString;
+}
+
+export function IN(columnString: string, ...valueString: string[]): string {
+  return " " + columnString + " IN (" + compound(...valueString) + ")";
 }
 
 export function equals(columnStringA: string, columnStringB: string): string {

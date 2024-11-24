@@ -27,6 +27,7 @@ export type DatabaseAPI = {
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: (props: QueryProps) => Promise<FetchResult<Company & Currency>>;
   postNewCompany: (props: { company: Company } & QueryProps) => Promise<PostResult>;
+  deleteCompanies: (props: { companies: Company[] } & QueryProps) => Promise<DeleteResult>;
 };
 
 export type BoundDatabaseAPI = {
@@ -35,6 +36,7 @@ export type BoundDatabaseAPI = {
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   postNewCompany: (props: { company: Company }) => Promise<PostResult>;
+  deleteCompanies: (props: { companies: Company[] }) => Promise<DeleteResult>;
 };
 
 export function bindAPIToWorkspace(
@@ -55,6 +57,12 @@ export function bindAPIToWorkspace(
         ...props,
         databaseName: workspaceID
       });
+    },
+    deleteCompanies: (props: { companies: Company[] }) => {
+      return api.deleteCompanies({
+        ...props,
+        databaseName: workspaceID
+      })
     }
   };
 }
