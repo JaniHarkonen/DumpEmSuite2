@@ -26,7 +26,12 @@ export default function CompanyProfilesList(): ReactNode {
         { accessor: "stock_ticker", caption: "Ticker" },
         { accessor: "updated", caption: "Updated" }
       ]}
-      data={stocks}
+      cells={stocks.map((company: Company & Currency) => {
+        return {
+          id: company.company_id,
+          data: company
+        };
+      })}
     />
   );
 }

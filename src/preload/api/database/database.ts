@@ -76,10 +76,6 @@ export class DatabaseManager {
     }
   }
 
-  public delete(databaseName: string, preparedString: string): void {
-
-  }
-
   public close(databaseName: string, callback?: ErrorCallback): void {
     const connection: DatabaseConnection | undefined = 
       this.getDatabase(databaseName);

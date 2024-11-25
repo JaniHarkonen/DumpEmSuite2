@@ -3,7 +3,6 @@ import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from 
 import { Company, Currency, FKCompany, Scraper } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, table, val, value, values, WHERE } from "./sql";
-import { ipcRenderer } from "electron/renderer";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -179,7 +178,6 @@ export const databaseAPI: DatabaseAPI = {
             WHERE(IN(col<Company>("company_id"), ...companies.map(() => val())))
           )
         );
-        ipcRenderer.send("debug", preparedString)
 
         databaseManager.post(
           databaseName, preparedString,

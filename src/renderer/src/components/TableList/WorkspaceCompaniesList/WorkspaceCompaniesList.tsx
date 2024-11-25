@@ -1,12 +1,15 @@
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
-import TableList, { ListColumn } from "../TableList";
+import TableList, { ListColumn, TableListDataCell } from "../TableList";
 import { Company, Currency } from "src/shared/schemaConfig";
 import useDatabase from "@renderer/hook/useDatabase";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
 import { BoundDatabaseAPI, FetchResult, PostResult } from "src/shared/database.type";
+import useSelection, { SelectionID, SelectionItem } from "@renderer/hook/useSelection";
 
 
-const COLUMNS: ListColumn<Company & Currency>[] = [
+type CompanyWithCurrency = Company & Currency;
+
+const COLUMNS: ListColumn<CompanyWithCurrency>[] = [
   { accessor: "company_name", caption: "Name" },
   { accessor: "stock_ticker", caption: "Ticker" },
   { accessor: "volume_price", caption: "Volume ($)" },
@@ -17,16 +20,8 @@ const COLUMNS: ListColumn<Company & Currency>[] = [
   { accessor: "updated", caption: "Updated" }
 ];
 
-type Selection = {
-  [id: number | string]: {
-    isSelected: boolean;
-    item: Company & Currency
-  };
-};
-
 export default function WorkspaceCompaniesList(): ReactNode {
-  const [stocks, setStocks] = useState<(Company & Currency)[]>([]);
-  const [stockSelection, setStockSelection] = useState<Selection>({});
+  const [stocks, setStocks] = useState<(CompanyWithCurrency)[]>([]);
   const [displayAddControls, setDisplayAddControls] = useState<boolean>(false);
   const [addCandidateCompany, setAddCandidateCompany] = useState<Company>({
     company_id: -1,
@@ -40,11 +35,26 @@ export default function WorkspaceCompaniesList(): ReactNode {
     updated: ""
   });
 
+  const {
+    selectionSet,
+    handleSelection,
+    getSelectedIDs,
+    resetSelection
+  } = useSelection<CompanyWithCurrency>({});
+
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
+
+  const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
+    stocks.map((stock: CompanyWithCurrency) => {
+      return {
+        id: stock.company_id,
+        data: stock
+      };
+    });
 
   const fetchAllCompanies = () => {
     databaseAPI.fetchAllCompanies()
-    .then((result: FetchResult<Company & Currency>) => {
+    .then((result: FetchResult<CompanyWithCurrency>) => {
       if( result.wasSuccessful ) {
         setStocks(result.rows);
       }
@@ -58,7 +68,6 @@ export default function WorkspaceCompaniesList(): ReactNode {
   const handleAddCompany = () => {
     databaseAPI.postNewCompany({ company: addCandidateCompany })
     .then((result: PostResult) => {
-      console.log(result)
       if( result.wasSuccessful ) {
         fetchAllCompanies();
       }
@@ -66,31 +75,21 @@ export default function WorkspaceCompaniesList(): ReactNode {
   };
 
   const handleCompanyRemove = () => {
-    const companies: Company[] = [];
-    for( let key of Object.keys(stockSelection) ) {
-      if( stockSelection[key].isSelected ) {
-        companies.push(stockSelection[key].item);
-      }
-    }
-    databaseAPI.deleteCompanies({ companies })
-    .then((result: PostResult) => {
-      setStockSelection({});
+    databaseAPI.deleteCompanies({
+      companies: getSelectedIDs().map((id: SelectionID) => selectionSet[id].item.data)
+    }).then((result: PostResult) => {
+      resetSelection();
+
       if( result.wasSuccessful ) {
         fetchAllCompanies();
       }
     });
   };
 
-  const handleCompanySelection = (item: Company & Currency, isChecked: boolean) => {
-    setStockSelection((prev: Selection) => {
-      return {
-        ...prev,
-        [item.company_id]: {
-          isSelected: isChecked,
-          item
-        }
-      };
-    });
+  const handleCompanySelection = (
+    item: SelectionItem<CompanyWithCurrency>, isChecked: boolean
+  ) => {
+    handleSelection(isChecked, ...[item]);
   };
 
 
@@ -99,11 +98,13 @@ export default function WorkspaceCompaniesList(): ReactNode {
       <CompanyControls
         onAdd={() => setDisplayAddControls(true)}
         onRemove={handleCompanyRemove}
+        onSelectAll={() => handleSelection(true, ...stockDataCells)}
+        onDeselectAll={resetSelection}
       />
       {displayAddControls && (
         <div className="d-flex">
           <button onClick={handleAddCompany}>Add</button>
-          {COLUMNS.map((column: ListColumn<Company & Currency>) => {
+          {COLUMNS.map((column: ListColumn<CompanyWithCurrency>) => {
             const id: string = "companies-list-add-controls-input-" + column.accessor;
             return (
               <div key={id}>
@@ -123,10 +124,11 @@ export default function WorkspaceCompaniesList(): ReactNode {
           })}
         </div>
       )}
-      <TableList<Company & Currency>
+      <TableList<CompanyWithCurrency>
         columns={COLUMNS}
-        data={stocks}
+        cells={stockDataCells}
         allowSelection
+        selectionSet={selectionSet}
         onColumnSelect={(column) => console.log(column)}
         onItemFocus={(item) => console.log(item)}
         onItemSelect={handleCompanySelection}
