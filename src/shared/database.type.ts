@@ -27,6 +27,13 @@ export type DatabaseAPI = {
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: (props: QueryProps) => Promise<FetchResult<Company & Currency>>;
   postNewCompany: (props: { company: Company } & QueryProps) => Promise<PostResult>;
+  postCompanyChanges: (
+    props: {
+      company: Company, 
+      attributes: (keyof Company)[], 
+      values: string[] 
+    } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] } & QueryProps) => Promise<DeleteResult>;
 };
 
@@ -36,6 +43,13 @@ export type BoundDatabaseAPI = {
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   postNewCompany: (props: { company: Company }) => Promise<PostResult>;
+  postCompanyChanges: (
+    props: {
+      company: Company, 
+      attributes: (keyof Company)[], 
+      values: string[] 
+    }
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] }) => Promise<DeleteResult>;
 };
 
@@ -58,11 +72,23 @@ export function bindAPIToWorkspace(
         databaseName: workspaceID
       });
     },
+    postCompanyChanges: (
+      props: {
+        company: Company, 
+        attributes: (keyof Company)[], 
+        values: string[] 
+      }
+    ) => {
+      return api.postCompanyChanges({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
     deleteCompanies: (props: { companies: Company[] }) => {
       return api.deleteCompanies({
         ...props,
         databaseName: workspaceID
-      })
+      });
     }
   };
 }

@@ -19,12 +19,12 @@ export function subquery(queryString: string): string {
   return " (" + queryString + ")";
 }
 
-export function col<T>(columnString: keyof T, tableReference?: string): string {
-  return (tableReference ? tableReference + "." : "") + (columnString as string);
+export function col<T>(columnString: keyof T, tableAlias?: string): string {
+  return (tableAlias ? tableAlias + "." : "") + (columnString as string);
 }
 
-export function table(tableString: string, tableReference?: string): string {
-  return tableString + (tableReference ? " " + tableReference : "");
+export function table(tableString: string, tableAlias?: string): string {
+  return tableString + (tableAlias ? " " + tableAlias : "");
 }
 
 export function SELECT(...column: string[]): string {
@@ -51,8 +51,16 @@ export function equals(columnStringA: string, columnStringB: string): string {
   return columnStringA + "=" + columnStringB;
 }
 
-export function and(conditionStringA: string, conditionStringB: string): string {
+export function AND(conditionStringA: string, conditionStringB: string): string {
   return " " + conditionStringA + " AND " + conditionStringB;
+}
+
+export function UPDATE(tableString: string):string {
+  return "UPDATE " + tableString;
+}
+
+export function SET(...setterString: string[]): string {
+  return " SET " + compound(...setterString);
 }
 
 export function insertInto(

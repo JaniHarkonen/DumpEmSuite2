@@ -1,5 +1,5 @@
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
-import TableList, { ListColumn, TableListDataCell } from "../TableList";
+import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList";
 import { Company, Currency } from "src/shared/schemaConfig";
 import useDatabase from "@renderer/hook/useDatabase";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
@@ -9,7 +9,7 @@ import useSelection, { SelectionID, SelectionItem } from "@renderer/hook/useSele
 
 type CompanyWithCurrency = Company & Currency;
 
-const COLUMNS: ListColumn<CompanyWithCurrency>[] = [
+const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { accessor: "company_name", caption: "Name" },
   { accessor: "stock_ticker", caption: "Ticker" },
   { accessor: "volume_price", caption: "Volume ($)" },
@@ -92,6 +92,21 @@ export default function WorkspaceCompaniesList(): ReactNode {
     handleSelection(isChecked, ...[item]);
   };
 
+  const handleCompanyChange = (
+    dataCell: TableListDataCell<CompanyWithCurrency>, 
+    changes: EditChanges<CompanyWithCurrency>
+  ) => {
+    databaseAPI.postCompanyChanges({
+      company: dataCell.data, 
+      attributes: changes.columns as (keyof Company)[], 
+      values: changes.values
+    }).then((result: PostResult) => {
+      if( result.wasSuccessful ) {
+        fetchAllCompanies();
+      }
+    });
+  };
+
 
   return (
     <div className="w-100">
@@ -104,7 +119,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
       {displayAddControls && (
         <div className="d-flex">
           <button onClick={handleAddCompany}>Add</button>
-          {COLUMNS.map((column: ListColumn<CompanyWithCurrency>) => {
+          {COLUMNS.map((column: TableListColumn<CompanyWithCurrency>) => {
             const id: string = "companies-list-add-controls-input-" + column.accessor;
             return (
               <div key={id}>
@@ -128,10 +143,12 @@ export default function WorkspaceCompaniesList(): ReactNode {
         columns={COLUMNS}
         cells={stockDataCells}
         allowSelection
+        allowEdit
         selectionSet={selectionSet}
         onColumnSelect={(column) => console.log(column)}
         onItemFocus={(item) => console.log(item)}
         onItemSelect={handleCompanySelection}
+        onItemFinalize={handleCompanyChange}
       />
     </div>
   );

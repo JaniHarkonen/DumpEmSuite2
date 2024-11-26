@@ -2,7 +2,7 @@ import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
 import { Company, Currency, FKCompany, Scraper } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, table, val, value, values, WHERE } from "./sql";
+import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -160,6 +160,37 @@ export const databaseAPI: DatabaseAPI = {
             'EUR'
           ]
         );
+      }
+    );
+  },
+  postCompanyChanges: ({
+    databaseName,
+    company,
+    attributes,
+    values
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const setterString: string[] = attributes.map((attrib: keyof Company) => {
+          return equals(col<Company>(attrib), val());
+        });
+
+        const preparedString: string = query(
+          UPDATE(table("company")) + 
+          SET(...setterString) + 
+          WHERE(equals(col<Company>("company_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [...values, company.company_id]
+        )
       }
     );
   },
