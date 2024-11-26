@@ -145,8 +145,6 @@ export default function WorkspaceCompaniesList(): ReactNode {
         allowSelection
         allowEdit
         selectionSet={selectionSet}
-        onColumnSelect={(column) => console.log(column)}
-        onItemFocus={(item) => console.log(item)}
         onItemSelect={handleCompanySelection}
         onItemFinalize={handleCompanyChange}
       />

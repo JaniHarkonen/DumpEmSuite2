@@ -1,5 +1,6 @@
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
-import { ChangeEvent, FocusEvent, ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode } from "react";
+import EditableText from "../EditableText/EditableText";
 
 
 export type TableListColumn<T> = {
@@ -8,11 +9,6 @@ export type TableListColumn<T> = {
 };
 
 export type TableListDataCell<T> = SelectionItem<T>;
-
-type Editable<T> = {
-  column: TableListColumn<T>;
-  data: T;
-};
 
 export type EditChanges<T> = {
   columns: (keyof T)[];
@@ -49,31 +45,23 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const pOnItemSelect: OnItemSelect<T> = props.onItemSelect || function(){ };
   const pOnItemFinalize: OnItemFinalize<T> = props.onItemFinalize || function(){ };
 
-  const [editable, setEditable] = useState<Editable<T> | null>(null);
-
-  const renderDataCell = (dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number) => {
-    const data = dataCell.data[column.accessor];
-    let dataDiv: ReactNode = <>{data}</>;
-
+  const renderDataCell = (
+    dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
+  ) => {
       // Apply input fields, if editing
-    if( 
-      pAllowEdit && editable?.data === dataCell.data && 
-      editable.column === column
-    ) {
-      dataDiv = (
-        <input
-          defaultValue={data as string}
-          onBlur={(e: FocusEvent<HTMLInputElement>) => {
-            pOnItemFinalize(dataCell, {
-              columns: [column.accessor], 
-              values: [e.target.value]
-            });
-            setEditable(null);
-          }}
-          autoFocus={true}
-        />
-      );
-    }
+    const data = dataCell.data[column.accessor];
+    let dataDiv: ReactNode = (
+      <EditableText
+        value={data as string}
+        onFinalize={(value: string) => pOnItemFinalize(dataCell, {
+          columns: [column.accessor], 
+          values: [value]
+        })}
+        editDisabled={!pAllowEdit}
+      >
+        {data as string}
+      </EditableText>
+    );
 
       // Apply selection checkbox, if first data cell
     if( pAllowSelection && index === 0 ) {
@@ -92,15 +80,13 @@ export default function TableList<T>(props: Props<T>): ReactNode {
     }
 
     return (
-      <td
-        key={"list-table-data-" + (column.accessor as String) + "-" + dataCell.id}
-        onDoubleClick={() => setEditable({ column, data: dataCell.data})}
-      >
+      <td key={"list-table-data-" + (column.accessor as String) + "-" + dataCell.id}>
         {dataDiv}
       </td>
     );
   }
 
+  
   return (
     <table className="text-align-left w-100 user-select-text">
       <thead>

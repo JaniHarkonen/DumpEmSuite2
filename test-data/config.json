@@ -90,7 +90,7 @@
                           "tags": []
                         }
                       ],
-                      "activeTabIndex": 1
+                      "activeTabIndex": 2
                     }
                   }
                 }
@@ -161,7 +161,7 @@
                         "isFork": true,
                         "divider": {
                           "direction": "vertical",
-                          "value": 50
+                          "value": 49.19855222337125
                         },
                         "left": {
                           "isFork": true,

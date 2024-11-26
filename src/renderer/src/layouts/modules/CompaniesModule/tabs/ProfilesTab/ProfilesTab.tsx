@@ -5,6 +5,7 @@ import { TabContentProvider } from "@renderer/model/tabs";
 import { useContext } from "react";
 import CompanyProfilesList from "@renderer/components/TableList/CompanyProfilesList/CompanyProfilesList";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
+import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
 
 
 export default function ProfilesTab() {
@@ -18,7 +19,12 @@ export default function ProfilesTab() {
       switch( contentTemplate ) {
         case "view-company-list": return <CompanyProfilesList />;
         case "view-chart": return <>chart</>;
-        case "view-company-profile": return <>profile</>;
+        case "view-company-profile": return <CompanyProfile profile={{
+          sector: "Industrials", 
+          presence: "Finland, Sweden, USA",
+          investors_url: "www.ir.not.a.link",
+          profile_description: "This is a description"
+        }}/>;
       }
       return <>failed</>;
     }
