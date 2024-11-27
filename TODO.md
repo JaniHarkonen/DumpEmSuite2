@@ -9,6 +9,15 @@
 ### General
 - make sure that all React-hook calls define a type (useState, useRef, useContext, etc.)
 
+### APIs
+- APIs should accept JSONs instead of multiple arguments
+
+### databaseAPI.ts
+- DatabaseManager instance should be provided to the API at app start, rather than be created in the API ts-file
+
+### TableList derivatives
+- CompanyProfilesList and WorkspaceCompaniesList are very similar, see if these could be refactored into a single component
+
 ### useFlexibleSplits.ts
 - only update the divider settings inside the config file when the divider is released, currently divider saving is disabled but would be saved each time the divider moves
 
