@@ -15,10 +15,10 @@ export type EditChanges<T> = {
   values: string[];
 };
 
-type OnColumnSelect<T> = (column: TableListColumn<T>) => void;
-type OnItemFocus<T> = (dataCell: TableListDataCell<T>) => void;
-type OnItemSelect<T> = (dataCell: TableListDataCell<T>, isChecked: boolean) => void;
-type OnItemFinalize<T> = (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
+export type OnColumnSelect<T> = (column: TableListColumn<T>) => void;
+export type OnItemFocus<T> = (dataCell: TableListDataCell<T>) => void;
+export type OnItemSelect<T> = (dataCell: TableListDataCell<T>, isChecked: boolean) => void;
+export type OnItemFinalize<T> = (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
 
 type Props<T> = {
   columns: TableListColumn<T>[];

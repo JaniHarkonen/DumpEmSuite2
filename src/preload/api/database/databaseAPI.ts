@@ -1,6 +1,6 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, FKCompany, Scraper } from "../../../shared/schemaConfig";
+import { Company, Currency, FKCompany, FKProfile, Profile, Scraper } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
 
@@ -118,6 +118,38 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  fetchCompanyProfile: ({
+    databaseName, company
+  }) => {
+    return new Promise<FetchResult<Profile>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<Profile>("investors_url"), 
+            col<Profile>("presence"),
+            col<Profile>("profile_description"),
+            col<Profile>("sector")
+          ) + 
+          FROM(table("profile")) + 
+          WHERE(equals(col<FKProfile>("fk_profile_company_id"), val()))
+        );
+
+        databaseManager.fetch<Profile>(
+          databaseName, preparedString,
+          (err: Error | null, rows: Profile[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              });
+            } else {
+              reject(createError(err));
+            }
+          }, [company.company_id]
+        );
+      }
+    );
+  },
   postNewCompany: ({
     databaseName, 
     company
@@ -186,6 +218,37 @@ export const databaseAPI: DatabaseAPI = {
           (runResult: RunResult | null, err: Error | null) => {
             if( !err ) {
               resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [...values, company.company_id]
+        )
+      }
+    );
+  },
+  postCompanyProfileChanges: ({
+    databaseName,
+    company,
+    attributes,
+    values
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const setterString: string[] = attributes.map((attribute: keyof Profile) => {
+          return equals(col<Profile>(attribute), val())
+        });
+        const preparedString: string = query(
+          UPDATE(table("profile")) + 
+          SET(...setterString) + 
+          WHERE(equals(col<FKProfile>("fk_profile_company_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+
             } else {
               reject(createError(err));
             }

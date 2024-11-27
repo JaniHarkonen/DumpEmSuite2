@@ -1,7 +1,7 @@
 import { DetailedHTMLProps, FocusEvent, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode, useState } from "react";
 
 
-type OnEditFinalize = (value: string) => void;
+export type OnEditFinalize = (value: string) => void;
 type ControlledElementRenderer = (
   props: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
 ) => ReactNode;

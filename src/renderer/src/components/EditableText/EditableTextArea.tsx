@@ -18,7 +18,7 @@ export default function EditableTextArea(props: Props): ReactNode {
     <EditableComponent
       value={props.value}
       controlledElement={renderTextArea}
-      onFinalize={() => {}}
+      onFinalize={props.onFinalize}
       editDisabled={props.editDisabled}
     >
       {props.value}
