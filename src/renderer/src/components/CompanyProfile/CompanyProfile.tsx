@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import { Profile } from "src/shared/schemaConfig";
 import EditableText from "../EditableText/EditableText";
 import EditableTextArea from "../EditableText/EditableTextArea";
+import PageContainer from "../PageContainer/PageContainer";
+import PageHeader from "../PageHeader/PageHeader";
 
 
 type Props = {
@@ -17,15 +19,18 @@ export default function CompanyProfile(props: Props): ReactNode {
 
   
   return (
-    <div>
-      <h4>Sector</h4>
-      <EditableText value={sector}>{sector}</EditableText>
-      <h4>Investors page</h4>
-      <EditableText value={investorsURL}>{investorsURL}</EditableText>
-      <h4>Presence</h4>
-      <EditableText value={presence}>{presence}</EditableText>
-      <h2>Description</h2>
-      <EditableTextArea value={description}>{description}</EditableTextArea>
-    </div>
+    <PageContainer>
+      <PageHeader>Profiles</PageHeader>
+      <div className="user-select-text">
+        <h4>Sector</h4>
+        <EditableText value={sector}>{sector}</EditableText>
+        <h4>Investors page</h4>
+        <EditableText value={investorsURL}>{investorsURL}</EditableText>
+        <h4>Presence</h4>
+        <EditableText value={presence}>{presence}</EditableText>
+        <h3>Description</h3>
+        <EditableTextArea value={description}>{description}</EditableTextArea>
+      </div>
+    </PageContainer>
   );
 }

@@ -1,13 +1,10 @@
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useState } from "react";
 import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList";
-import { Company, Currency } from "src/shared/schemaConfig";
-import useDatabase from "@renderer/hook/useDatabase";
+import { Company } from "src/shared/schemaConfig";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
-import { BoundDatabaseAPI, FetchResult, PostResult } from "src/shared/database.type";
 import useSelection, { SelectionID, SelectionItem } from "@renderer/hook/useSelection";
+import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 
-
-type CompanyWithCurrency = Company & Currency;
 
 const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { accessor: "company_name", caption: "Name" },
@@ -21,7 +18,6 @@ const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
 ];
 
 export default function WorkspaceCompaniesList(): ReactNode {
-  const [stocks, setStocks] = useState<(CompanyWithCurrency)[]>([]);
   const [displayAddControls, setDisplayAddControls] = useState<boolean>(false);
   const [addCandidateCompany, setAddCandidateCompany] = useState<Company>({
     company_id: -1,
@@ -42,48 +38,28 @@ export default function WorkspaceCompaniesList(): ReactNode {
     resetSelection
   } = useSelection<CompanyWithCurrency>({});
 
-  const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
+  const {
+    companies,
+    fetchIfSuccessful,
+    databaseAPI
+  } = useWorkspaceComapanies();
 
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
-    stocks.map((stock: CompanyWithCurrency) => {
+  companies.map((stock: CompanyWithCurrency) => {
       return {
         id: stock.company_id,
         data: stock
       };
     });
 
-  const fetchAllCompanies = () => {
-    databaseAPI.fetchAllCompanies()
-    .then((result: FetchResult<CompanyWithCurrency>) => {
-      if( result.wasSuccessful ) {
-        setStocks(result.rows);
-      }
-    });
-  };
-
-  useEffect(() => {
-    fetchAllCompanies();
-  }, []);
-
   const handleAddCompany = () => {
-    databaseAPI.postNewCompany({ company: addCandidateCompany })
-    .then((result: PostResult) => {
-      if( result.wasSuccessful ) {
-        fetchAllCompanies();
-      }
-    });
+    fetchIfSuccessful(databaseAPI.postNewCompany({ company: addCandidateCompany }));
   };
 
   const handleCompanyRemove = () => {
-    databaseAPI.deleteCompanies({
+    fetchIfSuccessful(databaseAPI.deleteCompanies({
       companies: getSelectedIDs().map((id: SelectionID) => selectionSet[id].item.data)
-    }).then((result: PostResult) => {
-      resetSelection();
-
-      if( result.wasSuccessful ) {
-        fetchAllCompanies();
-      }
-    });
+    }));
   };
 
   const handleCompanySelection = (
@@ -96,15 +72,11 @@ export default function WorkspaceCompaniesList(): ReactNode {
     dataCell: TableListDataCell<CompanyWithCurrency>, 
     changes: EditChanges<CompanyWithCurrency>
   ) => {
-    databaseAPI.postCompanyChanges({
+    fetchIfSuccessful(databaseAPI.postCompanyChanges({
       company: dataCell.data, 
       attributes: changes.columns as (keyof Company)[], 
       values: changes.values
-    }).then((result: PostResult) => {
-      if( result.wasSuccessful ) {
-        fetchAllCompanies();
-      }
-    });
+    }));
   };
 
 

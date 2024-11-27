@@ -1,37 +1,29 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import TableList from "../TableList";
-import { Company, Currency } from "src/shared/schemaConfig";
-import useDatabase from "@renderer/hook/useDatabase";
-import { FetchResult } from "src/shared/database.type";
+import PageContainer from "@renderer/components/PageContainer/PageContainer";
+import PageHeader from "@renderer/components/PageHeader/PageHeader";
+import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 
 
 export default function CompanyProfilesList(): ReactNode {
-  const [stocks, setStocks] = useState<(Company & Currency)[]>([]);
-  const {databaseAPI} = useDatabase();
-
-  useEffect(() => {
-    databaseAPI!.fetchAllCompanies()
-    .then((result: FetchResult<Company & Currency>) => {
-      if( result.wasSuccessful ) {
-        setStocks(result.rows);
-      }
-    });
-  }, []);
-
+  const {companies} = useWorkspaceComapanies();
 
   return (
-    <TableList<Company & Currency>
-      columns={[
-        { accessor: "company_name", caption: "Name" },
-        { accessor: "stock_ticker", caption: "Ticker" },
-        { accessor: "updated", caption: "Updated" }
-      ]}
-      cells={stocks.map((company: Company & Currency) => {
-        return {
-          id: company.company_id,
-          data: company
-        };
-      })}
-    />
+    <PageContainer>
+      <PageHeader>Companies</PageHeader>
+      <TableList<CompanyWithCurrency>
+        columns={[
+          { accessor: "company_name", caption: "Name" },
+          { accessor: "stock_ticker", caption: "Ticker" },
+          { accessor: "updated", caption: "Updated" }
+        ]}
+        cells={companies.map((company: CompanyWithCurrency) => {
+          return {
+            id: company.company_id,
+            data: company
+          };
+        })}
+      />
+    </PageContainer>
   );
 }

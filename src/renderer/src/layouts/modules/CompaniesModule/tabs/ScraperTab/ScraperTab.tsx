@@ -4,6 +4,7 @@ import ScraperInfoTable from "@renderer/components/ScraperInfo/ScraperInfoTable"
 import useDatabase from "@renderer/hook/useDatabase";
 import { useEffect, useState } from "react";
 import { Scraper } from "src/shared/schemaConfig";
+import PageHeader from "@renderer/components/PageHeader/PageHeader";
 
 
 export default function ScraperTab() {
@@ -19,7 +20,7 @@ export default function ScraperTab() {
   return (
     <div className="w-100 h-100 overflow-auto">
       <PageContainer>
-        <h3>Scraper configuration</h3>
+        <PageHeader>Scraper configuration</PageHeader>
         <div>
           {scraperInfo && (
             <div>
