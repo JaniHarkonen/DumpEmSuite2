@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList";
+import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList/TableList";
 import { Company } from "src/shared/schemaConfig";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
 import useSelection, { SelectionID, SelectionItem } from "@renderer/hook/useSelection";

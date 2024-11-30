@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import TableList, { OnItemFocus } from "../TableList";
+import TableList, { OnItemFocus } from "../TableList/TableList";
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
 import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";

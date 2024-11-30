@@ -1,10 +1,9 @@
 import { ChangeEvent, ReactNode, useState } from "react";
 import { Company } from "src/shared/schemaConfig";
 import { AsString } from "src/shared/utils";
-import { COMPANIES_LIST_COLUMNS } from "../TableList/WorkspaceCompaniesList/WorkspaceCompaniesList";
+import { COMPANIES_LIST_COLUMNS } from "../WorkspaceCompaniesList/WorkspaceCompaniesList";
 import { TableListColumn } from "../TableList/TableList";
 import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
-
 
 type OnAddCompany = (company: AsString<Company>) => void;
 type DefaultCallback = () => void;

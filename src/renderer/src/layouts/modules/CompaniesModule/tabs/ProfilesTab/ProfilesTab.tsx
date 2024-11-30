@@ -5,7 +5,7 @@ import { TabContentProvider } from "@renderer/model/tabs";
 import { useContext, useState } from "react";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
-import CompanyProfilesList from "@renderer/components/TableList/CompanyProfilesList/CompanyProfilesList";
+import CompanyProfilesList from "@renderer/components/CompanyProfilesList/CompanyProfilesList";
 import useDatabase from "@renderer/hook/useDatabase";
 import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 import { TableListDataCell } from "@renderer/components/TableList/TableList";
