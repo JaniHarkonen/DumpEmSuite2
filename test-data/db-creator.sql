@@ -66,10 +66,11 @@ CREATE TABLE profile (
 
 	/* Filteration tabs in the order that they should appear in the app */
 CREATE TABLE filteration_step (
-	step_id TEXT NOT NULL,
+	step_id TEXT,
 	caption TEXT, 
-	fk_previous_step_id TEXT,
+	fk_previous_step_id TEXT NULL,
 	
+	PRIMARY KEY (step_id)
 	FOREIGN KEY (fk_previous_step_id) REFERENCES filteration_step(step_id)
 );
 
@@ -157,3 +158,10 @@ VALUES
 (5, 'Food & drink', 'Sweden, Norway, Finland, USA', 'investors.cc.not.a.link', 'Coke of Cola offers refreshing, world-famous soft drinks with a variety of flavors, bringing happiness and refreshment to every sip.'),
 (6, 'Food & drink', 'Sweden, USA', 'investors.pep.not.a.link', 'Pep of Si offers energizing beverages and snacks, delivering bold flavors and a refreshing boost to keep you going all day.'),
 (7, 'Railroad', 'USA', 'investors.road.not.a.link', 'Railroad provides reliable, efficient transportation services, connecting cities and industries with fast, safe, and sustainable rail solutions.');
+
+INSERT INTO filteration_step (step_id, caption, fk_previous_step_id)
+VALUES
+("tab-volume", "Volume", NULL),
+("tab-price-action", "Price action", "tab-volume"),
+("tab-technical", "Technical", "tab-price-action"),
+("tab-fundamental", "Fundamental", "tab-technical");

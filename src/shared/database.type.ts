@@ -1,4 +1,5 @@
 import { Company, Currency, Profile, Scraper } from "./schemaConfig";
+import { AsString } from "./utils";
 
 
 export type QueryResult = {
@@ -29,7 +30,7 @@ export type DatabaseAPI = {
   fetchCompanyProfile: (
     props: { company: Company } & QueryProps
   ) => Promise<FetchResult<Profile>>;
-  postNewCompany: (props: { company: Company } & QueryProps) => Promise<PostResult>;
+  postNewCompany: (props: { company: Company | AsString<Company> } & QueryProps) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -53,7 +54,7 @@ export type BoundDatabaseAPI = {
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   fetchCompanyProfile: (props: { company: Company }) => Promise<FetchResult<Profile>>;
-  postNewCompany: (props: { company: Company }) => Promise<PostResult>;
+  postNewCompany: (props: { company: Company | AsString<Company> }) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -88,7 +89,7 @@ export function bindAPIToWorkspace(
       ...props,
       databaseName: workspaceID
     }),
-    postNewCompany: (props: { company: Company }) => {
+    postNewCompany: (props: { company: Company | AsString<Company> }) => {
       return api.postNewCompany({
         ...props,
         databaseName: workspaceID
