@@ -1,7 +1,7 @@
 import ModuleView from "@renderer/components/ModuleView/ModuleView";
 import { SceneContext } from "@renderer/context/SceneContext";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
-import { TabContentProvider } from "@renderer/model/tabs";
+import { Tab, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
 import { useContext, useState } from "react";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
@@ -57,8 +57,8 @@ export default function ProfilesTab() {
   };
 
   const tabsProvider: TabContentProvider = {
-    getContent: (contentTemplate: string | null) => {
-      switch( contentTemplate ) {
+    getContent: (tab: Tab | TabBlueprint ) => {
+      switch( tab.contentTemplate ) {
         case "view-company-list": return (
           <CompanyProfilesList onCompanySelect={handleCompanyListingFocus}/>
         );

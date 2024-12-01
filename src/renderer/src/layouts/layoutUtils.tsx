@@ -1,6 +1,6 @@
 import { SceneContext } from "@renderer/context/SceneContext";
 import { SceneTabsConfig } from "@renderer/model/config";
-import { TabContentProvider } from "@renderer/model/tabs";
+import { Tab, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode } from "react";
 
 type ProplessElementConstructor = () => ReactNode;
@@ -37,14 +37,14 @@ export function createTabContentProvider(
   defaultTemplate: ReactNode
 ): TabContentProvider {
   return {
-    getContent: (contentTemplate: string | null): ReactNode => {
-      if( !contentTemplate ) {
+    getContent: (tab: Tab | TabBlueprint): ReactNode => {
+      if( !tab.contentTemplate ) {
         return null;
       }
       
-      const Template: ProplessElementConstructor = mappings[contentTemplate];
+      const Template: ProplessElementConstructor = mappings[tab.contentTemplate];
       return (
-        <SceneContext.Provider value={{ sceneConfig: tabConfigurations[contentTemplate] }}>
+        <SceneContext.Provider value={{ sceneConfig: tabConfigurations[tab.contentTemplate] }}>
           {(Template && <Template />) || defaultTemplate}
         </SceneContext.Provider>
       );

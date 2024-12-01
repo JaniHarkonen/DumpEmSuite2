@@ -24,7 +24,7 @@ export type TabSettings = {
 };
 
 export interface TabContentProvider {
-  getContent: (contentTemplate: string | null) => ReactNode;
+  getContent: (tab: Tab | TabBlueprint) => ReactNode;
 }
 
 export function buildTab(tabBlueprint: TabBlueprint, contentProvider: TabContentProvider): Tab {
@@ -33,7 +33,7 @@ export function buildTab(tabBlueprint: TabBlueprint, contentProvider: TabContent
     workspace: tabBlueprint.workspace,
     caption: tabBlueprint.caption,
     contentTemplate: tabBlueprint.contentTemplate,
-    content: contentProvider.getContent(tabBlueprint.contentTemplate),
+    content: contentProvider.getContent(tabBlueprint),
     tags: [...(tabBlueprint.tags || [])]
   };
 }

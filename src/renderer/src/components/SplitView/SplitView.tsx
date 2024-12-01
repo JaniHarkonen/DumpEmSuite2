@@ -8,6 +8,7 @@ import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
 import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
+import { TabInfoContext } from "@renderer/context/TabInfoContext";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -68,7 +69,9 @@ export default function SplitView(props: Props): ReactNode {
           key={tab.workspace + "-tab-panel-" + tab.id}
           tab={tab}
         >
-          {tab.content}
+          <TabInfoContext.Provider value={{ currentTab: tab }}>
+            {tab.content}
+          </TabInfoContext.Provider>
         </TabPanel>
       );
     });
