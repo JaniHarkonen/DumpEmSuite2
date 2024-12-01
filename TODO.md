@@ -3,6 +3,7 @@
 ### Urgent
 - ThemeProvider should be implmented and used to influence the coloring of components
 - some HTML components could be wrapped inside a React-component that then applies the current theme to them (e.g. StyledButton)
+- rename 'color codes' of companies into 'tags'
 
 ### General
 - make sure that all React-hook calls define a type (useState, useRef, useContext, etc.)

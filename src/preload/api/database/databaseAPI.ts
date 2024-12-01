@@ -1,6 +1,6 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, FKCompany, FKProfile, Profile, Scraper } from "../../../shared/schemaConfig";
+import { Company, Currency, FKCompany, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
 
@@ -105,6 +105,35 @@ export const databaseAPI: DatabaseAPI = {
         databaseManager.fetch<Company & Currency>(
           databaseName, preparedString, 
           (err: Error | null, rows: (Company & Currency)[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              })
+            } else {
+              reject(createError(err));
+            }
+          }, []
+        );
+      }
+    );
+  },
+  fetchAllTags: ({ databaseName }) => {
+    return new Promise<FetchResult<Tag>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<Tag>("tag_id"), 
+            col<Tag>("tag_hex"), 
+            col<Tag>("tag_label")
+          ) + FROM(
+            table("tag")
+          )
+        );
+
+        databaseManager.fetch<Tag>(
+          databaseName, preparedString, 
+          (err: Error | null, rows: (Tag)[]) => {
             if( !err ) {
               resolve({
                 wasSuccessful: true,

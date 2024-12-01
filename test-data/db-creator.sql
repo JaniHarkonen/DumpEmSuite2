@@ -43,12 +43,13 @@ CREATE TABLE currency (
 );
 
 
-	/* Available set of color codes on each analysis tab */
-CREATE TABLE color_code (
-	code_id INTEGER NOT NULL,
-	code_hex TEXT NOT NULL,
+	/* Available set of tags on each analysis tab */
+CREATE TABLE tag (
+	tag_id INTEGER NOT NULL,
+	tag_hex TEXT NOT NULL,
+	tag_label TEXT,
 	
-	PRIMARY KEY (code_id AUTOINCREMENT)
+	PRIMARY KEY (tag_id AUTOINCREMENT)
 );
 
 
@@ -80,11 +81,11 @@ CREATE TABLE filteration (
 	notes TEXT,
 	fk_filteration_step_id TEXT NOT NULL,
 	fk_filteration_company_id INTEGER NOT NULL,
-	fk_filteration_code_id INTEGER NOT NULL DEFAULT 0,
+	fk_filteration_tag_id INTEGER NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id),
 	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (fk_filteration_code_id) REFERENCES color_code(code_id)
+	FOREIGN KEY (fk_filteration_tag_id) REFERENCES tag(tag_id)
 );
 
 
@@ -92,10 +93,10 @@ CREATE TABLE filteration (
 CREATE TABLE fundamental (
 	notes TEXT,
 	fk_fundamental_company_id INTEGER NOT NULL,
-	fk_fundamental_code_id INTEGER NOT NULL DEFAULT 0,
+	fk_fundamental_tag_id INTEGER NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_fundamental_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (fk_fundamental_code_id) REFERENCES color_code(code_id)
+	FOREIGN KEY (fk_fundamental_tag_id) REFERENCES tag(tag_id)
 );
 
 
@@ -140,12 +141,12 @@ VALUES
 (NULL, 'Pep of si', 'PEP', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pep'),
 (NULL, 'Railroad', 'ROAD', 5.0, 5000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/road');
 
-INSERT INTO color_code (code_id, code_hex)
+INSERT INTO tag (tag_id, tag_hex, tag_label)
 VALUES
-(NULL, 'BCBCBC'),
-(NULL, 'FF0000'),
-(NULL, '00FF00'),
-(NULL, '0000FF');
+(NULL, 'BCBCBC', "None"),
+(NULL, '00FF00', "Accepted"),
+(NULL, 'FF0000', "Rejected"),
+(NULL, '0000FF', "Watch list");
 
 
 	/* DESCRIPTIONS GENERATED VIA CHATGPT */
