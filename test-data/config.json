@@ -14,8 +14,8 @@
             "left": {
               "isFork": true,
               "divider": {
-                "direction": "vertical",
-                "value": 47.1976401179941
+                "direction": "horizontal",
+                "value": 50
               },
               "left": {
                 "isFork": false,
@@ -90,7 +90,7 @@
                           "tags": []
                         }
                       ],
-                      "activeTabIndex": 1
+                      "activeTabIndex": 2
                     }
                   }
                 }
@@ -233,44 +233,44 @@
                     "value": {
                       "tabs": [
                         {
-                          "id": "tab-volume",
+                          "id": "view-volume",
                           "workspace": "ws-test",
                           "caption": "Volume",
-                          "contentTemplate": "tab-volume",
+                          "contentTemplate": "view-volume",
                           "tags": []
                         },
                         {
-                          "id": "tab-price-action",
+                          "id": "view-price-action",
                           "workspace": "ws-test",
                           "caption": "Price action",
-                          "contentTemplate": "tab-price-action",
+                          "contentTemplate": "view-price-action",
                           "tags": []
                         },
                         {
-                          "id": "tab-technical",
+                          "id": "view-technical",
                           "workspace": "ws-test",
                           "caption": "TA 1",
-                          "contentTemplate": "tab-technical",
+                          "contentTemplate": "view-technical",
                           "tags": []
                         },
                         {
-                          "id": "tab-fundamental",
+                          "id": "view-fundamental",
                           "workspace": "ws-test",
                           "caption": "Fundamental",
-                          "contentTemplate": "tab-fundamental",
+                          "contentTemplate": "view-fundamental",
                           "tags": [
                             "permanent"
                           ]
                         }
                       ],
-                      "activeTabIndex": 2
+                      "activeTabIndex": 0
                     }
                   }
                 }
               }
             },
             "tabs": {
-              "tab-volume": {
+              "view-volume": {
                 "splitTree": {
                   "root": {
                     "isFork": true,
@@ -285,16 +285,157 @@
                         "value": 50
                       },
                       "left": {
-                        "isFork": false,
-                        "value": {
-                          "tabs": []
+                        "isFork": true,
+                        "divider": {
+                          "direction": "horizontal",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": false,
+                          "value": {
+                            "tabs": [
+                              {
+                                "id": "view-volume-stocks",
+                                "workspace": "ws-test",
+                                "caption": "Stocks",
+                                "contentTemplate": "view-filteration-tab-stocks",
+                                "tags": []
+                              }
+                            ],
+                            "activeTabIndex": 0
+                          }
+                        }
+                      },
+                      "right": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "vertical",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": [
+                                {
+                                  "id": "view-volume-chart",
+                                  "workspace": "ws-test",
+                                  "caption": "Chart",
+                                  "contentTemplate": "view-filteration-tab-chart",
+                                  "tags": []
+                                }
+                              ],
+                              "activeTabIndex": 0
+                            }
+                          }
+                        },
+                        "right": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": [
+                                {
+                                  "id": "view-volume-notes",
+                                  "workspace": "ws-test",
+                                  "caption": "Notes",
+                                  "contentTemplate": "view-filteration-tab-notes",
+                                  "tags": []
+                                }
+                              ],
+                              "activeTabIndex": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "tabs": {
+                  "view-volume-stocks": {
+                    "splitTree": {
+                      "root": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "horizontal",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": []
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "view-volume-chart": {
+                    "splitTree": {
+                      "root": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "horizontal",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": []
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "view-volume-notes": {
+                    "splitTree": {
+                      "root": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "horizontal",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": []
+                            }
+                          }
                         }
                       }
                     }
                   }
                 }
               },
-              "tab-price-action": {
+              "view-price-action": {
                 "splitTree": {
                   "root": {
                     "isFork": true,
@@ -319,7 +460,7 @@
                 }
               }
             },
-            "tab-technical": {
+            "view-technical": {
               "splitTree": {
                 "root": {
                   "isFork": true,
@@ -343,7 +484,7 @@
                 }
               }
             },
-            "tab-fundamental": {
+            "view-fundamental": {
               "splitTree": {
                 "root": {
                   "isFork": true,

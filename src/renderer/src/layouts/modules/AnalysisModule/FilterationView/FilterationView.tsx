@@ -1,20 +1,36 @@
 import CompanyAnalysisList from "@renderer/components/CompanyAnalysisList/CompanyAnalysisList";
-import PageContainer from "@renderer/components/PageContainer/PageContainer";
-import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import TagPanel from "@renderer/components/TagPanel/TagPanel";
-import { TabInfoContext } from "@renderer/context/TabInfoContext";
+import { SceneContext } from "@renderer/context/SceneContext";
+import useSceneConfig from "@renderer/hook/useSceneConfig";
+import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
+import { SceneTabsConfig } from "@renderer/model/config";
+import { SplitTreeBlueprint } from "@renderer/model/splits";
+import { TabContentProvider } from "@renderer/model/tabs";
 import { useContext } from "react";
+import ModuleView from "@renderer/components/ModuleView/ModuleView";
 
 
 export default function FilterationView() {
-  const {currentTab} = useContext(TabInfoContext);
+  const {sceneConfig} = useContext(SceneContext);
+  const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;
+  const tabsConfig: SceneTabsConfig = sceneConfig.tabs!;
+  const {handleSplitTreeUpdate} = useSceneConfig();
+
+  const tabsProvider: TabContentProvider = createTabContentProvider(
+    tabsConfig, 
+    {
+      "view-filteration-tab-stocks": () => <CompanyAnalysisList />,
+      "view-filteration-tab-chart": () => <>chart</>,
+      "view-filteration-tab-notes": () => <>notes</>
+    },
+    <>FAILED</>
+  );
 
 
   return (
-    <PageContainer>
-      <PageHeader>{currentTab?.caption}</PageHeader>
-      <TagPanel />
-      <CompanyAnalysisList />
-    </PageContainer>
+    <ModuleView
+      splitTreeBlueprint={sceneBlueprint}
+      contentProvider={tabsProvider}
+      onUpdate={handleSplitTreeUpdate}
+    />
   );
 }

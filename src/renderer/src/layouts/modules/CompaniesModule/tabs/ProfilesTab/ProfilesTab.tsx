@@ -63,9 +63,7 @@ export default function ProfilesTab() {
           <CompanyProfilesList onCompanySelect={handleCompanyListingFocus}/>
         );
         case "view-chart": return <>chart</>;
-        case "view-company-profile": return (
-          <CompanyProfile />
-        );
+        case "view-company-profile": return <CompanyProfile />;
       }
       return <>failed</>;
     }
