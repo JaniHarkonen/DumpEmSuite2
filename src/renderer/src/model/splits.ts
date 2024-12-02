@@ -238,6 +238,23 @@ export class SplitTreeManager {
     tabs.push(tab);
   }
 
+  private reorderTabLive(liveNode: SplitTreeValue, targetTab: Tab, index: number): boolean {
+    const tabs: Tab[] = liveNode.value.tabs;
+    index = Math.max(0, Math.min(tabs.length, index));
+    
+      // Only move the tab, if the tab exists in the live node
+    const currentIndex: number = tabs.indexOf(targetTab);
+
+    if( currentIndex < 0 || currentIndex === index ) {
+      return false;
+    }
+
+    tabs.splice(currentIndex, 1);
+    tabs.splice(index, 0, targetTab);
+
+    return true;
+  }
+
   private removeTabFromLive(
     targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork
   ): RemoveResult {
@@ -328,9 +345,21 @@ export class SplitTreeManager {
 
         const [liveNode] = liveNodes;
         return this.removeTabFromLive(liveNode as SplitTreeValue, remove);
-      },
-      targetNode
+      }, targetNode
     );
+  }
+
+  public reorderTab(targetNode: SplitTreeValue, targetTab: Tab, index: number): boolean {
+    return this.getLiveNodeAnd(
+      (liveNodes: SplitTreeNode[] | null): boolean => {
+        if( !liveNodes ) {
+          return false;
+        }
+
+        const [liveNode] = liveNodes;
+        return this.reorderTabLive(liveNode as SplitTreeValue, targetTab, index);
+      }, targetNode
+    )
   }
 
   public relocateTab(

@@ -95,7 +95,7 @@ export default function SplitView(props: Props): ReactNode {
             onOpen: (openedTab: Tab) => {
               handleTabOpen && handleTabOpen(valueNode, nodeTabs.indexOf(openedTab));
             },
-            onDrop: () => handleTabRelocation && handleTabRelocation(valueNode)
+            onDrop: (index: number) => handleTabRelocation && handleTabRelocation(valueNode, index)
           }}
         >
           <TabsWithDropArea

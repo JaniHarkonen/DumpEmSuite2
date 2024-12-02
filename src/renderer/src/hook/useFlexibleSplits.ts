@@ -25,7 +25,7 @@ type Returns = {
   setTabSelection: Dispatch<SetStateAction<TabSelection>>;
   handleTabOpen: (targetNode: SplitTreeValue, tabIndex: number) => void;
   handleTabSelection: (selection: TabSelection) => void;
-  handleTabRelocation: (toNode: SplitTreeValue) => void;
+  handleTabRelocation: (toNode: SplitTreeValue, index: number) => void;
   handleTabSplit: (
     toFork: SplitTreeFork, 
     requestedDirection: DividerDirection, 
@@ -91,9 +91,15 @@ export default function useFlexibleSplits(props: Props): Returns {
     });
   };
 
-  const handleTabRelocation = (toNode: SplitTreeValue) => {
+  const handleTabRelocation = (toNode: SplitTreeValue, index: number) => {
     handleSplitsUpdate((manager: SplitTreeManager): boolean => {
-      return !!tabSelection && manager.relocateTab(
+      if( !tabSelection ) {
+        return false;
+      } else if( tabSelection.sourceValueNode === toNode ) {
+        return manager.reorderTab(toNode, tabSelection.selectedTab, index);
+      }
+
+      return manager.relocateTab(
         tabSelection.sourceValueNode, toNode, tabSelection.selectedTab
       );
     });
