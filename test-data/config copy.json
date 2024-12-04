@@ -346,24 +346,20 @@
                                   "tabs": [
                                     {
                                       "id": "tab-sector-kf894le83kltguiry7",
-                                      "workspace": "ws-test",
                                       "caption": "Sector 1",
-                                      "tags": []
+                                      "workspace": "ws-test"
                                     },
                                     {
                                       "id": "tab-sector-lt894kf893pdf89423",
-                                      "workspace": "ws-test",
                                       "caption": "Sector 2",
-                                      "tags": []
+                                      "workspace": "ws-test"
                                     },
                                     {
                                       "id": "tab-sector-vn38fnf0402ndo9weu",
-                                      "workspace": "ws-test",
                                       "caption": "Sector 3",
-                                      "tags": []
+                                      "workspace": "ws-test"
                                     }
-                                  ],
-                                  "activeTabIndex": -1
+                                  ]
                                 }
                               }
                             }
@@ -372,7 +368,7 @@
                       }
                     }
                   ],
-                  "activeTabIndex": 0
+                  "activeTabIndex": 2
                 }
               }
             }

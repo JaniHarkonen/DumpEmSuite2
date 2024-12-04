@@ -10,7 +10,6 @@ export default function AnalysisModule(): ReactNode {
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
-    sceneConfig.tabs!, 
     { "view-fundamental": () => <>view-fundamental</> },
     <FilterationView />
   );

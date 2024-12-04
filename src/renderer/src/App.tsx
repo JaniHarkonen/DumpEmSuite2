@@ -57,7 +57,7 @@ export default function App(): ReactNode {
       <div className="w-100 h-100 overflow-hidden">
         <SceneContext.Provider
           value={{
-            sceneConfig: appStateConfigRef.current.workspaces[0].scene
+            sceneConfig: appStateConfigRef.current.workspaces[0].sceneConfig
           }}
         >
           <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />

@@ -1,6 +1,5 @@
 import { SceneContext } from "@renderer/context/SceneContext";
-import { SceneTabsConfig } from "@renderer/model/config";
-import { Tab, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
+import { defaultSceneConfigBlueprint, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode } from "react";
 
 
@@ -11,20 +10,21 @@ export type TemplateContentMappings = {
 }
 
 export function createTabContentProvider(
-  tabConfigurations: SceneTabsConfig,
   mappings: TemplateContentMappings,
   defaultTemplate: ReactNode
 ): TabContentProvider {
   return {
-    getContent: (tab: Tab | TabBlueprint): ReactNode => {
-      if( !tab.contentTemplate ) {
+    getContent: (tabBlueprint: TabBlueprint): ReactNode => {
+      if( !tabBlueprint.contentTemplate ) {
         return null;
       }
       
-      const Template: ProplessElementConstructor = mappings[tab.contentTemplate];
-      console.log(tabConfigurations[tab.contentTemplate], tab.contentTemplate)
+      const Template: ProplessElementConstructor = mappings[tabBlueprint.contentTemplate];
+
       return (
-        <SceneContext.Provider value={{ sceneConfig: tabConfigurations[tab.contentTemplate] }}>
+        <SceneContext.Provider value={{
+          sceneConfig: tabBlueprint.sceneConfigBlueprint || defaultSceneConfigBlueprint()
+        }}>
           {(Template && <Template />) || defaultTemplate}
         </SceneContext.Provider>
       );

@@ -65,7 +65,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
             </TabButton>
           );
         })}
-        <button onClick={() => {
+        {/* <button onClick={() => {
           handleTabAdd(targetNode, buildTab({
               id: "new-tab-test",
               workspace: "ws-test",
@@ -76,7 +76,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
           }}
         >
           +
-        </button>
+        </button> */}
       </TabControls>
     );
   };

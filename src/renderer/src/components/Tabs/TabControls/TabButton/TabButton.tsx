@@ -1,6 +1,6 @@
 import "./TabButton.css";
 
-import { Tab } from "@renderer/model/tabs";
+import { indexOfTab, Tab } from "@renderer/model/tabs";
 import { PropsWithChildren, ReactNode, useContext } from "react";
 import { TabsContext } from "@renderer/context/TabsContext";
 
@@ -16,7 +16,7 @@ export default function TabButton(props: Props): ReactNode {
   const {tabs, onSelect, onOpen, onDrop} = useContext(TabsContext);
 
   const handleTabDrop = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const index: number = tabs.indexOf(pTab);
+    const index: number = indexOfTab(tabs, pTab);
     e.stopPropagation();
     onDrop && onDrop(index);
   };

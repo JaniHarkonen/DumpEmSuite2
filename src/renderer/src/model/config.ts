@@ -1,19 +1,11 @@
-import { defaultSplitTree, SplitTreeBlueprint } from "./splits";
+import { defaultSplitTreeBlueprint } from "./splits";
+import { SceneConfigBlueprint } from "./tabs";
 
-
-export type SceneTabsConfig = {
-  [key in string]: SceneConfig;
-};
-
-export type SceneConfig = {
-  splitTree: SplitTreeBlueprint;
-  tabs?: SceneTabsConfig;
-};
 
 export type WorkspaceConfig = {
   id: string;
   caption: string;
-  scene: SceneConfig;
+  sceneConfig: SceneConfigBlueprint;
 };
 
 export type AppStateConfig = {
@@ -30,15 +22,9 @@ export function defaultWorkspaceConfig(): WorkspaceConfig {
   return {
     id: "",
     caption: "",
-    scene: {
-      splitTree: defaultSplitTree()
+    sceneConfig: {
+      splitTree: defaultSplitTreeBlueprint()
     }
-  };
-}
-
-export function defaultSceneConfig(): SceneConfig {
-  return {
-    splitTree: defaultSplitTree()
   };
 }
 

@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from "react";
 import Divider from "../Divider/Divider";
-import { Tab } from "@renderer/model/tabs";
+import { indexOfTab, Tab } from "@renderer/model/tabs";
 import { DividerDirection, SplitBranch, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
 import TabsWithDropArea from "../TabsWithDropArea/TabsWithDropArea";
 import { DropAreaSettings } from "../DropArea/DropArea";
@@ -93,7 +93,7 @@ export default function SplitView(props: Props): ReactNode {
               sourceValueNode: valueNode
             }),
             onOpen: (openedTab: Tab) => {
-              handleTabOpen && handleTabOpen(valueNode, nodeTabs.indexOf(openedTab));
+              handleTabOpen && handleTabOpen(valueNode, indexOfTab(nodeTabs, openedTab));
             },
             onDrop: (index: number) => handleTabRelocation && handleTabRelocation(valueNode, index)
           }}
