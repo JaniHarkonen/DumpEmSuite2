@@ -4,5 +4,5 @@ type Props = {
 
 
 export default function PageHeader(props: Props) {
-  return <h2>{props.children}</h2>;
+  return <h2 className="user-select-text">{props.children}</h2>;
 }

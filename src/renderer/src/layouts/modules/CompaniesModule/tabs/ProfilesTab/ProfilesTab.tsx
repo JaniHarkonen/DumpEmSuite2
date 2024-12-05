@@ -24,7 +24,7 @@ export default function ProfilesTab() {
     {
       "view-company-list": () => <CompanyProfilesList onCompanySelect={handleProfileSelection} />,
       "view-chart": () => <>chart</>,
-      "view-company-profile": () => <CompanyProfile allowEdit={true}/>
+      "view-company-profile": () => <CompanyProfile allowEdit={true} />
     }
   );
 
