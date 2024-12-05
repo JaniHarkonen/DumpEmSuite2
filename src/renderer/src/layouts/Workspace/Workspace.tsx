@@ -47,8 +47,7 @@ export default function Workspace(props: Props): ReactNode {
       "module-companies": () => <CompaniesModule />,
       "module-analysis": () => <AnalysisModule />,
       "module-macro": () => <>macro module</>
-    },
-    <>FAILED</>
+    }
   );
   
 

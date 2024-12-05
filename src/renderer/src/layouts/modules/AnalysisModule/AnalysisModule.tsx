@@ -4,13 +4,14 @@ import { ReactNode } from "react";
 import AnalysesView from "@renderer/layouts/modules/AnalysisModule/AnalysesView/AnalysesView";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import FilterationView from "./FilterationView/FilterationView";
+import FundamentalView from "./FundamentalView/FundamentalView";
 
 
 export default function AnalysisModule(): ReactNode {
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
-    { "view-fundamental": () => <>view-fundamental</> },
+    { "view-fundamental": () => <FundamentalView /> },
     <FilterationView />
   );
 

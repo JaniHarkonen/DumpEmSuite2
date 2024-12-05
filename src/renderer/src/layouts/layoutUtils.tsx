@@ -11,7 +11,7 @@ export type TemplateContentMappings = {
 
 export function createTabContentProvider(
   mappings: TemplateContentMappings,
-  defaultTemplate: ReactNode
+  defaultTemplate?: ReactNode
 ): TabContentProvider {
   return {
     getContent: (tabBlueprint: TabBlueprint): ReactNode => {
@@ -25,7 +25,7 @@ export function createTabContentProvider(
         <SceneContext.Provider value={{
           sceneConfig: tabBlueprint.sceneConfigBlueprint || defaultSceneConfigBlueprint()
         }}>
-          {(Template && <Template />) || defaultTemplate}
+          {(Template && <Template />) || defaultTemplate || <>FAILED</>}
         </SceneContext.Provider>
       );
     }

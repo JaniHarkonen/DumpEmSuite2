@@ -20,8 +20,7 @@ export default function CompaniesModule(): ReactNode {
       "tab-scraper": () => <ScraperTab />,
       "tab-listings": () => <ListingsTab />,
       "tab-profiles": () => <ProfilesTab />
-    },
-    <>FAILED</>
+    }
   );
 
 

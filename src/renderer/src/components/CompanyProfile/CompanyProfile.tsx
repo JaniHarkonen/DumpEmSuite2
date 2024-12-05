@@ -8,7 +8,12 @@ import { Profile } from "src/shared/schemaConfig";
 
 
 
-export default function CompanyProfile(): ReactNode {
+type Props = {
+  allowEdit?: boolean;
+}
+
+export default function CompanyProfile(props: Props): ReactNode {
+  const pAllowEdit: boolean = props.allowEdit || false;
   const {profile, company, onEditProfile} = useContext(ProfileContext);
 
   if( !profile || !company ) {
@@ -27,6 +32,7 @@ export default function CompanyProfile(): ReactNode {
       values: [value]
     });
   };
+
   
   return (
     <PageContainer>
@@ -36,6 +42,7 @@ export default function CompanyProfile(): ReactNode {
         <EditableText
           value={sector}
           onFinalize={(value: string) => handleEditProfile("sector", value)}
+          editDisabled={!pAllowEdit}
         >
           {sector}
         </EditableText>
@@ -43,6 +50,7 @@ export default function CompanyProfile(): ReactNode {
         <EditableText
           value={investorsURL}
           onFinalize={(value: string) => handleEditProfile("investors_url", value)}
+          editDisabled={!pAllowEdit}
         >
           {investorsURL}
         </EditableText>
@@ -50,6 +58,7 @@ export default function CompanyProfile(): ReactNode {
         <EditableText
           value={presence}
           onFinalize={(value: string) => handleEditProfile("presence", value)}
+          editDisabled={!pAllowEdit}
         >
           {presence}
         </EditableText>
@@ -57,6 +66,7 @@ export default function CompanyProfile(): ReactNode {
         <EditableTextArea
           value={description}
           onFinalize={(value: string) => handleEditProfile("profile_description", value)}
+          editDisabled={!pAllowEdit}
         >
           {description}
         </EditableTextArea>
