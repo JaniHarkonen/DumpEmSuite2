@@ -7,8 +7,6 @@ export type AvailableModules = "module-companies" | "module-analysis" | "module-
 
 export type AvailableViews = "view-scraper" | "view-listings" | "view-profiles" | "view-volume";
 
-export type TabTags = "add-filter" | "permanent";
-
 export const RELATIVE_APP_PATHS = {
   configPath: "\\test-data\\config.json"
 };

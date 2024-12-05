@@ -235,9 +235,27 @@ export class SplitTreeManager {
     }
   }
 
-  private addTabToLive(liveNode: SplitTreeValue, tab: Tab): void {
+  private addTabToLive(liveNode: SplitTreeValue, targetTab: Tab, index: number): void {
     const tabs: Tab[] = (liveNode as SplitTreeValue).value.tabs;
-    tabs.push(tab);
+
+      // Figure out the first and last available indices where the tab can be added given the 
+      // 'order' of each tab in the live node
+    let firstAvailableIndex: number = 0;
+    while( 
+      firstAvailableIndex < tabs.length && tabs[firstAvailableIndex].order < targetTab.order
+    ) {
+      firstAvailableIndex++;
+    }
+
+    let lastAvailableIndex: number = firstAvailableIndex;
+    while( 
+      lastAvailableIndex < tabs.length && tabs[lastAvailableIndex].order === targetTab.order 
+    ) {
+      lastAvailableIndex++;
+    }
+
+    index = Math.max(firstAvailableIndex, Math.min(lastAvailableIndex, index));
+    tabs.splice(index, 0, targetTab);
   }
 
   private reorderTabLive(liveNode: SplitTreeValue, targetTab: Tab, index: number): boolean {
@@ -250,7 +268,7 @@ export class SplitTreeManager {
     }
 
     tabs.splice(currentIndex, 1);
-    tabs.splice(index, 0, targetTab);
+    this.addTabToLive(liveNode, targetTab, index);
 
     return true;
   }
@@ -321,14 +339,14 @@ export class SplitTreeManager {
     }, targetNode);
   }
 
-  public addTab(targetNode: SplitTreeValue, tab: Tab): boolean {
+  public addTab(targetNode: SplitTreeValue, tab: Tab, index: number = Infinity): boolean {
     return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
       if( !liveNodes ) {
         return false;
       }
 
       const [liveNode] = liveNodes;
-      this.addTabToLive(liveNode as SplitTreeValue, tab);
+      this.addTabToLive(liveNode as SplitTreeValue, tab, index);
       return true;
     }, targetNode);
   }
@@ -376,7 +394,7 @@ export class SplitTreeManager {
       }
 
       const [liveFrom, liveTo] = liveNodes;
-      this.addTabToLive(liveTo as SplitTreeValue, tab);
+      this.addTabToLive(liveTo as SplitTreeValue, tab, -1);
       return this.removeTabFromLive(liveFrom as SplitTreeValue, tab).wasSuccessful;
     }, fromNode, toNode);
   }

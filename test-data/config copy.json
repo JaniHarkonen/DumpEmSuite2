@@ -50,16 +50,14 @@
                                       "workspace": "ws-test",
                                       "caption": "Scraper",
                                       "contentTemplate": "tab-scraper",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     },
                                     {
                                       "id": "tab-listings",
                                       "workspace": "ws-test",
                                       "caption": "Listings",
                                       "contentTemplate": "tab-listings",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     },
                                     {
                                       "id": "tab-profiles",
@@ -96,8 +94,7 @@
                                                         "workspace": "ws-test",
                                                         "caption": "Companies",
                                                         "contentTemplate": "view-company-list",
-                                                        "tags": [],
-                                                        "order": 0
+                                                        "tags": []
                                                       }
                                                     ],
                                                     "activeTabIndex": 0
@@ -125,8 +122,7 @@
                                                           "workspace": "ws-test",
                                                           "caption": "Chart",
                                                           "contentTemplate": "view-chart",
-                                                          "tags": [],
-                                                          "order": 0
+                                                          "tags": []
                                                         }
                                                       ],
                                                       "activeTabIndex": 0
@@ -148,8 +144,7 @@
                                                           "workspace": "ws-test",
                                                           "caption": "Profile",
                                                           "contentTemplate": "view-company-profile",
-                                                          "tags": [],
-                                                          "order": 0
+                                                          "tags": []
                                                         }
                                                       ],
                                                       "activeTabIndex": 0
@@ -188,7 +183,7 @@
                             "left": {
                               "isFork": true,
                               "divider": {
-                                "direction": "vertical",
+                                "direction": "horizontal",
                                 "value": 50
                               },
                               "left": {
@@ -230,8 +225,7 @@
                                                         "workspace": "ws-test",
                                                         "caption": "Stocks",
                                                         "contentTemplate": "view-filteration-tab-stocks",
-                                                        "tags": [],
-                                                        "order": 0
+                                                        "tags": []
                                                       }
                                                     ],
                                                     "activeTabIndex": 0
@@ -259,8 +253,7 @@
                                                           "workspace": "ws-test",
                                                           "caption": "Chart",
                                                           "contentTemplate": "view-filteration-tab-chart",
-                                                          "tags": [],
-                                                          "order": 0
+                                                          "tags": []
                                                         }
                                                       ],
                                                       "activeTabIndex": 0
@@ -282,8 +275,7 @@
                                                           "workspace": "ws-test",
                                                           "caption": "Notes",
                                                           "contentTemplate": "view-filteration-tab-notes",
-                                                          "tags": [],
-                                                          "order": 0
+                                                          "tags": []
                                                         }
                                                       ],
                                                       "activeTabIndex": 0
@@ -294,24 +286,21 @@
                                             }
                                           }
                                         }
-                                      },
-                                      "order": 0
+                                      }
                                     },
                                     {
                                       "id": "view-price-action",
                                       "workspace": "ws-test",
                                       "caption": "Price action",
                                       "contentTemplate": "view-price-action",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     },
                                     {
                                       "id": "view-technical",
                                       "workspace": "ws-test",
                                       "caption": "TA 1",
                                       "contentTemplate": "view-technical",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     },
                                     {
                                       "id": "view-fundamental",
@@ -320,11 +309,10 @@
                                       "contentTemplate": "view-fundamental",
                                       "tags": [
                                         "permanent"
-                                      ],
-                                      "order": 1
+                                      ]
                                     }
                                   ],
-                                  "activeTabIndex": 3
+                                  "activeTabIndex": 0
                                 }
                               }
                             }
@@ -360,22 +348,19 @@
                                       "id": "tab-sector-kf894le83kltguiry7",
                                       "workspace": "ws-test",
                                       "caption": "Sector 1",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     },
                                     {
                                       "id": "tab-sector-lt894kf893pdf89423",
                                       "workspace": "ws-test",
                                       "caption": "Sector 2",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     },
                                     {
                                       "id": "tab-sector-vn38fnf0402ndo9weu",
                                       "workspace": "ws-test",
                                       "caption": "Sector 3",
-                                      "tags": [],
-                                      "order": 0
+                                      "tags": []
                                     }
                                   ],
                                   "activeTabIndex": -1

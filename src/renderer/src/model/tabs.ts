@@ -15,8 +15,9 @@ export interface TabBlueprint {
   workspace: string;
   caption: string;
   contentTemplate: string | null;
-  tags: string[] | undefined;
+  tags: string[];
   sceneConfigBlueprint?: SceneConfigBlueprint;
+  order: number;
 }
 
 export interface Tab extends Omit<TabBlueprint, "sceneConfigBlueprint"> {
@@ -68,7 +69,8 @@ export function buildTab(
     contentTemplate: tabBlueprint.contentTemplate,
     content: contentProvider.getContent(tabBlueprint),
     tags: [...(tabBlueprint.tags || [])],
-    sceneConfig
+    sceneConfig,
+    order: tabBlueprint.order
   };
 }
 
@@ -89,7 +91,8 @@ export function blueprintTab(tab: Tab): TabBlueprint {
     caption: tab.caption,
     contentTemplate: tab.contentTemplate,
     tags: [...(tab.tags || [])],
-    sceneConfigBlueprint
+    sceneConfigBlueprint,
+    order: tab.order
   };
 }
 
@@ -111,12 +114,13 @@ export function copyTab(tab: Tab): Tab {
     contentTemplate: tab.contentTemplate,
     content: tab.content,
     tags: [...(tab.tags || [])],
-    sceneConfig
+    sceneConfig,
+    order: tab.order
   };
 }
 
 export function tabEquals(tab1: Tab | TabBlueprint, tab2: Tab | TabBlueprint): boolean {
-  return tab1.id === tab2.id;
+  return tab1.id === tab2.id && tab1.workspace === tab2.workspace;
 }
 
 export function indexOfTab(tabs: Tab[] | TabBlueprint[], tab: Tab | TabBlueprint): number {

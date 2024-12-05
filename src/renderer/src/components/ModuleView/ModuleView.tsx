@@ -20,6 +20,7 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
     handleTabSelection, 
     handleTabOpen,
     handleTabRelocation, 
+    handleTabReorder,
     handleTabSplit,
     handleDividerMove
   } = useFlexibleSplits({
@@ -52,6 +53,7 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
         handleTabSelection, 
         handleTabOpen,
         handleTabRelocation, 
+        handleTabReorder,
         handleTabSplit,
         handleDividerMove
       }}

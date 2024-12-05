@@ -5,24 +5,32 @@ import SplitView from "@renderer/components/SplitView/SplitView";
 import TabButton from "@renderer/components/Tabs/TabControls/TabButton/TabButton";
 import TabControls from "@renderer/components/Tabs/TabControls/TabControls";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
+import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
 import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
 import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
-import { MouseEvent, ReactNode } from "react";
+import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
+import { MouseEvent, ReactNode, useContext } from "react";
 
+
+const TAGS = {
+  permanent: "permanent"
+};
 
 export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
-  const pSceneBlueprint: SplitTreeBlueprint | null | undefined 
-    = props.splitTreeBlueprint;
+  const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
+  const {workspaceConfig} = useContext(WorkspaceContext);
 
   const {
     splitTree, 
     tabSelection, 
     handleTabSelection, 
+    resetTabSelection,
     handleTabOpen,
     handleTabRelocation, 
+    handleTabReorder: reorderTab,
     handleTabSplit,
     handleDividerMove,
     handleTabAdd,
@@ -39,19 +47,39 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     e.stopPropagation();
     removeTab(targetNode, tab);
   };
+
+  const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
+    const tab: Tab = tabSelection!.selectedTab;
+    if( !tab.tags.includes(TAGS.permanent) ) {
+      reorderTab(targetNode, index);
+    } else {
+      resetTabSelection();
+    }
+  };
+
+  const buildFilterationTab = (): Tab => {
+    return buildTab({
+      id: generateRandomUniqueID("filteration-tab-"),
+      workspace: workspaceConfig.id,
+      caption: "New filter",
+      contentTemplate: "tab-volume",
+      tags: [],
+      order: 0
+    }, pContentProvider);
+  };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
     const tabs: Tab[] = targetNode.value.tabs;
+
     return (
       <TabControls>
         {tabs.map((tab: Tab, tabIndex: number) => {
-          const tabTags: string[] = tab.tags!;
           return (
             <TabButton
               key={tab.workspace + "-tab-control-button-" + tab.id}
               tab={tab}
             >
-              {!tabTags.includes("permanent") && (
+              {!tab.tags.includes(TAGS.permanent) && (
                 <span className="tab-remove-icon-container">
                   <img
                     className="tab-remove-icon"
@@ -65,18 +93,9 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
             </TabButton>
           );
         })}
-        {/* <button onClick={() => {
-          handleTabAdd(targetNode, buildTab({
-              id: "new-tab-test",
-              workspace: "ws-test",
-              caption: "New tab",
-              contentTemplate: "tab-volume",
-              tags: []
-            }, pContentProvider));
-          }}
-        >
-          +
-        </button> */}
+        <button onClick={() => handleTabAdd(targetNode, buildFilterationTab())}>
+          {"+"}
+        </button>
       </TabControls>
     );
   };
@@ -90,6 +109,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
         handleTabSelection, 
         handleTabOpen,
         handleTabRelocation, 
+        handleTabReorder,
         handleTabSplit,
         handleDividerMove
       }}
