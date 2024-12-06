@@ -3,8 +3,6 @@
 ### Urgent
 - ThemeProvider should be implmented and used to influence the coloring of components
 - some HTML components could be wrapped inside a React-component that then applies the current theme to them (e.g. StyledButton)
-- SQLite along with a database implementation and relevant contexts are needed before continuing the development of modules as their logic will be heavily dependent on the results returned by the database
-- weird reject-handling in promises, look into throwing instead of calling reject
 
 ### General
 - make sure that all React-hook calls define a type (useState, useRef, useContext, etc.)
@@ -15,9 +13,6 @@
 ### databaseAPI.ts
 - DatabaseManager instance should be provided to the API at app start, rather than be created in the API ts-file
 
-### TableList derivatives
-- CompanyProfilesList and WorkspaceCompaniesList are very similar, see if these could be refactored into a single component
-
 ### useFlexibleSplits.ts
 - only update the divider settings inside the config file when the divider is released, currently divider saving is disabled but would be saved each time the divider moves
 
@@ -26,4 +21,3 @@
 
 ### splits.ts
 - get rid of one-value-per-node principle
-- don't use interfaces

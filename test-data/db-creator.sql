@@ -43,12 +43,13 @@ CREATE TABLE currency (
 );
 
 
-	/* Available set of color codes on each analysis tab */
-CREATE TABLE color_code (
-	code_id INTEGER NOT NULL,
-	code_hex TEXT NOT NULL,
+	/* Available set of tags on each analysis tab */
+CREATE TABLE tag (
+	tag_id INTEGER NOT NULL,
+	tag_hex TEXT NOT NULL,
+	tag_label TEXT,
 	
-	PRIMARY KEY (code_id AUTOINCREMENT)
+	PRIMARY KEY (tag_id AUTOINCREMENT)
 );
 
 
@@ -66,10 +67,11 @@ CREATE TABLE profile (
 
 	/* Filteration tabs in the order that they should appear in the app */
 CREATE TABLE filteration_step (
-	step_id TEXT NOT NULL,
+	step_id TEXT,
 	caption TEXT, 
-	fk_previous_step_id TEXT,
+	fk_previous_step_id TEXT NULL,
 	
+	PRIMARY KEY (step_id)
 	FOREIGN KEY (fk_previous_step_id) REFERENCES filteration_step(step_id)
 );
 
@@ -79,11 +81,11 @@ CREATE TABLE filteration (
 	notes TEXT,
 	fk_filteration_step_id TEXT NOT NULL,
 	fk_filteration_company_id INTEGER NOT NULL,
-	fk_filteration_code_id INTEGER NOT NULL DEFAULT 0,
+	fk_filteration_tag_id INTEGER NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id),
 	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (fk_filteration_code_id) REFERENCES color_code(code_id)
+	FOREIGN KEY (fk_filteration_tag_id) REFERENCES tag(tag_id)
 );
 
 
@@ -91,10 +93,10 @@ CREATE TABLE filteration (
 CREATE TABLE fundamental (
 	notes TEXT,
 	fk_fundamental_company_id INTEGER NOT NULL,
-	fk_fundamental_code_id INTEGER NOT NULL DEFAULT 0,
+	fk_fundamental_tag_id INTEGER NOT NULL DEFAULT 0,
 	
 	FOREIGN KEY (fk_fundamental_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (fk_fundamental_code_id) REFERENCES color_code(code_id)
+	FOREIGN KEY (fk_fundamental_tag_id) REFERENCES tag(tag_id)
 );
 
 
@@ -139,12 +141,12 @@ VALUES
 (NULL, 'Pep of si', 'PEP', 20.0, 2000.00, 100, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pep'),
 (NULL, 'Railroad', 'ROAD', 5.0, 5000.00, 1000, 'USD', '2028-01-01', 'NASDAQ', 'chart.not.a.link/road');
 
-INSERT INTO color_code (code_id, code_hex)
+INSERT INTO tag (tag_id, tag_hex, tag_label)
 VALUES
-(NULL, 'BCBCBC'),
-(NULL, 'FF0000'),
-(NULL, '00FF00'),
-(NULL, '0000FF');
+(NULL, 'BCBCBC', "None"),
+(NULL, '00FF00', "Accepted"),
+(NULL, 'FF0000', "Rejected"),
+(NULL, '0000FF', "Watch list");
 
 
 	/* DESCRIPTIONS GENERATED VIA CHATGPT */
@@ -157,3 +159,10 @@ VALUES
 (5, 'Food & drink', 'Sweden, Norway, Finland, USA', 'investors.cc.not.a.link', 'Coke of Cola offers refreshing, world-famous soft drinks with a variety of flavors, bringing happiness and refreshment to every sip.'),
 (6, 'Food & drink', 'Sweden, USA', 'investors.pep.not.a.link', 'Pep of Si offers energizing beverages and snacks, delivering bold flavors and a refreshing boost to keep you going all day.'),
 (7, 'Railroad', 'USA', 'investors.road.not.a.link', 'Railroad provides reliable, efficient transportation services, connecting cities and industries with fast, safe, and sustainable rail solutions.');
+
+INSERT INTO filteration_step (step_id, caption, fk_previous_step_id)
+VALUES
+("tab-volume", "Volume", NULL),
+("tab-price-action", "Price action", "tab-volume"),
+("tab-technical", "Technical", "tab-price-action"),
+("tab-fundamental", "Fundamental", "tab-technical");

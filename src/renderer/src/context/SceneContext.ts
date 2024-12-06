@@ -1,11 +1,11 @@
-import { defaultSceneConfig, SceneConfig } from "@renderer/model/config";
+import { defaultSceneConfigBlueprint, SceneConfigBlueprint } from "@renderer/model/tabs";
 import { createContext } from "react";
 
 
 type SceneContextType = {
-  sceneConfig: SceneConfig;
+  sceneConfig: SceneConfigBlueprint;
 };
 
 export const SceneContext = createContext<SceneContextType>({
-  sceneConfig: defaultSceneConfig()
+  sceneConfig: defaultSceneConfigBlueprint()
 });

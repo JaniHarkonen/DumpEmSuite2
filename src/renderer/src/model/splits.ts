@@ -1,4 +1,4 @@
-import { buildTab, TabContentProvider, Tab, TabBlueprint, blueprintTab, TabSettingsBlueprint, TabSettings } from "./tabs";
+import { buildTab, TabContentProvider, Tab, TabBlueprint, blueprintTab, TabSettingsBlueprint, TabSettings, copyTab, indexOfTab } from "./tabs";
 
   //////////////////// DIVIDER ///////////////////////
 export const DEFAULT_DIVIDER_VALUE_PERCENT: number = 50;
@@ -13,19 +13,19 @@ export type DividerSettings = {
   //////////////////// BLUEPRINTS ///////////////////////
 type SplitTreeNodeBlueprint = SplitTreeValueBlueprint | SplitTreeForkBlueprint;
 
-interface SplitTreeItemBlueprint {
+type SplitTreeItemBlueprint = {
   isFork: boolean;
 }
 
-interface SplitTreeValueBlueprint extends SplitTreeItemBlueprint {
+export type SplitTreeValueBlueprint = {
   value: TabSettingsBlueprint;
-}
+} & SplitTreeItemBlueprint;
 
-interface SplitTreeForkBlueprint extends SplitTreeItemBlueprint {
+export type SplitTreeForkBlueprint = {
   divider: DividerSettings;
   left: SplitTreeNodeBlueprint;
   right?: SplitTreeNodeBlueprint;
-}
+} & SplitTreeItemBlueprint;
 
 export type SplitTreeBlueprint = {
   root: SplitTreeForkBlueprint;
@@ -61,7 +61,7 @@ type RemoveResult = {
   trackedFork: SplitTreeFork | null;
 };
 
-export function defaultSplitTree(): SplitTree {
+export function defaultSplitTreeBlueprint(): SplitTreeBlueprint {
   return {
     root: {
       isFork: true,
@@ -69,10 +69,8 @@ export function defaultSplitTree(): SplitTree {
         direction: "horizontal",
         value: 50
       },
-      parent: null,
       left: {
         isFork: false,
-        parent: null,
         value: {
           tabs: [],
           activeTabIndex: -1
@@ -96,22 +94,86 @@ export function snapshotNode (
       parent,
       liveNode: fork
     } as SplitTreeFork;
+
     result.left = snapshotNode(fork.left, result)!;
     result.right = snapshotNode(fork.right, result) ?? undefined;
+
     return result;
   } else {
     const valueNode: SplitTreeValue = node as SplitTreeValue;
+
     return {
       isFork: false,
       parent,
       liveNode: valueNode,
       value: {
-        tabs: [...valueNode.value.tabs],
+        tabs: valueNode.value.tabs.map((tab: Tab) => copyTab(tab)),
         activeTabIndex: valueNode.value.activeTabIndex
       }
     };
   }
 }
+
+export function buildNode(
+  nodeBlueprint: SplitTreeNodeBlueprint | null | undefined,
+  contentProvider: TabContentProvider,
+  parent: SplitTreeFork | null = null
+): SplitTreeNode | null | undefined {
+  if( !nodeBlueprint ) {  // Handle undefined
+    return nodeBlueprint;
+  } else if( nodeBlueprint.isFork ) { // Handle forks
+    const fork: SplitTreeForkBlueprint = 
+      nodeBlueprint as SplitTreeForkBlueprint;
+    const result: SplitTreeFork = {
+      isFork: true,
+      divider: {...fork.divider},
+      parent
+    } as SplitTreeFork;
+    result.left = buildNode(fork.left, contentProvider, result)!;
+    result.right = buildNode(fork.right, contentProvider, result) ?? undefined;
+    return result;
+  } else {  // Handle value nodes
+    const valueNode: SplitTreeValueBlueprint = 
+      nodeBlueprint as SplitTreeValueBlueprint;
+    return {
+      isFork: false,
+      parent,
+      value: {
+        tabs: valueNode.value.tabs.map((tabBlueprint: TabBlueprint) => {
+          return buildTab(tabBlueprint, contentProvider);
+        }),
+        activeTabIndex: valueNode.value.activeTabIndex ?? -1
+      }
+    }
+  }
+}
+
+export function blueprintNode(
+  node: SplitTreeNode | null | undefined
+): SplitTreeNodeBlueprint | null | undefined {
+  if( !node ) {
+    return node;
+  } else if( node.isFork ) {
+    const fork: SplitTreeFork = node as SplitTreeFork;
+    return {
+      isFork: true,
+      divider: {...fork.divider},
+      left: blueprintNode(fork.left)!,
+      right: blueprintNode(fork.right) ?? undefined
+    };
+  } else {
+    const valueNode: SplitTreeValue = node as SplitTreeValue;
+    return {
+      isFork: false,
+      value: {
+        tabs: valueNode.value.tabs.map((tab: Tab) => {
+          return blueprintTab(tab);
+        }),
+        activeTabIndex: valueNode.value.activeTabIndex ?? -1
+      }
+    };
+  }
+};
 
 export class SplitTreeManager {
   static buildTree(
@@ -121,41 +183,8 @@ export class SplitTreeManager {
       return null;
     }
 
-    const buildNode = (
-      nodeBlueprint: SplitTreeNodeBlueprint | null | undefined,
-      parent: SplitTreeFork | null = null
-    ): SplitTreeNode | null | undefined => {
-      if( !nodeBlueprint ) {  // Handle undefined
-        return nodeBlueprint;
-      } else if( nodeBlueprint.isFork ) { // Handle forks
-        const fork: SplitTreeForkBlueprint = 
-          nodeBlueprint as SplitTreeForkBlueprint;
-        const result: SplitTreeFork = {
-          isFork: true,
-          divider: {...fork.divider},
-          parent
-        } as SplitTreeFork;
-        result.left = buildNode(fork.left, result)!;
-        result.right = buildNode(fork.right, result) ?? undefined;
-        return result;
-      } else {  // Handle value nodes
-        const valueNode: SplitTreeValueBlueprint = 
-          nodeBlueprint as SplitTreeValueBlueprint;
-        return {
-          isFork: false,
-          parent,
-          value: {
-            tabs: valueNode.value.tabs.map((tabBlueprint: TabBlueprint) => {
-              return buildTab(tabBlueprint, contentProvider);
-            }),
-            activeTabIndex: valueNode.value.activeTabIndex ?? -1
-          }
-        }
-      }
-    }
-
     return {
-      root: buildNode(treeBlueprint.root) as SplitTreeFork
+      root: buildNode(treeBlueprint.root, contentProvider) as SplitTreeFork
     };
   }
 
@@ -173,33 +202,6 @@ export class SplitTreeManager {
   }
 
   public blueprint(): SplitTreeBlueprint {
-    const blueprintNode = (
-      node: SplitTreeNode | null | undefined
-    ): SplitTreeNodeBlueprint | null | undefined => {
-      if( !node ) {
-        return node;
-      } else if( node.isFork ) {
-        const fork: SplitTreeFork = node as SplitTreeFork;
-        return {
-          isFork: true,
-          divider: {...fork.divider},
-          left: blueprintNode(fork.left)!,
-          right: blueprintNode(fork.right) ?? undefined
-        };
-      } else {
-        const valueNode: SplitTreeValue = node as SplitTreeValue;
-        return {
-          isFork: false,
-          value: {
-            tabs: valueNode.value.tabs.map((tab: Tab) => {
-              return blueprintTab(tab);
-            }),
-            activeTabIndex: valueNode.value.activeTabIndex ?? -1
-          }
-        };
-      }
-    };
-
     return {
       root: blueprintNode(this.tree.root) as SplitTreeForkBlueprint
     };
@@ -233,9 +235,42 @@ export class SplitTreeManager {
     }
   }
 
-  private addTabToLive(liveNode: SplitTreeValue, tab: Tab): void {
+  private addTabToLive(liveNode: SplitTreeValue, targetTab: Tab, index: number): void {
     const tabs: Tab[] = (liveNode as SplitTreeValue).value.tabs;
-    tabs.push(tab);
+
+      // Figure out the first and last available indices where the tab can be added given the 
+      // 'order' of each tab in the live node
+    let firstAvailableIndex: number = 0;
+    while( 
+      firstAvailableIndex < tabs.length && tabs[firstAvailableIndex].order < targetTab.order
+    ) {
+      firstAvailableIndex++;
+    }
+
+    let lastAvailableIndex: number = firstAvailableIndex;
+    while( 
+      lastAvailableIndex < tabs.length && tabs[lastAvailableIndex].order === targetTab.order 
+    ) {
+      lastAvailableIndex++;
+    }
+
+    index = Math.max(firstAvailableIndex, Math.min(lastAvailableIndex, index));
+    tabs.splice(index, 0, targetTab);
+  }
+
+  private reorderTabLive(liveNode: SplitTreeValue, targetTab: Tab, index: number): boolean {
+    const tabs: Tab[] = liveNode.value.tabs;
+    const currentIndex: number = indexOfTab(tabs, targetTab);
+    index = Math.max(0, Math.min(tabs.length, index));
+
+    if( currentIndex < 0 || currentIndex === index ) {
+      return false;
+    }
+
+    tabs.splice(currentIndex, 1);
+    this.addTabToLive(liveNode, targetTab, index);
+
+    return true;
   }
 
   private removeTabFromLive(
@@ -244,7 +279,7 @@ export class SplitTreeManager {
       // Find tab index, and remove from target
     const resolvedTargetNode: SplitTreeValue = targetNode;
     const targetTabs: Tab[] = resolvedTargetNode.value.tabs;
-    const tabIndex: number = targetTabs.indexOf(remove);
+    const tabIndex: number = indexOfTab(targetTabs, remove);
     if( tabIndex < 0 ) {
       return {
         wasSuccessful: false,
@@ -304,14 +339,14 @@ export class SplitTreeManager {
     }, targetNode);
   }
 
-  public addTab(targetNode: SplitTreeValue, tab: Tab): boolean {
+  public addTab(targetNode: SplitTreeValue, tab: Tab, index: number = Infinity): boolean {
     return this.getLiveNodeAnd((liveNodes: SplitTreeNode[] | null): boolean => {
       if( !liveNodes ) {
         return false;
       }
 
       const [liveNode] = liveNodes;
-      this.addTabToLive(liveNode as SplitTreeValue, tab);
+      this.addTabToLive(liveNode as SplitTreeValue, tab, index);
       return true;
     }, targetNode);
   }
@@ -328,9 +363,21 @@ export class SplitTreeManager {
 
         const [liveNode] = liveNodes;
         return this.removeTabFromLive(liveNode as SplitTreeValue, remove);
-      },
-      targetNode
+      }, targetNode
     );
+  }
+
+  public reorderTab(targetNode: SplitTreeValue, targetTab: Tab, index: number): boolean {
+    return this.getLiveNodeAnd(
+      (liveNodes: SplitTreeNode[] | null): boolean => {
+        if( !liveNodes ) {
+          return false;
+        }
+
+        const [liveNode] = liveNodes;
+        return this.reorderTabLive(liveNode as SplitTreeValue, targetTab, index);
+      }, targetNode
+    )
   }
 
   public relocateTab(
@@ -347,7 +394,7 @@ export class SplitTreeManager {
       }
 
       const [liveFrom, liveTo] = liveNodes;
-      this.addTabToLive(liveTo as SplitTreeValue, tab);
+      this.addTabToLive(liveTo as SplitTreeValue, tab, -1);
       return this.removeTabFromLive(liveFrom as SplitTreeValue, tab).wasSuccessful;
     }, fromNode, toNode);
   }

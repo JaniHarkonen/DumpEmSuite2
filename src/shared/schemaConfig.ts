@@ -32,9 +32,10 @@ export type Currency = {
   currency_symbol: string;
 };
 
-export type ColorCode = {
-  code_id: number;
-  code_hex: string;
+export type Tag = {
+  tag_id: number;
+  tag_hex: string;
+  tag_label: string | null;
 };
 
 export type Profile = {

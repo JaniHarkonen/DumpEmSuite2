@@ -43,12 +43,11 @@ export default function Workspace(props: Props): ReactNode {
   }, []);
 
   const modulesProvider: TabContentProvider = createTabContentProvider(
-    sceneConfig.tabs!, {
+    {
       "module-companies": () => <CompaniesModule />,
       "module-analysis": () => <AnalysisModule />,
       "module-macro": () => <>macro module</>
-    },
-    <>FAILED</>
+    }
   );
   
 

@@ -1,4 +1,5 @@
-import { Company, Currency, Profile, Scraper } from "./schemaConfig";
+import { Company, Currency, Profile, Scraper, Tag } from "./schemaConfig";
+import { AsString } from "./utils";
 
 
 export type QueryResult = {
@@ -26,10 +27,11 @@ export type DatabaseAPI = {
   close: (props: QueryProps) => Promise<QueryResult>;
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: (props: QueryProps) => Promise<FetchResult<Company & Currency>>;
+  fetchAllTags: (props: QueryProps) => Promise<FetchResult<Tag>>;
   fetchCompanyProfile: (
     props: { company: Company } & QueryProps
   ) => Promise<FetchResult<Profile>>;
-  postNewCompany: (props: { company: Company } & QueryProps) => Promise<PostResult>;
+  postNewCompany: (props: { company: Company | AsString<Company> } & QueryProps) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -52,8 +54,9 @@ export type BoundDatabaseAPI = {
   close: () => Promise<QueryResult>;
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
+  fetchAllTags: () => Promise<FetchResult<Tag>>;
   fetchCompanyProfile: (props: { company: Company }) => Promise<FetchResult<Profile>>;
-  postNewCompany: (props: { company: Company }) => Promise<PostResult>;
+  postNewCompany: (props: { company: Company | AsString<Company> }) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -84,11 +87,12 @@ export function bindAPIToWorkspace(
     close: () => api.close({ databaseName: workspaceID }),
     fetchScraperInfo: () => api.fetchScraperInfo({ databaseName: workspaceID }),
     fetchAllCompanies: () => api.fetchAllCompanies({ databaseName: workspaceID }),
+    fetchAllTags: () => api.fetchAllTags({ databaseName: workspaceID }),
     fetchCompanyProfile: (props: { company: Company }) => api.fetchCompanyProfile({
       ...props,
       databaseName: workspaceID
     }),
-    postNewCompany: (props: { company: Company }) => {
+    postNewCompany: (props: { company: Company | AsString<Company> }) => {
       return api.postNewCompany({
         ...props,
         databaseName: workspaceID

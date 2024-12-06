@@ -4,7 +4,7 @@ import { createContext } from "react";
 
 export type OnSelect = (selectedTab: Tab) => void;
 export type OnOpen = (openedTab: Tab) => void;
-export type OnDrop = () => void;
+export type OnDrop = (index: number) => void;
 
 export type TabsContextType = {
   tabs: Tab[];

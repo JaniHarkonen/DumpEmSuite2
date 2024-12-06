@@ -1,5 +1,6 @@
 :root {
   --normal-margin: 5px;
+  --strong-margin: 12px;
 }
 
 body {
@@ -108,6 +109,10 @@ textarea {
   justify-content: end;
 }
 
+.d-align-items-center {
+  align-items: center;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -126,6 +131,22 @@ textarea {
 
 .mb-norm {
   margin-bottom: var(--normal-margin);
+}
+
+.ml-strng {
+  margin-left: var(--strong-margin);
+}
+
+.mr-strong {
+  margin-right: var(--strong-margin);
+}
+
+.mt-strong {
+  margin-top: var(--strong-margin);
+}
+
+.mb-strong {
+  margin-bottom: var(--strong-margin);
 }
 
 .user-select-text {

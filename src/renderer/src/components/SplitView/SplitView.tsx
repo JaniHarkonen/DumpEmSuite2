@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from "react";
 import Divider from "../Divider/Divider";
-import { Tab } from "@renderer/model/tabs";
+import { indexOfTab, Tab } from "@renderer/model/tabs";
 import { DividerDirection, SplitBranch, SplitTreeFork, SplitTreeNode, SplitTreeValue } from "@renderer/model/splits";
 import TabsWithDropArea from "../TabsWithDropArea/TabsWithDropArea";
 import { DropAreaSettings } from "../DropArea/DropArea";
@@ -8,6 +8,7 @@ import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
 import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
+import { TabInfoContext } from "@renderer/context/TabInfoContext";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -36,6 +37,7 @@ export default function SplitView(props: Props): ReactNode {
     handleTabSelection, 
     handleTabOpen,
     handleTabRelocation, 
+    handleTabReorder,
     handleTabSplit,
     handleDividerMove
   } = useContext(FlexibleSplitsContext);
@@ -68,7 +70,9 @@ export default function SplitView(props: Props): ReactNode {
           key={tab.workspace + "-tab-panel-" + tab.id}
           tab={tab}
         >
-          {tab.content}
+          <TabInfoContext.Provider value={{ currentTab: tab }}>
+            {tab.content}
+          </TabInfoContext.Provider>
         </TabPanel>
       );
     });
@@ -80,6 +84,16 @@ export default function SplitView(props: Props): ReactNode {
       const nodeTabs: Tab[] = valueNode.value.tabs;
       const activeTabIndex: number = valueNode.value.activeTabIndex;
 
+      const decideRelocationOrReorder = (index: number) => {
+        if( !tabSelection ) {
+          return;
+        } else if( tabSelection.sourceValueNode === valueNode ) {
+          return handleTabReorder && handleTabReorder(valueNode, index);
+        } else {
+          handleTabRelocation && handleTabRelocation(valueNode, index);
+        }
+      };
+
       return (
         <TabsContext.Provider value={{
             tabs: nodeTabs,
@@ -90,9 +104,9 @@ export default function SplitView(props: Props): ReactNode {
               sourceValueNode: valueNode
             }),
             onOpen: (openedTab: Tab) => {
-              handleTabOpen && handleTabOpen(valueNode, nodeTabs.indexOf(openedTab));
+              handleTabOpen && handleTabOpen(valueNode, indexOfTab(nodeTabs, openedTab));
             },
-            onDrop: () => handleTabRelocation && handleTabRelocation(valueNode)
+            onDrop: decideRelocationOrReorder
           }}
         >
           <TabsWithDropArea
