@@ -52,9 +52,6 @@ export type FilterationStep = {
   step_id: string; 
   caption: string | null;
 };
-export type FKFilterationStep = {
-  fk_previous_step_id: string | null;
-};
 
 export type Filteration = {
   notes: string | null;

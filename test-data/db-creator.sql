@@ -68,11 +68,9 @@ CREATE TABLE profile (
 	/* Filteration tabs in the order that they should appear in the app */
 CREATE TABLE filteration_step (
 	step_id TEXT,
-	caption TEXT, 
-	fk_previous_step_id TEXT NULL,
+	caption TEXT,
 	
 	PRIMARY KEY (step_id)
-	FOREIGN KEY (fk_previous_step_id) REFERENCES filteration_step(step_id)
 );
 
 
@@ -81,11 +79,11 @@ CREATE TABLE filteration (
 	notes TEXT,
 	fk_filteration_step_id TEXT NOT NULL,
 	fk_filteration_company_id INTEGER NOT NULL,
-	fk_filteration_tag_id INTEGER NOT NULL DEFAULT 0,
+	fk_filteration_tag_id INTEGER NOT NULL DEFAULT 1,
 	
-	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id),
-	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (fk_filteration_tag_id) REFERENCES tag(tag_id)
+	FOREIGN KEY (fk_filteration_step_id) REFERENCES filteration_step(step_id) ON DELETE CASCADE,
+	FOREIGN KEY (fk_filteration_company_id) REFERENCES company(company_id) ON DELETE CASCADE,
+	FOREIGN KEY (fk_filteration_tag_id) REFERENCES tag(tag_id) ON DELETE SET DEFAULT
 );
 
 
@@ -160,9 +158,13 @@ VALUES
 (6, 'Food & drink', 'Sweden, USA', 'investors.pep.not.a.link', 'Pep of Si offers energizing beverages and snacks, delivering bold flavors and a refreshing boost to keep you going all day.'),
 (7, 'Railroad', 'USA', 'investors.road.not.a.link', 'Railroad provides reliable, efficient transportation services, connecting cities and industries with fast, safe, and sustainable rail solutions.');
 
-INSERT INTO filteration_step (step_id, caption, fk_previous_step_id)
+INSERT INTO filteration_step (step_id, caption)
 VALUES
-("tab-volume", "Volume", NULL),
-("tab-price-action", "Price action", "tab-volume"),
-("tab-technical", "Technical", "tab-price-action"),
-("tab-fundamental", "Fundamental", "tab-technical");
+("view-volume", "Volume"),
+("view-price-action", "Price action"),
+("view-technical", "Technical"),
+("view-fundamental", "Fundamental");
+
+/*INSERT INTO filteration (notes, fk_filteration_step_id, fk_filteration_company_id, fk_filteration_tag_id)
+VALUES
+("These are some test notes for the great company of Pizza place", "view-volume", 1, 2);*/

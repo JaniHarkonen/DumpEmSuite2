@@ -17,8 +17,10 @@ export type EditChanges<T> = {
 
 export type OnColumnSelect<T> = (column: TableListColumn<T>) => void;
 export type OnItemFocus<T> = (dataCell: TableListDataCell<T>) => void;
-export type OnItemSelect<T> = (dataCell: TableListDataCell<T>, isChecked: boolean) => void;
-export type OnItemFinalize<T> = (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
+export type OnItemSelect<T> = 
+  (dataCell: TableListDataCell<T>, isChecked: boolean) => void;
+export type OnItemFinalize<T> = 
+  (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
 
 type Props<T> = {
   columns: TableListColumn<T>[];
@@ -50,7 +52,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   ) => {
       // Apply input fields, if editing
     const data = dataCell.data[column.accessor];
-    let dataDiv: ReactNode = (
+    let dataElement: ReactNode = (
       <EditableText
         value={data as string}
         onFinalize={(value: string) => pOnItemFinalize(dataCell, {
@@ -65,7 +67,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
 
       // Apply selection checkbox, if first data cell
     if( pAllowSelection && index === 0 ) {
-      dataDiv = (
+      dataElement = (
         <>
           <input
             type="checkbox"
@@ -74,17 +76,17 @@ export default function TableList<T>(props: Props<T>): ReactNode {
             }}
             checked={pSelectionSet[dataCell.id]?.isSelected || false}
           />
-          {dataDiv}
+          {dataElement}
         </>
       );
     }
 
     return (
       <td key={"list-table-data-" + (column.accessor as String) + "-" + dataCell.id}>
-        {dataDiv}
+        {dataElement}
       </td>
     );
-  }
+  };
 
   
   return (

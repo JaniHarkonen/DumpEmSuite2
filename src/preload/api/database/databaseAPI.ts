@@ -1,6 +1,6 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, FKCompany, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
+import { Company, Currency, FilterationStep, FKCompany, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
 
@@ -201,6 +201,7 @@ export const databaseAPI: DatabaseAPI = {
             value(val(), val(), val(), val(), val(), val(), val(), val(), val())
           )
         );
+
         databaseManager.post(
           databaseName, preparedString,
           (runResult: RunResult | null, err: Error | null) => {
@@ -220,6 +221,35 @@ export const databaseAPI: DatabaseAPI = {
             company.updated,
             'EUR'
           ]
+        );
+      }
+    );
+  },
+  postNewFilterationStep: ({
+    databaseName,
+    filterationStep
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("filteration_step"),
+            col<FilterationStep>("step_id"),
+            col<FilterationStep>("caption")
+          ) + values(
+            value(val(), val())
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStep.step_id, filterationStep.caption]
         );
       }
     );
@@ -314,5 +344,31 @@ export const databaseAPI: DatabaseAPI = {
         )
       }
     );
+  },
+  deleteFilterationStep: ({
+    databaseName,
+    step_id
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("filteration_step")) + 
+            WHERE(equals(col<FilterationStep>("step_id"), val()))
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [step_id]
+        );
+      }
+    )
   }
 };

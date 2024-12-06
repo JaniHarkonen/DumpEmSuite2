@@ -1,4 +1,4 @@
-import { Company, Currency, Profile, Scraper, Tag } from "./schemaConfig";
+import { Company, Currency, FilterationStep, Profile, Scraper, Tag } from "./schemaConfig";
 import { AsString } from "./utils";
 
 
@@ -32,6 +32,7 @@ export type DatabaseAPI = {
     props: { company: Company } & QueryProps
   ) => Promise<FetchResult<Profile>>;
   postNewCompany: (props: { company: Company | AsString<Company> } & QueryProps) => Promise<PostResult>;
+  postNewFilterationStep: (props: { filterationStep: FilterationStep } & QueryProps) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -47,6 +48,7 @@ export type DatabaseAPI = {
     } & QueryProps
   ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] } & QueryProps) => Promise<DeleteResult>;
+  deleteFilterationStep: (props: { step_id: string } & QueryProps) => Promise<DeleteResult>;
 };
 
 export type BoundDatabaseAPI = {
@@ -57,6 +59,7 @@ export type BoundDatabaseAPI = {
   fetchAllTags: () => Promise<FetchResult<Tag>>;
   fetchCompanyProfile: (props: { company: Company }) => Promise<FetchResult<Profile>>;
   postNewCompany: (props: { company: Company | AsString<Company> }) => Promise<PostResult>;
+  postNewFilterationStep: (props: { filterationStep: FilterationStep }) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -72,6 +75,7 @@ export type BoundDatabaseAPI = {
     }
   ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] }) => Promise<DeleteResult>;
+  deleteFilterationStep: (props: { step_id: string }) => Promise<DeleteResult>;
 };
 
 export function bindAPIToWorkspace(
@@ -94,6 +98,12 @@ export function bindAPIToWorkspace(
     }),
     postNewCompany: (props: { company: Company | AsString<Company> }) => {
       return api.postNewCompany({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postNewFilterationStep: (props: { filterationStep: FilterationStep }) => {
+      return api.postNewFilterationStep({
         ...props,
         databaseName: workspaceID
       });
@@ -124,6 +134,12 @@ export function bindAPIToWorkspace(
     },
     deleteCompanies: (props: { companies: Company[] }) => {
       return api.deleteCompanies({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    deleteFilterationStep: (props: { step_id: string }) => {
+      return api.deleteFilterationStep({
         ...props,
         databaseName: workspaceID
       });
