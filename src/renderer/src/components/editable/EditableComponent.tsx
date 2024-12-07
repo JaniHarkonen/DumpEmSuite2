@@ -1,7 +1,7 @@
-import { DetailedHTMLProps, FocusEvent, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode, useState } from "react";
+import useEditable, { OnEditFinalize } from "@renderer/hook/useEditable";
+import { DetailedHTMLProps, FocusEvent, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode } from "react";
 
 
-export type OnEditFinalize = (value: string) => void;
 type ControlledElementRenderer = (
   props: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
 ) => ReactNode;
@@ -9,7 +9,7 @@ type ControlledElementRenderer = (
 type Props = {
   value: string;
   controlledElement: ControlledElementRenderer;
-  onFinalize?: OnEditFinalize;
+  onFinalize?: OnEditFinalize<string>;
   editDisabled?: boolean;
 } & PropsWithChildren;
 
@@ -18,22 +18,12 @@ export type EditableComponentProps = Props;
 export default function EditableComponent(props: Props): ReactNode {
   const pValue: string = props.value;
   const pControlledElement: ControlledElementRenderer = props.controlledElement;
-  const pOnTextEditFinalize: OnEditFinalize = props.onFinalize || function(){};
-  const pEditDisabled: boolean = props.editDisabled || false;
+  const pOnTextEditFinalize: OnEditFinalize<string> = props.onFinalize || function(){};
+  const pEditDisabled: boolean = props.editDisabled ?? false;
   const pChildren: ReactNode[] | ReactNode = props.children;
 
-  const [isEditing, setEditing] = useState<boolean>(false);
-
-  const handleFinalize = (value: string) => {
-    pOnTextEditFinalize(value);
-    setEditing(false);
-  };
-
-  const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if( e.code === "Enter" ) {
-      handleFinalize(e.currentTarget.value);
-    }
-  };
+  const [isEditing, handleEditStart, handleFinalize, handleEnter] = 
+    useEditable<string>({ onFinalize: pOnTextEditFinalize });
 
   if( pEditDisabled ) {
     return pChildren;
@@ -46,10 +36,12 @@ export default function EditableComponent(props: Props): ReactNode {
           defaultValue: pValue,
           onBlur: (e: FocusEvent<HTMLInputElement>) => handleFinalize(e.target.value),
           autoFocus: true,
-          onKeyDown: handleEnter
+          onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => {
+            handleEnter(e.code, e.currentTarget.value);
+          }
         })
       ) : (
-        <div onDoubleClick={() => setEditing(true)}>
+        <div onDoubleClick={handleEditStart}>
            {pChildren}
         </div>
       )}

@@ -2,10 +2,13 @@
 
 ### Urgent
 - ThemeProvider should be implmented and used to influence the coloring of components
-- some HTML components could be wrapped inside a React-component that then applies the current theme to them (e.g. StyledButton)
+
+### AnalysesView.tsx
+- currently a `span`-element is being used as a button, change this when styles are added
 
 ### General
 - make sure that all React-hook calls define a type (useState, useRef, useContext, etc.)
+- some HTML components could be wrapped inside a React-component that then applies the current theme to them (e.g. StyledButton)
 
 ### APIs
 - APIs should accept JSONs instead of multiple arguments

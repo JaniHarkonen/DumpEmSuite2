@@ -1,6 +1,6 @@
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
 import { ChangeEvent, ReactNode } from "react";
-import EditableText from "../EditableText/EditableText";
+import EditableText from "../editable/EditableText";
 
 
 export type TableListColumn<T> = {
@@ -39,8 +39,8 @@ export type TableListProps<T> = Props<T>;
 export default function TableList<T>(props: Props<T>): ReactNode {
   const pColumns: TableListColumn<T>[] = props.columns;
   const pData: TableListDataCell<T>[] = props.cells;
-  const pAllowSelection: boolean = props.allowSelection || false;
-  const pAllowEdit: boolean = props.allowEdit || false;
+  const pAllowSelection: boolean = props.allowSelection ?? false;
+  const pAllowEdit: boolean = props.allowEdit ?? false;
   const pSelectionSet: SelectionSet<T> = props.selectionSet || {};
   const pOnColumnSelect: OnColumnSelect<T> = props.onColumnSelect || function(){ };
   const pOnItemFocus: OnItemFocus<T> = props.onItemFocus || function(){ };
@@ -74,7 +74,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               pOnItemSelect(dataCell, e.target.checked)
             }}
-            checked={pSelectionSet[dataCell.id]?.isSelected || false}
+            checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
           />
           {dataElement}
         </>

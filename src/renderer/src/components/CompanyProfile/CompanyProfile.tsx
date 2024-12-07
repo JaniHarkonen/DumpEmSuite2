@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from "react";
-import EditableText from "../EditableText/EditableText";
-import EditableTextArea from "../EditableText/EditableTextArea";
+import EditableText from "../editable/EditableText";
+import EditableTextArea from "../editable/EditableTextArea";
 import PageContainer from "../PageContainer/PageContainer";
 import PageHeader from "../PageHeader/PageHeader";
 import { ProfileContext } from "@renderer/context/ProfileContext";
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export default function CompanyProfile(props: Props): ReactNode {
-  const pAllowEdit: boolean = props.allowEdit || false;
+  const pAllowEdit: boolean = props.allowEdit ?? false;
   const {profile, company, onEditProfile} = useContext(ProfileContext);
 
   if( !profile || !company ) {

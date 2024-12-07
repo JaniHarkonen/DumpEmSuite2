@@ -141,10 +141,10 @@ VALUES
 
 INSERT INTO tag (tag_id, tag_hex, tag_label)
 VALUES
-(NULL, 'BCBCBC', "None"),
-(NULL, '00FF00', "Accepted"),
-(NULL, 'FF0000', "Rejected"),
-(NULL, '0000FF', "Watch list");
+(NULL, '#BCBCBC', "None"),
+(NULL, '#00FF00', "Accepted"),
+(NULL, '#FF0000', "Rejected"),
+(NULL, '#0000FF', "Watch list");
 
 
 	/* DESCRIPTIONS GENERATED VIA CHATGPT */

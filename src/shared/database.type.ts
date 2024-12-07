@@ -33,6 +33,7 @@ export type DatabaseAPI = {
   ) => Promise<FetchResult<Profile>>;
   postNewCompany: (props: { company: Company | AsString<Company> } & QueryProps) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep } & QueryProps) => Promise<PostResult>;
+  postNewTag: (props: { tag: Tag | AsString<Tag> } & QueryProps) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -47,8 +48,14 @@ export type DatabaseAPI = {
       values: string[]
     } & QueryProps
   ) => Promise<PostResult>;
+  postTagChanges: (
+    props: {
+      updatedTag: Tag,
+    } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string } & QueryProps) => Promise<DeleteResult>;
+  deleteTag: (props: { tag: Tag } & QueryProps) => Promise<DeleteResult>;
 };
 
 export type BoundDatabaseAPI = {
@@ -60,6 +67,7 @@ export type BoundDatabaseAPI = {
   fetchCompanyProfile: (props: { company: Company }) => Promise<FetchResult<Profile>>;
   postNewCompany: (props: { company: Company | AsString<Company> }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep }) => Promise<PostResult>;
+  postNewTag: (props: { tag: Tag | AsString<Tag> }) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -74,8 +82,14 @@ export type BoundDatabaseAPI = {
       values: string[]
     }
   ) => Promise<PostResult>;
+  postTagChanges: (
+    props: {
+      updatedTag: Tag
+    }
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] }) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string }) => Promise<DeleteResult>;
+  deleteTag: (props: { tag: Tag }) => Promise<DeleteResult>;
 };
 
 export function bindAPIToWorkspace(
@@ -108,6 +122,12 @@ export function bindAPIToWorkspace(
         databaseName: workspaceID
       });
     },
+    postNewTag: (props: { tag: Tag | AsString<Tag> }) => {
+      return api.postNewTag({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
     postCompanyChanges: (
       props: {
         company: Company, 
@@ -132,6 +152,12 @@ export function bindAPIToWorkspace(
         databaseName: workspaceID
       });
     },
+    postTagChanges: (props: { updatedTag: Tag }) => {
+      return api.postTagChanges({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
     deleteCompanies: (props: { companies: Company[] }) => {
       return api.deleteCompanies({
         ...props,
@@ -140,6 +166,12 @@ export function bindAPIToWorkspace(
     },
     deleteFilterationStep: (props: { step_id: string }) => {
       return api.deleteFilterationStep({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    deleteTag: (props: { tag: Tag }) => {
+      return api.deleteTag({
         ...props,
         databaseName: workspaceID
       });

@@ -120,13 +120,12 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
-  const {workspaceConfig} = useContext(WorkspaceContext);
-  const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
+  const {workspaceConfig} = useContext(WorkspaceContext);
   const {
     splitTree, 
     tabSelection, 
-    handleTabSelection, 
+    handleTabSelection,   
     resetTabSelection,
     handleTabOpen,
     handleTabRelocation, 
@@ -140,6 +139,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     contentProvider: pContentProvider,
     onUpdate: pOnUpdate
   });
+
+  const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const handleTabAdd = (targetNode: SplitTreeValue) => {
     const id: string = generateRandomUniqueID("filteration-tab-");
@@ -192,13 +193,15 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
               tab={tab}
             >
               {!tab.tags.includes(TAGS.permanent) && (
-                <span className="tab-remove-icon-container">
+                <span
+                  className="tab-remove-icon-container"
+                  onClick={(e: MouseEvent<HTMLImageElement>) => {
+                    handleTabRemove(e, targetNode, tabs[tabIndex]);
+                  }}
+                >
                   <img
-                    className="tab-remove-icon"
+                    className="size-tiny-icon tab-remove-icon"
                     src={ASSETS.icons.buttons.trashCan.white}
-                    onClick={(e: MouseEvent<HTMLImageElement>) => {
-                      handleTabRemove(e, targetNode, tabs[tabIndex]);
-                    }}
                   />
                 </span>
               )}

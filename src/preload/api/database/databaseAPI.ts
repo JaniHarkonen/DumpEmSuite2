@@ -254,6 +254,35 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  postNewTag: ({
+    databaseName,
+    tag
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("tag"),
+            col<Tag>("tag_hex"),
+            col<Tag>("tag_label")
+          ) + values(
+            value(val(), val())
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [tag.tag_hex, tag.tag_label]
+        );
+      }
+    );
+  },
   postCompanyChanges: ({
     databaseName,
     company,
@@ -316,6 +345,31 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  postTagChanges: ({
+    databaseName,
+    updatedTag
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("tag")) + 
+          SET(equals(col<Tag>("tag_hex"), val()), equals(col<Tag>("tag_label"), val())) + 
+          WHERE(equals(col<Tag>("tag_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [updatedTag.tag_hex, updatedTag.tag_label, updatedTag.tag_id]
+        )
+      }
+    );
+  },
   deleteCompanies: ({
     databaseName, 
     companies
@@ -368,6 +422,32 @@ export const databaseAPI: DatabaseAPI = {
             }
           }, [step_id]
         );
+      }
+    )
+  },
+  deleteTag: ({
+    databaseName,
+    tag
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("tag")) + 
+            WHERE(equals(col<Tag>("tag_id"), val()))
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [tag.tag_id]
+        )
       }
     )
   }
