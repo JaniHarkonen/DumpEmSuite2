@@ -64,7 +64,6 @@ export default function TagPanel(props: Props): ReactNode {
 
   return (
     <>
-      <h4>Tags</h4>
       <div className="tag-panel-tag-container">
         {tags.map((tag: Tag, index: number) => {
           return (

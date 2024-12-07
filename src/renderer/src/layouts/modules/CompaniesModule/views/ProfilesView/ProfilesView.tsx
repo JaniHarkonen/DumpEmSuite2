@@ -1,4 +1,3 @@
-import ModuleView from "@renderer/components/ModuleView/ModuleView";
 import { SceneContext } from "@renderer/context/SceneContext";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
@@ -9,9 +8,10 @@ import { ProfileContext } from "@renderer/context/ProfileContext";
 import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import CompanyProfilesList from "@renderer/components/CompanyList/CompanyProfilesList/CompanyProfilesList";
+import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 
 
-export default function ProfilesTab() {
+export default function ProfilesView() {
   const {handleSplitTreeUpdate} = useSceneConfig();
   const {sceneConfig} = useContext(SceneContext);
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;

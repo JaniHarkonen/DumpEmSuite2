@@ -4,8 +4,8 @@ import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { useContext } from "react";
-import ModuleView from "@renderer/components/ModuleView/ModuleView";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
+import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 
 
 export default function FilterationView() {

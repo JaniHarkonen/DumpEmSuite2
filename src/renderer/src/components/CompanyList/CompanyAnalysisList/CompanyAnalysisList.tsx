@@ -5,6 +5,7 @@ import CompanyList, { OnCompanyListingSelect, SelectCompanyListingProps } from "
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import { TableListColumn } from "@renderer/components/TableList/TableList";
 import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
+import FilterationControls from "@renderer/components/FilterationControls/FilterationControls";
 
 
 const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -21,6 +22,7 @@ export default function CompanyAnalysisList(props: SelectCompanyListingProps): R
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
+      <FilterationControls />
       <TagPanel />
       <CompanyList
         columns={COLUMNS}
