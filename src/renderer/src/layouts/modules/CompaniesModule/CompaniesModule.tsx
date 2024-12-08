@@ -1,4 +1,3 @@
-
 import { SceneContext } from "@renderer/context/SceneContext";
 import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { SplitTreeBlueprint } from "@renderer/model/splits";

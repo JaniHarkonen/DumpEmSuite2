@@ -31,6 +31,7 @@ export type DatabaseAPI = {
   fetchCompanyProfile: (
     props: { company: Company } & QueryProps
   ) => Promise<FetchResult<Profile>>;
+  fetchFilterationStepStocks: (props: { filterationStepID: string } & QueryProps) => Promise<FetchResult<Company & Currency & Tag>>;
   postNewCompany: (props: { company: Company | AsString<Company> } & QueryProps) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep } & QueryProps) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag> } & QueryProps) => Promise<PostResult>;
@@ -65,6 +66,7 @@ export type BoundDatabaseAPI = {
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: () => Promise<FetchResult<Tag>>;
   fetchCompanyProfile: (props: { company: Company }) => Promise<FetchResult<Profile>>;
+  fetchFilterationStepStocks: (props: { filterationStepID: string }) => Promise<FetchResult<Company & Currency & Tag>>;
   postNewCompany: (props: { company: Company | AsString<Company> }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep }) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag> }) => Promise<PostResult>;
@@ -106,10 +108,18 @@ export function bindAPIToWorkspace(
     fetchScraperInfo: () => api.fetchScraperInfo({ databaseName: workspaceID }),
     fetchAllCompanies: () => api.fetchAllCompanies({ databaseName: workspaceID }),
     fetchAllTags: () => api.fetchAllTags({ databaseName: workspaceID }),
-    fetchCompanyProfile: (props: { company: Company }) => api.fetchCompanyProfile({
-      ...props,
-      databaseName: workspaceID
-    }),
+    fetchCompanyProfile: (props: { company: Company }) => {
+      return api.fetchCompanyProfile({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    fetchFilterationStepStocks: (props: { filterationStepID: string }) => {
+      return api.fetchFilterationStepStocks({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
     postNewCompany: (props: { company: Company | AsString<Company> }) => {
       return api.postNewCompany({
         ...props,

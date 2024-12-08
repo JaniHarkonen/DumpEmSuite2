@@ -3,45 +3,32 @@ import { BoundDatabaseAPI, FetchResult } from "src/shared/database.type";
 import { Company, Currency, Tag } from "src/shared/schemaConfig";
 import useDatabase from "./useDatabase";
 
-
-export type CompanyWithCurrency = Company & Currency;
-
-export type FilterationStepStock = CompanyWithCurrency & Tag;
+export type FilterationStepStock = Company & Currency & Tag;
 
 export type Returns = {
-  companies: CompanyWithCurrency[];
-  fetchAllCompanies: () => void;
+  stocks: FilterationStepStock[];
   fetchFilterationStepCompanies: (filterationStepID: string) => void;
   databaseAPI: BoundDatabaseAPI;
 };
 
 
-export default function useWorkspaceCompanies(): Returns {
-  const [companies, setCompanies] = useState<(CompanyWithCurrency)[]>([]);
+export default function useFilterationStepStocks(): Returns {
+  const [stocks, setStocks] = useState<FilterationStepStock[]>([]);
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
-
-  const fetchAllCompanies = () => {
-    databaseAPI.fetchAllCompanies()
-    .then((result: FetchResult<CompanyWithCurrency>) => {
-      if( result.wasSuccessful ) {
-        setCompanies(result.rows);
-      }
-    });
-  };
 
   const fetchFilterationStepCompanies = (filterationStepID: string) => {
     databaseAPI.fetchFilterationStepStocks({ filterationStepID })
     .then((result: FetchResult<FilterationStepStock>) => {
       if( result.wasSuccessful ) {
-        setCompanies(result.rows);
+        console.log(result)
+        setStocks(result.rows);
       }
     })
   };
 
-  
+
   return {
-    companies,
-    fetchAllCompanies,
+    stocks,
     fetchFilterationStepCompanies,
     databaseAPI
   };

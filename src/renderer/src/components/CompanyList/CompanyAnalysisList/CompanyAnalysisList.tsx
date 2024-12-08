@@ -1,11 +1,13 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import CompanyList, { OnCompanyListingSelect, SelectCompanyListingProps } from "../CompanyList";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import { TableListColumn } from "@renderer/components/TableList/TableList";
 import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 import FilterationControls from "@renderer/components/FilterationControls/FilterationControls";
+import { Currency } from "src/shared/schemaConfig";
+import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 
 
 const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -16,15 +18,27 @@ const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { accessor: "volume_quantity", caption: "Volume quantity" }
 ];
 
-export default function CompanyAnalysisList(props: SelectCompanyListingProps): ReactNode {
-  const pOnCompanySelect: OnCompanyListingSelect | undefined = props.onCompanySelect;
+type Props = {
+  filterationStepID: string;
+} & SelectCompanyListingProps<Currency>;
+
+export default function CompanyAnalysisList(props: Props): ReactNode {
+  const pFilterationStepID: string = props.filterationStepID;
+  const pOnCompanySelect: OnCompanyListingSelect<Currency> | undefined = props.onCompanySelect;
+
+  const {stocks, fetchFilterationStepCompanies} = useFilterationStepStocks();
   
+  useEffect(() => {
+    fetchFilterationStepCompanies(pFilterationStepID);
+  }, []);
+
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
       <FilterationControls />
       <TagPanel />
-      <CompanyList
+      <CompanyList<Currency>
+        companies={stocks}
         columns={COLUMNS}
         onCompanySelect={pOnCompanySelect}
       />

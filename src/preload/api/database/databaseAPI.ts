@@ -1,8 +1,8 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, FilterationStep, FKCompany, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
+import { Company, Currency, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { AND, col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -178,6 +178,70 @@ export const databaseAPI: DatabaseAPI = {
         );
       }
     );
+  },
+  fetchFilterationStepStocks: ({
+    databaseName,
+    filterationStepID
+  }) => {
+    return new Promise<FetchResult<Company & Currency & Tag>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<Company>("company_id", "c"), 
+            col<Company>("company_name", "c"), 
+            col<Company>("stock_ticker", "c"), 
+            col<Company>("stock_price", "c"),
+            col<Company>("volume_price", "c"),
+            col<Company>("volume_quantity", "c"),
+            col<Company>("exchange", "c"),
+            col<Company>("chart_url", "c"),
+            col<Company>("updated", "c"),
+            col<Currency>("currency_id", "cx"),
+            col<Tag>("tag_hex", "t"),
+            col<Tag>("tag_label", "t")
+          ) + FROM(
+            table("company", "c"),
+            table("currency", "cx"),
+            table("tag", "t"),
+            table("filteration", "f")
+          ) + WHERE(
+            AND(
+              AND(
+                AND(
+                  equals(
+                    col<FKFilteration>("fk_filteration_company_id", "f"), 
+                    col<Company>("company_id", "c")
+                  ),
+                  equals(
+                    col<FKCompany>("fk_company_currency_id", "c"), 
+                    col<Currency>("currency_id", "cx")
+                  )
+                ),
+                equals(
+                  col<FKFilteration>("fk_filteration_tag_id", "f"), 
+                  col<Tag>("tag_id", "t")
+                )
+              ),
+              equals(col<FKFilteration>("fk_filteration_step_id"), val())
+            )
+          )
+        );
+
+        databaseManager.fetch<Company & Currency & Tag>(
+          databaseName, preparedString,
+          (err: Error | null, rows: (Company & Currency & Tag)[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              });
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID]
+        );
+      }
+    )
   },
   postNewCompany: ({
     databaseName, 

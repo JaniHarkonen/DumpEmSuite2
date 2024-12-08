@@ -59,7 +59,7 @@ export type Filteration = {
 export type FKFilteration = {
   fk_filteration_step_id: string;
   fk_filteration_company_id: string;
-  fk_filteration_code_id: number;
+  fk_filteration_tag_id: number;
 };
 
 export type Fundamental = {
@@ -67,7 +67,7 @@ export type Fundamental = {
 };
 export type FKFundamental = {
   fk_fundamental_company_id: number;
-  fk_fundamental_code_id: number;
+  fk_fundamental_tag_id: number;
 };
 
 export type MacroSector = {

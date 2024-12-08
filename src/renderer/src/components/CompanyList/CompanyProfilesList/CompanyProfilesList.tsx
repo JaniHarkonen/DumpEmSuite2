@@ -1,9 +1,10 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import CompanyList, { OnCompanyListingSelect, SelectCompanyListingProps } from "../CompanyList";
-import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
+import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 import { TableListColumn } from "@renderer/components/TableList/TableList";
+import { Currency } from "src/shared/schemaConfig";
 
 
 const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -12,13 +13,19 @@ const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { accessor: "updated", caption: "Updated" }
 ];
 
-export default function CompanyProfilesList(props: SelectCompanyListingProps): ReactNode {
-  const pOnCompanySelect: OnCompanyListingSelect | undefined = props.onCompanySelect;
+export default function CompanyProfilesList(props: SelectCompanyListingProps<Currency>): ReactNode {
+  const pOnCompanySelect: OnCompanyListingSelect<Currency> | undefined = props.onCompanySelect;
+  const {companies, fetchAllCompanies} = useWorkspaceComapanies();
   
+  useEffect(() => {
+    fetchAllCompanies();
+  }, []);
+
   return (
     <PageContainer>
       <PageHeader>Profiles</PageHeader>
-      <CompanyList
+      <CompanyList<Currency>
+        companies={companies}
         columns={COLUMNS}
         onCompanySelect={pOnCompanySelect}
       />

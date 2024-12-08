@@ -1,34 +1,34 @@
-import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 import TableList, { TableListColumn, TableListDataCell } from "../TableList/TableList";
 import { ReactNode } from "react";
+import { Company } from "src/shared/schemaConfig";
 
 
-export type OnCompanyListingSelect = (company: CompanyWithCurrency) => void;
+export type OnCompanyListingSelect<T> = (company: Company & T) => void;
 
-export type SelectCompanyListingProps = {
-  onCompanySelect?: OnCompanyListingSelect;
+export type SelectCompanyListingProps<T> = {
+  onCompanySelect?: OnCompanyListingSelect<T>;
 };
 
-type Props = {
-  columns: TableListColumn<CompanyWithCurrency>[];
-} & SelectCompanyListingProps;
+type Props<T> = {
+  companies: (Company & T)[];
+  columns: TableListColumn<Company & T>[];
+} & SelectCompanyListingProps<T>;
 
-export default function CompanyList(props: Props): ReactNode {
-  const pColumns: TableListColumn<CompanyWithCurrency>[] = props.columns;
-  const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
+export default function CompanyList<T>(props: Props<T>): ReactNode {
+  const pCompanies: (Company & T)[] = props.companies;
+  const pColumns: TableListColumn<Company & T>[] = props.columns;
+  const pOnCompanySelect: OnCompanyListingSelect<T> = props.onCompanySelect || function(){ };
 
-  const {companies} = useWorkspaceComapanies();
-
-  const handleCompanySelection = (dataCell: TableListDataCell<CompanyWithCurrency>) => {
+  const handleCompanySelection = (dataCell: TableListDataCell<Company & T>) => {
     pOnCompanySelect(dataCell.data);
   };
 
 
   return (
-    <TableList<CompanyWithCurrency>
+    <TableList<Company & T>
       onItemFocus={handleCompanySelection}
       columns={pColumns}
-      cells={companies.map((company: CompanyWithCurrency) => {
+      cells={pCompanies.map((company: Company & T) => {
         return {
           id: company.company_id,
           data: company

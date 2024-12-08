@@ -15,6 +15,7 @@
 
 ### databaseAPI.ts
 - DatabaseManager instance should be provided to the API at app start, rather than be created in the API ts-file
+- split function declarations into separate files
 
 ### useFlexibleSplits.ts
 - only update the divider settings inside the config file when the divider is released, currently divider saving is disabled but would be saved each time the divider moves

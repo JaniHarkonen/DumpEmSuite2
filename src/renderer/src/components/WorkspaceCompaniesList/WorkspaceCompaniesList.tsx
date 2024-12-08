@@ -1,10 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList/TableList";
 import { Company } from "src/shared/schemaConfig";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
 import useSelection, { SelectionID, SelectionItem } from "@renderer/hook/useSelection";
-import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
+import useWorkspaceCompanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 import { AsString } from "src/shared/utils";
+import ifQuerySuccessful from "@renderer/utils/ifQuerySuccessful";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -28,9 +29,13 @@ export default function WorkspaceCompaniesList(): ReactNode {
 
   const {
     companies,
-    fetchIfSuccessful,
+    fetchAllCompanies,
     databaseAPI
-  } = useWorkspaceComapanies();
+  } = useWorkspaceCompanies();
+
+  useEffect(() => {
+    fetchAllCompanies();
+  }, []);
 
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
     companies.map((stock: CompanyWithCurrency) => {
@@ -41,13 +46,13 @@ export default function WorkspaceCompaniesList(): ReactNode {
     });
 
   const handleAddCompany = (company: AsString<Company>) => {
-    fetchIfSuccessful(databaseAPI.postNewCompany({ company }));
+    ifQuerySuccessful(databaseAPI.postNewCompany({ company }), fetchAllCompanies);
   };
 
   const handleCompanyRemove = () => {
-    fetchIfSuccessful(databaseAPI.deleteCompanies({
+    ifQuerySuccessful(databaseAPI.deleteCompanies({
       companies: getSelectedIDs().map((id: SelectionID) => selectionSet[id].item.data)
-    }));
+    }), fetchAllCompanies);
   };
 
   const handleCompanySelection = (
@@ -60,11 +65,11 @@ export default function WorkspaceCompaniesList(): ReactNode {
     dataCell: TableListDataCell<CompanyWithCurrency>, 
     changes: EditChanges<CompanyWithCurrency>
   ) => {
-    fetchIfSuccessful(databaseAPI.postCompanyChanges({
+    ifQuerySuccessful(databaseAPI.postCompanyChanges({
       company: dataCell.data, 
       attributes: changes.columns as (keyof Company)[], 
       values: changes.values
-    }));
+    }), fetchAllCompanies);
   };
 
 

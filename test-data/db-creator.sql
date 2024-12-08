@@ -165,6 +165,8 @@ VALUES
 ("view-technical", "Technical"),
 ("view-fundamental", "Fundamental");
 
-/*INSERT INTO filteration (notes, fk_filteration_step_id, fk_filteration_company_id, fk_filteration_tag_id)
+/*
+INSERT INTO filteration (notes, fk_filteration_step_id, fk_filteration_company_id, fk_filteration_tag_id)
 VALUES
-("These are some test notes for the great company of Pizza place", "view-volume", 1, 2);*/
+("These are some test notes for the great company of Pizza place", "view-volume", 1, 2);
+*/
