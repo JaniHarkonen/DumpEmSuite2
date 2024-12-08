@@ -1,33 +1,48 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
 import { ReactNode, useEffect } from "react";
-import CompanyList, { OnCompanyListingSelect, SelectCompanyListingProps } from "../CompanyList";
-import useWorkspaceComapanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
-import { TableListColumn } from "@renderer/components/TableList/TableList";
-import { Currency } from "src/shared/schemaConfig";
+import useWorkspaceComapanies from "@renderer/hook/useWorkspaceCompanies";
+import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
+import { Company } from "src/shared/schemaConfig";
 
 
-const COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
+const COLUMNS: TableListColumn<Company>[] = [
   { accessor: "company_name", caption: "Name" },
   { accessor: "stock_ticker", caption: "Ticker" },
   { accessor: "updated", caption: "Updated" }
 ];
 
-export default function CompanyProfilesList(props: SelectCompanyListingProps<Currency>): ReactNode {
-  const pOnCompanySelect: OnCompanyListingSelect<Currency> | undefined = props.onCompanySelect;
+type OnCompanyListingSelect = (company: Company) => void;
+
+type Props = {
+  onCompanySelect?: OnCompanyListingSelect;
+};
+
+export default function CompanyProfilesList(props: Props): ReactNode {
+  const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
   const {companies, fetchAllCompanies} = useWorkspaceComapanies();
   
   useEffect(() => {
     fetchAllCompanies();
   }, []);
 
+  const handleCompanySelection = (dataCell: TableListDataCell<Company>) => {
+    pOnCompanySelect(dataCell.data);
+  };
+
+
   return (
     <PageContainer>
       <PageHeader>Profiles</PageHeader>
-      <CompanyList<Currency>
-        companies={companies}
+      <TableList<Company>
+        onItemFocus={handleCompanySelection}
         columns={COLUMNS}
-        onCompanySelect={pOnCompanySelect}
+        cells={companies.map((company: Company) => {
+          return {
+            id: company.company_id,
+            data: company
+          };
+        })}
       />
     </PageContainer>
   );
