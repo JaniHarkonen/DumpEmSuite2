@@ -3,7 +3,6 @@ import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from 
 import { Company, Currency, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { AND, col, DELETE, equals, FROM, IN, insertInto, NOT, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
-import { ipcRenderer } from "electron";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -385,8 +384,6 @@ export const databaseAPI: DatabaseAPI = {
           )
         );
 
-        ipcRenderer.send("debug", preparedString)
-
         databaseManager.post(
           databaseName, preparedString,
           (runResult: RunResult | null, err: Error | null) => {
@@ -564,6 +561,41 @@ export const databaseAPI: DatabaseAPI = {
               reject(createError(err));
             }
           }, [tag.tag_id]
+        )
+      }
+    )
+  },
+  delistStock: ({
+    databaseName,
+    filterationStepID,
+    companyID
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("filteration")) + 
+            WHERE(
+              equals(col<FKFilteration>("fk_filteration_step_id"), val()) + 
+              AND(
+                IN(
+                  col<FKFilteration>("fk_filteration_company_id"),
+                  ...companyID.map(() => val())
+                )
+              )
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID, ...companyID]
         )
       }
     )

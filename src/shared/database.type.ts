@@ -72,6 +72,7 @@ export type DatabaseAPI = {
   deleteCompanies: (props: { companies: Company[] } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string } & QueryProps) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag } & QueryProps) => Promise<DeleteResult>;
+  delistStock: (props: { filterationStepID: string, companyID: string[] } & QueryProps) => Promise<DeleteResult>;
 };
 
 export type BoundDatabaseAPI = {
@@ -112,6 +113,7 @@ export type BoundDatabaseAPI = {
   deleteCompanies: (props: { companies: Company[] }) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string }) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag }) => Promise<DeleteResult>;
+  delistStock: (props: { filterationStepID: string, companyID: string[] }) => Promise<DeleteResult>;
 };
 
 export function bindAPIToWorkspace(
@@ -208,6 +210,12 @@ export function bindAPIToWorkspace(
     },
     deleteTag: (props: { tag: Tag }) => {
       return api.deleteTag({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    delistStock: (props: { filterationStepID: string, companyID: string[] }) => {
+      return api.delistStock({
         ...props,
         databaseName: workspaceID
       });

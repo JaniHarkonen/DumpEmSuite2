@@ -6,6 +6,11 @@ import EditableText from "../editable/EditableText";
 export type TableListColumn<T> = {
   accessor: keyof T;
   caption: string;
+  ElementConstructor?: (
+    dataCell: TableListDataCell<T>, 
+    column: TableListColumn<T>, 
+    index: number
+  ) => ReactNode;
 };
 
 export type TableListDataCell<T> = SelectionItem<T>;
@@ -50,6 +55,11 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
+      // Use the element constructor, if one has been provided
+    if( column.ElementConstructor ) {
+      return column.ElementConstructor(dataCell, column, index);
+    }
+    
       // Apply input fields, if editing
     const data = dataCell.data[column.accessor];
     let dataElement: ReactNode = (
