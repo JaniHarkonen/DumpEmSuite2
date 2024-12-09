@@ -27,8 +27,16 @@ export function table(tableString: string, tableAlias?: string): string {
   return tableString + (tableAlias ? " " + tableAlias : "");
 }
 
+function select(qualifierString: "" | "DISTINCT", ...column: string[]): string {
+  return "SELECT " + qualifierString + " " + compound(...column);
+}
+
 export function SELECT(...column: string[]): string {
-  return "SELECT " + compound(...column);
+  return select("" , ...column);
+}
+
+export function selectDistinct(...column: string[]): string {
+  return select("DISTINCT" , ...column);
 }
 
 export function FROM(...table: string[]): string {
@@ -51,8 +59,12 @@ export function equals(columnStringA: string, columnStringB: string): string {
   return columnStringA + "=" + columnStringB;
 }
 
-export function AND(conditionStringA: string, conditionStringB: string): string {
-  return " " + conditionStringA + " AND " + conditionStringB;
+export function AND(operandString: string): string {
+  return " AND " + operandString;
+}
+
+export function NOT(): string {
+  return " NOT ";
 }
 
 export function UPDATE(tableString: string):string {

@@ -2,7 +2,8 @@ import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
 import { Company, Currency, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { AND, col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { AND, col, DELETE, equals, FROM, IN, insertInto, NOT, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { ipcRenderer } from "electron";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -98,7 +99,10 @@ export const databaseAPI: DatabaseAPI = {
           ) + FROM(
             table("company", "c"), table("currency", "cx")
           ) + WHERE(
-            equals(col<FKCompany>("fk_company_currency_id", "c"), col<Currency>("currency_id", "cx"))
+            equals(
+              col<FKCompany>("fk_company_currency_id", "c"), 
+              col<Currency>("currency_id", "cx")
+            )
           )
         );
 
@@ -205,23 +209,20 @@ export const databaseAPI: DatabaseAPI = {
             table("tag", "t"),
             table("filteration", "f")
           ) + WHERE(
-            AND(
-              AND(
-                AND(
-                  equals(
-                    col<FKFilteration>("fk_filteration_company_id", "f"), 
-                    col<Company>("company_id", "c")
-                  ),
-                  equals(
-                    col<FKCompany>("fk_company_currency_id", "c"), 
-                    col<Currency>("currency_id", "cx")
-                  )
-                ),
-                equals(
-                  col<FKFilteration>("fk_filteration_tag_id", "f"), 
-                  col<Tag>("tag_id", "t")
-                )
-              ),
+            equals(
+              col<FKFilteration>("fk_filteration_company_id", "f"), 
+              col<Company>("company_id", "c")
+            ) + AND(
+              equals(
+                col<FKCompany>("fk_company_currency_id", "c"), 
+                col<Currency>("currency_id", "cx")
+              )
+            ) + AND(
+              equals(
+                col<FKFilteration>("fk_filteration_tag_id", "f"), 
+                col<Tag>("tag_id", "t")
+              )
+            ) + AND(
               equals(col<FKFilteration>("fk_filteration_step_id"), val())
             )
           )
@@ -241,7 +242,7 @@ export const databaseAPI: DatabaseAPI = {
           }, [filterationStepID]
         );
       }
-    )
+    );
   },
   postNewCompany: ({
     databaseName, 
@@ -343,6 +344,58 @@ export const databaseAPI: DatabaseAPI = {
               reject(createError(err));
             }
           }, [tag.tag_hex, tag.tag_label]
+        );
+      }
+    );
+  },
+  postAllStocksFromCompanyListings: ({
+    databaseName,
+    filterationStepID
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("filteration"),
+            col<FKFilteration>("fk_filteration_company_id"),
+            col<FKFilteration>("fk_filteration_step_id"),
+            col<FKFilteration>("fk_filteration_tag_id")
+          ) + SELECT(
+            col<Company>("company_id", "c"),
+            col<FilterationStep>("step_id", "fs"),
+            col<Tag>("tag_id", "t")
+          ) + FROM(
+            table("company", "c"),
+            table("filteration_step", "fs"),
+            table("tag", "t"),
+          ) + WHERE(
+            equals(col<Tag>("tag_id", "t"), "1") + 
+            AND(
+              equals(col<FilterationStep>("step_id", "fs"), val())
+            ) + AND(
+              NOT() + IN(
+                col<Company>("company_id", "c"),
+                SELECT(col<FKFilteration>("fk_filteration_company_id", "f")) + 
+                FROM(table("filteration", "f")) + 
+                WHERE(
+                  equals(col<FKFilteration>("fk_filteration_step_id", "f"), val())
+                )
+              )
+            )
+          )
+        );
+
+        ipcRenderer.send("debug", preparedString)
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID, filterationStepID]
         );
       }
     );

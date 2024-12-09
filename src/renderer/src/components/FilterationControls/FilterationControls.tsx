@@ -1,14 +1,21 @@
 import { ReactNode } from "react";
 
-export default function FilterationControls(): ReactNode {
+
+type Props = {
+  onBringAll?: () => void;
+};
+
+export default function FilterationControls(props: Props): ReactNode {
+  const pOnBringAll: () => void = props.onBringAll || function(){ };
+
 
   return(
     <div>
-      <button>Fetch all companies</button>
+      <button onClick={pOnBringAll}>Bring all companies</button>
       <button>De-list</button>
       <button>Select all</button>
       <button>De-select all</button>
       <button>Submit</button>
     </div>
-  )
+  );
 }

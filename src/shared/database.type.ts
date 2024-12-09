@@ -31,10 +31,25 @@ export type DatabaseAPI = {
   fetchCompanyProfile: (
     props: { company: Company } & QueryProps
   ) => Promise<FetchResult<Profile>>;
-  fetchFilterationStepStocks: (props: { filterationStepID: string } & QueryProps) => Promise<FetchResult<Company & Currency & Tag>>;
-  postNewCompany: (props: { company: Company | AsString<Company> } & QueryProps) => Promise<PostResult>;
-  postNewFilterationStep: (props: { filterationStep: FilterationStep } & QueryProps) => Promise<PostResult>;
+  fetchFilterationStepStocks: (
+    props: {
+      filterationStepID: string
+    } & QueryProps
+  ) => Promise<FetchResult<Company & Currency & Tag>>;
+  postNewCompany: (
+    props: {
+      company: Company | AsString<Company>
+    } & QueryProps
+  ) => Promise<PostResult>;
+  postNewFilterationStep: (
+    props: {
+      filterationStep: FilterationStep
+    } & QueryProps
+  ) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag> } & QueryProps) => Promise<PostResult>;
+  postAllStocksFromCompanyListings: (
+    props: { filterationStepID: string } & QueryProps
+  ) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -66,10 +81,15 @@ export type BoundDatabaseAPI = {
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: () => Promise<FetchResult<Tag>>;
   fetchCompanyProfile: (props: { company: Company }) => Promise<FetchResult<Profile>>;
-  fetchFilterationStepStocks: (props: { filterationStepID: string }) => Promise<FetchResult<Company & Currency & Tag>>;
+  fetchFilterationStepStocks: (
+    props: {
+      filterationStepID: string
+    }
+  ) => Promise<FetchResult<Company & Currency & Tag>>;
   postNewCompany: (props: { company: Company | AsString<Company> }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep }) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag> }) => Promise<PostResult>;
+  postAllStocksFromCompanyListings: (props: { filterationStepID: string }) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company, 
@@ -134,6 +154,12 @@ export function bindAPIToWorkspace(
     },
     postNewTag: (props: { tag: Tag | AsString<Tag> }) => {
       return api.postNewTag({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postAllStocksFromCompanyListings: (props: { filterationStepID: string }) => {
+      return api.postAllStocksFromCompanyListings({
         ...props,
         databaseName: workspaceID
       });

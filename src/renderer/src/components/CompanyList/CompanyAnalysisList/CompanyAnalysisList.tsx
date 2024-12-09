@@ -27,10 +27,16 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   const pFilterationStepID: string = props.filterationStepID;
   const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
 
-  const {stocks, fetchFilterationStepCompanies} = useFilterationStepStocks();
+  const {
+    stocks, 
+    fetchFilterationStepCompanies, 
+    bringAllStocksToFilterationStep
+  } = useFilterationStepStocks({
+    filterationStepID: pFilterationStepID
+  });
   
   useEffect(() => {
-    fetchFilterationStepCompanies(pFilterationStepID);
+    fetchFilterationStepCompanies();
   }, []);
 
   const handleCompanySelection = (dataCell: TableListDataCell<CompanyWithCurrency>) => {
@@ -41,7 +47,9 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
-      <FilterationControls />
+      <FilterationControls
+        onBringAll={bringAllStocksToFilterationStep}
+      />
       <TagPanel />
       <TableList<CompanyWithCurrency>
         onItemFocus={handleCompanySelection}
