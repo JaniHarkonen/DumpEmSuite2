@@ -8,6 +8,7 @@ import FilterationControls from "@renderer/components/FilterationControls/Filter
 import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 import useSelection, { SelectionID } from "@renderer/hook/useSelection";
 import { Tag } from "src/shared/schemaConfig";
+import useFiltertionTags from "@renderer/hook/useFiltertionTags";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -52,9 +53,12 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     getSelectedIDs,
     resetSelection
   } = useSelection<FilterationStepStock>({});
+
+  const {tags, fetchAllTags} = useFiltertionTags();
   
   useEffect(() => {
     fetchFilterationStepStocks();
+    fetchAllTags();
   }, []);
 
   const handleStockFocus = (dataCell: TableListDataCell<FilterationStepStock>) => {
@@ -113,10 +117,16 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
               }}
               defaultValue={dataCell.data.tag_id}
             >
-              <option value={"1"}>None</option>
-              <option value={"2"}>Accepted</option>
-              <option value={"3"}>Rejected</option>
-              <option value={"6"}>Watch-list</option>
+              {tags.map((tag: Tag) => {
+                return (
+                  <option
+                    key={"datacell-tag-selection-" + dataCell.id}
+                    value={tag.tag_id}
+                    >
+                      {tag.tag_label}
+                    </option>
+                )
+              })}
             </select>
           </>
         );

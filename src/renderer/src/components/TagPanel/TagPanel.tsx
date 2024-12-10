@@ -1,11 +1,10 @@
 import "./TagPanel.css";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import CompanyTag, { OnTagSelect } from "./CompanyTag/CompanyTag";
-import { BoundDatabaseAPI, DeleteResult, FetchResult, PostResult } from "src/shared/database.type";
-import useDatabase from "@renderer/hook/useDatabase";
 import { Tag } from "src/shared/schemaConfig";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
+import useFiltertionTags from "@renderer/hook/useFiltertionTags";
 
 
 export type CompanyTagEditChanges = {
@@ -23,47 +22,23 @@ export default function TagPanel(props: Props): ReactNode {
   const pAllowEdit: boolean = props.allowEdit ?? true;
   const pOnTagSelect: OnTagSelect = props.onTagSelect || function(){ };
 
-  const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
-  const [tags, setTags] = useState<Tag[]>([]);
+  const {
+    tags,
+    fetchAllTags,
+    addTag,
+    updateTag,
+    removeTag
+  } = useFiltertionTags();
 
   useEffect(() => fetchAllTags(), []);
 
-  const fetchAllTags = () => {
-    databaseAPI.fetchAllTags().then((result: FetchResult<Tag>) => setTags(result.rows));
-  };
-
-  const updateTag = (changes: CompanyTagEditChanges) => {
-    databaseAPI.postTagChanges({
-      updatedTag: changes.updatedTag,
-    }).then((result: PostResult) => {
-      if( result.wasSuccessful ) {
-        fetchAllTags();
-      }
+  const handleNewTag = () => {
+    addTag({
+      tag_id: "",
+      tag_hex: "#000000",
+      tag_label: generateRandomUniqueID("Tag ")
     });
-  };
-
-  const removeTag = (tag: Tag) => {
-    databaseAPI.deleteTag({ tag })
-    .then((result: DeleteResult) => {
-      if( result.wasSuccessful ) {
-        fetchAllTags();
-      }
-    });
-  };
-
-  const handleTagAdd = () => {
-    databaseAPI.postNewTag({
-      tag: {
-        tag_id: "",
-        tag_hex: "#000000",
-        tag_label: generateRandomUniqueID("Tag ")
-      }
-    }).then((result: PostResult) => {
-      if( result.wasSuccessful ) {
-        fetchAllTags();
-      }
-    });
-  };
+  }
 
 
   return (
@@ -85,7 +60,7 @@ export default function TagPanel(props: Props): ReactNode {
             </div>
           );
         })}
-        <button onClick={handleTagAdd}>{"+"}</button>
+        <button onClick={handleNewTag}>{"+"}</button>
       </div>
     </>
   );
