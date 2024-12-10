@@ -6,6 +6,8 @@ import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useState } from "rea
 import { Tag } from "src/shared/schemaConfig";
 
 
+export type OnTagSelect = (tag: Tag) => void;
+
 type OnCompanyTagUpdate = (updatedTag: Tag) => void;
 type OnCompanyTagRemove = (tag: Tag) => void;
 
@@ -13,6 +15,7 @@ type Props = {
   tag: Tag;
   onUpdate?: OnCompanyTagUpdate;
   onRemove?: OnCompanyTagRemove;
+  onSelect?: OnTagSelect;
   allowEdit?: boolean;
 };
 
@@ -20,6 +23,7 @@ export default function CompanyTag(props: Props): ReactNode {
   const pTag: Tag = props.tag;
   const pOnUpdate: OnCompanyTagUpdate = props.onUpdate || function(){ };
   const pOnRemove: OnCompanyTagRemove = props.onRemove || function(){ };
+  const pOnSelect: OnTagSelect = props.onSelect || function(){ };
   const pAllowEdit: boolean = props.allowEdit ?? false;
 
   const [isEditing, handleStartEdit, handleFinalize, handleEnter] = useEditable<Tag>({ onFinalize: pOnUpdate });
@@ -52,6 +56,7 @@ export default function CompanyTag(props: Props): ReactNode {
       className="d-flex d-align-items-center"
       onDoubleClick={() => pAllowEdit && handleStartEdit()}
       onBlur={handleBlur}
+      onClick={() => pOnSelect(tag)}
     >
       {isEditing ? (
         <>

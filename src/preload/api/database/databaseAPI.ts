@@ -200,6 +200,7 @@ export const databaseAPI: DatabaseAPI = {
             col<Company>("chart_url", "c"),
             col<Company>("updated", "c"),
             col<Currency>("currency_id", "cx"),
+            col<Tag>("tag_id", "t"),
             col<Tag>("tag_hex", "t"),
             col<Tag>("tag_label", "t")
           ) + FROM(

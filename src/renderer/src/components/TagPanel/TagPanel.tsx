@@ -1,7 +1,7 @@
 import "./TagPanel.css";
 
 import { ReactNode, useEffect, useState } from "react";
-import CompanyTag from "./CompanyTag/CompanyTag";
+import CompanyTag, { OnTagSelect } from "./CompanyTag/CompanyTag";
 import { BoundDatabaseAPI, DeleteResult, FetchResult, PostResult } from "src/shared/database.type";
 import useDatabase from "@renderer/hook/useDatabase";
 import { Tag } from "src/shared/schemaConfig";
@@ -16,10 +16,13 @@ export type OnCompanyTagEdit = (changes: CompanyTagEditChanges) => void;
 
 type Props = {
   allowEdit?: boolean;
+  onTagSelect?: OnTagSelect;
 }
 
 export default function TagPanel(props: Props): ReactNode {
   const pAllowEdit: boolean = props.allowEdit ?? true;
+  const pOnTagSelect: OnTagSelect = props.onTagSelect || function(){ };
+
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
   const [tags, setTags] = useState<Tag[]>([]);
 
@@ -62,6 +65,7 @@ export default function TagPanel(props: Props): ReactNode {
     });
   };
 
+
   return (
     <>
       <div className="tag-panel-tag-container">
@@ -75,6 +79,7 @@ export default function TagPanel(props: Props): ReactNode {
                 tag={tag}
                 onUpdate={(updatedTag: Tag) => updateTag({ updatedTag })}
                 onRemove={removeTag}
+                onSelect={pOnTagSelect}
                 allowEdit={pAllowEdit && index !== 0}
               />
             </div>

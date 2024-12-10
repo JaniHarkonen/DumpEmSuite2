@@ -1,12 +1,13 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
 import FilterationControls from "@renderer/components/FilterationControls/FilterationControls";
 import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 import useSelection, { SelectionID } from "@renderer/hook/useSelection";
+import { Tag } from "src/shared/schemaConfig";
 
 
 const COLUMNS: TableListColumn<FilterationStepStock>[] = [
@@ -52,6 +53,8 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   const pFilterationStepID: string = props.filterationStepID;
   const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
 
+  const [tagFilters, setTagFilters] = useState<Tag[]>([]);
+
   const {
     stocks, 
     fetchFilterationStepStocks, 
@@ -67,6 +70,11 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
         id: company.company_id,
         data: company
       };
+    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
+      return (
+        tagFilters.length === 0 || 
+        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
+      );
     });
 
   const {
@@ -84,12 +92,30 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     pOnCompanySelect(dataCell.data);
   };
 
-  const handleStockSelect = (dataCell: TableListDataCell<FilterationStepStock>, isChecked: boolean) => {
+  const handleStockSelect = (
+    dataCell: TableListDataCell<FilterationStepStock>, isChecked: boolean
+  ) => {
     handleSelection(isChecked, ...[dataCell]);
   };
 
   const handleStockDelist = () => {
-    delistStocks(...getSelectedIDs().map((id: SelectionID) => selectionSet[id].item.data.company_id.toString()));
+    delistStocks(...getSelectedIDs().map((id: SelectionID) => {
+      return selectionSet[id].item.data.company_id.toString();
+    }));
+    resetSelection();
+  };
+
+  const handleToggleTag = (tag: Tag) => {
+    const tagIndex: number = 
+      tagFilters.findIndex((filterTag: Tag) => filterTag.tag_id === tag.tag_id);
+    if( tagIndex < 0 ) {
+      setTagFilters(tagFilters.concat(tag));
+    } else {
+      setTagFilters([
+        ...tagFilters.slice(0, tagIndex),
+        ...tagFilters.slice(tagIndex + 1)
+      ]);
+    }
   };
 
 
@@ -102,7 +128,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
         onSelectAll={() => handleSelection(true, ...stockDataCells)}
         onDeselectAll={resetSelection}
       />
-      <TagPanel />
+      <TagPanel onTagSelect={handleToggleTag} />
       <TableList<FilterationStepStock>
         onItemFocus={handleStockFocus}
         columns={COLUMNS}
