@@ -223,7 +223,7 @@ export const databaseAPI: DatabaseAPI = {
                 col<Tag>("tag_id", "t")
               )
             ) + AND(
-              equals(col<FKFilteration>("fk_filteration_step_id"), val())
+              equals(col<FKFilteration>("fk_filteration_step_id", "f"), val())
             )
           )
         );
@@ -484,6 +484,38 @@ export const databaseAPI: DatabaseAPI = {
         )
       }
     );
+  },
+  postFilterationTagChanges: ({ 
+    databaseName,
+    filterationStepID, 
+    companyID, 
+    tagID 
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("filteration")) + 
+          SET(equals(col<FKFilteration>("fk_filteration_tag_id"), val())) + 
+          WHERE(
+            equals(col<FKFilteration>("fk_filteration_step_id"), val()) +
+            AND(
+              equals(col<FKFilteration>("fk_filteration_company_id"), val())
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [tagID, filterationStepID, companyID]
+        )
+      }
+    )
   },
   deleteCompanies: ({
     databaseName, 

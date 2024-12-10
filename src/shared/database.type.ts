@@ -69,6 +69,13 @@ export type DatabaseAPI = {
       updatedTag: Tag,
     } & QueryProps
   ) => Promise<PostResult>;
+  postFilterationTagChanges: (
+    props: { 
+      filterationStepID: string, 
+      companyID: string, 
+      tagID: string 
+    } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string } & QueryProps) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag } & QueryProps) => Promise<DeleteResult>;
@@ -108,6 +115,13 @@ export type BoundDatabaseAPI = {
   postTagChanges: (
     props: {
       updatedTag: Tag
+    }
+  ) => Promise<PostResult>;
+  postFilterationTagChanges: (
+    props: { 
+      filterationStepID: string, 
+      companyID: string, 
+      tagID: string 
     }
   ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[] }) => Promise<DeleteResult>;
@@ -192,6 +206,18 @@ export function bindAPIToWorkspace(
     },
     postTagChanges: (props: { updatedTag: Tag }) => {
       return api.postTagChanges({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postFilterationTagChanges: (
+      props: { 
+        filterationStepID: string, 
+        companyID: string, 
+        tagID: string 
+      }
+    ) => {
+      return api.postFilterationTagChanges({
         ...props,
         databaseName: workspaceID
       });

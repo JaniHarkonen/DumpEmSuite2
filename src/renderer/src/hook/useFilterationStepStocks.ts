@@ -11,6 +11,7 @@ export type Returns = {
   fetchFilterationStepStocks: () => void;
   bringAllStocksToFilterationStep: () => void;
   delistStocks: (...companyID: string[]) => void;
+  postFilterationTagChange: (tagID: string, companyID: string) => void;
   databaseAPI: BoundDatabaseAPI;
 };
 
@@ -52,12 +53,25 @@ export default function useFilterationStepStocks(props: Props): Returns {
     });
   };
 
+  const postFilterationTagChange = (tagID: string, companyID: string) => {
+    databaseAPI.postFilterationTagChanges({
+      filterationStepID: pFilterationStepID,
+      companyID,
+      tagID
+    }).then((result: PostResult) => {
+      if( result.wasSuccessful ) {
+        fetchFilterationStepStocks();
+      }
+    })
+  }
+
 
   return {
     stocks,
     fetchFilterationStepStocks,
     bringAllStocksToFilterationStep,
     delistStocks,
+    postFilterationTagChange,
     databaseAPI
   };
 }

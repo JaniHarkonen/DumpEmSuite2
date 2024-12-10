@@ -6,6 +6,11 @@
 ### AnalysesView.tsx
 - currently a `span`-element is being used as a button, change this when styles are added
 
+### TableList.tsx
+- this component is becoming perhaps too general, also `table` is most likely not the best element for displaying data that may require checkboxes and `select`-elements
+- switch out of using `table`, use flexbox instead
+- look into splitting TableList into multiple components that would then be used to construct the tables whenever needed
+
 ### General
 - make sure that all React-hook calls define a type (useState, useRef, useContext, etc.)
 - some HTML components could be wrapped inside a React-component that then applies the current theme to them (e.g. StyledButton)

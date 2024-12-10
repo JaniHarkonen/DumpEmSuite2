@@ -1,6 +1,6 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, SyntheticEvent, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
@@ -9,38 +9,6 @@ import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 import useSelection, { SelectionID } from "@renderer/hook/useSelection";
 import { Tag } from "src/shared/schemaConfig";
 
-
-const COLUMNS: TableListColumn<FilterationStepStock>[] = [
-  { accessor: "company_name", caption: "Name" },
-  { accessor: "stock_ticker", caption: "Ticker" },
-  { accessor: "stock_price", caption: "Share price" },
-  { accessor: "volume_price", caption: "Volume price" },
-  { accessor: "volume_quantity", caption: "Volume quantity" },
-  { 
-    accessor: "tag_hex", 
-    caption: "Verdict",
-    ElementConstructor: (
-      dataCell: TableListDataCell<FilterationStepStock>, 
-      column: TableListColumn<FilterationStepStock>, 
-      index: number
-    ) => {
-      return (
-        <>
-          <span
-            className="size-tiny-icon mr-norm"
-            style={{ backgroundColor: dataCell.data.tag_hex }}
-          />
-          <select>
-            <option>None</option>
-            <option>Accepted</option>
-            <option>Rejected</option>
-            <option>Watch-list</option>
-          </select>
-        </>
-      );
-    }
-  }
-];
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
 
@@ -59,7 +27,8 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     stocks, 
     fetchFilterationStepStocks, 
     bringAllStocksToFilterationStep,
-    delistStocks
+    delistStocks,
+    postFilterationTagChange
   } = useFilterationStepStocks({
     filterationStepID: pFilterationStepID
   });
@@ -117,6 +86,43 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       ]);
     }
   };
+
+  const COLUMNS: TableListColumn<FilterationStepStock>[] = [
+    { accessor: "company_name", caption: "Name" },
+    { accessor: "stock_ticker", caption: "Ticker" },
+    { accessor: "stock_price", caption: "Share price" },
+    { accessor: "volume_price", caption: "Volume price" },
+    { accessor: "volume_quantity", caption: "Volume quantity" },
+    { 
+      accessor: "tag_hex", 
+      caption: "Verdict",
+      ElementConstructor: (
+        dataCell: TableListDataCell<FilterationStepStock>, 
+        column: TableListColumn<FilterationStepStock>, 
+        index: number
+      ) => {
+        return (
+          <>
+            <span
+              className="size-tiny-icon mr-norm"
+              style={{ backgroundColor: dataCell.data.tag_hex }}
+            />
+            <select
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                postFilterationTagChange(e.target.value, dataCell.data.company_id.toString());
+              }}
+              defaultValue={dataCell.data.tag_id}
+            >
+              <option value={"1"}>None</option>
+              <option value={"2"}>Accepted</option>
+              <option value={"3"}>Rejected</option>
+              <option value={"6"}>Watch-list</option>
+            </select>
+          </>
+        );
+      }
+    }
+  ];
 
 
   return (
