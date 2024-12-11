@@ -75,6 +75,14 @@ export function SET(...setterString: string[]): string {
   return " SET " + compound(...setterString);
 }
 
+export function AS(asString: string): string {
+  return " AS " + asString;
+}
+
+export function EXISTS(): string {
+  return " EXISTS ";
+}
+
 export function insertInto(
   tableString: string, ...columnString: string[]
 ): string {

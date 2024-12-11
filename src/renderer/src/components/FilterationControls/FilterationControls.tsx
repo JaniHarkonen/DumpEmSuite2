@@ -21,7 +21,6 @@ export default function FilterationControls(props: Props): ReactNode {
       <button onClick={pOnDelist}>De-list</button>
       <button onClick={pSelectAll}>Select all</button>
       <button onClick={pOnDeselectAll}>De-select all</button>
-      <button>Submit</button>
     </div>
   );
 }

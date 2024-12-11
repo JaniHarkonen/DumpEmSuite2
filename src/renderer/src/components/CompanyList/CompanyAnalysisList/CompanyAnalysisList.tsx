@@ -1,6 +1,6 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ChangeEvent, ReactNode, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
@@ -15,37 +15,17 @@ type OnCompanyListingSelect = (company: FilterationStepStock) => void;
 
 type Props = {
   filterationStepID: string;
+  nextStepID?: string;
   onCompanySelect?: OnCompanyListingSelect;
 };
 
 export default function CompanyAnalysisList(props: Props): ReactNode {
   const pFilterationStepID: string = props.filterationStepID;
+  const pNextStepID: string | undefined = props.nextStepID;
   const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
 
   const [tagFilters, setTagFilters] = useState<Tag[]>([]);
-
-  const {
-    stocks, 
-    fetchFilterationStepStocks, 
-    bringAllStocksToFilterationStep,
-    delistStocks,
-    postFilterationTagChange
-  } = useFilterationStepStocks({
-    filterationStepID: pFilterationStepID
-  });
-
-  const stockDataCells: TableListDataCell<FilterationStepStock>[] = 
-    stocks.map((company: FilterationStepStock) => {
-      return {
-        id: company.company_id,
-        data: company
-      };
-    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
-      return (
-        tagFilters.length === 0 || 
-        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
-      );
-    });
+  const [preserveTags, setPreserveTags] = useState<boolean>(false);
 
   const {
     selectionSet,
@@ -55,6 +35,32 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   } = useSelection<FilterationStepStock>({});
 
   const {tags, fetchAllTags} = useFiltertionTags();
+
+  const {
+    stocks, 
+    fetchFilterationStepStocks, 
+    bringAllStocksToFilterationStep,
+    delistStocks,
+    postFilterationTagChange,
+    postStocksToFilterationStep
+  } = useFilterationStepStocks({
+    filterationStepID: pFilterationStepID,
+    defaultTagID: 1
+  });
+
+  const stockDataCells: TableListDataCell<FilterationStepStock>[] = 
+    stocks.map((company: FilterationStepStock) => {
+      return {
+        id: company.company_id,
+        data: company
+      };
+    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
+        // Hide stocks that do not satisfy the filter criteria
+      return (
+        tagFilters.length === 0 || 
+        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
+      );
+    });
   
   useEffect(() => {
     fetchFilterationStepStocks();
@@ -79,16 +85,28 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   };
 
   const handleToggleTag = (tag: Tag) => {
-    const tagIndex: number = 
-      tagFilters.findIndex((filterTag: Tag) => filterTag.tag_id === tag.tag_id);
+    const tagIndex: number = tagFilters.findIndex((filterTag: Tag) => {
+      return( filterTag.tag_id === tag.tag_id );
+    });
+
+      // Turn filter ON
     if( tagIndex < 0 ) {
       setTagFilters(tagFilters.concat(tag));
     } else {
+        // Turn filter OFF
       setTagFilters([
         ...tagFilters.slice(0, tagIndex),
         ...tagFilters.slice(tagIndex + 1)
       ]);
     }
+  };
+
+  const handleStockSubmission = () => {
+    postStocksToFilterationStep(
+      pNextStepID!,
+      [...getSelectedIDs().map((id: SelectionID) => id.toString())],
+      preserveTags
+    );
   };
 
   const COLUMNS: TableListColumn<FilterationStepStock>[] = [
@@ -122,9 +140,9 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
                   <option
                     key={"datacell-tag-selection-" + dataCell.id}
                     value={tag.tag_id}
-                    >
-                      {tag.tag_label}
-                    </option>
+                  >
+                    {tag.tag_label}
+                  </option>
                 )
               })}
             </select>
@@ -144,6 +162,17 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
         onSelectAll={() => handleSelection(true, ...stockDataCells)}
         onDeselectAll={resetSelection}
       />
+      {pNextStepID && (
+        <div className="d-flex">
+          <button onClick={handleStockSubmission}>
+            Submit
+          </button>
+          <input
+            type="checkbox"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPreserveTags(e.target.checked)}
+          /> Preserve tags
+        </div>
+      )}
       <TagPanel onTagSelect={handleToggleTag} />
       <TableList<FilterationStepStock>
         onItemFocus={handleStockFocus}

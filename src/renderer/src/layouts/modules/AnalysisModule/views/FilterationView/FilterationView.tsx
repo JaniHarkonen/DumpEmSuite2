@@ -2,25 +2,29 @@ import { SceneContext } from "@renderer/context/SceneContext";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
-import { Tab, TabContentProvider } from "@renderer/model/tabs";
+import { TabContentProvider } from "@renderer/model/tabs";
 import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
-import { TabInfoContext } from "@renderer/context/TabInfoContext";
+import { TabsContext } from "@renderer/context/TabsContext";
 
 
 export default function FilterationView() {
   const {handleSplitTreeUpdate} = useSceneConfig();
-  const {sceneConfig} = useContext(SceneContext);
 
-  const currentTab: Tab = useContext(TabInfoContext).currentTab!;
+  const {sceneConfig} = useContext(SceneContext);
+  const {tabs, activeTabIndex} = useContext(TabsContext);
+  
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig?.splitTree;
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
      {
       "view-filteration-tab-stocks": () => {
         return (
-          <CompanyAnalysisList filterationStepID={currentTab.id} />
+          <CompanyAnalysisList
+            filterationStepID={tabs[activeTabIndex].id}
+            nextStepID={tabs[activeTabIndex + 1].id}
+          />
         );
       },
       "view-filteration-tab-chart": () => <>chart</>,

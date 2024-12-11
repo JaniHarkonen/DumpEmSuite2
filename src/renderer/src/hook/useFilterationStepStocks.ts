@@ -12,16 +12,25 @@ export type Returns = {
   bringAllStocksToFilterationStep: () => void;
   delistStocks: (...companyID: string[]) => void;
   postFilterationTagChange: (tagID: string, companyID: string) => void;
+  postStocksToFilterationStep: (
+    targetStepID: string,
+    stockIDs: string[],
+    preserveTag: boolean
+  ) => void;
   databaseAPI: BoundDatabaseAPI;
 };
 
 type Props = {
   filterationStepID: string;
+  defaultTagID: number;
 };
 
 export default function useFilterationStepStocks(props: Props): Returns {
   const pFilterationStepID: string = props.filterationStepID;
+  const pDefaultTagID: number = props.defaultTagID;
+
   const [stocks, setStocks] = useState<FilterationStepStock[]>([]);
+
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const fetchFilterationStepStocks = () => {
@@ -34,8 +43,10 @@ export default function useFilterationStepStocks(props: Props): Returns {
   };
 
   const bringAllStocksToFilterationStep = () => {
-    databaseAPI.postAllStocksFromCompanyListings({ filterationStepID: pFilterationStepID })
-    .then((result: PostResult) => {
+    databaseAPI.postAllStocksFromCompanyListings({
+      filterationStepID: pFilterationStepID,
+      defaultTagID: pDefaultTagID.toString()
+    }).then((result: PostResult) => {
       if( result.wasSuccessful ) {
         fetchFilterationStepStocks();
       }
@@ -63,7 +74,21 @@ export default function useFilterationStepStocks(props: Props): Returns {
         fetchFilterationStepStocks();
       }
     })
-  }
+  };
+
+  const postStocksToFilterationStep = (
+    targetStepID: string,
+    stockIDs: string[],
+    preserveTag: boolean
+  ) => {
+    databaseAPI.postStocksToFilterationStep({
+      sourceStepID: pFilterationStepID,
+      targetStepID,
+      stockIDs,
+      preserveTag,
+      defaultTagID: pDefaultTagID.toString()
+    });
+  };
 
 
   return {
@@ -72,6 +97,7 @@ export default function useFilterationStepStocks(props: Props): Returns {
     bringAllStocksToFilterationStep,
     delistStocks,
     postFilterationTagChange,
+    postStocksToFilterationStep,
     databaseAPI
   };
 }
