@@ -3,13 +3,13 @@ import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { ReactNode, useContext } from "react";
 import { SceneContext } from "@renderer/context/SceneContext";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
-import { Tab, TabContentProvider } from "@renderer/model/tabs";
+import { TabContentProvider } from "@renderer/model/tabs";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
-import { TabInfoContext } from "@renderer/context/TabInfoContext";
+import { TabsContext } from "@renderer/context/TabsContext";
 
 
 export default function FundamentalView(): ReactNode {
@@ -17,7 +17,7 @@ export default function FundamentalView(): ReactNode {
   const {profileSelection, handleProfileSelection} = useProfileSelection();
   const {sceneConfig} = useContext(SceneContext);
 
-  const currentTab: Tab = useContext(TabInfoContext).currentTab!;
+  const {tabs, activeTabIndex} = useContext(TabsContext);
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig?.splitTree;
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
@@ -25,7 +25,7 @@ export default function FundamentalView(): ReactNode {
       "view-filteration-tab-stocks": () => {
         return (
           <CompanyAnalysisList
-            filterationStepID={currentTab.id}
+            filterationStepID={tabs[activeTabIndex].id}
             onCompanySelect={handleProfileSelection}
           />
         )
