@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
-import { BoundDatabaseAPI, FetchResult, QueryResult } from "src/shared/database.type";
-import { Company, Currency } from "src/shared/schemaConfig";
+import { useState } from "react";
+import { BoundDatabaseAPI, FetchResult } from "src/shared/database.type";
+import { Company, Currency, Tag } from "src/shared/schemaConfig";
 import useDatabase from "./useDatabase";
 
 
 export type CompanyWithCurrency = Company & Currency;
+
+export type FilterationStepStock = CompanyWithCurrency & Tag;
+
 export type Returns = {
   companies: CompanyWithCurrency[];
   fetchAllCompanies: () => void;
-  fetchIfSuccessful: (queryPromise: Promise<QueryResult>) => void;
+  fetchFilterationStepCompanies: (filterationStepID: string) => void;
   databaseAPI: BoundDatabaseAPI;
 };
 
-export default function useWorkspaceComapanies(): Returns {
+
+export default function useWorkspaceCompanies(): Returns {
   const [companies, setCompanies] = useState<(CompanyWithCurrency)[]>([]);
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
@@ -25,22 +29,20 @@ export default function useWorkspaceComapanies(): Returns {
     });
   };
 
-  useEffect(() => {
-    fetchAllCompanies();
-  }, []);
-
-  const fetchIfSuccessful = (queryPromise: Promise<QueryResult>) => {
-    queryPromise.then((result: QueryResult) => {
+  const fetchFilterationStepCompanies = (filterationStepID: string) => {
+    databaseAPI.fetchFilterationStepStocks({ filterationStepID })
+    .then((result: FetchResult<FilterationStepStock>) => {
       if( result.wasSuccessful ) {
-        fetchAllCompanies();
+        setCompanies(result.rows);
       }
     })
   };
 
+  
   return {
     companies,
     fetchAllCompanies,
-    fetchIfSuccessful,
+    fetchFilterationStepCompanies,
     databaseAPI
   };
 }

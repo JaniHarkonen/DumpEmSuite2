@@ -1,11 +1,16 @@
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
 import { ChangeEvent, ReactNode } from "react";
-import EditableText from "../EditableText/EditableText";
+import EditableText from "../editable/EditableText";
 
 
 export type TableListColumn<T> = {
   accessor: keyof T;
   caption: string;
+  ElementConstructor?: (
+    dataCell: TableListDataCell<T>, 
+    column: TableListColumn<T>, 
+    index: number
+  ) => ReactNode;
 };
 
 export type TableListDataCell<T> = SelectionItem<T>;
@@ -17,8 +22,10 @@ export type EditChanges<T> = {
 
 export type OnColumnSelect<T> = (column: TableListColumn<T>) => void;
 export type OnItemFocus<T> = (dataCell: TableListDataCell<T>) => void;
-export type OnItemSelect<T> = (dataCell: TableListDataCell<T>, isChecked: boolean) => void;
-export type OnItemFinalize<T> = (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
+export type OnItemSelect<T> = 
+  (dataCell: TableListDataCell<T>, isChecked: boolean) => void;
+export type OnItemFinalize<T> = 
+  (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
 
 type Props<T> = {
   columns: TableListColumn<T>[];
@@ -37,8 +44,8 @@ export type TableListProps<T> = Props<T>;
 export default function TableList<T>(props: Props<T>): ReactNode {
   const pColumns: TableListColumn<T>[] = props.columns;
   const pData: TableListDataCell<T>[] = props.cells;
-  const pAllowSelection: boolean = props.allowSelection || false;
-  const pAllowEdit: boolean = props.allowEdit || false;
+  const pAllowSelection: boolean = props.allowSelection ?? false;
+  const pAllowEdit: boolean = props.allowEdit ?? false;
   const pSelectionSet: SelectionSet<T> = props.selectionSet || {};
   const pOnColumnSelect: OnColumnSelect<T> = props.onColumnSelect || function(){ };
   const pOnItemFocus: OnItemFocus<T> = props.onItemFocus || function(){ };
@@ -48,9 +55,14 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
+      // Use the element constructor, if one has been provided
+    if( column.ElementConstructor ) {
+      return column.ElementConstructor(dataCell, column, index);
+    }
+    
       // Apply input fields, if editing
     const data = dataCell.data[column.accessor];
-    let dataDiv: ReactNode = (
+    let dataElement: ReactNode = (
       <EditableText
         value={data as string}
         onFinalize={(value: string) => pOnItemFinalize(dataCell, {
@@ -65,26 +77,26 @@ export default function TableList<T>(props: Props<T>): ReactNode {
 
       // Apply selection checkbox, if first data cell
     if( pAllowSelection && index === 0 ) {
-      dataDiv = (
+      dataElement = (
         <>
           <input
             type="checkbox"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               pOnItemSelect(dataCell, e.target.checked)
             }}
-            checked={pSelectionSet[dataCell.id]?.isSelected || false}
+            checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
           />
-          {dataDiv}
+          {dataElement}
         </>
       );
     }
 
     return (
       <td key={"list-table-data-" + (column.accessor as String) + "-" + dataCell.id}>
-        {dataDiv}
+        {dataElement}
       </td>
     );
-  }
+  };
 
   
   return (

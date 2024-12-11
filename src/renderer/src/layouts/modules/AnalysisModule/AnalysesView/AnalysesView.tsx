@@ -6,11 +6,13 @@ import TabButton from "@renderer/components/Tabs/TabControls/TabButton/TabButton
 import TabControls from "@renderer/components/Tabs/TabControls/TabControls";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
+import useDatabase from "@renderer/hook/useDatabase";
 import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
 import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
 import { buildTab, SceneConfigBlueprint, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
+import { BoundDatabaseAPI } from "src/shared/database.type";
 
 
 const TAGS = {
@@ -118,19 +120,19 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
-  const {workspaceConfig} = useContext(WorkspaceContext);
 
+  const {workspaceConfig} = useContext(WorkspaceContext);
   const {
     splitTree, 
     tabSelection, 
-    handleTabSelection, 
+    handleTabSelection,   
     resetTabSelection,
     handleTabOpen,
     handleTabRelocation, 
     handleTabReorder: reorderTab,
     handleTabSplit,
     handleDividerMove,
-    handleTabAdd,
+    handleTabAdd: addTab,
     handleTabRemove: removeTab
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
@@ -138,25 +140,11 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     onUpdate: pOnUpdate
   });
 
-  const handleTabRemove = (
-    e: MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
-  ) => {
-    e.stopPropagation();
-    removeTab(targetNode, tab);
-  };
+  const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
-  const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
-    const tab: Tab = tabSelection!.selectedTab;
-    if( !tab.tags.includes(TAGS.permanent) ) {
-      reorderTab(targetNode, index);
-    } else {
-      resetTabSelection();
-    }
-  };
-
-  const buildFilterationTab = (): Tab => {
+  const handleTabAdd = (targetNode: SplitTreeValue) => {
     const id: string = generateRandomUniqueID("filteration-tab-");
-    return buildTab({
+    const tab: Tab = buildTab({
       id,
       workspace: workspaceConfig.id,
       caption: "New filter",
@@ -165,6 +153,32 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       sceneConfigBlueprint: buildFilterationBlueprint(id),
       order: 0
     }, pContentProvider);
+
+    addTab(targetNode, tab);
+    databaseAPI.postNewFilterationStep({
+      filterationStep: {
+        step_id: id,
+        caption: tab.caption
+      }
+    });
+  };
+
+  const handleTabRemove = (
+    e: MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
+  ) => {
+    e.stopPropagation();
+    removeTab(targetNode, tab);
+    databaseAPI.deleteFilterationStep({ step_id: tab.id });
+  };
+
+  const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
+    const tab: Tab = tabSelection!.selectedTab;
+
+    if( !tab.tags.includes(TAGS.permanent) ) {
+      reorderTab(targetNode, index);
+    } else {
+      resetTabSelection();
+    }
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
@@ -179,20 +193,22 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
               tab={tab}
             >
               {!tab.tags.includes(TAGS.permanent) && (
-                <span className="tab-remove-icon-container">
+                <span
+                  className="tab-remove-icon-container"
+                  onClick={(e: MouseEvent<HTMLImageElement>) => {
+                    handleTabRemove(e, targetNode, tabs[tabIndex]);
+                  }}
+                >
                   <img
-                    className="tab-remove-icon"
+                    className="size-tiny-icon tab-remove-icon"
                     src={ASSETS.icons.buttons.trashCan.white}
-                    onClick={(e: MouseEvent<HTMLImageElement>) => {
-                      handleTabRemove(e, targetNode, tabs[tabIndex]);
-                    }}
                   />
                 </span>
               )}
             </TabButton>
           );
         })}
-        <button onClick={() => handleTabAdd(targetNode, buildFilterationTab())}>
+        <button onClick={() => handleTabAdd(targetNode)}>
           {"+"}
         </button>
       </TabControls>

@@ -3,8 +3,8 @@ import { TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode } from "react";
 import AnalysesView from "@renderer/layouts/modules/AnalysisModule/AnalysesView/AnalysesView";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
-import FilterationView from "./FilterationView/FilterationView";
-import FundamentalView from "./FundamentalView/FundamentalView";
+import FilterationView from "./views/FilterationView/FilterationView";
+import FundamentalView from "./views/FundamentalView/FundamentalView";
 
 
 export default function AnalysisModule(): ReactNode {

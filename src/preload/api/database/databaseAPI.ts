@@ -1,8 +1,8 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, FKCompany, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
+import { Company, Currency, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { col, DELETE, equals, FROM, IN, insertInto, query, SELECT, SET, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -98,7 +98,10 @@ export const databaseAPI: DatabaseAPI = {
           ) + FROM(
             table("company", "c"), table("currency", "cx")
           ) + WHERE(
-            equals(col<FKCompany>("fk_company_currency_id", "c"), col<Currency>("currency_id", "cx"))
+            equals(
+              col<FKCompany>("fk_company_currency_id", "c"), 
+              col<Currency>("currency_id", "cx")
+            )
           )
         );
 
@@ -179,6 +182,68 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  fetchFilterationStepStocks: ({
+    databaseName,
+    filterationStepID
+  }) => {
+    return new Promise<FetchResult<Company & Currency & Tag>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<Company>("company_id", "c"), 
+            col<Company>("company_name", "c"), 
+            col<Company>("stock_ticker", "c"), 
+            col<Company>("stock_price", "c"),
+            col<Company>("volume_price", "c"),
+            col<Company>("volume_quantity", "c"),
+            col<Company>("exchange", "c"),
+            col<Company>("chart_url", "c"),
+            col<Company>("updated", "c"),
+            col<Currency>("currency_id", "cx"),
+            col<Tag>("tag_id", "t"),
+            col<Tag>("tag_hex", "t"),
+            col<Tag>("tag_label", "t")
+          ) + FROM(
+            table("company", "c"),
+            table("currency", "cx"),
+            table("tag", "t"),
+            table("filteration", "f")
+          ) + WHERE(
+            equals(
+              col<FKFilteration>("fk_filteration_company_id", "f"), 
+              col<Company>("company_id", "c")
+            ) + AND(
+              equals(
+                col<FKCompany>("fk_company_currency_id", "c"), 
+                col<Currency>("currency_id", "cx")
+              )
+            ) + AND(
+              equals(
+                col<FKFilteration>("fk_filteration_tag_id", "f"), 
+                col<Tag>("tag_id", "t")
+              )
+            ) + AND(
+              equals(col<FKFilteration>("fk_filteration_step_id", "f"), val())
+            )
+          )
+        );
+
+        databaseManager.fetch<Company & Currency & Tag>(
+          databaseName, preparedString,
+          (err: Error | null, rows: (Company & Currency & Tag)[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              });
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID]
+        );
+      }
+    );
+  },
   postNewCompany: ({
     databaseName, 
     company
@@ -201,6 +266,7 @@ export const databaseAPI: DatabaseAPI = {
             value(val(), val(), val(), val(), val(), val(), val(), val(), val())
           )
         );
+
         databaseManager.post(
           databaseName, preparedString,
           (runResult: RunResult | null, err: Error | null) => {
@@ -220,6 +286,115 @@ export const databaseAPI: DatabaseAPI = {
             company.updated,
             'EUR'
           ]
+        );
+      }
+    );
+  },
+  postNewFilterationStep: ({
+    databaseName,
+    filterationStep
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("filteration_step"),
+            col<FilterationStep>("step_id"),
+            col<FilterationStep>("caption")
+          ) + values(
+            value(val(), val())
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStep.step_id, filterationStep.caption]
+        );
+      }
+    );
+  },
+  postNewTag: ({
+    databaseName,
+    tag
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("tag"),
+            col<Tag>("tag_hex"),
+            col<Tag>("tag_label")
+          ) + values(
+            value(val(), val())
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [tag.tag_hex, tag.tag_label]
+        );
+      }
+    );
+  },
+  postAllStocksFromCompanyListings: ({
+    databaseName,
+    filterationStepID,
+    defaultTagID
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("filteration"),
+            col<FKFilteration>("fk_filteration_company_id"),
+            col<FKFilteration>("fk_filteration_step_id"),
+            col<FKFilteration>("fk_filteration_tag_id")
+          ) + SELECT(
+            col<Company>("company_id", "c"),
+            col<FilterationStep>("step_id", "fs"),
+            col<Tag>("tag_id", "t")
+          ) + FROM(
+            table("company", "c"),
+            table("filteration_step", "fs"),
+            table("tag", "t"),
+          ) + WHERE(
+            equals(col<Tag>("tag_id", "t"), defaultTagID) + 
+            AND(
+              equals(col<FilterationStep>("step_id", "fs"), val())
+            ) + AND(
+              NOT() + IN(
+                col<Company>("company_id", "c"),
+                SELECT(col<FKFilteration>("fk_filteration_company_id", "f")) + 
+                FROM(table("filteration", "f")) + 
+                WHERE(
+                  equals(col<FKFilteration>("fk_filteration_step_id", "f"), val())
+                )
+              )
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID, filterationStepID]
         );
       }
     );
@@ -286,6 +461,125 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  postTagChanges: ({
+    databaseName,
+    updatedTag
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("tag")) + 
+          SET(equals(col<Tag>("tag_hex"), val()), equals(col<Tag>("tag_label"), val())) + 
+          WHERE(equals(col<Tag>("tag_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [updatedTag.tag_hex, updatedTag.tag_label, updatedTag.tag_id]
+        )
+      }
+    );
+  },
+  postFilterationTagChanges: ({ 
+    databaseName,
+    filterationStepID, 
+    companyID, 
+    tagID 
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("filteration")) + 
+          SET(equals(col<FKFilteration>("fk_filteration_tag_id"), val())) + 
+          WHERE(
+            equals(col<FKFilteration>("fk_filteration_step_id"), val()) +
+            AND(
+              equals(col<FKFilteration>("fk_filteration_company_id"), val())
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [tagID, filterationStepID, companyID]
+        )
+      }
+    )
+  },
+  postStocksToFilterationStep: ({
+    databaseName,
+    sourceStepID,
+    targetStepID,
+    stockIDs,
+    preserveTag,
+    defaultTagID,
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const tagColumn: string = (
+          preserveTag ? 
+          col<FKFilteration>("fk_filteration_tag_id", "f") : 
+          defaultTagID + AS(col<FKFilteration>("fk_filteration_tag_id"))
+        );
+        const preparedString: string = query(
+          insertInto(
+            table("filteration"),
+            col<FKFilteration>("fk_filteration_company_id"),
+            col<FKFilteration>("fk_filteration_step_id"),
+            col<FKFilteration>("fk_filteration_tag_id")
+          ) + SELECT(
+            col<FKFilteration>("fk_filteration_company_id", "f"),
+            val() + AS(col<FKFilteration>("fk_filteration_step_id")),
+            tagColumn
+          ) + FROM(
+            table("filteration", "f")
+          ) + WHERE(
+            equals(col<FKFilteration>("fk_filteration_step_id", "f"), val()) + 
+            AND(
+              IN(
+                col<FKFilteration>("fk_filteration_company_id"),
+                ...stockIDs.map(() => val())
+              )
+            ) + AND(
+              NOT() + IN(
+                col<FKFilteration>("fk_filteration_company_id"),
+                subquery(
+                  SELECT(col<FKFilteration>("fk_filteration_company_id")) + 
+                  FROM(table("filteration")) + 
+                  WHERE(
+                    equals(col<FKFilteration>("fk_filteration_step_id"), val())
+                  )
+                )
+              )
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [targetStepID, sourceStepID, ...stockIDs, targetStepID]
+        )
+      }
+    )
+  },
   deleteCompanies: ({
     databaseName, 
     companies
@@ -314,5 +608,92 @@ export const databaseAPI: DatabaseAPI = {
         )
       }
     );
+  },
+  deleteFilterationStep: ({
+    databaseName,
+    step_id
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("filteration_step")) + 
+            WHERE(equals(col<FilterationStep>("step_id"), val()))
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [step_id]
+        );
+      }
+    )
+  },
+  deleteTag: ({
+    databaseName,
+    tag
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("tag")) + 
+            WHERE(equals(col<Tag>("tag_id"), val()))
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [tag.tag_id]
+        )
+      }
+    )
+  },
+  delistStock: ({
+    databaseName,
+    filterationStepID,
+    companyID
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("filteration")) + 
+            WHERE(
+              equals(col<FKFilteration>("fk_filteration_step_id"), val()) + 
+              AND(
+                IN(
+                  col<FKFilteration>("fk_filteration_company_id"),
+                  ...companyID.map(() => val())
+                )
+              )
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID, ...companyID]
+        )
+      }
+    )
   }
 };

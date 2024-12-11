@@ -2,7 +2,6 @@ import { BoundDatabaseAPI, FetchResult, PostResult } from "src/shared/database.t
 import useDatabase from "./useDatabase";
 import { Company, Profile } from "src/shared/schemaConfig";
 import { ProfileContextType, ProfileEditChanges } from "@renderer/context/ProfileContext";
-import { CompanyWithCurrency } from "./useWorkspaceCompanies";
 import { useState } from "react";
 
 
@@ -10,7 +9,7 @@ type Returns = {
   profileSelection: ProfileContextType;
   fetchCompanyProfile: (company: Company) => void;
   handleProfileEdit: (changes: ProfileEditChanges) => void;
-  handleProfileSelection: (company: CompanyWithCurrency) => void;
+  handleProfileSelection: (company: Company) => void;
 };
 
 export default function useProfileSelection(): Returns {
@@ -45,7 +44,7 @@ export default function useProfileSelection(): Returns {
     });
   };
 
-  const handleProfileSelection = (company: CompanyWithCurrency) => {
+  const handleProfileSelection = (company: Company) => {
     fetchCompanyProfile(company);
   };
 

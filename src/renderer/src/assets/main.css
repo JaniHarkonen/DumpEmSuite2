@@ -73,6 +73,11 @@ textarea {
   width: auto;
 }
 
+.size-tiny-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .h-auto {
   height: auto;
 }
@@ -163,4 +168,8 @@ textarea {
 
 .debug-bg-blue {
   background-color: blue;
+}
+
+.debug-gb-black {
+  background-color: black;
 }

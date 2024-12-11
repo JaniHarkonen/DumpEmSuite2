@@ -1,4 +1,3 @@
-import ModuleView from "@renderer/components/ModuleView/ModuleView";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode, useEffect, useState } from "react";
 import CompaniesModule from "../modules/CompaniesModule/CompaniesModule";
@@ -8,6 +7,7 @@ import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { WorkspaceContext, WorkspaceContextType } from "@renderer/context/WorkspaceContext";
 import { WorkspaceConfig } from "@renderer/model/config";
 import { bindAPIToWorkspace, BoundDatabaseAPI, QueryResult } from "../../../../shared/database.type";
+import ModuleView from "../modules/ModuleView/ModuleView";
 
 
 type Props = {
@@ -60,7 +60,7 @@ export default function Workspace(props: Props): ReactNode {
             databaseAPI: workspaceContext.databaseAPI
           }}
         >
-          <ModuleView 
+          <ModuleView
             splitTreeBlueprint={sceneConfig.splitTree} 
             contentProvider={modulesProvider}
             onUpdate={handleSplitTreeUpdate}
