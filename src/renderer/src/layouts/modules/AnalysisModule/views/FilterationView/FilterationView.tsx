@@ -7,6 +7,7 @@ import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
+import MarkdownNote from "@renderer/components/MarkdownNote/MarkdownNote";
 
 
 export default function FilterationView() {
@@ -28,7 +29,7 @@ export default function FilterationView() {
         );
       },
       "view-filteration-tab-chart": () => <>chart</>,
-      "view-filteration-tab-notes": () => <>notes</>
+      "view-filteration-tab-notes": () => <MarkdownNote />
     }
   );
 
