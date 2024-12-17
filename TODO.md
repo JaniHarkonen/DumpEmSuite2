@@ -1,6 +1,7 @@
 # TODO
 
 ### Urgent
+- THERE IS A TYPO: `filteration` should be `filtration`
 - ThemeProvider should be implmented and used to influence the coloring of components
 
 ### AnalysesView.tsx

@@ -1,0 +1,6 @@
+.note-list-item-bullet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+}

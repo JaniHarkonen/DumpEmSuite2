@@ -11,7 +11,6 @@ export default function MarkdownNote() {
   ] = useEditable({});
   const [markdown, setMarkdown] = useState<string>("");
 
-
   return(
     <div
       className="w-100 h-100"
@@ -26,9 +25,10 @@ export default function MarkdownNote() {
           value={markdown}
         />
       ) : (
-        <>
+        <div className="user-select-text">
+          <strong><em>test</em></strong>
           {markdownProcessor(markdown)}
-        </>
+        </div>
       )}
     </div>
   );
