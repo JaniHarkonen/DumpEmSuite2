@@ -24,7 +24,7 @@ export default function FilterationView() {
         return (
           <CompanyAnalysisList
             filterationStepID={tabs[activeTabIndex].id}
-            nextStepID={tabs[activeTabIndex + 1].id}
+            nextStepID={tabs[activeTabIndex + 1]?.id || tabs[activeTabIndex].id}
           />
         );
       },

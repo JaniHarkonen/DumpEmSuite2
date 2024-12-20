@@ -1,6 +1,8 @@
 # TODO
 
 ### Urgent
+- THERE IS A TYPO: `filteration` should be `filtration`
+- filteration steps should specify the step that their verdicts will be submitted to (currently this info is derived from the tabIndex which doesn't make any sense)
 - ThemeProvider should be implmented and used to influence the coloring of components
 
 ### AnalysesView.tsx
