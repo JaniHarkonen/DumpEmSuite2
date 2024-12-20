@@ -1,35 +1,56 @@
 import useEditable from "@renderer/hook/useEditable";
-import { markdownProcessor } from "@renderer/model/markdown";
-import { ChangeEvent, useState } from "react";
+import { renderMarkdown } from "@renderer/model/markdown";
+import { FocusEvent, KeyboardEvent, MutableRefObject, useRef, useState } from "react";
 
 
 export default function MarkdownNote() {
+  const [markdown, setMarkdown] = useState<string>("");
+  
   const [
     isEditing,
     handleEditStart,
     handleFinalize
-  ] = useEditable({});
-  const [markdown, setMarkdown] = useState<string>("");
+  ] = useEditable<string>({
+    onFinalize: (value: string) => setMarkdown(value)
+  });
+
+  const textAreaRef: MutableRefObject<HTMLTextAreaElement | null> = 
+    useRef<HTMLTextAreaElement | null>(null);
+
+  const handleTab = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if( e.key === "Tab" ) {
+      e.preventDefault();
+
+      const target: HTMLTextAreaElement = e.currentTarget;
+      const selectionStart: number = target.selectionStart;
+
+      target.value = target.value.substring(0, selectionStart) + "\t" + target.value.substring(selectionStart);
+      target.selectionStart = selectionStart + 1;
+      target.selectionEnd = selectionStart + 1;
+    }
+  };
 
   return(
     <div
       className="w-100 h-100"
       onDoubleClick={handleEditStart}
     >
-      {isEditing ? (
+      {isEditing && (
         <textarea
           className="w-100 h-100"
-          onBlur={handleFinalize}
+          onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
           autoFocus={true}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMarkdown(e.target.value)}
-          value={markdown}
+          defaultValue={markdown}
+          onKeyDown={handleTab}
+          ref={textAreaRef}
         />
-      ) : (
-        <div className="user-select-text">
-          <strong><em>test</em></strong>
-          {markdownProcessor(markdown)}
-        </div>
       )}
+        <div
+          className="user-select-text"
+          style={{display: isEditing ? "none" : "block"}}
+        >
+          {renderMarkdown(markdown)}
+        </div>
     </div>
   );
 }
