@@ -1,6 +1,7 @@
 import useEditable from "@renderer/hook/useEditable";
-import { renderMarkdown } from "@renderer/model/markdown";
+import { renderMarkdown } from "@renderer/model/markdown/markdown";
 import { FocusEvent, KeyboardEvent, MutableRefObject, useRef, useState } from "react";
+import PageContainer from "../PageContainer/PageContainer";
 
 
 export default function MarkdownNote() {
@@ -31,26 +32,28 @@ export default function MarkdownNote() {
   };
 
   return(
-    <div
-      className="w-100 h-100"
-      onDoubleClick={handleEditStart}
-    >
-      {isEditing && (
-        <textarea
-          className="w-100 h-100"
-          onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
-          autoFocus={true}
-          defaultValue={markdown}
-          onKeyDown={handleTab}
-          ref={textAreaRef}
-        />
-      )}
-        <div
-          className="user-select-text"
-          style={{display: isEditing ? "none" : "block"}}
-        >
-          {renderMarkdown(markdown)}
-        </div>
-    </div>
+    <PageContainer>
+      <div
+        className="w-100 h-100"
+        onDoubleClick={handleEditStart}
+      >
+        {isEditing && (
+          <textarea
+            className="w-100 h-100"
+            onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
+            autoFocus={true}
+            defaultValue={markdown}
+            onKeyDown={handleTab}
+            ref={textAreaRef}
+          />
+        )}
+          <div
+            className="user-select-text"
+            style={{display: isEditing ? "none" : "block"}}
+          >
+            {renderMarkdown(markdown)}
+          </div>
+      </div>
+    </PageContainer>
   );
 }
