@@ -7,7 +7,7 @@ import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
-import MarkdownNote from "@renderer/components/MarkdownNote/MarkdownNote";
+import FilterationNote from "../FilterationNote/FilterationNote";
 
 
 export default function FilterationView() {
@@ -17,6 +17,7 @@ export default function FilterationView() {
   const {tabs, activeTabIndex} = useContext(TabsContext);
   
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig?.splitTree;
+  const filterationStepID: string = tabs[activeTabIndex].id || "";
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
      {
@@ -29,7 +30,7 @@ export default function FilterationView() {
         );
       },
       "view-filteration-tab-chart": () => <>chart</>,
-      "view-filteration-tab-notes": () => <MarkdownNote />
+      "view-filteration-tab-notes": () => <FilterationNote filterationStepID={filterationStepID} />
     }
   );
 

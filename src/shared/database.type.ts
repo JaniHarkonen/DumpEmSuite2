@@ -1,4 +1,4 @@
-import { Company, Currency, FilterationStep, Profile, Scraper, Tag } from "./schemaConfig";
+import { Company, Currency, Filteration, FilterationStep, Profile, Scraper, Tag } from "./schemaConfig";
 import { AsString } from "./utils";
 
 
@@ -34,6 +34,12 @@ export type DatabaseAPI = {
   fetchFilterationStepStocks: (
     props: { filterationStepID: string; } & QueryProps
   ) => Promise<FetchResult<Company & Currency & Tag>>;
+  fetchFilterationStepNote: (
+    props: {
+      filterationStepID: string;
+      companyID: string;
+    } & QueryProps
+  ) => Promise<FetchResult<Filteration>>;
   postNewCompany: (
     props: { company: Company | AsString<Company>; } & QueryProps
   ) => Promise<PostResult>;
@@ -75,6 +81,13 @@ export type DatabaseAPI = {
       defaultTagID: string;
     } & QueryProps
   ) => Promise<PostResult>;
+  postFilterationNoteChanges: (
+    props: {
+      filterationStepID: string;
+      companyID: string;
+      value: string;
+    } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; } & QueryProps) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; } & QueryProps) => Promise<DeleteResult>;
@@ -93,6 +106,12 @@ export type BoundDatabaseAPI = {
   fetchFilterationStepStocks: (
     props: { filterationStepID: string }
   ) => Promise<FetchResult<Company & Currency & Tag>>;
+  fetchFilterationStepNote: (
+    props: {
+      filterationStepID: string;
+      companyID: string;
+    }
+  ) => Promise<FetchResult<Filteration>>;
   postNewCompany: (props: { company: Company | AsString<Company>; }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep; }) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag>; }) => Promise<PostResult>;
@@ -128,6 +147,13 @@ export type BoundDatabaseAPI = {
       defaultTagID: string;
     }
   ) => Promise<PostResult>;
+  postFilterationNoteChanges: (
+    props: {
+      filterationStepID: string;
+      companyID: string;
+      value: string;
+    }
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; }) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; }) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; }) => Promise<DeleteResult>;
@@ -156,111 +182,102 @@ export function bindAPIToWorkspace(
         databaseName: workspaceID
       });
     },
-    fetchFilterationStepStocks: (props: { filterationStepID: string }) => {
+    fetchFilterationStepStocks: (props) => {
       return api.fetchFilterationStepStocks({
         ...props,
         databaseName: workspaceID
       });
     },
-    postNewCompany: (props: { company: Company | AsString<Company> }) => {
+    fetchFilterationStepNote: (
+      props: {
+        filterationStepID: string;
+        companyID: string;
+      }
+    ) => {
+      return api.fetchFilterationStepNote({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postNewCompany: (props) => {
       return api.postNewCompany({
         ...props,
         databaseName: workspaceID
       });
     },
-    postNewFilterationStep: (props: { filterationStep: FilterationStep }) => {
+    postNewFilterationStep: (props) => {
       return api.postNewFilterationStep({
         ...props,
         databaseName: workspaceID
       });
     },
-    postNewTag: (props: { tag: Tag | AsString<Tag> }) => {
+    postNewTag: (props) => {
       return api.postNewTag({
         ...props,
         databaseName: workspaceID
       });
     },
-    postAllStocksFromCompanyListings: (props: { filterationStepID: string; defaultTagID: string; }) => {
+    postAllStocksFromCompanyListings: (props) => {
       return api.postAllStocksFromCompanyListings({
         ...props,
         databaseName: workspaceID
       });
     },
-    postCompanyChanges: (
-      props: {
-        company: Company, 
-        attributes: (keyof Company)[], 
-        values: string[] 
-      }
-    ) => {
+    postCompanyChanges: (props) => {
       return api.postCompanyChanges({
         ...props,
         databaseName: workspaceID
       });
     },
-    postCompanyProfileChanges: (
-      props: {
-        company: Company,
-        attributes: (keyof Profile)[],
-        values: string[]
-      }
-    ) => {
+    postCompanyProfileChanges: (props) => {
       return api.postCompanyProfileChanges({
         ...props,
         databaseName: workspaceID
       });
     },
-    postTagChanges: (props: { updatedTag: Tag }) => {
+    postTagChanges: (props) => {
       return api.postTagChanges({
         ...props,
         databaseName: workspaceID
       });
     },
-    postFilterationTagChanges: (
-      props: { 
-        filterationStepID: string, 
-        companyID: string, 
-        tagID: string 
-      }
-    ) => {
+    postFilterationTagChanges: (props) => {
       return api.postFilterationTagChanges({
         ...props,
         databaseName: workspaceID
       });
     },
-    postStocksToFilterationStep: (
-      props: {
-        sourceStepID: string;
-        targetStepID: string;
-        stockIDs: string[];
-        preserveTag: boolean;
-        defaultTagID: string;
-      }
-    ) => {
+    postStocksToFilterationStep: (props) => {
       return api.postStocksToFilterationStep({
         ...props,
         databaseName: workspaceID
       });
     },
-    deleteCompanies: (props: { companies: Company[] }) => {
+    postFilterationNoteChanges: (props) => {
+      return api.postFilterationNoteChanges({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    deleteCompanies: (props) => {
       return api.deleteCompanies({
         ...props,
         databaseName: workspaceID
       });
     },
-    deleteFilterationStep: (props: { step_id: string }) => {
+    deleteFilterationStep: (props) => {
       return api.deleteFilterationStep({
         ...props,
         databaseName: workspaceID
       });
     },
-    deleteTag: (props: { tag: Tag }) => {
+    deleteTag: (props) => {
       return api.deleteTag({
         ...props,
         databaseName: workspaceID
       });
     },
-    delistStock: (props: { filterationStepID: string, companyID: string[] }) => {
+    delistStock: (props) => {
       return api.delistStock({
         ...props,
         databaseName: workspaceID
