@@ -8,10 +8,13 @@ import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysi
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
 import FilterationNote from "../FilterationNote/FilterationNote";
+import useProfileSelection from "@renderer/hook/useProfileSelection";
+import { ProfileContext } from "@renderer/context/ProfileContext";
 
 
 export default function FilterationView() {
   const {handleSplitTreeUpdate} = useSceneConfig();
+  const {profileSelection, handleProfileSelection} = useProfileSelection();
 
   const {sceneConfig} = useContext(SceneContext);
   const {tabs, activeTabIndex} = useContext(TabsContext);
@@ -26,6 +29,7 @@ export default function FilterationView() {
           <CompanyAnalysisList
             filterationStepID={tabs[activeTabIndex].id}
             nextStepID={tabs[activeTabIndex + 1]?.id || tabs[activeTabIndex].id}
+            onCompanySelect={handleProfileSelection}
           />
         );
       },
@@ -36,10 +40,12 @@ export default function FilterationView() {
 
 
   return (
-    <ModuleView
-      splitTreeBlueprint={sceneBlueprint}
-      contentProvider={tabsProvider}
-      onUpdate={handleSplitTreeUpdate}
-    />
+    <ProfileContext.Provider value={profileSelection}>
+      <ModuleView
+        splitTreeBlueprint={sceneBlueprint}
+        contentProvider={tabsProvider}
+        onUpdate={handleSplitTreeUpdate}
+      />
+    </ProfileContext.Provider>
   );
 }
