@@ -50,6 +50,9 @@ export type DatabaseAPI = {
   postAllStocksFromCompanyListings: (
     props: { filterationStepID: string; defaultTagID: string; } & QueryProps
   ) => Promise<PostResult>;
+  postFilterationStepCaption: (
+    props: { filterationStep: FilterationStep } & QueryProps
+  ) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company;
@@ -115,7 +118,10 @@ export type BoundDatabaseAPI = {
   postNewCompany: (props: { company: Company | AsString<Company>; }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep; }) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag>; }) => Promise<PostResult>;
-  postAllStocksFromCompanyListings: (props: { filterationStepID: string; defaultTagID: string; }) => Promise<PostResult>;
+  postAllStocksFromCompanyListings: (
+    props: { filterationStepID: string; defaultTagID: string; }
+  ) => Promise<PostResult>;
+  postFilterationStepCaption: (props: { filterationStep: FilterationStep }) => Promise<PostResult>;
   postCompanyChanges: (
     props: {
       company: Company;
@@ -219,6 +225,12 @@ export function bindAPIToWorkspace(
     },
     postAllStocksFromCompanyListings: (props) => {
       return api.postAllStocksFromCompanyListings({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postFilterationStepCaption: (props) => {
+      return api.postFilterationStepCaption({
         ...props,
         databaseName: workspaceID
       });

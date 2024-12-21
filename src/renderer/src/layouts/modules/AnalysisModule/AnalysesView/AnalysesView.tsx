@@ -9,112 +9,17 @@ import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import useDatabase from "@renderer/hook/useDatabase";
 import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
 import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
-import { buildTab, SceneConfigBlueprint, Tab, TabContentProvider } from "@renderer/model/tabs";
+import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
+import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
+import { FilterationStep } from "src/shared/schemaConfig";
 
 
 const TAGS = {
   permanent: "permanent"
 };
-
-function buildFilterationBlueprint(hostID: string): SceneConfigBlueprint {
-  return {
-    splitTree: {
-      root: {
-        isFork: true,
-        divider: {
-          direction: "horizontal",
-          value: 50
-        },
-        left: {
-          isFork: true,
-          divider: {
-            direction: "horizontal",
-            value: 50
-          },
-          left: {
-            isFork: true,
-            divider: {
-              direction: "horizontal",
-              value: 50
-            },
-            left: {
-              isFork: false,
-              value: {
-                tabs: [
-                  {
-                    id: hostID + "-stocks",
-                    workspace: "ws-test",
-                    caption: "Stocks",
-                    contentTemplate: "view-filteration-tab-stocks",
-                    tags: [],
-                    order: 0
-                  }
-                ],
-                activeTabIndex: 0
-              }
-            }
-          },
-          right: {
-            isFork: true,
-            divider: {
-              direction: "vertical",
-              value: 50
-            },
-            left: {
-              isFork: true,
-              divider: {
-                direction: "horizontal",
-                value: 50
-              },
-              left: {
-                isFork: false,
-                value: {
-                  tabs: [
-                    {
-                      id: hostID + "-chart",
-                      workspace: "ws-test",
-                      caption: "Chart",
-                      contentTemplate: "view-filteration-tab-chart",
-                      tags: [],
-                      order: 0
-                    }
-                  ],
-                  activeTabIndex: 0
-                }
-              }
-            },
-            right: {
-              isFork: true,
-              divider: {
-                direction: "horizontal",
-                value: 50
-              },
-              left: {
-                isFork: false,
-                value: {
-                  tabs: [
-                    {
-                      id: hostID + "-notes",
-                      workspace: "ws-test",
-                      caption: "Notes",
-                      contentTemplate: "view-filteration-tab-notes",
-                      tags: [],
-                      order: 0
-                    }
-                  ],
-                  activeTabIndex: 0
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  };
-}
 
 export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
@@ -130,6 +35,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     handleTabOpen,
     handleTabRelocation, 
     handleTabReorder: reorderTab,
+    handleTabCaptionChange: changeTabCaption,
     handleTabSplit,
     handleDividerMove,
     handleTabAdd: addTab,
@@ -180,6 +86,17 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       resetTabSelection();
     }
   };
+
+  const handleTabCaptionChange = (
+    targetNode: SplitTreeValue, targetTab: Tab, caption: string
+  ) => {
+    const changedStep: FilterationStep = {
+      step_id: targetTab.id,
+      caption
+    };
+    changeTabCaption(targetNode, targetTab, caption);
+    databaseAPI.postFilterationStepCaption({ filterationStep: changedStep });
+  };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
     const tabs: Tab[] = targetNode.value.tabs;
@@ -191,6 +108,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
             <TabButton
               key={tab.workspace + "-tab-control-button-" + tab.id}
               tab={tab}
+              isEditable={true}
+              onCaptionEdit={(value: string) => handleTabCaptionChange(targetNode, tabs[tabIndex], value)}
             >
               {!tab.tags.includes(TAGS.permanent) && (
                 <span

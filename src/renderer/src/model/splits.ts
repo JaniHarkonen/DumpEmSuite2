@@ -273,6 +273,18 @@ export class SplitTreeManager {
     return true;
   }
 
+  private changeTabCaptionLive(liveNode: SplitTreeValue, targetTab: Tab, caption: string): boolean {
+    const tabs: Tab[] = liveNode.value.tabs;
+    const tabIndex: number = indexOfTab(tabs, targetTab);
+
+    if( tabIndex < 0 ) {
+      return false;
+    }
+
+    tabs[tabIndex].caption = caption;
+    return true;
+  }
+
   private removeTabFromLive(
     targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork
   ): RemoveResult {
@@ -376,6 +388,19 @@ export class SplitTreeManager {
 
         const [liveNode] = liveNodes;
         return this.reorderTabLive(liveNode as SplitTreeValue, targetTab, index);
+      }, targetNode
+    )
+  }
+
+  public changeTabCaption(targetNode: SplitTreeValue, targetTab: Tab, caption: string): boolean {
+    return this.getLiveNodeAnd(
+      (liveNodes: SplitTreeNode[] | null) => {
+        if( !liveNodes ) {
+          return false;
+        }
+
+        const [liveNode] = liveNodes;
+        return this.changeTabCaptionLive(liveNode as SplitTreeValue, targetTab, caption);
       }, targetNode
     )
   }

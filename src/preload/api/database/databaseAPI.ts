@@ -438,6 +438,31 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  postFilterationStepCaption: ({
+    databaseName,
+    filterationStep
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("filteration_step")) + 
+          SET(equals(col<FilterationStep>("caption"), val())) + 
+          WHERE(equals(col<FilterationStep>("step_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStep.caption, filterationStep.step_id]
+        );
+      }
+    );
+  },
   postCompanyChanges: ({
     databaseName,
     company,
