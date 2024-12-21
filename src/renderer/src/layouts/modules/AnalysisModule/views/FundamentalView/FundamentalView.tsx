@@ -10,28 +10,30 @@ import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysi
 import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
+import FilterationNote from "../FilterationNote/FilterationNote";
 
 
 export default function FundamentalView(): ReactNode {
   const {handleSplitTreeUpdate} = useSceneConfig();
   const {profileSelection, handleProfileSelection} = useProfileSelection();
   const {sceneConfig} = useContext(SceneContext);
-
   const {tabs, activeTabIndex} = useContext(TabsContext);
+
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig?.splitTree;
+  const filterationStepID: string = tabs[activeTabIndex].id || "";
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
     {
       "view-filteration-tab-stocks": () => {
         return (
           <CompanyAnalysisList
-            filterationStepID={tabs[activeTabIndex].id}
+            filterationStepID={filterationStepID}
             onCompanySelect={handleProfileSelection}
           />
-        )
+        );
       },
       "view-filteration-tab-chart": () => <>chart</>,
-      "view-fundamental-notes": () => <>fundamental</>,
+      "view-fundamental-notes": () => <FilterationNote filterationStepID={filterationStepID} />,
       "view-material-browser": () => <>materials</>,
       "view-company-profile": () => <CompanyProfile />
     }

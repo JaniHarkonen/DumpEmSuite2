@@ -7,16 +7,20 @@ import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
-import MarkdownNote from "@renderer/components/MarkdownNote/MarkdownNote";
+import FilterationNote from "../FilterationNote/FilterationNote";
+import useProfileSelection from "@renderer/hook/useProfileSelection";
+import { ProfileContext } from "@renderer/context/ProfileContext";
 
 
 export default function FilterationView() {
   const {handleSplitTreeUpdate} = useSceneConfig();
+  const {profileSelection, handleProfileSelection} = useProfileSelection();
 
   const {sceneConfig} = useContext(SceneContext);
   const {tabs, activeTabIndex} = useContext(TabsContext);
   
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig?.splitTree;
+  const filterationStepID: string = tabs[activeTabIndex].id || "";
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
      {
@@ -25,20 +29,23 @@ export default function FilterationView() {
           <CompanyAnalysisList
             filterationStepID={tabs[activeTabIndex].id}
             nextStepID={tabs[activeTabIndex + 1]?.id || tabs[activeTabIndex].id}
+            onCompanySelect={handleProfileSelection}
           />
         );
       },
       "view-filteration-tab-chart": () => <>chart</>,
-      "view-filteration-tab-notes": () => <MarkdownNote />
+      "view-filteration-tab-notes": () => <FilterationNote filterationStepID={filterationStepID} />
     }
   );
 
 
   return (
-    <ModuleView
-      splitTreeBlueprint={sceneBlueprint}
-      contentProvider={tabsProvider}
-      onUpdate={handleSplitTreeUpdate}
-    />
+    <ProfileContext.Provider value={profileSelection}>
+      <ModuleView
+        splitTreeBlueprint={sceneBlueprint}
+        contentProvider={tabsProvider}
+        onUpdate={handleSplitTreeUpdate}
+      />
+    </ProfileContext.Provider>
   );
 }

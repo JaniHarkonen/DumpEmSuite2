@@ -1,6 +1,6 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
+import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
 
@@ -240,6 +240,45 @@ export const databaseAPI: DatabaseAPI = {
               reject(createError(err));
             }
           }, [filterationStepID]
+        );
+      }
+    );
+  },
+  fetchFilterationStepNote: ({
+    databaseName,
+    filterationStepID,
+    companyID
+  }) => {
+    return new Promise<FetchResult<Filteration>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<Filteration>("notes", "f")
+          ) + FROM(
+            table("filteration", "f")
+          ) + WHERE(
+            equals(
+              col<FKFilteration>("fk_filteration_step_id", "f"), val()
+            ) + AND(
+              equals(
+                col<FKFilteration>("fk_filteration_company_id", "f"), val()
+              )
+            )
+          )
+        );
+
+        databaseManager.fetch<Filteration>(
+          databaseName, preparedString,
+          (err: Error | null, rows: (Filteration)[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              });
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStepID, companyID]
         );
       }
     );
@@ -579,6 +618,38 @@ export const databaseAPI: DatabaseAPI = {
         )
       }
     )
+  },
+  postFilterationNoteChanges: ({
+    databaseName,
+    filterationStepID,
+    companyID,
+    value
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("filteration")) + 
+          SET(equals(col<Filteration>("notes"), val())) + 
+          WHERE(
+            equals(col<FKFilteration>("fk_filteration_step_id"), val()) + 
+            AND(
+              equals(col<FKFilteration>("fk_filteration_company_id"), val())
+            )
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [value, filterationStepID, companyID]
+        );
+      }
+    );
   },
   deleteCompanies: ({
     databaseName, 
