@@ -1,7 +1,7 @@
 import { SceneConfigBlueprint } from "@renderer/model/tabs";
 
 
-export function buildFilterationBlueprint(hostID: string): SceneConfigBlueprint {
+export function buildFilterationBlueprint(hostID: string, workspaceID: string): SceneConfigBlueprint {
   return {
     splitTree: {
       root: {
@@ -28,7 +28,7 @@ export function buildFilterationBlueprint(hostID: string): SceneConfigBlueprint 
                 tabs: [
                   {
                     id: hostID + "-stocks",
-                    workspace: "ws-test",
+                    workspace: workspaceID,
                     caption: "Stocks",
                     contentTemplate: "view-filteration-tab-stocks",
                     tags: [],
@@ -57,7 +57,7 @@ export function buildFilterationBlueprint(hostID: string): SceneConfigBlueprint 
                   tabs: [
                     {
                       id: hostID + "-chart",
-                      workspace: "ws-test",
+                      workspace: workspaceID,
                       caption: "Chart",
                       contentTemplate: "view-filteration-tab-chart",
                       tags: [],
@@ -80,7 +80,7 @@ export function buildFilterationBlueprint(hostID: string): SceneConfigBlueprint 
                   tabs: [
                     {
                       id: hostID + "-notes",
-                      workspace: "ws-test",
+                      workspace: workspaceID,
                       caption: "Notes",
                       contentTemplate: "view-filteration-tab-notes",
                       tags: [],

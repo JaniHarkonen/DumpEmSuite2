@@ -8,6 +8,7 @@ import { WorkspaceContext, WorkspaceContextType } from "@renderer/context/Worksp
 import { WorkspaceConfig } from "@renderer/model/config";
 import { bindAPIToWorkspace, BoundDatabaseAPI, QueryResult } from "../../../../shared/database.type";
 import ModuleView from "../modules/ModuleView/ModuleView";
+import MacroModule from "../modules/MacroModule/MacroModule";
 
 
 type Props = {
@@ -46,7 +47,7 @@ export default function Workspace(props: Props): ReactNode {
     {
       "module-companies": () => <CompaniesModule />,
       "module-analysis": () => <AnalysisModule />,
-      "module-macro": () => <>macro module</>
+      "module-macro": () => <MacroModule />
     }
   );
   

@@ -13,7 +13,7 @@ import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
-import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
+import buildSectorBlueprint from "./buildSectorBlueprint";
 import { FilterationStep } from "src/shared/schemaConfig";
 
 
@@ -21,7 +21,7 @@ const TAGS = {
   permanent: "permanent"
 };
 
-export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
+export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
@@ -49,53 +49,47 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const handleTabAdd = (targetNode: SplitTreeValue) => {
-    const id: string = generateRandomUniqueID("filteration-tab-");
-    const tab: Tab = buildTab({
-      id,
-      workspace: workspaceConfig.id,
-      caption: "New filter",
-      contentTemplate: "tab-volume",
-      tags: [],
-      sceneConfigBlueprint: buildFilterationBlueprint(id, workspaceConfig.id),
-      order: 0
-    }, pContentProvider);
+    // const id: string = generateRandomUniqueID("filteration-tab-");
+    // const tab: Tab = buildTab({
+    //   id,
+    //   workspace: workspaceConfig.id,
+    //   caption: "New filter",
+    //   contentTemplate: "tab-volume",
+    //   tags: [],
+    //   sceneConfigBlueprint: buildFilterationBlueprint(id, workspaceConfig.id),
+    //   order: 0
+    // }, pContentProvider);
 
-    addTab(targetNode, tab);
-    databaseAPI.postNewFilterationStep({
-      filterationStep: {
-        step_id: id,
-        caption: tab.caption
-      }
-    });
+    // addTab(targetNode, tab);
+    // databaseAPI.postNewFilterationStep({
+    //   filterationStep: {
+    //     step_id: id,
+    //     caption: tab.caption
+    //   }
+    // });
   };
 
   const handleTabRemove = (
     e: MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
   ) => {
     e.stopPropagation();
-    removeTab(targetNode, tab);
-    databaseAPI.deleteFilterationStep({ step_id: tab.id });
+    // removeTab(targetNode, tab);
+    // databaseAPI.deleteFilterationStep({ step_id: tab.id });
   };
 
   const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
-    const tab: Tab = tabSelection!.selectedTab;
-
-    if( !tab.tags.includes(TAGS.permanent) ) {
-      reorderTab(targetNode, index);
-    } else {
-      resetTabSelection();
-    }
+    // reorderTab(targetNode, index);
   };
 
   const handleTabCaptionChange = (
     targetNode: SplitTreeValue, targetTab: Tab, caption: string
   ) => {
-    const changedStep: FilterationStep = {
-      step_id: targetTab.id,
-      caption
-    };
-    changeTabCaption(targetNode, targetTab, caption);
-    databaseAPI.postFilterationStepCaption({ filterationStep: changedStep });
+    // const changedStep: FilterationStep = {
+    //   step_id: targetTab.id,
+    //   caption
+    // };
+    // changeTabCaption(targetNode, targetTab, caption);
+    // databaseAPI.postFilterationStepCaption({ filterationStep: changedStep });
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
@@ -104,30 +98,26 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     return (
       <TabControls>
         {tabs.map((tab: Tab, tabIndex: number) => {
-          const isFundamental: boolean = !tab.tags.includes(TAGS.permanent);
-
           return (
             <TabButton
               key={tab.workspace + "-tab-control-button-" + tab.id}
               tab={tab}
-              isEditable={isFundamental}
+              isEditable={true}
               onCaptionEdit={(value: string) => {
                 handleTabCaptionChange(targetNode, tabs[tabIndex], value);
               }}
             >
-              {isFundamental && (
-                <span
-                  className="tab-remove-icon-container"
-                  onClick={(e: MouseEvent<HTMLImageElement>) => {
-                    handleTabRemove(e, targetNode, tabs[tabIndex]);
-                  }}
-                >
-                  <img
-                    className="size-tiny-icon tab-remove-icon"
-                    src={ASSETS.icons.buttons.trashCan.white}
-                  />
-                </span>
-              )}
+              <span
+                className="tab-remove-icon-container"
+                onClick={(e: MouseEvent<HTMLImageElement>) => {
+                  handleTabRemove(e, targetNode, tabs[tabIndex]);
+                }}
+              >
+                <img
+                  className="size-tiny-icon tab-remove-icon"
+                  src={ASSETS.icons.buttons.trashCan.white}
+                />
+              </span>
             </TabButton>
           );
         })}
@@ -137,7 +127,6 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       </TabControls>
     );
   };
-
   
   return (
     <FlexibleSplitsContext.Provider
