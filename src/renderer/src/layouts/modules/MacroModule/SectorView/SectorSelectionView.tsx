@@ -26,8 +26,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
   const {
     splitTree, 
     tabSelection, 
-    handleTabSelection,   
-    resetTabSelection,
+    handleTabSelection,
     handleTabOpen,
     handleTabRelocation, 
     handleTabReorder: reorderTab,
