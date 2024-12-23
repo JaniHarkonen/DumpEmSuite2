@@ -8,18 +8,14 @@ import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import useDatabase from "@renderer/hook/useDatabase";
 import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
-import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
+import { SplitTree, SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
 import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
 import buildSectorBlueprint from "./buildSectorBlueprint";
-import { FilterationStep } from "src/shared/schemaConfig";
+import { MacroSector } from "src/shared/schemaConfig";
 
-
-const TAGS = {
-  permanent: "permanent"
-};
 
 export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
@@ -43,53 +39,54 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
     contentProvider: pContentProvider,
-    onUpdate: pOnUpdate
+    onUpdate: (blueprint: SplitTreeBlueprint, newTree: SplitTree) => {pOnUpdate!(blueprint, newTree); console.log("done")}
   });
 
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const handleTabAdd = (targetNode: SplitTreeValue) => {
-    // const id: string = generateRandomUniqueID("filteration-tab-");
-    // const tab: Tab = buildTab({
-    //   id,
-    //   workspace: workspaceConfig.id,
-    //   caption: "New filter",
-    //   contentTemplate: "tab-volume",
-    //   tags: [],
-    //   sceneConfigBlueprint: buildFilterationBlueprint(id, workspaceConfig.id),
-    //   order: 0
-    // }, pContentProvider);
+    const id: string = generateRandomUniqueID("view-sector-");
+    const tab: Tab = buildTab({
+      id,
+      workspace: workspaceConfig.id,
+      caption: "New sector",
+      contentTemplate: "view-sector-analysis",
+      tags: [],
+      sceneConfigBlueprint: buildSectorBlueprint(id, workspaceConfig.id),
+      order: 0
+    }, pContentProvider);
 
-    // addTab(targetNode, tab);
-    // databaseAPI.postNewFilterationStep({
-    //   filterationStep: {
-    //     step_id: id,
-    //     caption: tab.caption
-    //   }
-    // });
+    console.log(targetNode, tab)
+    addTab(targetNode, tab);
+    databaseAPI.postNewMacroSector({
+      macroSector: {
+        sector_id: id,
+        sector_name: tab.caption
+      }
+    });
   };
 
   const handleTabRemove = (
     e: MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
   ) => {
     e.stopPropagation();
-    // removeTab(targetNode, tab);
-    // databaseAPI.deleteFilterationStep({ step_id: tab.id });
+    removeTab(targetNode, tab);
+    databaseAPI.deleteMacroSector({ macroSectorID: tab.id });
   };
 
   const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
-    // reorderTab(targetNode, index);
+    reorderTab(targetNode, index);
   };
 
   const handleTabCaptionChange = (
     targetNode: SplitTreeValue, targetTab: Tab, caption: string
   ) => {
-    // const changedStep: FilterationStep = {
-    //   step_id: targetTab.id,
-    //   caption
-    // };
-    // changeTabCaption(targetNode, targetTab, caption);
-    // databaseAPI.postFilterationStepCaption({ filterationStep: changedStep });
+    const changedSector: MacroSector = {
+      sector_id: targetTab.id,
+      sector_name: caption
+    };
+    changeTabCaption(targetNode, targetTab, caption);
+    databaseAPI.postMacroSectorCaption({ macroSector: changedSector });
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {

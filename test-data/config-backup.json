@@ -653,15 +653,165 @@
                               "left": {
                                 "isFork": false,
                                 "value": {
-                                  "tabs": [],
+                                  "tabs": [
+                                    {
+                                      "id": "tab-sector-kf894le83kltguiry7",
+                                      "workspace": "ws-test",
+                                      "caption": "Sector 1",
+                                      "contentTemplate": "view-sector-analysis",
+                                      "tags": [],
+                                      "sceneConfigBlueprint": {
+                                        "splitTree": {
+                                          "root": {
+                                            "isFork": true,
+                                            "divider": {
+                                              "direction": "horizontal",
+                                              "value": 50
+                                            },
+                                            "left": {
+                                              "isFork": true,
+                                              "divider": {
+                                                "direction": "horizontal",
+                                                "value": 50
+                                              },
+                                              "left": {
+                                                "isFork": false,
+                                                "value": {
+                                                  "tabs": [
+                                                    {
+                                                      "id": "tab-sector-kf894le83kltguiry7-notes",
+                                                      "workspace": "ws-test",
+                                                      "caption": "Notes",
+                                                      "contentTemplate": "view-sector-tab-notes",
+                                                      "tags": [],
+                                                      "order": 0
+                                                    },
+                                                    {
+                                                      "id": "tab-sector-kf894le83kltguiry7-materials",
+                                                      "workspace": "ws-test",
+                                                      "caption": "Materials",
+                                                      "contentTemplate": "view-sector-tab-materials",
+                                                      "tags": [],
+                                                      "order": 0
+                                                    }
+                                                  ],
+                                                  "activeTabIndex": -1
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "order": 0
+                                    },
+                                    {
+                                      "id": "tab-sector-lt894kf893pdf89423",
+                                      "workspace": "ws-test",
+                                      "caption": "Sector 2",
+                                      "contentTemplate": "view-sector-analysis",
+                                      "tags": [],
+                                      "sceneConfigBlueprint": {
+                                        "splitTree": {
+                                          "root": {
+                                            "isFork": true,
+                                            "divider": {
+                                              "direction": "horizontal",
+                                              "value": 50
+                                            },
+                                            "left": {
+                                              "isFork": true,
+                                              "divider": {
+                                                "direction": "horizontal",
+                                                "value": 50
+                                              },
+                                              "left": {
+                                                "isFork": false,
+                                                "value": {
+                                                  "tabs": [
+                                                    {
+                                                      "id": "tab-sector-lt894kf893pdf89423-notes",
+                                                      "workspace": "ws-test",
+                                                      "caption": "Notes",
+                                                      "contentTemplate": "view-sector-tab-notes",
+                                                      "tags": [],
+                                                      "order": 0
+                                                    },
+                                                    {
+                                                      "id": "tab-sector-lt894kf893pdf89423-materials",
+                                                      "workspace": "ws-test",
+                                                      "caption": "Materials",
+                                                      "contentTemplate": "view-sector-tab-materials",
+                                                      "tags": [],
+                                                      "order": 0
+                                                    }
+                                                  ],
+                                                  "activeTabIndex": -1
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "order": 0
+                                    },
+                                    {
+                                      "id": "tab-sector-vn38fnf0402ndo9weu",
+                                      "workspace": "ws-test",
+                                      "caption": "Sector 3",
+                                      "contentTemplate": "view-sector-analysis",
+                                      "tags": [],
+                                      "sceneConfigBlueprint": {
+                                        "splitTree": {
+                                          "root": {
+                                            "isFork": true,
+                                            "divider": {
+                                              "direction": "horizontal",
+                                              "value": 50
+                                            },
+                                            "left": {
+                                              "isFork": true,
+                                              "divider": {
+                                                "direction": "horizontal",
+                                                "value": 50
+                                              },
+                                              "left": {
+                                                "isFork": false,
+                                                "value": {
+                                                  "tabs": [
+                                                    {
+                                                      "id": "tab-sector-vn38fnf0402ndo9weu-notes",
+                                                      "workspace": "ws-test",
+                                                      "caption": "Notes",
+                                                      "contentTemplate": "view-sector-tab-notes",
+                                                      "tags": [],
+                                                      "order": 0
+                                                    },
+                                                    {
+                                                      "id": "tab-sector-vn38fnf0402ndo9weu-materials",
+                                                      "workspace": "ws-test",
+                                                      "caption": "Materials",
+                                                      "contentTemplate": "view-sector-tab-materials",
+                                                      "tags": [],
+                                                      "order": 0
+                                                    }
+                                                  ],
+                                                  "activeTabIndex": -1
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "order": 0
+                                    }
+                                  ],
                                   "activeTabIndex": 0
                                 }
                               }
                             }
                           }
                         }
-                      },
-                      "order": 0
+                      }
                     }
                   ],
                   "activeTabIndex": 2

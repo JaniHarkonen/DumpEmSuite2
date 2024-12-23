@@ -76,6 +76,7 @@ export type MacroSector = {
 };
 
 export type MacroAnalysis = {
+  notes: string | null;
 };
 export type FKMacroAnalysis = {
   fk_macro_analysis_sector_id: string;

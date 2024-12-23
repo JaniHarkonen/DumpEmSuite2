@@ -109,9 +109,10 @@ CREATE TABLE macro_sector (
 
 	/* Macro analyses (TO BE COMPLETED) */
 CREATE TABLE macro_analysis (
+	notes TEXT NULL,
 	fk_macro_analysis_sector_id TEXT NOT NULL,
 	
-	FOREIGN KEY (fk_macro_analysis_sector_id) REFERENCES macro_sector(sector_id)
+	FOREIGN KEY (fk_macro_analysis_sector_id) REFERENCES macro_sector(sector_id) ON DELETE CASCADE
 );
 
 
