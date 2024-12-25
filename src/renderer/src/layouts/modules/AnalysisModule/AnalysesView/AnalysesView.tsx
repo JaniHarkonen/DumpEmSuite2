@@ -1,8 +1,6 @@
 import "../../../../components/Tabs/TabControls/TabButton/TabButton.css";
 
-import { ASSETS } from "@renderer/assets/assets";
 import SplitView from "@renderer/components/SplitView/SplitView";
-import TabButton from "@renderer/components/Tabs/TabControls/TabButton/TabButton";
 import TabControls from "@renderer/components/Tabs/TabControls/TabControls";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
@@ -15,6 +13,7 @@ import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
 import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
 import { FilterationStep } from "src/shared/schemaConfig";
+import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 
 
 const TAGS = {
@@ -54,7 +53,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       id,
       workspace: workspaceConfig.id,
       caption: "New filter",
-      contentTemplate: "tab-volume",
+      contentTemplate: "none",
       tags: [],
       sceneConfigBlueprint: buildFilterationBlueprint(id, workspaceConfig.id),
       order: 0
@@ -103,32 +102,22 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
 
     return (
       <TabControls>
-        {tabs.map((tab: Tab, tabIndex: number) => {
-          const isFundamental: boolean = !tab.tags.includes(TAGS.permanent);
+        {tabs.map((tab: Tab) => {
+          const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
 
-          return (
-            <TabButton
-              key={tab.workspace + "-tab-control-button-" + tab.id}
-              tab={tab}
-              isEditable={isFundamental}
-              onCaptionEdit={(value: string) => {
-                handleTabCaptionChange(targetNode, tabs[tabIndex], value);
-              }}
-            >
-              {isFundamental && (
-                <span
-                  className="tab-remove-icon-container"
-                  onClick={(e: MouseEvent<HTMLImageElement>) => {
-                    handleTabRemove(e, targetNode, tabs[tabIndex]);
-                  }}
-                >
-                  <img
-                    className="size-tiny-icon tab-remove-icon"
-                    src={ASSETS.icons.buttons.trashCan.white}
-                  />
-                </span>
-              )}
-            </TabButton>
+          return(
+            <EditableTabButton
+                key={tab.workspace + "-tab-control-button-" + tab.id}
+                tab={tab}
+                allowEdit={!isFundamental}
+                allowRemove={!isFundamental}
+                onCaptionEdit={(value: string) => {
+                  handleTabCaptionChange(targetNode, tab, value);
+                }}
+                onRemove={(e: MouseEvent<HTMLImageElement>) => {
+                  handleTabRemove(e, targetNode, tab);
+                }}
+            />
           );
         })}
         <button onClick={() => handleTabAdd(targetNode)}>

@@ -1,20 +1,19 @@
 import "../../../../components/Tabs/TabControls/TabButton/TabButton.css";
 
-import { ASSETS } from "@renderer/assets/assets";
 import SplitView from "@renderer/components/SplitView/SplitView";
-import TabButton from "@renderer/components/Tabs/TabControls/TabButton/TabButton";
 import TabControls from "@renderer/components/Tabs/TabControls/TabControls";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import useDatabase from "@renderer/hook/useDatabase";
 import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@renderer/hook/useFlexibleSplits";
-import { SplitTree, SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
+import { SplitTreeBlueprint, SplitTreeValue } from "@renderer/model/splits";
 import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
 import buildSectorBlueprint from "./buildSectorBlueprint";
 import { MacroSector } from "src/shared/schemaConfig";
+import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 
 
 export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
@@ -38,7 +37,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
     contentProvider: pContentProvider,
-    onUpdate: (blueprint: SplitTreeBlueprint, newTree: SplitTree) => {pOnUpdate!(blueprint, newTree); console.log("done")}
+    onUpdate: pOnUpdate
   });
 
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
@@ -55,7 +54,6 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
       order: 0
     }, pContentProvider);
 
-    console.log(targetNode, tab)
     addTab(targetNode, tab);
     databaseAPI.postNewMacroSector({
       macroSector: {
@@ -93,28 +91,16 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
 
     return (
       <TabControls>
-        {tabs.map((tab: Tab, tabIndex: number) => {
-          return (
-            <TabButton
+        {tabs.map((tab: Tab) => {
+          return(
+            <EditableTabButton
               key={tab.workspace + "-tab-control-button-" + tab.id}
               tab={tab}
-              isEditable={true}
               onCaptionEdit={(value: string) => {
-                handleTabCaptionChange(targetNode, tabs[tabIndex], value);
+                handleTabCaptionChange(targetNode, tab, value);
               }}
-            >
-              <span
-                className="tab-remove-icon-container"
-                onClick={(e: MouseEvent<HTMLImageElement>) => {
-                  handleTabRemove(e, targetNode, tabs[tabIndex]);
-                }}
-              >
-                <img
-                  className="size-tiny-icon tab-remove-icon"
-                  src={ASSETS.icons.buttons.trashCan.white}
-                />
-              </span>
-            </TabButton>
+              onRemove={(e: MouseEvent<HTMLImageElement>) => handleTabRemove(e, targetNode, tab)}
+            />
           );
         })}
         <button onClick={() => handleTabAdd(targetNode)}>
@@ -124,6 +110,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
     );
   };
   
+
   return (
     <FlexibleSplitsContext.Provider
       value={{

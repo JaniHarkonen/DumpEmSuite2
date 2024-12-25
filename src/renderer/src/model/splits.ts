@@ -11,7 +11,7 @@ export type DividerSettings = {
 };
 
   //////////////////// BLUEPRINTS ///////////////////////
-type SplitTreeNodeBlueprint = SplitTreeValueBlueprint | SplitTreeForkBlueprint;
+export type SplitTreeNodeBlueprint = SplitTreeValueBlueprint | SplitTreeForkBlueprint;
 
 type SplitTreeItemBlueprint = {
   isFork: boolean;

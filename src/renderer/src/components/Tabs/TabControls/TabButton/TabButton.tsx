@@ -6,7 +6,7 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import useEditable, { OnEditFinalize } from "@renderer/hook/useEditable";
 
 
-type OnCaptionEditFinalize = OnEditFinalize<string>;
+export type OnCaptionEditFinalize = OnEditFinalize<string>;
 
 type Props = {
   tab: Tab;
