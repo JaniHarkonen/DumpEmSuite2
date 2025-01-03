@@ -38,6 +38,10 @@ export class DatabaseManager {
 
         callback && callback(err);
       });
+
+      // Enforces foreign key constraints (ensures that cascading updates, such as 
+      // "ON DELETE CASCADE" are carried out)
+    database.exec("PRAGMA foreign_keys = ON;");
   }
 
   public fetch<T>(

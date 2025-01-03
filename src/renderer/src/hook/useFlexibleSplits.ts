@@ -48,12 +48,14 @@ export default function useFlexibleSplits(props: Props): Returns {
 
   const [splitTree, setSplitTree] = useState<SplitTree | null>(null);
   const [tabSelection, setTabSelection] = useState<TabSelection>(null);
+  
   const treeManager: MutableRefObject<SplitTreeManager | null> = useRef(null);
 
   useEffect(() => {
     if( pSplitTreeBlueprint ) {
       const builtTree: SplitTree | null = 
         SplitTreeManager.buildTree(pSplitTreeBlueprint, pContentProvider);
+        
       if( builtTree ) {
         treeManager.current = new SplitTreeManager(builtTree);
         setSplitTree(treeManager.current.snapshot());

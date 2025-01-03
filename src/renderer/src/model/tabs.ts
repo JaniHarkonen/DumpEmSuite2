@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
-import { blueprintNode, buildNode, defaultSplitTreeBlueprint, snapshotNode, SplitTree, SplitTreeBlueprint, SplitTreeFork, SplitTreeForkBlueprint } from "./splits";
+import { defaultSplitTreeBlueprint, SplitTreeBlueprint } from "./splits";
 
 
 export type SceneConfig = {
-  splitTree: SplitTree;
+  splitTree: SplitTreeBlueprint;
 };
 
 export type SceneConfigBlueprint = {
@@ -54,11 +54,7 @@ export function buildTab(
 
   if( tabBlueprint.sceneConfigBlueprint ) {
     sceneConfig = {
-      splitTree: {
-        root: buildNode(
-          tabBlueprint.sceneConfigBlueprint.splitTree.root, contentProvider
-        ) as SplitTreeFork
-      }
+      splitTree: tabBlueprint.sceneConfigBlueprint.splitTree
     };
   }
   
@@ -79,9 +75,7 @@ export function blueprintTab(tab: Tab): TabBlueprint {
 
   if( tab.sceneConfig ) {
     sceneConfigBlueprint = {
-      splitTree: {
-        root: blueprintNode(tab.sceneConfig.splitTree.root) as SplitTreeForkBlueprint
-      }
+      splitTree: tab.sceneConfig.splitTree
     };
   }
 
@@ -101,9 +95,7 @@ export function copyTab(tab: Tab): Tab {
 
   if( tab.sceneConfig ) {
     sceneConfig = {
-      splitTree: {
-        root: snapshotNode(tab.sceneConfig.splitTree.root) as SplitTreeFork
-      }
+      splitTree: tab.sceneConfig.splitTree
     };
   }
 

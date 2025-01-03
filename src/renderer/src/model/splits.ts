@@ -211,14 +211,18 @@ export class SplitTreeManager {
     operation: LiveNodeOperation<T>, ...targetNode: SplitTreeNode[]
   ): T {
     let liveNodes: SplitTreeNode[] | null = [];
+    
     for( let i = 0; i < targetNode.length; i++ ) {
       const live: SplitTreeNode | undefined = targetNode[i].liveNode;
+
       if( !live ) {
         liveNodes = null;
         break;
       }
+
       liveNodes.push(live);
     }
+
     return operation(liveNodes);
   }
 

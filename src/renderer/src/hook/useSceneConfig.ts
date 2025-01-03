@@ -16,7 +16,7 @@ export default function useSceneConfig(): Returns {
   const {sceneConfig} = useContext(SceneContext);
 
   const handleSplitTreeUpdate: OnSceneSplitTreeUpdate = (blueprint: SplitTreeBlueprint) => {
-    sceneConfig.splitTree = blueprint;
+    sceneConfig.splitTree.root = blueprint.root;
 
     if( config.appStateConfigRef && config.appStateConfigRef.current ) {
       config.configFileUpdater(config.appStateConfigRef.current);
