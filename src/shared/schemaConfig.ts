@@ -62,20 +62,13 @@ export type FKFilteration = {
   fk_filteration_tag_id: number;
 };
 
-export type Fundamental = {
-  notes: string | null;
-};
-export type FKFundamental = {
-  fk_fundamental_company_id: number;
-  fk_fundamental_tag_id: number;
-};
-
 export type MacroSector = {
   sector_id: string;
   sector_name: string | null;
 };
 
 export type MacroAnalysis = {
+  notes: string | null;
 };
 export type FKMacroAnalysis = {
   fk_macro_analysis_sector_id: string;

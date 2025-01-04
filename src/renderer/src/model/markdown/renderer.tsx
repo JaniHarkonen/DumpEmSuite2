@@ -24,7 +24,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
       case "list-main": return <span key={key}><strong>–</strong>{childNodes}</span>;
       case "list-pro": return <span key={key}><strong>+</strong>{childNodes}</span>;
       case "list-question": return <span key={key}><strong>?</strong>{childNodes}</span>;
-      case "underlined": console.log("is");return <u key={key}>{childNodes}</u>;
+      case "underlined": return <u key={key}>{childNodes}</u>;
       case "header": {
         switch( astNode.value ) {
           case "3": return <h3 key={key}>{childNodes}</h3>;
@@ -55,6 +55,16 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
             exchange={split[0]}
             ticker={split[1]}
           />
+        );
+      }
+      case "row": {
+        return (
+          <div
+            key={key}
+            className="d-flex"
+          >
+            {childNodes}
+          </div>
         );
       }
     }

@@ -27,6 +27,7 @@ type Returns = {
   resetTabSelection: () => void;
   handleTabRelocation: (toNode: SplitTreeValue, index: number) => void;
   handleTabReorder: (targetNode: SplitTreeValue, index: number) => void;
+  handleTabCaptionChange: (targetNode: SplitTreeValue, targetTab: Tab, caption: string) => void;
   handleTabSplit: (
     toFork: SplitTreeFork, 
     requestedDirection: DividerDirection, 
@@ -47,12 +48,14 @@ export default function useFlexibleSplits(props: Props): Returns {
 
   const [splitTree, setSplitTree] = useState<SplitTree | null>(null);
   const [tabSelection, setTabSelection] = useState<TabSelection>(null);
+  
   const treeManager: MutableRefObject<SplitTreeManager | null> = useRef(null);
 
   useEffect(() => {
     if( pSplitTreeBlueprint ) {
       const builtTree: SplitTree | null = 
         SplitTreeManager.buildTree(pSplitTreeBlueprint, pContentProvider);
+        
       if( builtTree ) {
         treeManager.current = new SplitTreeManager(builtTree);
         setSplitTree(treeManager.current.snapshot());
@@ -116,7 +119,13 @@ export default function useFlexibleSplits(props: Props): Returns {
 
       return manager.reorderTab(targetNode, tabSelection.selectedTab, index);
     });
-  }
+  };
+
+  const handleTabCaptionChange = (targetNode: SplitTreeValue, targetTab: Tab, caption: string) => {
+    handleSplitsUpdate((manager: SplitTreeManager): boolean => {
+      return manager.changeTabCaption(targetNode, targetTab, caption);
+    });
+  };
 
   const handleTabSplit = (
     toFork: SplitTreeFork, 
@@ -169,6 +178,7 @@ export default function useFlexibleSplits(props: Props): Returns {
     handleTabSelection,
     handleTabRelocation,
     handleTabReorder,
+    handleTabCaptionChange,
     handleTabSplit,
     handleDividerMove,
     handleTabAdd,

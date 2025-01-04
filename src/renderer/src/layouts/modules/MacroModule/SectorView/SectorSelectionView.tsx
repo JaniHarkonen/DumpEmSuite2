@@ -11,16 +11,12 @@ import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
-import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
-import { FilterationStep } from "src/shared/schemaConfig";
+import buildSectorBlueprint from "./buildSectorBlueprint";
+import { MacroSector } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 
 
-const TAGS = {
-  permanent: "permanent"
-};
-
-export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
+export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
   const pSceneBlueprint: SplitTreeBlueprint | null | undefined = props.splitTreeBlueprint;
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
@@ -29,8 +25,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const {
     splitTree, 
     tabSelection, 
-    handleTabSelection,   
-    resetTabSelection,
+    handleTabSelection,
     handleTabOpen,
     handleTabRelocation, 
     handleTabReorder: reorderTab,
@@ -48,22 +43,22 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const handleTabAdd = (targetNode: SplitTreeValue) => {
-    const id: string = generateRandomUniqueID("filteration-tab-");
+    const id: string = generateRandomUniqueID("view-sector-");
     const tab: Tab = buildTab({
       id,
       workspace: workspaceConfig.id,
-      caption: "New filter",
-      contentTemplate: "none",
+      caption: "New sector",
+      contentTemplate: "view-sector-analysis",
       tags: [],
-      sceneConfigBlueprint: buildFilterationBlueprint(id, workspaceConfig.id),
+      sceneConfigBlueprint: buildSectorBlueprint(id, workspaceConfig.id),
       order: 0
     }, pContentProvider);
 
     addTab(targetNode, tab);
-    databaseAPI.postNewFilterationStep({
-      filterationStep: {
-        step_id: id,
-        caption: tab.caption
+    databaseAPI.postNewMacroSector({
+      macroSector: {
+        sector_id: id,
+        sector_name: tab.caption
       }
     });
   };
@@ -73,28 +68,22 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   ) => {
     e.stopPropagation();
     removeTab(targetNode, tab);
-    databaseAPI.deleteFilterationStep({ step_id: tab.id });
+    databaseAPI.deleteMacroSector({ macroSectorID: tab.id });
   };
 
   const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
-    const tab: Tab = tabSelection!.selectedTab;
-
-    if( !tab.tags.includes(TAGS.permanent) ) {
-      reorderTab(targetNode, index);
-    } else {
-      resetTabSelection();
-    }
+    reorderTab(targetNode, index);
   };
 
   const handleTabCaptionChange = (
     targetNode: SplitTreeValue, targetTab: Tab, caption: string
   ) => {
-    const changedStep: FilterationStep = {
-      step_id: targetTab.id,
-      caption
+    const changedSector: MacroSector = {
+      sector_id: targetTab.id,
+      sector_name: caption
     };
     changeTabCaption(targetNode, targetTab, caption);
-    databaseAPI.postFilterationStepCaption({ filterationStep: changedStep });
+    databaseAPI.postMacroSectorCaption({ macroSector: changedSector });
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
@@ -103,20 +92,14 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     return (
       <TabControls>
         {tabs.map((tab: Tab) => {
-          const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
-
           return(
             <EditableTabButton
-                key={tab.workspace + "-tab-control-button-" + tab.id}
-                tab={tab}
-                allowEdit={!isFundamental}
-                allowRemove={!isFundamental}
-                onCaptionEdit={(value: string) => {
-                  handleTabCaptionChange(targetNode, tab, value);
-                }}
-                onRemove={(e: MouseEvent<HTMLImageElement>) => {
-                  handleTabRemove(e, targetNode, tab);
-                }}
+              key={tab.workspace + "-tab-control-button-" + tab.id}
+              tab={tab}
+              onCaptionEdit={(value: string) => {
+                handleTabCaptionChange(targetNode, tab, value);
+              }}
+              onRemove={(e: MouseEvent<HTMLImageElement>) => handleTabRemove(e, targetNode, tab)}
             />
           );
         })}
@@ -126,8 +109,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       </TabControls>
     );
   };
-
   
+
   return (
     <FlexibleSplitsContext.Provider
       value={{
@@ -144,4 +127,5 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       {splitTree && <SplitView renderControls={renderTabControls} />}
     </FlexibleSplitsContext.Provider>
   );
+  
 }

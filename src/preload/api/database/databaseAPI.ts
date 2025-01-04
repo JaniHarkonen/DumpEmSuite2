@@ -1,8 +1,8 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKProfile, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
+import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKMacroAnalysis, FKProfile, MacroAnalysis, MacroSector, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, replaceInto, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -283,6 +283,40 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  fetchMacroSectorNote: ({
+    databaseName,
+    macroSectorID
+  }) => {
+    return new Promise<FetchResult<MacroAnalysis>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<MacroAnalysis>("notes")
+          ) + FROM(
+            table("macro_analysis")
+          ) + WHERE(
+            equals(
+              col<FKMacroAnalysis>("fk_macro_analysis_sector_id"), val()
+            )
+          )
+        );
+
+        databaseManager.fetch<MacroAnalysis>(
+          databaseName, preparedString,
+          (err: Error | null, rows: (MacroAnalysis)[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              });
+            } else {
+              reject(createError(err));
+            }
+          }, [macroSectorID]
+        );
+      }
+    );
+  },
   postNewCompany: ({
     databaseName, 
     company
@@ -387,6 +421,35 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  postNewMacroSector: ({
+    databaseName,
+    macroSector
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          insertInto(
+            table("macro_sector"),
+            col<MacroSector>("sector_id"),
+            col<MacroSector>("sector_name")
+          ) + values(
+            value(val(), val())
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [macroSector.sector_id, macroSector.sector_name]
+        );
+      }
+    )
+  },
   postAllStocksFromCompanyListings: ({
     databaseName,
     filterationStepID,
@@ -434,6 +497,31 @@ export const databaseAPI: DatabaseAPI = {
               reject(createError(err));
             }
           }, [filterationStepID, filterationStepID]
+        );
+      }
+    );
+  },
+  postFilterationStepCaption: ({
+    databaseName,
+    filterationStep
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("filteration_step")) + 
+          SET(equals(col<FilterationStep>("caption"), val())) + 
+          WHERE(equals(col<FilterationStep>("step_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [filterationStep.caption, filterationStep.step_id]
         );
       }
     );
@@ -651,6 +739,59 @@ export const databaseAPI: DatabaseAPI = {
       }
     );
   },
+  postMacroSectorCaption: ({
+    databaseName,
+    macroSector
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          UPDATE(table("macro_sector")) + 
+          SET(equals(col<MacroSector>("sector_name"), val())) + 
+          WHERE(equals(col<MacroSector>("sector_id"), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [macroSector.sector_name, macroSector.sector_id]
+        );
+      }
+    );
+  },
+  postMacroSectorNoteChanges: ({
+    databaseName,
+    macroSectorID,
+    notes
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          replaceInto(
+            table("macro_analysis"), 
+            col<MacroAnalysis>("notes"), 
+            col<FKMacroAnalysis>("fk_macro_analysis_sector_id")
+          ) + values(value(val(), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [notes, macroSectorID]
+        );
+      }
+    );
+  },
   deleteCompanies: ({
     databaseName, 
     companies
@@ -764,6 +905,32 @@ export const databaseAPI: DatabaseAPI = {
             }
           }, [filterationStepID, ...companyID]
         )
+      }
+    )
+  },
+  deleteMacroSector: ({
+    databaseName,
+    macroSectorID
+  }) => {
+    return new Promise<DeleteResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          DELETE(
+            FROM(table("macro_sector")) + 
+            WHERE(equals(col<MacroSector>("sector_id"), val()))
+          )
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [macroSectorID]
+        );
       }
     )
   }

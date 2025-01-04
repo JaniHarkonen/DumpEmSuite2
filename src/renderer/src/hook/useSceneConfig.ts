@@ -1,13 +1,13 @@
 import { GlobalContext } from "@renderer/context/GlobalContext";
 import { SceneContext } from "@renderer/context/SceneContext";
-import { SceneConfig } from "@renderer/model/config";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
+import { SceneConfigBlueprint } from "@renderer/model/tabs";
 import { useContext } from "react";
 
 
 type OnSceneSplitTreeUpdate = (blueprint: SplitTreeBlueprint) => void;
 type Returns = {
-  sceneConfig: SceneConfig;
+  sceneConfig: SceneConfigBlueprint;
   handleSplitTreeUpdate: OnSceneSplitTreeUpdate;
 };
 
@@ -16,7 +16,7 @@ export default function useSceneConfig(): Returns {
   const {sceneConfig} = useContext(SceneContext);
 
   const handleSplitTreeUpdate: OnSceneSplitTreeUpdate = (blueprint: SplitTreeBlueprint) => {
-    sceneConfig.splitTree = blueprint;
+    sceneConfig.splitTree.root = blueprint.root;
 
     if( config.appStateConfigRef && config.appStateConfigRef.current ) {
       config.configFileUpdater(config.appStateConfigRef.current);

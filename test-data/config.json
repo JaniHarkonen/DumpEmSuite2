@@ -653,39 +653,18 @@
                               "left": {
                                 "isFork": false,
                                 "value": {
-                                  "tabs": [
-                                    {
-                                      "id": "tab-sector-kf894le83kltguiry7",
-                                      "workspace": "ws-test",
-                                      "caption": "Sector 1",
-                                      "tags": [],
-                                      "order": 0
-                                    },
-                                    {
-                                      "id": "tab-sector-lt894kf893pdf89423",
-                                      "workspace": "ws-test",
-                                      "caption": "Sector 2",
-                                      "tags": [],
-                                      "order": 0
-                                    },
-                                    {
-                                      "id": "tab-sector-vn38fnf0402ndo9weu",
-                                      "workspace": "ws-test",
-                                      "caption": "Sector 3",
-                                      "tags": [],
-                                      "order": 0
-                                    }
-                                  ],
-                                  "activeTabIndex": -1
+                                  "tabs": [],
+                                  "activeTabIndex": 0
                                 }
                               }
                             }
                           }
                         }
-                      }
+                      },
+                      "order": 0
                     }
                   ],
-                  "activeTabIndex": 1
+                  "activeTabIndex": 2
                 }
               }
             }

@@ -293,7 +293,27 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
       type: "underlined",
       children: parse(input.slice(start, cursor()))
     };
-  }
+  };
+
+  const row = (): ASTNode | null => {
+    if( !check(peek(), "row-open") ) {
+      return null;
+    }
+
+    advance();
+
+    const start: number = cursor(1);
+    while( peek() && !check(peek(), "row-close") ) {
+      advance();
+    }
+
+    advance();
+
+    return {
+      type: "row",
+      children: parse(input.slice(start, cursor()))
+    };
+  };
 
   const asPlainText = (): ASTNode | null => {
     const token: MarkdownToken | undefined = peek();
@@ -322,6 +342,7 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
       (astNode = chart()) || 
       (astNode = newLine()) || 
       (astNode = underlined()) || 
+      (astNode = row()) || 
       (astNode = asPlainText())
     ) {
       pushNode(astNode);

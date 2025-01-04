@@ -87,17 +87,6 @@ CREATE TABLE filteration (
 );
 
 
-	/* Fundamental analyses */
-CREATE TABLE fundamental (
-	notes TEXT,
-	fk_fundamental_company_id INTEGER NOT NULL,
-	fk_fundamental_tag_id INTEGER NOT NULL DEFAULT 0,
-	
-	FOREIGN KEY (fk_fundamental_company_id) REFERENCES company(company_id),
-	FOREIGN KEY (fk_fundamental_tag_id) REFERENCES tag(tag_id)
-);
-
-
 	/* Macro sector tabs in the order that they appear in the Macro-module */
 CREATE TABLE macro_sector (
 	sector_id TEXT NOT NULL,
@@ -109,9 +98,10 @@ CREATE TABLE macro_sector (
 
 	/* Macro analyses (TO BE COMPLETED) */
 CREATE TABLE macro_analysis (
-	fk_macro_analysis_sector_id TEXT NOT NULL,
+	notes TEXT NULL,
+	fk_macro_analysis_sector_id TEXT NOT NULL UNIQUE,
 	
-	FOREIGN KEY (fk_macro_analysis_sector_id) REFERENCES macro_sector(sector_id)
+	FOREIGN KEY (fk_macro_analysis_sector_id) REFERENCES macro_sector(sector_id) ON DELETE CASCADE
 );
 
 

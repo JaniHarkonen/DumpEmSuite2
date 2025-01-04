@@ -11,7 +11,7 @@ export type DividerSettings = {
 };
 
   //////////////////// BLUEPRINTS ///////////////////////
-type SplitTreeNodeBlueprint = SplitTreeValueBlueprint | SplitTreeForkBlueprint;
+export type SplitTreeNodeBlueprint = SplitTreeValueBlueprint | SplitTreeForkBlueprint;
 
 type SplitTreeItemBlueprint = {
   isFork: boolean;
@@ -211,14 +211,18 @@ export class SplitTreeManager {
     operation: LiveNodeOperation<T>, ...targetNode: SplitTreeNode[]
   ): T {
     let liveNodes: SplitTreeNode[] | null = [];
+    
     for( let i = 0; i < targetNode.length; i++ ) {
       const live: SplitTreeNode | undefined = targetNode[i].liveNode;
+
       if( !live ) {
         liveNodes = null;
         break;
       }
+
       liveNodes.push(live);
     }
+
     return operation(liveNodes);
   }
 
@@ -270,6 +274,18 @@ export class SplitTreeManager {
     tabs.splice(currentIndex, 1);
     this.addTabToLive(liveNode, targetTab, index);
 
+    return true;
+  }
+
+  private changeTabCaptionLive(liveNode: SplitTreeValue, targetTab: Tab, caption: string): boolean {
+    const tabs: Tab[] = liveNode.value.tabs;
+    const tabIndex: number = indexOfTab(tabs, targetTab);
+
+    if( tabIndex < 0 ) {
+      return false;
+    }
+
+    tabs[tabIndex].caption = caption;
     return true;
   }
 
@@ -376,6 +392,19 @@ export class SplitTreeManager {
 
         const [liveNode] = liveNodes;
         return this.reorderTabLive(liveNode as SplitTreeValue, targetTab, index);
+      }, targetNode
+    )
+  }
+
+  public changeTabCaption(targetNode: SplitTreeValue, targetTab: Tab, caption: string): boolean {
+    return this.getLiveNodeAnd(
+      (liveNodes: SplitTreeNode[] | null) => {
+        if( !liveNodes ) {
+          return false;
+        }
+
+        const [liveNode] = liveNodes;
+        return this.changeTabCaptionLive(liveNode as SplitTreeValue, targetTab, caption);
       }, targetNode
     )
   }
