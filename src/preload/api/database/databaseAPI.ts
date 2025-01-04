@@ -3,7 +3,6 @@ import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from 
 import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKMacroAnalysis, FKProfile, MacroAnalysis, MacroSector, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, replaceInto, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
-import { ipcRenderer } from "electron/renderer";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!

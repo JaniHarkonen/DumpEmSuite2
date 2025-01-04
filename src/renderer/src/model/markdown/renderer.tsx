@@ -57,6 +57,16 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
           />
         );
       }
+      case "row": {
+        return (
+          <div
+            key={key}
+            className="d-flex"
+          >
+            {childNodes}
+          </div>
+        );
+      }
     }
 
     return [];

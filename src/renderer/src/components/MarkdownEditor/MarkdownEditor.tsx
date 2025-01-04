@@ -35,8 +35,8 @@ export default function MarkdownEditor(props: Props) {
     if( e.key === "Tab" ) {
       e.preventDefault();
 
+        // Apply tab to the textarea and fix the cursor position
       const selectionStart: number = target.selectionStart;
-
       target.value = 
         target.value.substring(0, selectionStart) + "\t" + 
         target.value.substring(selectionStart);

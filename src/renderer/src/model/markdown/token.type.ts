@@ -29,4 +29,7 @@ export type TokenType =
   "underline-open" | 
   "underline-close" |
   "underlined" |
+  "row-open" | 
+  "row-close" |
+  "row" |
   ListPoint;
