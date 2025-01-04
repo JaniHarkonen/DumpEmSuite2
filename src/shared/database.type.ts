@@ -1,4 +1,4 @@
-import { Company, Currency, Filteration, FilterationStep, MacroSector, Profile, Scraper, Tag } from "./schemaConfig";
+import { Company, Currency, Filteration, FilterationStep, MacroAnalysis, MacroSector, Profile, Scraper, Tag } from "./schemaConfig";
 import { AsString } from "./utils";
 
 
@@ -40,6 +40,9 @@ export type DatabaseAPI = {
       companyID: string;
     } & QueryProps
   ) => Promise<FetchResult<Filteration>>;
+  fetchMacroSectorNote: (
+    props: { macroSectorID: string; } & QueryProps
+  ) => Promise<FetchResult<MacroAnalysis>>;
   postNewCompany: (
     props: { company: Company | AsString<Company>; } & QueryProps
   ) => Promise<PostResult>;
@@ -95,6 +98,12 @@ export type DatabaseAPI = {
   postMacroSectorCaption: (
     props: { macroSector: MacroSector; } & QueryProps
   ) => Promise<PostResult>;
+  postMacroSectorNoteChanges: (
+    props: {
+      macroSectorID: string;
+      notes: string;
+    } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; } & QueryProps) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; } & QueryProps) => Promise<DeleteResult>;
@@ -120,6 +129,9 @@ export type BoundDatabaseAPI = {
       companyID: string;
     }
   ) => Promise<FetchResult<Filteration>>;
+  fetchMacroSectorNote: (
+    props: { macroSectorID: string; }
+  ) => Promise<FetchResult<MacroAnalysis>>;
   postNewCompany: (props: { company: Company | AsString<Company>; }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep; }) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag>; }) => Promise<PostResult>;
@@ -167,6 +179,12 @@ export type BoundDatabaseAPI = {
     }
   ) => Promise<PostResult>;
   postMacroSectorCaption: (props: { macroSector: MacroSector; }) => Promise<PostResult>;
+  postMacroSectorNoteChanges: (
+    props: {
+      macroSectorID: string;
+      notes: string;
+    }
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; }) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; }) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; }) => Promise<DeleteResult>;
@@ -204,6 +222,12 @@ export function bindAPIToWorkspace(
     },
     fetchFilterationStepNote: (props) => {
       return api.fetchFilterationStepNote({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    fetchMacroSectorNote: (props) => {
+      return api.fetchMacroSectorNote({
         ...props,
         databaseName: workspaceID
       });
@@ -282,6 +306,12 @@ export function bindAPIToWorkspace(
     },
     postMacroSectorCaption: (props) => {
       return api.postMacroSectorCaption({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postMacroSectorNoteChanges: (props) => {
+      return api.postMacroSectorNoteChanges({
         ...props,
         databaseName: workspaceID
       });

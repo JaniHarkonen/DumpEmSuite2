@@ -89,6 +89,12 @@ export function insertInto(
   return "INSERT INTO " + tableString + "(" + compound(...columnString) + ")";
 }
 
+export function replaceInto(
+  tableString: string, ... columnString: string[]
+): string {
+  return "REPLACE INTO " + tableString + "(" + compound(...columnString) + ")";
+}
+
 export function value(...valueString: string[]): string {
   return "(" + compound(...valueString) + ")";
 }

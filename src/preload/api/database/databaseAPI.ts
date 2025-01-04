@@ -1,8 +1,9 @@
 import { RunResult } from "sqlite3";
 import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
-import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKProfile, MacroSector, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
+import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKMacroAnalysis, FKProfile, MacroAnalysis, MacroSector, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
-import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, replaceInto, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
+import { ipcRenderer } from "electron/renderer";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -279,6 +280,40 @@ export const databaseAPI: DatabaseAPI = {
               reject(createError(err));
             }
           }, [filterationStepID, companyID]
+        );
+      }
+    );
+  },
+  fetchMacroSectorNote: ({
+    databaseName,
+    macroSectorID
+  }) => {
+    return new Promise<FetchResult<MacroAnalysis>>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          SELECT(
+            col<MacroAnalysis>("notes")
+          ) + FROM(
+            table("macro_analysis")
+          ) + WHERE(
+            equals(
+              col<FKMacroAnalysis>("fk_macro_analysis_sector_id"), val()
+            )
+          )
+        );
+
+        databaseManager.fetch<MacroAnalysis>(
+          databaseName, preparedString,
+          (err: Error | null, rows: (MacroAnalysis)[]) => {
+            if( !err ) {
+              resolve({
+                wasSuccessful: true,
+                rows
+              });
+            } else {
+              reject(createError(err));
+            }
+          }, [macroSectorID]
         );
       }
     );
@@ -726,6 +761,34 @@ export const databaseAPI: DatabaseAPI = {
               reject(createError(err));
             }
           }, [macroSector.sector_name, macroSector.sector_id]
+        );
+      }
+    );
+  },
+  postMacroSectorNoteChanges: ({
+    databaseName,
+    macroSectorID,
+    notes
+  }) => {
+    return new Promise<PostResult>(
+      (resolve, reject) => {
+        const preparedString: string = query(
+          replaceInto(
+            table("macro_analysis"), 
+            col<MacroAnalysis>("notes"), 
+            col<FKMacroAnalysis>("fk_macro_analysis_sector_id")
+          ) + values(value(val(), val()))
+        );
+
+        databaseManager.post(
+          databaseName, preparedString,
+          (runResult: RunResult | null, err: Error | null) => {
+            if( !err ) {
+              resolve(destructureRunResult(runResult));
+            } else {
+              reject(createError(err));
+            }
+          }, [notes, macroSectorID]
         );
       }
     );

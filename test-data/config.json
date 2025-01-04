@@ -163,7 +163,7 @@
                                       }
                                     }
                                   ],
-                                  "activeTabIndex": 1
+                                  "activeTabIndex": 2
                                 }
                               }
                             }
@@ -653,7 +653,65 @@
                               "left": {
                                 "isFork": false,
                                 "value": {
-                                  "tabs": [],
+                                  "tabs": [
+                                    {
+                                      "id": "view-sector-26073612c7fdc183d6739b2ca07",
+                                      "workspace": "ws-test",
+                                      "caption": "Test sector",
+                                      "contentTemplate": "view-sector-analysis",
+                                      "tags": [],
+                                      "sceneConfigBlueprint": {
+                                        "splitTree": {
+                                          "root": {
+                                            "isFork": true,
+                                            "divider": {
+                                              "direction": "horizontal",
+                                              "value": 50
+                                            },
+                                            "left": {
+                                              "isFork": true,
+                                              "divider": {
+                                                "direction": "horizontal",
+                                                "value": 50
+                                              },
+                                              "left": {
+                                                "isFork": true,
+                                                "divider": {
+                                                  "direction": "horizontal",
+                                                  "value": 50
+                                                },
+                                                "left": {
+                                                  "isFork": false,
+                                                  "value": {
+                                                    "tabs": [
+                                                      {
+                                                        "id": "view-sector-26073612c7fdc183d6739b2ca07-notes",
+                                                        "workspace": "ws-test",
+                                                        "caption": "Notes",
+                                                        "contentTemplate": "view-sector-tab-notes",
+                                                        "tags": [],
+                                                        "order": 0
+                                                      },
+                                                      {
+                                                        "id": "view-sector-26073612c7fdc183d6739b2ca07-materials",
+                                                        "workspace": "ws-test",
+                                                        "caption": "Materials",
+                                                        "contentTemplate": "view-sector-tab-materials",
+                                                        "tags": [],
+                                                        "order": 0
+                                                      }
+                                                    ],
+                                                    "activeTabIndex": 0
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "order": 0
+                                    }
+                                  ],
                                   "activeTabIndex": 0
                                 }
                               }
@@ -664,7 +722,7 @@
                       "order": 0
                     }
                   ],
-                  "activeTabIndex": 1
+                  "activeTabIndex": 2
                 }
               }
             }

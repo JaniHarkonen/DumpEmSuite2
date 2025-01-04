@@ -127,4 +127,5 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
       {splitTree && <SplitView renderControls={renderTabControls} />}
     </FlexibleSplitsContext.Provider>
   );
+  
 }
