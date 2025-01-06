@@ -3,6 +3,7 @@ import "./Toolbar.css";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import ToolbarDropdown, { ToolbarOption } from "./ToolbarDropdown";
 import { ModalContext } from "@renderer/context/ModalContext";
+import NewWorkspaceModal from "@renderer/modals/NewWorkspaceModal/NewWorkspaceModal";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -53,18 +54,22 @@ export default function Toolbar(): ReactNode {
     return () => document.removeEventListener("mousedown", outsideClickListener);
   }, [openDropMenu]);
 
+  const createNewWorkspace = () => {
+
+  };
+
   const dispatchOption = (optionKey: string) => {
     switch( optionKey ) {
       case "new-workspace": console.log("new"); break;
       case "open-workspace": console.log("open"); break;
-      case "theme": openModal(<div className="d-flex d-justify-center d-align-items-center w-100 h-100">hello world</div>); break;
+      case "theme": openModal(<NewWorkspaceModal />); break;
       case "shortcuts": console.log("shortcuts"); break;
     }
   };
 
   const handleMainOptionSelection = (optionKey: DropMenuOption) => {
     dispatchOption(optionKey);
-    
+
     if( openDropMenu === optionKey ) {
       setOpenDropMenu("none");
     } else {
