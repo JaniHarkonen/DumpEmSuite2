@@ -1,9 +1,12 @@
+import "./App.css";
+
 import { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
 import Workspace from "./layouts/Workspace/Workspace";
 import { AppStateConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
 import { RELATIVE_APP_PATHS } from "./app.config";
 import { SceneContext } from "./context/SceneContext";
+import Toolbar from "./components/Toolbar/Toolbar";
 
 
 type ConfigFileInfo = {
@@ -14,8 +17,6 @@ type ConfigFileInfo = {
 const {filesAPI} = window.api;
 
 export default function App(): ReactNode {
-  // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-  // ipcHandle();
   const [configFileInfo, setConfigFileInfo] = useState<ConfigFileInfo>(null);
 
     // A ref is used throughout the application to access the config instead of 
@@ -54,12 +55,13 @@ export default function App(): ReactNode {
         }
       }}
     >
-      <div className="w-100 h-100 overflow-hidden">
+      <div className="app-container">
         <SceneContext.Provider
           value={{
             sceneConfig: appStateConfigRef.current.workspaces[0].sceneConfig
           }}
         >
+          <Toolbar />
           <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />
         </SceneContext.Provider>
       </div>
