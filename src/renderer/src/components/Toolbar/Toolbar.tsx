@@ -1,10 +1,11 @@
 import "./Toolbar.css";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import ToolbarDropdown, { ToolbarOption } from "./ToolbarDropdown";
+import { ModalContext } from "@renderer/context/ModalContext";
 
 
-type DropMenuOption = "workspace" | "theme";
+type DropMenuOption = "workspace" | "theme" | "shortcuts";
 
 type MenuOption = {
   key: DropMenuOption;
@@ -30,17 +31,22 @@ const MENU_OPTIONS: MenuOption[] = [
   {
     key: "theme",
     label: "Theme"
+  },
+  {
+    key: "shortcuts",
+    label: "Shortcuts"
   }
 ];
 
 export default function Toolbar(): ReactNode {
+  const {openModal} = useContext(ModalContext);
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
 
   useEffect(() => {
     const outsideClickListener = () => {
       if( openDropMenu !== "none" ) {
         setOpenDropMenu("none");
-      }1
+      }
     };
 
     document.addEventListener("mousedown", outsideClickListener);
@@ -51,13 +57,15 @@ export default function Toolbar(): ReactNode {
     switch( optionKey ) {
       case "new-workspace": console.log("new"); break;
       case "open-workspace": console.log("open"); break;
-      case "theme": console.log("theme"); break;
+      case "theme": openModal(<div className="d-flex d-justify-center d-align-items-center w-100 h-100">hello world</div>); break;
+      case "shortcuts": console.log("shortcuts"); break;
     }
   };
 
   const handleMainOptionSelection = (optionKey: DropMenuOption) => {
+    dispatchOption(optionKey);
+    
     if( openDropMenu === optionKey ) {
-      dispatchOption(optionKey);
       setOpenDropMenu("none");
     } else {
       setOpenDropMenu(optionKey);

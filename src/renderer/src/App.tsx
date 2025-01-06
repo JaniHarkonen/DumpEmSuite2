@@ -7,6 +7,8 @@ import { GlobalContext } from "./context/GlobalContext";
 import { RELATIVE_APP_PATHS } from "./app.config";
 import { SceneContext } from "./context/SceneContext";
 import Toolbar from "./components/Toolbar/Toolbar";
+import AppModal from "./components/AppModal/AppModal";
+import { ModalContext } from "./context/ModalContext";
 
 
 type ConfigFileInfo = {
@@ -18,6 +20,7 @@ const {filesAPI} = window.api;
 
 export default function App(): ReactNode {
   const [configFileInfo, setConfigFileInfo] = useState<ConfigFileInfo>(null);
+  const [modalElement, setModalElement] = useState<ReactNode>(undefined);
 
     // A ref is used throughout the application to access the config instead of 
     // passing the 'configFileInfo'. This way the global app state doesn't have 
@@ -48,23 +51,34 @@ export default function App(): ReactNode {
   }
 
   return (
-    <GlobalContext.Provider value={{
-        config: {
-          appStateConfigRef: appStateConfigRef,
-          configFileUpdater: configFileInfo.configFileUpdater
-        }
+    <ModalContext.Provider value={{
+        openModal: setModalElement,
+        closeModal: () => setModalElement(undefined)
       }}
     >
-      <div className="app-container">
-        <SceneContext.Provider
-          value={{
-            sceneConfig: appStateConfigRef.current.workspaces[0].sceneConfig
-          }}
-        >
+      <GlobalContext.Provider value={{
+          config: {
+            appStateConfigRef: appStateConfigRef,
+            configFileUpdater: configFileInfo.configFileUpdater
+          }
+        }}
+      >
+        <div className="app-container">
+          {modalElement && (
+            <AppModal>
+              {modalElement}
+            </AppModal>
+          )}
           <Toolbar />
-          <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />
-        </SceneContext.Provider>
-      </div>
-    </GlobalContext.Provider>
+          <SceneContext.Provider
+            value={{
+              sceneConfig: appStateConfigRef.current.workspaces[0].sceneConfig
+            }}
+          >
+            <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />
+          </SceneContext.Provider>
+        </div>
+      </GlobalContext.Provider>
+    </ModalContext.Provider>
   );
 }

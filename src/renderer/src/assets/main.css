@@ -106,8 +106,16 @@ textarea {
   position: relative;
 }
 
+.p-fixed {
+  position: fixed;
+}
+
 .d-flex {
   display: flex;
+}
+
+.d-justify-center {
+  justify-content: center;
 }
 
 .d-justify-end {
