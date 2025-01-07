@@ -3,7 +3,6 @@ import "./Toolbar.css";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import ToolbarDropdown, { ToolbarOption } from "./ToolbarDropdown";
 import { ModalContext } from "@renderer/context/ModalContext";
-import NewWorkspaceModal from "@renderer/modals/NewWorkspaceModal/NewWorkspaceModal";
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 
 
@@ -41,7 +40,6 @@ const MENU_OPTIONS: MenuOption[] = [
 ];
 
 export default function Toolbar(): ReactNode {
-  const {openModal} = useContext(ModalContext);
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
 
   const {showOpenDirectoryDialog} = useFileSystemDialog({
@@ -79,8 +77,8 @@ export default function Toolbar(): ReactNode {
           }
         });
         break;
-      case "theme": openModal(<NewWorkspaceModal />); break;
-      case "shortcuts": console.log("shortcuts"); break;
+      case "theme": console.log(optionKey); break;
+      case "shortcuts": console.log(optionKey); break;
     }
   };
 
