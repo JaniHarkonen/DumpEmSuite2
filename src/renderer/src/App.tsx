@@ -9,6 +9,7 @@ import { SceneContext } from "./context/SceneContext";
 import Toolbar from "./components/Toolbar/Toolbar";
 import AppModal from "./components/AppModal/AppModal";
 import { ModalContext } from "./context/ModalContext";
+import { ReadResult } from "src/shared/files.type";
 
 
 type ConfigFileInfo = {
@@ -35,14 +36,14 @@ export default function App(): ReactNode {
 
       // Read app configuration file
     filesAPI.readJSON<AppStateConfig>(configPath)
-    .then((read) => {
+    .then((read: ReadResult<AppStateConfig>) => {
       appStateConfigRef.current = read.result;
       setConfigFileInfo({
         appStateConfig: read.result,
         configFileUpdater: updater
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err: Error) => console.log(err));
   }, []);
 
 

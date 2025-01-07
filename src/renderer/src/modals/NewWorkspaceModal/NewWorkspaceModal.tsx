@@ -4,6 +4,10 @@ import { ReactNode } from "react";
 
 
 export default function NewWorkspaceModal(): ReactNode {
+  const createNewWorkspace = () => {
+
+  };
+
   return (
     <div className="modal-window-container">
       <div className="modal-content-container">
@@ -21,7 +25,7 @@ export default function NewWorkspaceModal(): ReactNode {
               type="text"
               autoFocus={true}
             />
-            <button>Create</button>
+            <button onClick={createNewWorkspace}>Create</button>
           </div>
         </div>
       </div>
