@@ -1,8 +1,7 @@
 import "./App.css";
 
 import { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
-import Workspace from "./layouts/Workspace/Workspace";
-import { AppStateConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
+import { AppConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
 import { RELATIVE_APP_PATHS } from "./app.config";
 import { SceneContext } from "./context/SceneContext";
@@ -10,10 +9,11 @@ import Toolbar from "./components/Toolbar/Toolbar";
 import AppModal from "./components/AppModal/AppModal";
 import { ModalContext } from "./context/ModalContext";
 import { ReadResult } from "src/shared/files.type";
+import WorkspacesView from "./layouts/Workspace/WorkspacesView/WorkspacesView";
 
 
 type ConfigFileInfo = {
-  appStateConfig: AppStateConfig;
+  appConfig: AppConfig;
   configFileUpdater: ConfigFileUpdater;
 } | null;
 
@@ -26,8 +26,8 @@ export default function App(): ReactNode {
     // A ref is used throughout the application to access the config instead of 
     // passing the 'configFileInfo'. This way the global app state doesn't have 
     // to be set each time the app config changes.
-  const appStateConfigRef: MutableRefObject<AppStateConfig | null> = 
-    useRef(configFileInfo?.appStateConfig || null);
+  const appConfigRef: MutableRefObject<AppConfig | null> = 
+    useRef(configFileInfo?.appConfig || null);
 
   useEffect(() => {
     const configPath: string = 
@@ -35,11 +35,11 @@ export default function App(): ReactNode {
     const updater: ConfigFileUpdater = createConfigFileUpdater(configPath);
 
       // Read app configuration file
-    filesAPI.readJSON<AppStateConfig>(configPath)
-    .then((read: ReadResult<AppStateConfig>) => {
-      appStateConfigRef.current = read.result;
+    filesAPI.readJSON<AppConfig>(configPath)
+    .then((read: ReadResult<AppConfig>) => {
+      appConfigRef.current = read.result;
       setConfigFileInfo({
-        appStateConfig: read.result,
+        appConfig: read.result,
         configFileUpdater: updater
       });
     })
@@ -47,7 +47,7 @@ export default function App(): ReactNode {
   }, []);
 
 
-  if( !configFileInfo || !appStateConfigRef.current ) {
+  if( !configFileInfo || !appConfigRef.current ) {
     return <>Loading...</>;
   }
 
@@ -59,7 +59,7 @@ export default function App(): ReactNode {
     >
       <GlobalContext.Provider value={{
           config: {
-            appStateConfigRef: appStateConfigRef,
+            appConfigRef,
             configFileUpdater: configFileInfo.configFileUpdater
           }
         }}
@@ -73,10 +73,10 @@ export default function App(): ReactNode {
           <Toolbar />
           <SceneContext.Provider
             value={{
-              sceneConfig: appStateConfigRef.current.workspaces[0].sceneConfig
+              sceneConfig: appConfigRef.current.sceneConfigBlueprint
             }}
           >
-            <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />
+            <WorkspacesView />
           </SceneContext.Provider>
         </div>
       </GlobalContext.Provider>

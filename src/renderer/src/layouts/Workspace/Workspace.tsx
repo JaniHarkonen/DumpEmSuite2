@@ -1,27 +1,25 @@
-import { TabContentProvider } from "@renderer/model/tabs";
-import { ReactNode, useEffect, useState } from "react";
+import { defaultSceneConfigBlueprint, Tab, TabContentProvider } from "@renderer/model/tabs";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import CompaniesModule from "../modules/CompaniesModule/CompaniesModule";
 import AnalysisModule from "../modules/AnalysisModule/AnalysisModule";
 import { createTabContentProvider } from "../layoutUtils";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { WorkspaceContext, WorkspaceContextType } from "@renderer/context/WorkspaceContext";
-import { WorkspaceConfig } from "@renderer/model/config";
 import { bindAPIToWorkspace, BoundDatabaseAPI, QueryResult } from "../../../../shared/database.type";
 import ModuleView from "../modules/ModuleView/ModuleView";
 import MacroModule from "../modules/MacroModule/MacroModule";
+import { TabsContext } from "@renderer/context/TabsContext";
 
-
-type Props = {
-  workspaceConfig: WorkspaceConfig;
-};
 
 const {filesAPI, databaseAPI} = window.api;
 
-export default function Workspace(props: Props): ReactNode {
-  const pWorkspaceConfig: WorkspaceConfig = props.workspaceConfig;
-
+export default function Workspace(): ReactNode {
   const [workspaceContext, setWorkspaceContext] = useState<WorkspaceContextType | null>(null);
+  
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
+  const {tabs, activeTabIndex} = useContext(TabsContext);
+
+  const activeTab: Tab = tabs[activeTabIndex];
 
   useEffect(() => {
     const boundDatabaseAPI: BoundDatabaseAPI = bindAPIToWorkspace(
@@ -37,7 +35,11 @@ export default function Workspace(props: Props): ReactNode {
       }
 
       setWorkspaceContext({
-        workspaceConfig: pWorkspaceConfig,
+        workspaceConfig: {
+          id: activeTab.id,
+          caption: activeTab.caption,
+          sceneConfig: activeTab.sceneConfig || defaultSceneConfigBlueprint()
+        },
         databaseAPI: boundDatabaseAPI
       });
     });

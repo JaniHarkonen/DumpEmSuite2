@@ -1,8 +1,7 @@
 import "./Toolbar.css";
 
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import ToolbarDropdown, { ToolbarOption } from "./ToolbarDropdown";
-import { ModalContext } from "@renderer/context/ModalContext";
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 
 
@@ -26,6 +25,10 @@ const MENU_OPTIONS: MenuOption[] = [
       {
         key: "open-workspace",
         label: "Open"
+      },
+      {
+        key: "close-workspace",
+        label: "Close"
       }
     ]
   },
@@ -76,6 +79,9 @@ export default function Toolbar(): ReactNode {
             title: "Open a workspace"
           }
         });
+        break;
+      case "close-workspace": 
+        console.log("closed");
         break;
       case "theme": console.log(optionKey); break;
       case "shortcuts": console.log(optionKey); break;
