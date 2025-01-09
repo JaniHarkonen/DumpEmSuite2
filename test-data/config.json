@@ -66,18 +66,18 @@
                                             "value": {
                                               "tabs": [
                                                 {
-                                                  "id": "tab-scraper",
+                                                  "id": "view-scraper",
                                                   "workspace": "ws-test",
                                                   "caption": "Scraper",
-                                                  "contentTemplate": "tab-scraper",
+                                                  "contentTemplate": "view-scraper",
                                                   "tags": [],
                                                   "order": 0
                                                 },
                                                 {
-                                                  "id": "tab-listings",
+                                                  "id": "view-listings",
                                                   "workspace": "ws-test",
                                                   "caption": "Listings",
-                                                  "contentTemplate": "tab-listings",
+                                                  "contentTemplate": "view-listings",
                                                   "tags": [],
                                                   "order": 0
                                                 },
@@ -799,18 +799,18 @@
                                             "value": {
                                               "tabs": [
                                                 {
-                                                  "id": "tab-scraper",
+                                                  "id": "view-scraper",
                                                   "workspace": "ws-test",
                                                   "caption": "Scraper",
-                                                  "contentTemplate": "tab-scraper",
+                                                  "contentTemplate": "view-scraper",
                                                   "tags": [],
                                                   "order": 0
                                                 },
                                                 {
-                                                  "id": "tab-listings",
+                                                  "id": "view-listings",
                                                   "workspace": "ws-test",
                                                   "caption": "Listings",
-                                                  "contentTemplate": "tab-listings",
+                                                  "contentTemplate": "view-listings",
                                                   "tags": [],
                                                   "order": 0
                                                 },

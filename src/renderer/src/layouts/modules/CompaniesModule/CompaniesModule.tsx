@@ -17,9 +17,9 @@ export default function CompaniesModule(): ReactNode {
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
     {
-      "tab-scraper": () => <ScraperTab />,
-      "tab-listings": () => <ListingsView />,
-      "tab-profiles": () => <ProfilesView />
+      "view-scraper": () => <ScraperTab />,
+      "view-listings": () => <ListingsView />,
+      "view-profiles": () => <ProfilesView />
     }
   );
 

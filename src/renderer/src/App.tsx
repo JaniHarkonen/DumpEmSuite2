@@ -5,7 +5,6 @@ import { AppConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/c
 import { GlobalContext } from "./context/GlobalContext";
 import { RELATIVE_APP_PATHS } from "./app.config";
 import { SceneContext } from "./context/SceneContext";
-import Toolbar from "./components/Toolbar/Toolbar";
 import AppModal from "./components/AppModal/AppModal";
 import { ModalContext } from "./context/ModalContext";
 import { ReadResult } from "src/shared/files.type";
@@ -70,7 +69,6 @@ export default function App(): ReactNode {
               {modalElement}
             </AppModal>
           )}
-          <Toolbar />
           <SceneContext.Provider
             value={{
               sceneConfig: appConfigRef.current.sceneConfigBlueprint
