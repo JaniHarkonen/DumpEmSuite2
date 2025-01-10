@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile, mkdir } from "fs/promises";
 import { FilesAPI, ReadResult } from "../../shared/files.type";
 import { ipcRenderer } from "electron";
 
@@ -53,5 +53,6 @@ export const filesAPI: FilesAPI = {
     const eventCallback = (event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
     ipcRenderer.on("open-dialog-result", eventCallback);
     return () => ipcRenderer.removeListener("open-dialog-result", eventCallback);
-  }
+  },
+  makeDirectory: ({ path }) => mkdir(path, { recursive: false })
 };

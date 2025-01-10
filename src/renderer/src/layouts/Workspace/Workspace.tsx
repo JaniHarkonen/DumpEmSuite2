@@ -11,7 +11,7 @@ import MacroModule from "../modules/MacroModule/MacroModule";
 import { TabsContext } from "@renderer/context/TabsContext";
 
 
-const {filesAPI, databaseAPI} = window.api;
+const {databaseAPI} = window.api;
 
 export default function Workspace(): ReactNode {
   const [workspaceContext, setWorkspaceContext] = useState<WorkspaceContextType | null>(null);
@@ -22,18 +22,18 @@ export default function Workspace(): ReactNode {
   const activeTab: Tab = tabs[activeTabIndex];
 
   useEffect(() => {
+    if( !activeTab.extra ) {
+      return;
+    }
+
     const boundDatabaseAPI: BoundDatabaseAPI = bindAPIToWorkspace(
-      "test",
-      filesAPI.getWorkingDirectory() + "\\test-data\\test-database.db",
+      activeTab.id,
+      // filesAPI.getWorkingDirectory() + "\\test-data\\test-database.db",
+      activeTab.extra.path,
       databaseAPI
     );
 
-    boundDatabaseAPI.open()
-    .then((result: QueryResult) => {
-      if( !result.wasSuccessful ) {
-        return;
-      }
-
+    const setContext = () => {
       setWorkspaceContext({
         workspaceConfig: {
           id: activeTab.id,
@@ -42,6 +42,20 @@ export default function Workspace(): ReactNode {
         },
         databaseAPI: boundDatabaseAPI
       });
+    };
+
+    boundDatabaseAPI.open()
+    .then((result: QueryResult) => {
+        // Set the database context on open
+      if( result.wasSuccessful ) {
+        setContext();
+      }
+    }).catch((result: QueryResult) => {
+        // If the database was already open, we can still set the database context.
+        // Otherwise, the context wont be set.
+      if( result.error?.name === "already-open" ) {
+        setContext();
+      }
     });
   }, []);
 

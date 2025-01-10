@@ -43,4 +43,5 @@ export type FilesAPI = {
   getWorkingDirectory: () => string;
   showOpenDialog: ShowOpenDialog;
   onOpenDialogResult: (props: { callback: OpenDialogCallback }) => UnsubscriberCallback;
+  makeDirectory: (props: { path: string }) => Promise<void>;
 };

@@ -1,3 +1,4 @@
+import { ipcRenderer } from "electron";
 import { Database, OPEN_READWRITE, RunResult } from "sqlite3";
 
 
@@ -28,6 +29,15 @@ export class DatabaseManager {
   ): void {
     const database: Database = 
       new Database(databasePath, OPEN_READWRITE, (err: Error | null) => {
+          // Abort if database is already open
+        if( this.openDatabases.has(databaseName) ) {
+          callback && callback({
+            name: "already-open", 
+            message: "Database '" + databaseName + "' is already open!"
+          });
+          return;
+        }
+
         if( !err ) {
           this.openDatabases.set(databaseName, {
             name: databaseName,
@@ -60,6 +70,45 @@ export class DatabaseManager {
     } else {
       connection.database.prepare(preparedString, values).all<T>(callback);
     }
+  }
+
+  public fetchMultiple(
+    databaseName: string,
+    preparedString: string[],
+    values: DatabaseValue[][],
+    fields: string[],
+    callback: (err: Error | null, result: any) => void
+  ): void {
+    const promises: Promise<any>[] = [];
+    
+    for( let i = 0; i < preparedString.length; i++ ) {
+      const prepared: string = preparedString[i];
+      const value: DatabaseValue[] = values[i];
+      promises.push(new Promise<any>((resolve, reject) => {
+        this.fetch<any>(
+          databaseName, 
+          prepared, 
+          (err: Error | null, rows: any[]) => {
+            if( !err ) {
+              resolve(rows);
+            } else {
+              reject(new Error("Failed to execute the query!"));
+            }
+          }, 
+          value
+        );
+      }));
+    }
+
+    Promise.all(promises).then((results: any[]) => {
+      const finalResult: any = {};
+
+      for( let i = 0; i < results.length; i++ ) {
+        finalResult[fields[i]] = results[i];
+      }
+      
+      callback(null, finalResult);
+    }).catch((err: Error) => callback(err, null));
   }
 
   public post(

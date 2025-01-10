@@ -18,6 +18,7 @@ export interface TabBlueprint {
   tags: string[];
   sceneConfigBlueprint?: SceneConfigBlueprint;
   order: number;
+  extra?: any;
 }
 
 export interface Tab extends Omit<TabBlueprint, "sceneConfigBlueprint"> {
@@ -66,7 +67,8 @@ export function buildTab(
     content: contentProvider.getContent(tabBlueprint),
     tags: [...(tabBlueprint.tags || [])],
     sceneConfig,
-    order: tabBlueprint.order
+    order: tabBlueprint.order,
+    extra: tabBlueprint.extra
   };
 }
 
@@ -86,7 +88,8 @@ export function blueprintTab(tab: Tab): TabBlueprint {
     contentTemplate: tab.contentTemplate,
     tags: [...(tab.tags || [])],
     sceneConfigBlueprint,
-    order: tab.order
+    order: tab.order,
+    extra: tab.extra
   };
 }
 
@@ -107,7 +110,8 @@ export function copyTab(tab: Tab): Tab {
     content: tab.content,
     tags: [...(tab.tags || [])],
     sceneConfig,
-    order: tab.order
+    order: tab.order,
+    extra: tab.extra
   };
 }
 

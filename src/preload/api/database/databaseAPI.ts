@@ -1,5 +1,5 @@
 import { RunResult } from "sqlite3";
-import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult } from "../../../shared/database.type";
+import { DatabaseAPI, DeleteResult, FetchResult, PostResult, QueryResult, WorkspaceStructure } from "../../../shared/database.type";
 import { Company, Currency, Filteration, FilterationStep, FKCompany, FKFilteration, FKMacroAnalysis, FKProfile, MacroAnalysis, MacroSector, Profile, Scraper, Tag } from "../../../shared/schemaConfig";
 import { DatabaseManager } from "./database";
 import { AND, AS, col, DELETE, equals, FROM, IN, insertInto, NOT, query, replaceInto, SELECT, SET, subquery, table, UPDATE, val, value, values, WHERE } from "./sql";
@@ -55,6 +55,43 @@ export const databaseAPI: DatabaseAPI = {
         }
       });
     });
+  },
+  fetchWorkspaceStructure: ({
+    databaseName,
+    databasePath
+  }) => {
+    return new Promise<FetchResult<WorkspaceStructure>>(
+      (resolve, reject) => {
+        databaseManager.open(databaseName, databasePath, (err: Error | null) => {
+          if( !err ) {
+            databaseManager.fetchMultiple(
+              databaseName, 
+              [
+                SELECT("*") + FROM(table("filteration_step")),
+                SELECT("*") + FROM(table("macro_sector")),
+                SELECT("*") + FROM(table("metadata"))
+              ],
+              [[],[],[]],
+              ["filteration_step", "macro_sector", "metadata"],
+              (error: Error | null, results: WorkspaceStructure) => {
+                if( !error ) {
+                  databaseManager.close(databaseName, () => {
+                    resolve({
+                      wasSuccessful: true,
+                      rows: [results]
+                    });
+                  });
+                } else {
+                  reject(error);
+                }
+              }
+            );
+          } else {
+            reject(createError(err));
+          }
+        })
+      }
+    )
   },
   fetchScraperInfo: ({ databaseName }) => {
     return new Promise<FetchResult<Scraper>>(

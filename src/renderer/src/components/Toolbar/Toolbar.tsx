@@ -6,6 +6,11 @@ import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import { OpenDialogResult } from "src/shared/files.type";
 import { SplitTree, SplitTreeFork, SplitTreeValue } from "@renderer/model/splits";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
+import { SceneConfigBlueprint, TabBlueprint } from "@renderer/model/tabs";
+import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
+import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
+import { FetchResult, WorkspaceStructure } from "src/shared/database.type";
+import { Metadata } from "src/shared/schemaConfig";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -41,15 +46,22 @@ const MENU_OPTIONS: MenuOption[] = [
   }
 ];
 
-type AddWorkspace = (caption: string, targetNode: SplitTreeValue) => void;
+type AddWorkspace = (
+  workspaceTabBlueprint: TabBlueprint,
+  targetNode: SplitTreeValue
+) => void;
 
 type Props = {
   addWorkspace: AddWorkspace;
 };
 
+const {databaseAPI} = window.api;
+
 export default function Toolbar(props: Props): ReactNode {
   const pAddWorkspace: AddWorkspace = props.addWorkspace;
+
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
+
   const {splitTree} = useContext(FlexibleSplitsContext);
 
     // This ref is only used so that the hooks passed onto the useFileSystemDialog may use 
@@ -62,14 +74,60 @@ export default function Toolbar(props: Props): ReactNode {
       return;
     }
 
+    const path: string = result.path[0];
+    const dbPath: string = path + "\\data.db";
+    const databaseName: string = path.substring(path.lastIndexOf("\\") + 1, path.length);
+    const valueNode: SplitTreeValue = 
+      (splitTreeRef.current.root.left as SplitTreeFork).left as SplitTreeValue;
+
     switch( result.key ) {
-      case "new-workspace": 
-        const path: string = result.path[0];
-        pAddWorkspace(
-          path.substring(path.lastIndexOf("\\") + 1, path.length), 
-          (splitTreeRef.current.root.left as SplitTreeFork).left as SplitTreeValue
-        );
-        break;
+      case "new-workspace": {
+        const id: string = generateRandomUniqueID("ws-");
+        const sceneConfigBlueprint: SceneConfigBlueprint = buildWorkspaceBlueprint(id);
+        const workspaceTabBlueprint: TabBlueprint = {
+          id,
+          workspace: id,
+          caption: databaseName,
+          contentTemplate: "NONE",
+          tags: [],
+          sceneConfigBlueprint,
+          order: 0,
+          extra: {
+            path: dbPath
+          }
+        }
+        pAddWorkspace(workspaceTabBlueprint, valueNode);
+      } break;
+      case "open-workspace": {
+        databaseAPI.fetchWorkspaceStructure({
+          databaseName,
+          databasePath: path + "\\data.db"
+        }).then((result: FetchResult<WorkspaceStructure>) => {
+          if( !result.wasSuccessful ) {
+            return;
+          }
+
+          const structure: WorkspaceStructure = result.rows[0];
+          const metadata: Metadata = structure.metadata[0];
+          const id: string = metadata.workspace_id;
+          const sceneConfigBlueprint: SceneConfigBlueprint = buildWorkspaceBlueprint(
+            id, structure.filterationSteps, structure.macroSectors
+          );
+          const workspaceTabBlueprint: TabBlueprint = {
+            id,
+            workspace: id,
+            caption: metadata.workspace_name,
+            contentTemplate: "NONE",
+            tags: [],
+            sceneConfigBlueprint,
+            order: 0,
+            extra: {
+              path: dbPath
+            }
+          };
+          pAddWorkspace(workspaceTabBlueprint, valueNode);
+        });
+      } break;
     }
   };
 

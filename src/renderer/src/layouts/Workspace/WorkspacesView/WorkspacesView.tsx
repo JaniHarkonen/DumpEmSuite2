@@ -11,8 +11,6 @@ import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import SplitView from "@renderer/components/SplitView/SplitView";
 import { ASSETS } from "@renderer/assets/assets";
 import Toolbar from "@renderer/components/Toolbar/Toolbar";
-import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
-import { buildWorkspaceBlueprint } from "@renderer/components/Toolbar/buildWorkspaceBlueprint";
 
 
 export default function WorkspacesView(): ReactNode {
@@ -45,17 +43,10 @@ export default function WorkspacesView(): ReactNode {
     onUpdate: handleSplitTreeUpdate
   });
 
-  const handleWorkspaceAdd = (caption: string, targetNode: SplitTreeValue) => {
-    const id: string = generateRandomUniqueID("ws-");
-    const tab: Tab = buildTab({
-      id,
-      workspace: id,
-      caption,
-      contentTemplate: "NONE",
-      tags: [],
-      sceneConfigBlueprint: buildWorkspaceBlueprint(id),
-      order: 0
-    }, tabsProvider);
+  const handleWorkspaceAdd = (
+    workspaceTabBlueprint: TabBlueprint, targetNode: SplitTreeValue
+  ) => {
+    const tab: Tab = buildTab(workspaceTabBlueprint, tabsProvider);
     handleTabAdd(targetNode, tab);
   };
 
