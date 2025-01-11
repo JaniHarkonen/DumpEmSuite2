@@ -56,6 +56,23 @@ export const databaseAPI: DatabaseAPI = {
       });
     });
   },
+  createDatabase: ({
+    databaseID,
+    databaseName,
+    databasePath
+  }) => {
+    return new Promise<QueryResult>(
+      (resolve, reject) => {
+        databaseManager.create(databaseID, databaseName, databasePath, (err: Error | null) => {
+          if( !err ) {
+            resolve({ wasSuccessful: true });
+          } else {
+            reject(createError(err));
+          }
+        });
+      }
+    );
+  },
   fetchWorkspaceStructure: ({
     databaseName,
     databasePath

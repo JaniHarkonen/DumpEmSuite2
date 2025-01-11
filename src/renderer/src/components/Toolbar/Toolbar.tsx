@@ -9,7 +9,7 @@ import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import { SceneConfigBlueprint, TabBlueprint } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
-import { FetchResult, WorkspaceStructure } from "src/shared/database.type";
+import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/database.type";
 import { Metadata } from "src/shared/schemaConfig";
 
 
@@ -83,20 +83,31 @@ export default function Toolbar(props: Props): ReactNode {
     switch( result.key ) {
       case "new-workspace": {
         const id: string = generateRandomUniqueID("ws-");
-        const sceneConfigBlueprint: SceneConfigBlueprint = buildWorkspaceBlueprint(id);
-        const workspaceTabBlueprint: TabBlueprint = {
-          id,
-          workspace: id,
-          caption: databaseName,
-          contentTemplate: "NONE",
-          tags: [],
-          sceneConfigBlueprint,
-          order: 0,
-          extra: {
-            path: dbPath
+        databaseAPI.createDatabase({
+          databaseID: id,
+          databaseName,
+          databasePath: dbPath
+        }).then((result: QueryResult) => {
+          if( !result.wasSuccessful ) {
+            return;
           }
-        }
-        pAddWorkspace(workspaceTabBlueprint, valueNode);
+
+          const sceneConfigBlueprint: SceneConfigBlueprint = buildWorkspaceBlueprint(id);
+          const workspaceTabBlueprint: TabBlueprint = {
+            id,
+            workspace: id,
+            caption: databaseName,
+            contentTemplate: "NONE",
+            tags: [],
+            sceneConfigBlueprint,
+            order: 0,
+            extra: {
+              path: dbPath
+            }
+          }
+
+          pAddWorkspace(workspaceTabBlueprint, valueNode);
+        });
       } break;
       case "open-workspace": {
         databaseAPI.fetchWorkspaceStructure({

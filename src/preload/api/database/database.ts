@@ -1,5 +1,7 @@
+import { Database, OPEN_CREATE, OPEN_READWRITE, RunResult } from "sqlite3";
+import qCreateDatabase from "./query/qCreateDatabase";
+import { CURRENT_APP_VERSION } from "../../../shared/appConfig";
 import { ipcRenderer } from "electron";
-import { Database, OPEN_READWRITE, RunResult } from "sqlite3";
 
 
 type DatabaseConnection = {
@@ -22,6 +24,34 @@ export class DatabaseManager {
 
   private getDatabase(databaseName: string): DatabaseConnection | undefined {
     return this.openDatabases.get(databaseName);
+  }
+
+  public create(
+    databaseID: string, databaseName: string, databasePath: string, callback?: ErrorCallback
+  ): void {
+    const database: Database = 
+      new Database(databasePath, OPEN_CREATE | OPEN_READWRITE, (openError: Error | null) => {
+        if( openError ) {
+          callback && callback({
+            name: "create-error",
+            message: "Database '" + databaseName + "' could not be created!"
+          });
+        } else {
+          database.exec(qCreateDatabase({
+            dump_em_suite_version: CURRENT_APP_VERSION,
+            workspace_id: databaseID,
+            workspace_name: databaseName
+          }), (createError: Error | null) => {
+            if( createError ) {
+              ipcRenderer.send("debug", "failed" + createError);
+              database.close((closeError: Error | null) => callback && callback(closeError));
+            } else {
+              database.close();
+              callback && callback(createError);
+            }
+          });
+        }
+      });
   }
 
   public open(

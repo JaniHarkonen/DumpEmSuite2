@@ -31,6 +31,12 @@ export type WorkspaceStructure = {
 export type DatabaseAPI = {
   open: (props: { databasePath: string; } & QueryProps) => Promise<QueryResult>;
   close: (props: QueryProps) => Promise<QueryResult>;
+  createDatabase: (
+    props: {
+      databaseID: string, 
+      databasePath: string 
+    } & QueryProps
+  ) => Promise<QueryResult>;
   fetchWorkspaceStructure: (props: { databasePath: string; } & QueryProps) => 
     Promise<FetchResult<WorkspaceStructure>>;
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
@@ -124,6 +130,12 @@ export type DatabaseAPI = {
 export type BoundDatabaseAPI = {
   open: () => Promise<QueryResult>;
   close: () => Promise<QueryResult>;
+  createDatabase: (
+    props: {
+      databaseID: string, 
+      databasePath: string 
+    } & QueryProps
+  ) => Promise<QueryResult>;
   fetchWorkspaceStructure: (props: { databasePath: string; } & QueryProps) => 
     Promise<FetchResult<WorkspaceStructure>>;
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
@@ -215,6 +227,7 @@ export function bindAPIToWorkspace(
       });
     },
     close: () => api.close({ databaseName: workspaceID }),
+    createDatabase: (props) => api.createDatabase(props),
     fetchWorkspaceStructure: (props) => api.fetchWorkspaceStructure(props),
     fetchScraperInfo: () => api.fetchScraperInfo({ databaseName: workspaceID }),
     fetchAllCompanies: () => api.fetchAllCompanies({ databaseName: workspaceID }),

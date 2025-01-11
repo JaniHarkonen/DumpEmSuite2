@@ -3,7 +3,7 @@ import "./App.css";
 import { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
 import { AppConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
-import { RELATIVE_APP_PATHS } from "./app.config";
+import { RELATIVE_APP_PATHS } from "../../shared/appConfig";
 import { SceneContext } from "./context/SceneContext";
 import AppModal from "./components/AppModal/AppModal";
 import { ModalContext } from "./context/ModalContext";

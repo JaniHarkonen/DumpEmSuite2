@@ -48,6 +48,7 @@ export default function WorkspacesView(): ReactNode {
   ) => {
     const tab: Tab = buildTab(workspaceTabBlueprint, tabsProvider);
     handleTabAdd(targetNode, tab);
+    console.log("here we are");
   };
 
   const handleTabRemove = (
