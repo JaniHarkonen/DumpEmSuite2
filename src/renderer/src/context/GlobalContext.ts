@@ -1,9 +1,9 @@
-import { AppStateConfig, ConfigFileUpdater } from "@renderer/model/config";
+import { AppConfig, ConfigFileUpdater } from "@renderer/model/config";
 import { createContext, MutableRefObject } from "react";
 
 
 export type ConfigContextType = {
-  appStateConfigRef: MutableRefObject<AppStateConfig | null> | null;
+  appConfigRef: MutableRefObject<AppConfig | null> | null;
   configFileUpdater: ConfigFileUpdater;
 };
 
@@ -13,7 +13,7 @@ export type GlobalContextType = {
 
 export function defaultConfigContext(): ConfigContextType {
   return {
-    appStateConfigRef: null,
+    appConfigRef: null,
     configFileUpdater: () => {}
   };
 }

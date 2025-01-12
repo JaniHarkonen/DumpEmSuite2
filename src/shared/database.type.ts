@@ -1,4 +1,4 @@
-import { Company, Currency, Filteration, FilterationStep, MacroAnalysis, MacroSector, Profile, Scraper, Tag } from "./schemaConfig";
+import { Company, Currency, Filteration, FilterationStep, MacroAnalysis, MacroSector, Metadata, Profile, Scraper, Tag } from "./schemaConfig";
 import { AsString } from "./utils";
 
 
@@ -22,9 +22,23 @@ export type QueryProps = {
   databaseName: string;
 };
 
+export type WorkspaceStructure = {
+  filterationSteps: FilterationStep[];
+  macroSectors: MacroSector[];
+  metadata: Metadata;
+};
+
 export type DatabaseAPI = {
   open: (props: { databasePath: string; } & QueryProps) => Promise<QueryResult>;
   close: (props: QueryProps) => Promise<QueryResult>;
+  createDatabase: (
+    props: {
+      databaseID: string, 
+      databasePath: string 
+    } & QueryProps
+  ) => Promise<QueryResult>;
+  fetchWorkspaceStructure: (props: { databasePath: string; } & QueryProps) => 
+    Promise<FetchResult<WorkspaceStructure>>;
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: (props: QueryProps) => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: (props: QueryProps) => Promise<FetchResult<Tag>>;
@@ -116,6 +130,14 @@ export type DatabaseAPI = {
 export type BoundDatabaseAPI = {
   open: () => Promise<QueryResult>;
   close: () => Promise<QueryResult>;
+  createDatabase: (
+    props: {
+      databaseID: string, 
+      databasePath: string 
+    } & QueryProps
+  ) => Promise<QueryResult>;
+  fetchWorkspaceStructure: (props: { databasePath: string; } & QueryProps) => 
+    Promise<FetchResult<WorkspaceStructure>>;
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: () => Promise<FetchResult<Tag>>;
@@ -205,6 +227,8 @@ export function bindAPIToWorkspace(
       });
     },
     close: () => api.close({ databaseName: workspaceID }),
+    createDatabase: (props) => api.createDatabase(props),
+    fetchWorkspaceStructure: (props) => api.fetchWorkspaceStructure(props),
     fetchScraperInfo: () => api.fetchScraperInfo({ databaseName: workspaceID }),
     fetchAllCompanies: () => api.fetchAllCompanies({ databaseName: workspaceID }),
     fetchAllTags: () => api.fetchAllTags({ databaseName: workspaceID }),

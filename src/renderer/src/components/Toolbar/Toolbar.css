@@ -1,0 +1,13 @@
+.dropdown-menu-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  z-index: 1;
+}
+
+.dropdown-menu-container button {
+  text-align: left;
+  border-radius: 0px;
+  border-style: none;
+}

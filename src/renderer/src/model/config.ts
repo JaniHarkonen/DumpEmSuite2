@@ -8,15 +8,9 @@ export type WorkspaceConfig = {
   sceneConfig: SceneConfigBlueprint;
 };
 
-export type AppStateConfig = {
-  workspaces: WorkspaceConfig[];
+export type AppConfig = {
+  sceneConfigBlueprint: SceneConfigBlueprint;
 };
-
-export function AppStateConfig(): AppStateConfig {
-  return {
-    workspaces: []
-  };
-}
 
 export function defaultWorkspaceConfig(): WorkspaceConfig {
   return {
@@ -28,10 +22,10 @@ export function defaultWorkspaceConfig(): WorkspaceConfig {
   };
 }
 
-export type ConfigFileUpdater = (appStateConfig: AppStateConfig) => void;
+export type ConfigFileUpdater = (appConfig: AppConfig) => void;
 
 export function createConfigFileUpdater(configPath: string): ConfigFileUpdater {
-  return (appStateConfig: AppStateConfig) => {
-    window.api.filesAPI.writeJSON<AppStateConfig>(configPath, appStateConfig);
+  return (appConfig: AppConfig) => {
+    window.api.filesAPI.writeJSON<AppConfig>(configPath, appConfig);
   }
 }

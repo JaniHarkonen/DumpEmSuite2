@@ -1,28 +1,32 @@
+import "./App.css";
+
 import { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
-import Workspace from "./layouts/Workspace/Workspace";
-import { AppStateConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
+import { AppConfig, createConfigFileUpdater, ConfigFileUpdater } from "./model/config";
 import { GlobalContext } from "./context/GlobalContext";
-import { RELATIVE_APP_PATHS } from "./app.config";
+import { RELATIVE_APP_PATHS } from "../../shared/appConfig";
 import { SceneContext } from "./context/SceneContext";
+import AppModal from "./components/AppModal/AppModal";
+import { ModalContext } from "./context/ModalContext";
+import { ReadResult } from "src/shared/files.type";
+import WorkspacesView from "./layouts/Workspace/WorkspacesView/WorkspacesView";
 
 
 type ConfigFileInfo = {
-  appStateConfig: AppStateConfig;
+  appConfig: AppConfig;
   configFileUpdater: ConfigFileUpdater;
 } | null;
 
 const {filesAPI} = window.api;
 
 export default function App(): ReactNode {
-  // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-  // ipcHandle();
   const [configFileInfo, setConfigFileInfo] = useState<ConfigFileInfo>(null);
+  const [modalElement, setModalElement] = useState<ReactNode>(undefined);
 
     // A ref is used throughout the application to access the config instead of 
     // passing the 'configFileInfo'. This way the global app state doesn't have 
     // to be set each time the app config changes.
-  const appStateConfigRef: MutableRefObject<AppStateConfig | null> = 
-    useRef(configFileInfo?.appStateConfig || null);
+  const appConfigRef: MutableRefObject<AppConfig | null> = 
+    useRef(configFileInfo?.appConfig || null);
 
   useEffect(() => {
     const configPath: string = 
@@ -30,39 +34,50 @@ export default function App(): ReactNode {
     const updater: ConfigFileUpdater = createConfigFileUpdater(configPath);
 
       // Read app configuration file
-    filesAPI.readJSON<AppStateConfig>(configPath)
-    .then((read) => {
-      appStateConfigRef.current = read.result;
+    filesAPI.readJSON<AppConfig>(configPath)
+    .then((read: ReadResult<AppConfig>) => {
+      appConfigRef.current = read.result;
       setConfigFileInfo({
-        appStateConfig: read.result,
+        appConfig: read.result,
         configFileUpdater: updater
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err: Error) => console.log(err));
   }, []);
 
 
-  if( !configFileInfo || !appStateConfigRef.current ) {
+  if( !configFileInfo || !appConfigRef.current ) {
     return <>Loading...</>;
   }
 
   return (
-    <GlobalContext.Provider value={{
-        config: {
-          appStateConfigRef: appStateConfigRef,
-          configFileUpdater: configFileInfo.configFileUpdater
-        }
+    <ModalContext.Provider value={{
+        openModal: setModalElement,
+        closeModal: () => setModalElement(undefined)
       }}
     >
-      <div className="w-100 h-100 overflow-hidden">
-        <SceneContext.Provider
-          value={{
-            sceneConfig: appStateConfigRef.current.workspaces[0].sceneConfig
-          }}
-        >
-          <Workspace workspaceConfig={appStateConfigRef.current.workspaces[0]} />
-        </SceneContext.Provider>
-      </div>
-    </GlobalContext.Provider>
+      <GlobalContext.Provider value={{
+          config: {
+            appConfigRef,
+            configFileUpdater: configFileInfo.configFileUpdater
+          }
+        }}
+      >
+        <div className="app-container">
+          {modalElement && (
+            <AppModal>
+              {modalElement}
+            </AppModal>
+          )}
+          <SceneContext.Provider
+            value={{
+              sceneConfig: appConfigRef.current.sceneConfigBlueprint
+            }}
+          >
+            <WorkspacesView />
+          </SceneContext.Provider>
+        </div>
+      </GlobalContext.Provider>
+    </ModalContext.Provider>
   );
 }

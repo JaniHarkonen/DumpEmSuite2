@@ -1,3 +1,5 @@
+export type ColumnValueMap = {[key in string]: string};
+
 function compound(...components: string[]): string {
   if( components.length === 0 ) {
     return "";
@@ -107,4 +109,17 @@ export function values(...value: string[]): string {
 
 export function val(valueString?: string): string {
   return valueString ? valueString : "?";
+}
+
+export function upsert(tableString: string, ...columnString: string[]): string {
+  return (
+    insertInto(
+      tableString, 
+      ...columnString
+    ) + values(
+      value(...columnString.map(() => val()))
+    ) + " ON CONFLICT DO UPDATE" + SET(
+      ...columnString.map((column: string) => equals(col<any>(column), val()))
+    )
+  );
 }
