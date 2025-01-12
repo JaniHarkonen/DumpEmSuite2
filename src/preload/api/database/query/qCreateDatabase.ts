@@ -123,6 +123,10 @@ export default function qCreateDatabase(metadata: Metadata): string {
     ('EUR', '€'),
     ('USD', '$');
 
+    INSERT INTO tag (tag_hex, tag_label)
+    VALUES
+    ('#C6C6C6', 'None');
+
     INSERT INTO filteration_step (step_id, caption)
     VALUES
     ("view-volume", "Volume"),

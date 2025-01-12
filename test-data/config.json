@@ -18,8 +18,8 @@
             "value": {
               "tabs": [
                 {
-                  "id": "ws-eff655bb499b11fdf1",
-                  "workspace": "ws-eff655bb499b11fdf1",
+                  "id": "ws-3936e3520fd8b18a2ccd0baa2de",
+                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                   "caption": "test-database",
                   "contentTemplate": "NONE",
                   "tags": [],
@@ -43,11 +43,10 @@
                               "tabs": [
                                 {
                                   "id": "module-companies",
-                                  "workspace": "ws-eff655bb499b11fdf1",
+                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                   "caption": "Companies",
                                   "contentTemplate": "module-companies",
                                   "tags": [],
-                                  "order": 0,
                                   "sceneConfigBlueprint": {
                                     "splitTree": {
                                       "root": {
@@ -68,7 +67,7 @@
                                               "tabs": [
                                                 {
                                                   "id": "view-scraper",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "Scraper",
                                                   "contentTemplate": "view-scraper",
                                                   "tags": [],
@@ -76,7 +75,7 @@
                                                 },
                                                 {
                                                   "id": "view-listings",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "Listings",
                                                   "contentTemplate": "view-listings",
                                                   "tags": [],
@@ -84,7 +83,7 @@
                                                 },
                                                 {
                                                   "id": "view-profiles",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "Profiles",
                                                   "contentTemplate": "view-profiles",
                                                   "tags": [],
@@ -105,7 +104,7 @@
                                                           "left": {
                                                             "isFork": true,
                                                             "divider": {
-                                                              "direction": "vertical",
+                                                              "direction": "horizontal",
                                                               "value": 50
                                                             },
                                                             "left": {
@@ -114,7 +113,7 @@
                                                                 "tabs": [
                                                                   {
                                                                     "id": "view-company-list",
-                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                     "caption": "Companies",
                                                                     "contentTemplate": "view-company-list",
                                                                     "tags": [],
@@ -143,7 +142,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-chart",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Chart",
                                                                       "contentTemplate": "view-chart",
                                                                       "tags": [],
@@ -166,7 +165,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-company-profile",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Profile",
                                                                       "contentTemplate": "view-company-profile",
                                                                       "tags": [],
@@ -185,21 +184,21 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 2
+                                              "activeTabIndex": 1
                                             }
                                           }
                                         }
                                       }
                                     }
-                                  }
+                                  },
+                                  "order": 0
                                 },
                                 {
                                   "id": "module-analysis",
-                                  "workspace": "ws-eff655bb499b11fdf1",
+                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                   "caption": "Analysis",
                                   "contentTemplate": "module-analysis",
                                   "tags": [],
-                                  "order": 0,
                                   "sceneConfigBlueprint": {
                                     "splitTree": {
                                       "root": {
@@ -220,7 +219,7 @@
                                               "tabs": [
                                                 {
                                                   "id": "view-volume",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "Volume",
                                                   "contentTemplate": "view-filteration",
                                                   "tags": [],
@@ -250,7 +249,7 @@
                                                                 "tabs": [
                                                                   {
                                                                     "id": "view-volume-stocks",
-                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
@@ -279,7 +278,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-volume-chart",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Chart",
                                                                       "contentTemplate": "view-filteration-tab-chart",
                                                                       "tags": [],
@@ -302,7 +301,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-volume-notes",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Notes",
                                                                       "contentTemplate": "view-filteration-tab-notes",
                                                                       "tags": [],
@@ -322,7 +321,7 @@
                                                 },
                                                 {
                                                   "id": "view-price-action",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "Price action",
                                                   "contentTemplate": "view-filteration",
                                                   "tags": [],
@@ -352,7 +351,7 @@
                                                                 "tabs": [
                                                                   {
                                                                     "id": "view-volume-stocks",
-                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
@@ -381,7 +380,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-volume-chart",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Chart",
                                                                       "contentTemplate": "view-filteration-tab-chart",
                                                                       "tags": [],
@@ -404,7 +403,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-volume-notes",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Notes",
                                                                       "contentTemplate": "view-filteration-tab-notes",
                                                                       "tags": [],
@@ -424,7 +423,7 @@
                                                 },
                                                 {
                                                   "id": "view-technical",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "TA 1",
                                                   "contentTemplate": "view-filteration",
                                                   "tags": [],
@@ -454,7 +453,7 @@
                                                                 "tabs": [
                                                                   {
                                                                     "id": "view-volume-stocks",
-                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
@@ -483,7 +482,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-volume-chart",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Chart",
                                                                       "contentTemplate": "view-filteration-tab-chart",
                                                                       "tags": [],
@@ -506,7 +505,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-volume-notes",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Notes",
                                                                       "contentTemplate": "view-filteration-tab-notes",
                                                                       "tags": [],
@@ -526,7 +525,7 @@
                                                 },
                                                 {
                                                   "id": "view-fundamental",
-                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                   "caption": "Fundamental",
                                                   "contentTemplate": "view-fundamental",
                                                   "tags": [
@@ -558,7 +557,7 @@
                                                                 "tabs": [
                                                                   {
                                                                     "id": "view-fundamental-stocks",
-                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
@@ -587,7 +586,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-fundamental-chart",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Chart",
                                                                       "contentTemplate": "view-filteration-tab-chart",
                                                                       "tags": [],
@@ -595,7 +594,7 @@
                                                                     },
                                                                     {
                                                                       "id": "view-fundamental-material-browser",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Materials",
                                                                       "contentTemplate": "view-material-browser",
                                                                       "tags": [],
@@ -603,7 +602,7 @@
                                                                     },
                                                                     {
                                                                       "id": "view-fundamental-profile",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Profile",
                                                                       "contentTemplate": "view-company-profile",
                                                                       "tags": [],
@@ -626,7 +625,7 @@
                                                                   "tabs": [
                                                                     {
                                                                       "id": "view-fundamental-notes",
-                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                                                       "caption": "Notes",
                                                                       "contentTemplate": "view-fundamental-notes",
                                                                       "tags": [],
@@ -651,11 +650,12 @@
                                         }
                                       }
                                     }
-                                  }
+                                  },
+                                  "order": 0
                                 },
                                 {
                                   "id": "module-macro",
-                                  "workspace": "ws-eff655bb499b11fdf1",
+                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
                                   "caption": "Macro",
                                   "contentTemplate": "module-macro",
                                   "tags": [],
@@ -676,7 +676,65 @@
                                           "left": {
                                             "isFork": false,
                                             "value": {
-                                              "tabs": [],
+                                              "tabs": [
+                                                {
+                                                  "id": "view-sector-1ce2d4929176c56f6d20be160a8",
+                                                  "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
+                                                  "caption": "Analysis sector",
+                                                  "contentTemplate": "view-sector-analysis",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-sector-1ce2d4929176c56f6d20be160a8-notes",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
+                                                                    "caption": "Notes",
+                                                                    "contentTemplate": "view-sector-tab-notes",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  },
+                                                                  {
+                                                                    "id": "view-sector-1ce2d4929176c56f6d20be160a8-materials",
+                                                                    "workspace": "ws-3936e3520fd8b18a2ccd0baa2de",
+                                                                    "caption": "Materials",
+                                                                    "contentTemplate": "view-sector-tab-materials",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                }
+                                              ],
                                               "activeTabIndex": 0
                                             }
                                           }
@@ -687,7 +745,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 0
+                              "activeTabIndex": 2
                             }
                           }
                         }

@@ -4,7 +4,6 @@ import { Company, FilterationStep, FKFilteration, Tag } from "../../../../shared
 import { AND, col, equals, FROM, IN, insertInto, NOT, query, SELECT, table, val, WHERE } from "../sql";
 import { createError, destructureRunResult } from "../databaseAPI";
 import { DatabaseManager } from "../database";
-import { ipcRenderer } from "electron";
 
 
 export default function qPostAllStocksFromCompanyListings(
@@ -46,7 +45,6 @@ export default function qPostAllStocksFromCompanyListings(
         )
       );
 
-      ipcRenderer.send("debug", preparedString)
       databaseManager.post(
         databaseName, preparedString,
         (runResult: RunResult | null, err: Error | null) => {

@@ -116,7 +116,6 @@ export function upsert(tableString: string, ...columnString: string[]): string {
     insertInto(
       tableString, 
       ...columnString
-      // ...keys.map((key: string) => col<any>(key))
     ) + values(
       value(...columnString.map(() => val()))
     ) + " ON CONFLICT DO UPDATE" + SET(
