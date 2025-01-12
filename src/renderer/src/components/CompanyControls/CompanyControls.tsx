@@ -32,7 +32,6 @@ export default function CompanyControls(props: Props): ReactNode {
     volume_price: "",
     volume_quantity: "",
     exchange: "",
-    chart_url: "",
     updated: ""
   });
 

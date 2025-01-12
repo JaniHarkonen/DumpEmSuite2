@@ -21,11 +21,10 @@ export default function qPostNewCompany(
           col<Company>("volume_price"),
           col<Company>("volume_quantity"),
           col<Company>("exchange"),
-          col<Company>("chart_url"),
           col<Company>("updated"),
           col<FKCompany>("fk_company_currency_id")
         ) + values(
-          value(val(), val(), val(), val(), val(), val(), val(), val(), val())
+          value(val(), val(), val(), val(), val(), val(), val(), val())
         )
       );
 
@@ -44,7 +43,6 @@ export default function qPostNewCompany(
           company.volume_price,
           company.volume_quantity,
           company.exchange,
-          company.chart_url,
           company.updated,
           'EUR'
         ]

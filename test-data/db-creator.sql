@@ -26,7 +26,6 @@ CREATE TABLE company (
 	volume_quantity REAL,
 	updated TEXT,
 	exchange TEXT,
-	chart_url TEXT,
 	fk_company_currency_id TEXT,
 	
 	PRIMARY KEY (company_id AUTOINCREMENT),
@@ -119,7 +118,7 @@ INSERT INTO scraper (scraper_name, scraper_version, scrape_script_version, good_
 VALUES
 ('test scrape', 'v1.0.0', 'v3.3.3', '2000-02-02', 'XYZ:/not/a/path.scraper');
 
-INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, updated, exchange, chart_url)
+INSERT INTO company (company_id, company_name, stock_ticker, stock_price, volume_price, volume_quantity, fk_company_currency_id, updated, exchange)
 VALUES
 (NULL, 'Pizza place', 'PZZA', 50.0, 50000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/pzza'),
 (NULL, 'Big bank', 'BANK', 100.0, 100000.00, 1000, 'EUR', '2028-01-01', 'NASDAQ', 'chart.not.a.link/bank'),

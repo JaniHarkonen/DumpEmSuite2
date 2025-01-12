@@ -20,7 +20,6 @@ export type Company = {
   volume_price: number | null;
   volume_quantity: number | null;
   exchange: string | null,
-	chart_url: string | null,
   updated: string | null;
 };
 export type FKCompany = {

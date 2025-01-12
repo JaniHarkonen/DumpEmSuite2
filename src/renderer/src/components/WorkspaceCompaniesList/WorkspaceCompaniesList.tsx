@@ -15,7 +15,6 @@ export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { accessor: "volume_quantity", caption: "Volume (quant.)" },
   { accessor: "stock_price", caption: "Share price ($)" },
   { accessor: "exchange", caption: "Exchange symbol" },
-  { accessor: "chart_url", caption: "Chart URL" },
   { accessor: "updated", caption: "Updated" }
 ];
 

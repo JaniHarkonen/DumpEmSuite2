@@ -34,7 +34,6 @@ export default function qCreateDatabase(metadata: Metadata): string {
       volume_quantity REAL,
       updated TEXT,
       exchange TEXT,
-      chart_url TEXT,
       fk_company_currency_id TEXT,
       
       PRIMARY KEY (company_id AUTOINCREMENT),
