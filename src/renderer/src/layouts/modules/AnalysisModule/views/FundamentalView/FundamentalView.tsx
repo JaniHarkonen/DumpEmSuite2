@@ -11,6 +11,7 @@ import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
 import FilterationNote from "../FilterationNote/FilterationNote";
+import ProfileChart from "@renderer/components/tradingview/ProfileChart";
 
 
 export default function FundamentalView(): ReactNode {
@@ -32,7 +33,7 @@ export default function FundamentalView(): ReactNode {
           />
         );
       },
-      "view-filteration-tab-chart": () => <>chart</>,
+      "view-filteration-tab-chart": () => <ProfileChart />,
       "view-fundamental-notes": () => <FilterationNote filterationStepID={filterationStepID} />,
       "view-material-browser": () => <>materials</>,
       "view-company-profile": () => <CompanyProfile />

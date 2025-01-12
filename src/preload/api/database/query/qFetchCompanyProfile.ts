@@ -22,9 +22,6 @@ export default function qFetchCompanyProfile(
         WHERE(equals(col<FKProfile>("fk_profile_company_id"), val()))
       );
 
-      ipcRenderer.send("debug", preparedString)
-      ipcRenderer.send("debug", company.company_id)
-
       databaseManager.fetch<Profile>(
         databaseName, preparedString,
         (err: Error | null, rows: Profile[]) => {

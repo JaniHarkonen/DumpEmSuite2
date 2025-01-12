@@ -9,6 +9,7 @@ import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import CompanyProfilesList from "@renderer/components/CompanyList/CompanyProfilesList/CompanyProfilesList";
 import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
+import ProfileChart from "@renderer/components/tradingview/ProfileChart";
 
 
 export default function ProfilesView() {
@@ -23,7 +24,7 @@ export default function ProfilesView() {
   const tabsProvider: TabContentProvider = createTabContentProvider(
     {
       "view-company-list": () => <CompanyProfilesList onCompanySelect={handleProfileSelection} />,
-      "view-chart": () => <>chart</>,
+      "view-chart": () => <ProfileChart />,
       "view-company-profile": () => <CompanyProfile allowEdit={true} />
     }
   );

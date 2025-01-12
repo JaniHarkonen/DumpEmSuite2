@@ -21,10 +21,6 @@ export default function qPostCompanyProfileChanges(
         company.company_id, ...setterValues
       ];
 
-      ipcRenderer.send("debug", setterValues)
-      ipcRenderer.send("debug", company.company_id)
-      ipcRenderer.send("debug", preparedString)
-
       databaseManager.post(
         databaseName, preparedString,
         (runResult: RunResult | null, err: Error | null) => {
