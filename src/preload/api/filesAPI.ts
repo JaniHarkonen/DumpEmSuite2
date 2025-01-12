@@ -1,6 +1,8 @@
-import { readFile, writeFile, mkdir } from "fs/promises";
-import { FilesAPI, ReadResult } from "../../shared/files.type";
+import { readFile, writeFile, mkdir, readdir } from "fs/promises";
+import { FilePathParse, FilesAPI, ReadResult } from "../../shared/files.type";
 import { ipcRenderer } from "electron";
+import { parse, ParsedPath } from "path";
+import { exec } from "child_process";
 
 
 const DEFAULT_JSON_STRINGIFY_SETTINGS = {
@@ -54,5 +56,19 @@ export const filesAPI: FilesAPI = {
     ipcRenderer.on("open-dialog-result", eventCallback);
     return () => ipcRenderer.removeListener("open-dialog-result", eventCallback);
   },
-  makeDirectory: ({ path }) => mkdir(path, { recursive: false })
+  makeDirectory: ({ path }) => mkdir(path, { recursive: false }),
+  getFilesInDirectory: ({ path }) => readdir(path),
+  parseFilePath: ({ path }) => {
+    return new Promise<FilePathParse>(
+      (resolve, reject) => {
+        try {
+          const parsedPath: ParsedPath = parse(path);
+          resolve(parsedPath);
+        } catch( err ) {
+          reject(err);
+        }
+      }
+    );
+  },
+  execute: ({ command }) => exec(command)
 };

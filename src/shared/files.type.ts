@@ -35,6 +35,14 @@ export type ShowOpenDialogProps = {
 
 export type ShowOpenDialog = (props: ShowOpenDialogProps) => void;
 
+export type FilePathParse = {
+  dir: string;
+  root: string;
+  base: string;
+  name: string;
+  ext: string;
+};
+
 type UnsubscriberCallback = () => void;
 
 export type FilesAPI = {
@@ -44,4 +52,7 @@ export type FilesAPI = {
   showOpenDialog: ShowOpenDialog;
   onOpenDialogResult: (props: { callback: OpenDialogCallback }) => UnsubscriberCallback;
   makeDirectory: (props: { path: string }) => Promise<void>;
+  getFilesInDirectory: (props: { path: string }) => Promise<string[]>;
+  parseFilePath: (props: { path: string }) => Promise<FilePathParse>;
+  execute: (props: { command: string }) => void;
 };

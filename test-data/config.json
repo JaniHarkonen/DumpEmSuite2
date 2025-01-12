@@ -47,7 +47,6 @@
                                   "caption": "Companies",
                                   "contentTemplate": "module-companies",
                                   "tags": [],
-                                  "order": 0,
                                   "sceneConfigBlueprint": {
                                     "splitTree": {
                                       "root": {
@@ -191,7 +190,8 @@
                                         }
                                       }
                                     }
-                                  }
+                                  },
+                                  "order": 0
                                 },
                                 {
                                   "id": "module-analysis",
@@ -199,7 +199,6 @@
                                   "caption": "Analysis",
                                   "contentTemplate": "module-analysis",
                                   "tags": [],
-                                  "order": 0,
                                   "sceneConfigBlueprint": {
                                     "splitTree": {
                                       "root": {
@@ -610,7 +609,7 @@
                                                                       "order": 0
                                                                     }
                                                                   ],
-                                                                  "activeTabIndex": 0
+                                                                  "activeTabIndex": 1
                                                                 }
                                                               }
                                                             },
@@ -645,13 +644,14 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 0
+                                              "activeTabIndex": 3
                                             }
                                           }
                                         }
                                       }
                                     }
-                                  }
+                                  },
+                                  "order": 0
                                 },
                                 {
                                   "id": "module-macro",
@@ -687,7 +687,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 0
+                              "activeTabIndex": 1
                             }
                           }
                         }

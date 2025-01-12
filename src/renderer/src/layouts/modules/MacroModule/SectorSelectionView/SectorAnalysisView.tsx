@@ -6,6 +6,7 @@ import { ReactNode, useContext } from "react";
 import ModuleView from "../../ModuleView/ModuleView";
 import MacroSectorNotesView from "../views/MacroSectorNotesView";
 import { TabsContext } from "@renderer/context/TabsContext";
+import MaterialsBrowser from "@renderer/components/MaterialsBrowser/MaterialsBrowser";
 
 
 export default function SectorAnalysisView(): ReactNode {
@@ -25,7 +26,7 @@ export default function SectorAnalysisView(): ReactNode {
           }}/>
         );
       },
-      "view-sector-tab-materials": () => <>materials</>
+      "view-sector-tab-materials": () => <MaterialsBrowser />
     },
     <>failed</>
   );

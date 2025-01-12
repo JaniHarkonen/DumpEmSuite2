@@ -78,6 +78,11 @@ textarea {
   height: 14px;
 }
 
+.size-medium-icon {
+  width: 64px;
+  height: 64px;
+}
+
 .h-auto {
   height: auto;
 }
