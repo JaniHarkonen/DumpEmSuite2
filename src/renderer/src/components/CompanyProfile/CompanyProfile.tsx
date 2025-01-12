@@ -16,14 +16,14 @@ export default function CompanyProfile(props: Props): ReactNode {
   const pAllowEdit: boolean = props.allowEdit ?? false;
   const {profile, company, onEditProfile} = useContext(ProfileContext);
 
-  if( !profile || !company ) {
+  if( !company ) {
     return <></>;
   }
 
-  const sector: string = profile.sector || "";
-  const investorsURL: string = profile.investors_url || "";
-  const presence: string = profile.presence || "";
-  const description: string = profile.profile_description || "";
+  const sector: string = profile?.sector || "none";
+  const investorsURL: string = profile?.investors_url || "none";
+  const presence: string = profile?.presence || "none";
+  const description: string = profile?.profile_description || "none";
 
   const handleEditProfile = (attribute: keyof Profile, value: string) => {
     onEditProfile && onEditProfile({

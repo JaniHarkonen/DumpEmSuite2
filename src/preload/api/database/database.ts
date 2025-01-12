@@ -1,7 +1,6 @@
 import { Database, OPEN_CREATE, OPEN_READWRITE, RunResult } from "sqlite3";
 import qCreateDatabase from "./query/qCreateDatabase";
 import { CURRENT_APP_VERSION } from "../../../shared/appConfig";
-import { ipcRenderer } from "electron";
 
 
 type DatabaseConnection = {
@@ -10,7 +9,7 @@ type DatabaseConnection = {
   database: Database;
 };
 
-type DatabaseValue = number | string | boolean | null;
+export type DatabaseValue = number | string | boolean | null;
 
 export type ErrorCallback = (err: Error | null) => void;
 
@@ -43,7 +42,6 @@ export class DatabaseManager {
             workspace_name: databaseName
           }), (createError: Error | null) => {
             if( createError ) {
-              ipcRenderer.send("debug", "failed" + createError);
               database.close((closeError: Error | null) => callback && callback(closeError));
             } else {
               database.close();

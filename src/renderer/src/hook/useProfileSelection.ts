@@ -22,6 +22,7 @@ export default function useProfileSelection(): Returns {
   const fetchCompanyProfile = (company: Company) => {
     databaseAPI.fetchCompanyProfile({ company: company })
     .then((result: FetchResult<Profile>) => {
+      console.log(result)
       if( result.wasSuccessful ) {
         setProfileSelection({
           profile: result.rows[0],

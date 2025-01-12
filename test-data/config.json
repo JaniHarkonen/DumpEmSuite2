@@ -16,7 +16,690 @@
           "left": {
             "isFork": false,
             "value": {
-              "tabs": [],
+              "tabs": [
+                {
+                  "id": "ws-eff655bb499b11fdf1",
+                  "workspace": "ws-eff655bb499b11fdf1",
+                  "caption": "test-database",
+                  "contentTemplate": "NONE",
+                  "tags": [],
+                  "sceneConfigBlueprint": {
+                    "splitTree": {
+                      "root": {
+                        "isFork": true,
+                        "divider": {
+                          "direction": "horizontal",
+                          "value": 50
+                        },
+                        "left": {
+                          "isFork": true,
+                          "divider": {
+                            "direction": "horizontal",
+                            "value": 50
+                          },
+                          "left": {
+                            "isFork": false,
+                            "value": {
+                              "tabs": [
+                                {
+                                  "id": "module-companies",
+                                  "workspace": "ws-eff655bb499b11fdf1",
+                                  "caption": "Companies",
+                                  "contentTemplate": "module-companies",
+                                  "tags": [],
+                                  "order": 0,
+                                  "sceneConfigBlueprint": {
+                                    "splitTree": {
+                                      "root": {
+                                        "isFork": true,
+                                        "divider": {
+                                          "direction": "horizontal",
+                                          "value": 50
+                                        },
+                                        "left": {
+                                          "isFork": true,
+                                          "divider": {
+                                            "direction": "horizontal",
+                                            "value": 50
+                                          },
+                                          "left": {
+                                            "isFork": false,
+                                            "value": {
+                                              "tabs": [
+                                                {
+                                                  "id": "view-scraper",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "Scraper",
+                                                  "contentTemplate": "view-scraper",
+                                                  "tags": [],
+                                                  "order": 0
+                                                },
+                                                {
+                                                  "id": "view-listings",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "Listings",
+                                                  "contentTemplate": "view-listings",
+                                                  "tags": [],
+                                                  "order": 0
+                                                },
+                                                {
+                                                  "id": "view-profiles",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "Profiles",
+                                                  "contentTemplate": "view-profiles",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "vertical",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-company-list",
+                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "caption": "Companies",
+                                                                    "contentTemplate": "view-company-list",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          },
+                                                          "right": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "vertical",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-chart",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Chart",
+                                                                      "contentTemplate": "view-chart",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-company-profile",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Profile",
+                                                                      "contentTemplate": "view-company-profile",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                }
+                                              ],
+                                              "activeTabIndex": 2
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "module-analysis",
+                                  "workspace": "ws-eff655bb499b11fdf1",
+                                  "caption": "Analysis",
+                                  "contentTemplate": "module-analysis",
+                                  "tags": [],
+                                  "order": 0,
+                                  "sceneConfigBlueprint": {
+                                    "splitTree": {
+                                      "root": {
+                                        "isFork": true,
+                                        "divider": {
+                                          "direction": "horizontal",
+                                          "value": 50
+                                        },
+                                        "left": {
+                                          "isFork": true,
+                                          "divider": {
+                                            "direction": "horizontal",
+                                            "value": 50
+                                          },
+                                          "left": {
+                                            "isFork": false,
+                                            "value": {
+                                              "tabs": [
+                                                {
+                                                  "id": "view-volume",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "Volume",
+                                                  "contentTemplate": "view-filteration",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-volume-stocks",
+                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "caption": "Stocks",
+                                                                    "contentTemplate": "view-filteration-tab-stocks",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          },
+                                                          "right": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "vertical",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-volume-chart",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Chart",
+                                                                      "contentTemplate": "view-filteration-tab-chart",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-volume-notes",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Notes",
+                                                                      "contentTemplate": "view-filteration-tab-notes",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                },
+                                                {
+                                                  "id": "view-price-action",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "Price action",
+                                                  "contentTemplate": "view-filteration",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-volume-stocks",
+                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "caption": "Stocks",
+                                                                    "contentTemplate": "view-filteration-tab-stocks",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          },
+                                                          "right": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "vertical",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-volume-chart",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Chart",
+                                                                      "contentTemplate": "view-filteration-tab-chart",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-volume-notes",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Notes",
+                                                                      "contentTemplate": "view-filteration-tab-notes",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                },
+                                                {
+                                                  "id": "view-technical",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "TA 1",
+                                                  "contentTemplate": "view-filteration",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-volume-stocks",
+                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "caption": "Stocks",
+                                                                    "contentTemplate": "view-filteration-tab-stocks",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          },
+                                                          "right": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "vertical",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-volume-chart",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Chart",
+                                                                      "contentTemplate": "view-filteration-tab-chart",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-volume-notes",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Notes",
+                                                                      "contentTemplate": "view-filteration-tab-notes",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                },
+                                                {
+                                                  "id": "view-fundamental",
+                                                  "workspace": "ws-eff655bb499b11fdf1",
+                                                  "caption": "Fundamental",
+                                                  "contentTemplate": "view-fundamental",
+                                                  "tags": [
+                                                    "permanent"
+                                                  ],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-fundamental-stocks",
+                                                                    "workspace": "ws-eff655bb499b11fdf1",
+                                                                    "caption": "Stocks",
+                                                                    "contentTemplate": "view-filteration-tab-stocks",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          },
+                                                          "right": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "vertical",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-fundamental-chart",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Chart",
+                                                                      "contentTemplate": "view-filteration-tab-chart",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    },
+                                                                    {
+                                                                      "id": "view-fundamental-material-browser",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Materials",
+                                                                      "contentTemplate": "view-material-browser",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    },
+                                                                    {
+                                                                      "id": "view-fundamental-profile",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Profile",
+                                                                      "contentTemplate": "view-company-profile",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-fundamental-notes",
+                                                                      "workspace": "ws-eff655bb499b11fdf1",
+                                                                      "caption": "Notes",
+                                                                      "contentTemplate": "view-fundamental-notes",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 1
+                                                }
+                                              ],
+                                              "activeTabIndex": 0
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "module-macro",
+                                  "workspace": "ws-eff655bb499b11fdf1",
+                                  "caption": "Macro",
+                                  "contentTemplate": "module-macro",
+                                  "tags": [],
+                                  "sceneConfigBlueprint": {
+                                    "splitTree": {
+                                      "root": {
+                                        "isFork": true,
+                                        "divider": {
+                                          "direction": "horizontal",
+                                          "value": 50
+                                        },
+                                        "left": {
+                                          "isFork": true,
+                                          "divider": {
+                                            "direction": "horizontal",
+                                            "value": 50
+                                          },
+                                          "left": {
+                                            "isFork": false,
+                                            "value": {
+                                              "tabs": [],
+                                              "activeTabIndex": 0
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "order": 0
+                                }
+                              ],
+                              "activeTabIndex": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "order": 0,
+                  "extra": {
+                    "path": "test-data\\test-database\\data.db"
+                  }
+                }
+              ],
               "activeTabIndex": 0
             }
           }

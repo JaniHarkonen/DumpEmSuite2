@@ -67,7 +67,7 @@ export default function qCreateDatabase(metadata: Metadata): string {
       presence TEXT,
       investors_url TEXT,
       profile_description TEXT,
-      fk_profile_company_id INTEGER NOT NULL,
+      fk_profile_company_id INTEGER NOT NULL UNIQUE,
       
       FOREIGN KEY (fk_profile_company_id) REFERENCES company(company_id)
     );

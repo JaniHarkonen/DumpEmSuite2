@@ -11,7 +11,7 @@ import MacroModule from "../modules/MacroModule/MacroModule";
 import { TabsContext } from "@renderer/context/TabsContext";
 
 
-const {databaseAPI} = window.api;
+const {databaseAPI, filesAPI} = window.api;
 
 export default function Workspace(): ReactNode {
   const [workspaceContext, setWorkspaceContext] = useState<WorkspaceContextType | null>(null);
@@ -27,9 +27,8 @@ export default function Workspace(): ReactNode {
     }
 
     const boundDatabaseAPI: BoundDatabaseAPI = bindAPIToWorkspace(
-      activeTab.id,
-      // filesAPI.getWorkingDirectory() + "\\test-data\\test-database.db",
-      activeTab.extra.path,
+      activeTab.id, 
+      filesAPI.getWorkingDirectory() + "\\" + activeTab.extra.path, // getWorkingDirectory-PART IS ONLY TO BE USED IN DEV
       databaseAPI
     );
 

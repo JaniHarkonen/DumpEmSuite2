@@ -13,6 +13,8 @@ import { ASSETS } from "@renderer/assets/assets";
 import Toolbar from "@renderer/components/Toolbar/Toolbar";
 
 
+const {databaseAPI} = window.api;
+
 export default function WorkspacesView(): ReactNode {
   const tabsProvider: TabContentProvider = {
     getContent: (tabBlueprint: TabBlueprint) => (
@@ -48,7 +50,6 @@ export default function WorkspacesView(): ReactNode {
   ) => {
     const tab: Tab = buildTab(workspaceTabBlueprint, tabsProvider);
     handleTabAdd(targetNode, tab);
-    console.log("here we are");
   };
 
   const handleTabRemove = (
@@ -56,6 +57,7 @@ export default function WorkspacesView(): ReactNode {
   ) => {
     e.stopPropagation();
     removeTab(targetNode, tab);
+    databaseAPI.close({ databaseName: tab.id });
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
@@ -79,7 +81,6 @@ export default function WorkspacesView(): ReactNode {
       </TabControls>
     );
   };
-
   
   return (
     <FlexibleSplitsContext.Provider
