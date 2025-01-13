@@ -30,7 +30,7 @@ export default function App(): ReactNode {
 
   useEffect(() => {
     const configPath: string = 
-      filesAPI.getWorkingDirectory() + RELATIVE_APP_PATHS.configPath;
+      RELATIVE_APP_PATHS.make.config(filesAPI.getWorkingDirectory());
     const updater: ConfigFileUpdater = createConfigFileUpdater(configPath);
 
       // Read app configuration file

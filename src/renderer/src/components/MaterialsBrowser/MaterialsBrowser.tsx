@@ -1,30 +1,23 @@
 import { ReactNode, useEffect, useState } from "react";
 import BrowserFile from "./BrowserFile/BrowserFile";
 import { FilePathParse } from "src/shared/files.type";
-import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 
 
 type Props = {
-  // directoryPath: string;
+  directoryPath: string;
 }
 
 const {filesAPI} = window.api;
 
 export default function MaterialsBrowser(props: Props): ReactNode {
-  // const pDirectoryPath: string = props.directoryPath;
-  const pDirectoryPath: string | null = (
-    filesAPI.getWorkingDirectory() + 
-    "\\test-data\\test-database\\" + 
-    RELATIVE_APP_PATHS.materialsPath
-  );
-
+  const pDirectoryPath: string = props.directoryPath;
   const [filePaths, setFilePaths] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
   const dialogKey: string = "materials-browser-import-" + pDirectoryPath;
 
+
+  console.log(pDirectoryPath)
+
   const importFiles = (path: string[]) => {
-    console.log("copy", path)
     for( let file of path ) {
       filesAPI.parseFilePath({ path: file })
       .then((parse: FilePathParse) => {
@@ -40,8 +33,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
 
   useEffect(() => {
     filesAPI.getFilesInDirectory({ path: pDirectoryPath })
-    .then((result: string[]) => setFilePaths(result))
-    .catch((reason: string) => setError(reason));
+    .then((result: string[]) => setFilePaths(result));
 
     return filesAPI.onOpenDialogResult({
       callback: ({ key, cancelled, path }) => {
@@ -88,9 +80,9 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   };
 
   const handleFileImportDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    const files: string[] = [];
     e.preventDefault();
     
-    const files: string[] = [];
     for( let i = 0; i < e.dataTransfer.files.length; i++ ) {
       files.push(e.dataTransfer.files[i].path);
     }
@@ -110,10 +102,6 @@ export default function MaterialsBrowser(props: Props): ReactNode {
     }));
   };
 
-  if( error ) {
-    return <>{error}</>;
-  }
-
   if( !pDirectoryPath ) {
     return <>Please, select a company...</>;
   }
@@ -125,7 +113,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
     >
       <button onClick={handleFileImportSelection}>Import files</button>
       <button onClick={handleOpenInExplorer}>Open in system explorer</button>
-      {filePaths.map((path: string, index: number) => {
+      {filePaths.length > 0 ? filePaths.map((path: string, index: number) => {
         return (
           <BrowserFile
             key={path}
@@ -135,7 +123,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
             onDelete={(fileInfo: FilePathParse) => removeFile(index, fileInfo)}
           />
         );
-      })}
+      }) : <div>No materials yet.</div>}
     </div>
   );
 }

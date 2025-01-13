@@ -184,7 +184,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }
@@ -543,7 +543,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 50
+                                                            "value": 56.25
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -609,7 +609,7 @@
                                                                       "order": 0
                                                                     }
                                                                   ],
-                                                                  "activeTabIndex": 2
+                                                                  "activeTabIndex": 1
                                                                 }
                                                               }
                                                             },
@@ -644,7 +644,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 3
                                             }
                                           }
                                         }
@@ -724,7 +724,7 @@
                                                                     "order": 0
                                                                   }
                                                                 ],
-                                                                "activeTabIndex": 0
+                                                                "activeTabIndex": 1
                                                               }
                                                             }
                                                           }
@@ -754,7 +754,7 @@
                   },
                   "order": 0,
                   "extra": {
-                    "path": "test-data\\test-database\\data.db"
+                    "path": "test-data\\test-database"
                   }
                 }
               ],

@@ -7,11 +7,14 @@ import ModuleView from "../../ModuleView/ModuleView";
 import MacroSectorNotesView from "../views/MacroSectorNotesView";
 import { TabsContext } from "@renderer/context/TabsContext";
 import MaterialsBrowser from "@renderer/components/MaterialsBrowser/MaterialsBrowser";
+import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
+import { RELATIVE_APP_PATHS } from "../../../../../../../src/shared/appConfig";
 
 
 export default function SectorAnalysisView(): ReactNode {
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
   const {activeTabIndex, tabs} = useContext(TabsContext);
+  const {workspacePath} = useContext(WorkspaceContext);
 
   const activeTab: Tab = tabs[activeTabIndex];
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;
@@ -26,7 +29,13 @@ export default function SectorAnalysisView(): ReactNode {
           }}/>
         );
       },
-      "view-sector-tab-materials": () => <MaterialsBrowser />
+      "view-sector-tab-materials": () => {
+        return (
+          <MaterialsBrowser
+            directoryPath={RELATIVE_APP_PATHS.make.sector(workspacePath!, activeTab.id)}
+          />
+        );
+      }
     },
     <>failed</>
   );

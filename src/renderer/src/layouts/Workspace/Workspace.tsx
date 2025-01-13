@@ -9,6 +9,7 @@ import { bindAPIToWorkspace, BoundDatabaseAPI, QueryResult } from "../../../../s
 import ModuleView from "../modules/ModuleView/ModuleView";
 import MacroModule from "../modules/MacroModule/MacroModule";
 import { TabsContext } from "@renderer/context/TabsContext";
+import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 
 
 const {databaseAPI, filesAPI} = window.api;
@@ -20,6 +21,7 @@ export default function Workspace(): ReactNode {
   const {tabs, activeTabIndex} = useContext(TabsContext);
 
   const activeTab: Tab = tabs[activeTabIndex];
+  const workspacePath: string = filesAPI.getWorkingDirectory() + "\\" + activeTab.extra.path; // getWorkingDirectory-PART IS ONLY TO BE USED IN DEV
 
   useEffect(() => {
     if( !activeTab.extra ) {
@@ -27,9 +29,7 @@ export default function Workspace(): ReactNode {
     }
 
     const boundDatabaseAPI: BoundDatabaseAPI = bindAPIToWorkspace(
-      activeTab.id, 
-      filesAPI.getWorkingDirectory() + "\\" + activeTab.extra.path, // getWorkingDirectory-PART IS ONLY TO BE USED IN DEV
-      databaseAPI
+      activeTab.id, RELATIVE_APP_PATHS.make.database(workspacePath), databaseAPI
     );
 
     const setContext = () => {
@@ -73,7 +73,8 @@ export default function Workspace(): ReactNode {
         <WorkspaceContext.Provider
           value={{
             workspaceConfig: workspaceContext.workspaceConfig,
-            databaseAPI: workspaceContext.databaseAPI
+            databaseAPI: workspaceContext.databaseAPI,
+            workspacePath
           }}
         >
           <ModuleView
