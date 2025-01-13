@@ -4,6 +4,10 @@ import { MacroSector } from "../../../../shared/schemaConfig";
 import { DatabaseManager } from "../database";
 import { col, DELETE, equals, FROM, query, table, val, WHERE } from "../sql";
 import { createError, destructureRunResult } from "../databaseAPI";
+import path, { ParsedPath } from "path";
+import { ipcRenderer } from "electron";
+import { RELATIVE_APP_PATHS } from "../../../../shared/appConfig";
+import { rm } from "fs/promises";
 
 
 export default function qDeleteMacroSector(
@@ -17,6 +21,18 @@ export default function qDeleteMacroSector(
           WHERE(equals(col<MacroSector>("sector_id"), val()))
         )
       );
+
+      const databasePath: string | null = databaseManager.getPath(databaseName);
+
+        // Delete the associated materials directory
+      if( databasePath ) {
+        const parse: ParsedPath = path.parse(databasePath);
+        ipcRenderer.send("debug", RELATIVE_APP_PATHS.make.sector(parse.dir, macroSectorID));
+        rm(
+          RELATIVE_APP_PATHS.make.sector(parse.dir, macroSectorID), 
+          { recursive: true }
+        );
+      }
 
       databaseManager.post(
         databaseName, preparedString,

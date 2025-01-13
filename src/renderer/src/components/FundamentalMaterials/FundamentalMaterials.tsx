@@ -6,10 +6,10 @@ import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 
 
 export default function FundamentalMaterials(): ReactNode {
-  const {profile, company} = useContext(ProfileContext);
+  const {company} = useContext(ProfileContext);
   const {workspacePath} = useContext(WorkspaceContext);
 
-  if( !company || !profile || !workspacePath ) {
+  if( !company || !workspacePath ) {
     return <>Please, select a company...</>;
   }
 
@@ -18,8 +18,6 @@ export default function FundamentalMaterials(): ReactNode {
   }
 
   return (
-    <MaterialsBrowser 
-      directoryPath={getMaterialsPath()}
-    />
+    <MaterialsBrowser directoryPath={getMaterialsPath()} />
   );
 }

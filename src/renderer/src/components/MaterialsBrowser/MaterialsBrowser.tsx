@@ -15,7 +15,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   const dialogKey: string = "materials-browser-import-" + pDirectoryPath;
 
 
-  console.log(pDirectoryPath)
+  console.log(pDirectoryPath);
 
   const importFiles = (path: string[]) => {
     for( let file of path ) {
@@ -33,7 +33,8 @@ export default function MaterialsBrowser(props: Props): ReactNode {
 
   useEffect(() => {
     filesAPI.getFilesInDirectory({ path: pDirectoryPath })
-    .then((result: string[]) => setFilePaths(result));
+    .then((result: string[]) => setFilePaths(result))
+    .catch(() => setFilePaths([]));
 
     return filesAPI.onOpenDialogResult({
       callback: ({ key, cancelled, path }) => {

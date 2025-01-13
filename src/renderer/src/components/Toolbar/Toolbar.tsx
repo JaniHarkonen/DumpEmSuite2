@@ -86,7 +86,7 @@ export default function Toolbar(props: Props): ReactNode {
         databaseAPI.createDatabase({
           databaseID: id,
           databaseName,
-          databasePath: path
+          databasePath: RELATIVE_APP_PATHS.make.database(path)
         }).then((result: QueryResult) => {
           if( !result.wasSuccessful ) {
             return;

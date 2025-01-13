@@ -33,7 +33,7 @@ export class DatabaseManager {
         if( openError ) {
           callback && callback({
             name: "create-error",
-            message: "Database '" + databaseName + "' could not be created!"
+            message: "Database '" + databaseName + "' could not be created! Path: " + databasePath
           });
         } else {
           database.exec(qCreateDatabase({
@@ -158,8 +158,7 @@ export class DatabaseManager {
   }
 
   public close(databaseName: string, callback?: ErrorCallback): void {
-    const connection: DatabaseConnection | undefined = 
-      this.getDatabase(databaseName);
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
 
     if( connection ) {
       connection.database.close((err: Error | null) => {
@@ -170,5 +169,10 @@ export class DatabaseManager {
         callback && callback(err);
       });
     }
+  }
+
+  public getPath(databaseName: string): string | null {
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
+    return connection?.path ?? null;
   }
 }

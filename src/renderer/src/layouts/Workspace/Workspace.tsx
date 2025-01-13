@@ -21,7 +21,7 @@ export default function Workspace(): ReactNode {
   const {tabs, activeTabIndex} = useContext(TabsContext);
 
   const activeTab: Tab = tabs[activeTabIndex];
-  const workspacePath: string = filesAPI.getWorkingDirectory() + "\\" + activeTab.extra.path; // getWorkingDirectory-PART IS ONLY TO BE USED IN DEV
+  const workspacePath: string = filesAPI.getWorkingDirectory() + activeTab.extra.path; // getWorkingDirectory-PART IS ONLY TO BE USED IN DEV
 
   useEffect(() => {
     if( !activeTab.extra ) {
