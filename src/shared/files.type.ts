@@ -51,8 +51,10 @@ export type FilesAPI = {
   getWorkingDirectory: () => string;
   showOpenDialog: ShowOpenDialog;
   onOpenDialogResult: (props: { callback: OpenDialogCallback }) => UnsubscriberCallback;
-  makeDirectory: (props: { path: string }) => Promise<void>;
+  makeDirectory: (props: { path: string, recursive: boolean }) => Promise<string | undefined>;
   getFilesInDirectory: (props: { path: string }) => Promise<string[]>;
   parseFilePath: (props: { path: string }) => Promise<FilePathParse>;
   execute: (props: { command: string }) => void;
+  copyFile: (props: { sourcePath: string, destinationPath: string }) => Promise<void>;
+  deleteFile: (props: { path: string }) => Promise<void>;
 };

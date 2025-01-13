@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir, readdir } from "fs/promises";
+import { readFile, writeFile, mkdir, readdir, copyFile, unlink } from "fs/promises";
 import { FilePathParse, FilesAPI, ReadResult } from "../../shared/files.type";
 import { ipcRenderer } from "electron";
 import { parse, ParsedPath } from "path";
@@ -56,7 +56,7 @@ export const filesAPI: FilesAPI = {
     ipcRenderer.on("open-dialog-result", eventCallback);
     return () => ipcRenderer.removeListener("open-dialog-result", eventCallback);
   },
-  makeDirectory: ({ path }) => mkdir(path, { recursive: false }),
+  makeDirectory: ({ path, recursive }) => mkdir(path, { recursive }),
   getFilesInDirectory: ({ path }) => readdir(path),
   parseFilePath: ({ path }) => {
     return new Promise<FilePathParse>(
@@ -70,5 +70,7 @@ export const filesAPI: FilesAPI = {
       }
     );
   },
-  execute: ({ command }) => exec(command)
+  execute: ({ command }) => exec(command),
+  copyFile: ({ sourcePath, destinationPath }) => copyFile(sourcePath, destinationPath),
+  deleteFile: ({ path }) => unlink(path)
 };
