@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import BrowserFile from "./BrowserFile/BrowserFile";
-import { FilePathParse, OpenDialogResult } from "src/shared/files.type";
+import { FilePathParse } from "src/shared/files.type";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 
 
@@ -12,7 +12,7 @@ const {filesAPI} = window.api;
 
 export default function MaterialsBrowser(props: Props): ReactNode {
   // const pDirectoryPath: string = props.directoryPath;
-  const pDirectoryPath: string = (
+  const pDirectoryPath: string | null = (
     filesAPI.getWorkingDirectory() + 
     "\\test-data\\test-database\\" + 
     RELATIVE_APP_PATHS.materialsPath
@@ -95,14 +95,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
       files.push(e.dataTransfer.files[i].path);
     }
 
-    ensureMaterialsDirectoryExists(() => {
-      for( let file of e.dataTransfer.files ) {
-        files.push(file.path);
-        console.log("push")
-      }
-
-      importFiles(files);
-    });
+    ensureMaterialsDirectoryExists(() => importFiles(files));
   };
 
   const ignoreDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -119,6 +112,10 @@ export default function MaterialsBrowser(props: Props): ReactNode {
 
   if( error ) {
     return <>{error}</>;
+  }
+
+  if( !pDirectoryPath ) {
+    return <>Please, select a company...</>;
   }
 
   return (

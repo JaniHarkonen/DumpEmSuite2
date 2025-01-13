@@ -28,6 +28,7 @@ import qDeleteFilterationStep from "./query/qDeleteFilterationStep";
 import qDeleteTag from "./query/qDeleteTag";
 import qDelistStock from "./query/qDelistStock";
 import qDeleteMacroSector from "./query/qDeleteMacroSector";
+import qFetchAllFiltrationSteps from "./query/qFetchAllFiltrationSteps";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -105,6 +106,7 @@ export const databaseAPI: DatabaseAPI = {
   fetchScraperInfo: ({ databaseName }) => qFetchScraperInfo(databaseManager, databaseName),
   fetchAllCompanies: ({ databaseName }) => qFetchAllCompanies(databaseManager, databaseName),
   fetchAllTags: ({ databaseName }) => qFetchAllTags(databaseManager, databaseName),
+  fetchAllFiltrationSteps: ({ databaseName }) => qFetchAllFiltrationSteps(databaseManager, databaseName),
   fetchCompanyProfile: ({
     databaseName, company
   }) => {return qFetchCompanyProfile(databaseManager, databaseName, company)},

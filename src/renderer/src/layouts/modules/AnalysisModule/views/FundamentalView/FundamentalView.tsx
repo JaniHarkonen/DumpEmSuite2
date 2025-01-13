@@ -30,6 +30,7 @@ export default function FundamentalView(): ReactNode {
         return (
           <CompanyAnalysisList
             filterationStepID={filterationStepID}
+            allowSubmit={false}
             onCompanySelect={handleProfileSelection}
           />
         );

@@ -42,6 +42,7 @@ export type DatabaseAPI = {
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: (props: QueryProps) => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: (props: QueryProps) => Promise<FetchResult<Tag>>;
+  fetchAllFiltrationSteps: (props: QueryProps) => Promise<FetchResult<FilterationStep>>;
   fetchCompanyProfile: (
     props: { company: Company; } & QueryProps
   ) => Promise<FetchResult<Profile>>;
@@ -141,6 +142,7 @@ export type BoundDatabaseAPI = {
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: () => Promise<FetchResult<Tag>>;
+  fetchAllFiltrationSteps: () => Promise<FetchResult<FilterationStep>>;
   fetchCompanyProfile: (props: { company: Company; }) => Promise<FetchResult<Profile>>;
   fetchFilterationStepStocks: (
     props: { filterationStepID: string }
@@ -232,6 +234,7 @@ export function bindAPIToWorkspace(
     fetchScraperInfo: () => api.fetchScraperInfo({ databaseName: workspaceID }),
     fetchAllCompanies: () => api.fetchAllCompanies({ databaseName: workspaceID }),
     fetchAllTags: () => api.fetchAllTags({ databaseName: workspaceID }),
+    fetchAllFiltrationSteps: () => api.fetchAllFiltrationSteps({ databaseName: workspaceID }),
     fetchCompanyProfile: (props) => {
       return api.fetchCompanyProfile({
         ...props,
