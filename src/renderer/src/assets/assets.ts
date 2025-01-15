@@ -7,6 +7,7 @@ import iconFileJPGColor from "./icons/file-jpg-color-icon.svg";
 import iconFilePNGColor from "./icons/file-png-color-icon.svg";
 import iconFileTXTColor from "./icons/file-txt-color-icon.svg";
 import iconFileUnknownColor from "./icons/file-unknown-white-icon.svg";
+import iconAlertTriangleColor from "./icons/alert-triangle-color-icon.svg";
 
 
 export const ASSETS = {
@@ -40,6 +41,11 @@ export const ASSETS = {
       },
       unknown: {
         white: iconFileUnknownColor
+      }
+    },
+    alerts: {
+      missing: {
+        color: iconAlertTriangleColor
       }
     }
   }

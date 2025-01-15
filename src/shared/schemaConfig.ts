@@ -5,11 +5,8 @@ export type Metadata = {
 };
 
 export type Scraper = {
-  scraper_name: string | null;
-  scraper_version: string | null;
-  scrape_script_version: string | null;
-  good_for: string | null;
-  scraper_path: string | null;
+  path: string | null;
+  unique_column?: number;
 };
 
 export type Company = {

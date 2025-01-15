@@ -16,11 +16,8 @@ export default function qCreateDatabase(metadata: Metadata): string {
 
       /* Workspace scraper configuration */
     CREATE TABLE scraper (
-      scraper_name TEXT,
-      scraper_version TEXT,
-      scrape_script_version TEXT,
-      good_for TEXT,
-      scraper_path TEXT
+      unique_column INTEGER NOT NULL UNIQUE,
+      path TEXT
     );
 
 

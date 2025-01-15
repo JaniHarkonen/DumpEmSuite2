@@ -3,6 +3,7 @@ import { FilePathParse, FilesAPI, ReadResult } from "../../shared/files.type";
 import { ipcRenderer } from "electron";
 import { parse, ParsedPath } from "path";
 import { exec } from "child_process";
+import { existsSync } from "fs";
 
 
 const DEFAULT_JSON_STRINGIFY_SETTINGS = {
@@ -37,8 +38,7 @@ export const filesAPI: FilesAPI = {
   },
   getWorkingDirectory: () => process.cwd(),
   showOpenDialog: ({
-    key,
-    options
+    key, options
   }) => {
     ipcRenderer.send("show-open-dialog", {
       key,
@@ -51,10 +51,27 @@ export const filesAPI: FilesAPI = {
       }
     });
   },
+  showSaveDialog: ({
+    key, options
+  }) => {
+    ipcRenderer.send("show-save-dialog", {
+      key, options,
+      ...options,
+      properties: [
+        ...options.properties || [],
+        "dontAddToRecent"
+      ]
+    });
+  },
   onOpenDialogResult: ({ callback }) => {
     const eventCallback = (event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
     ipcRenderer.on("open-dialog-result", eventCallback);
     return () => ipcRenderer.removeListener("open-dialog-result", eventCallback);
+  },
+  onSaveDialogResult: ({ callback }) => {
+    const eventCallback = (event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
+    ipcRenderer.on("save-dialog-result", eventCallback);
+    return () => ipcRenderer.removeListener("save-dialog-result", eventCallback);
   },
   makeDirectory: ({ path, recursive }) => mkdir(path, { recursive }),
   getFilesInDirectory: ({ path }) => readdir(path),
@@ -72,5 +89,6 @@ export const filesAPI: FilesAPI = {
   },
   execute: ({ command }) => exec(command),
   copyFile: ({ sourcePath, destinationPath }) => copyFile(sourcePath, destinationPath),
-  deleteFile: ({ path }) => unlink(path)
+  deleteFile: ({ path }) => unlink(path),
+  fileExists: ({ path }) => new Promise<boolean>((resolve) => resolve(existsSync(path)))
 };

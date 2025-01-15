@@ -29,6 +29,7 @@ import qDeleteTag from "./query/qDeleteTag";
 import qDelistStock from "./query/qDelistStock";
 import qDeleteMacroSector from "./query/qDeleteMacroSector";
 import qFetchAllFiltrationSteps from "./query/qFetchAllFiltrationSteps";
+import qPostScraperInfo from "./query/qPostScraperInfo";
 
 
 const databaseManager: DatabaseManager = new DatabaseManager(); // This should declared somewhere else!!!
@@ -123,6 +124,10 @@ export const databaseAPI: DatabaseAPI = {
     databaseName,
     macroSectorID
   }) => qFetchMacroSectorNote(databaseManager, databaseName, macroSectorID),
+  postScraperInfo: ({
+    databaseName,
+    scraperInfo
+  }) => qPostScraperInfo(databaseManager, databaseName, scraperInfo),
   postNewCompany: ({
     databaseName, 
     company
