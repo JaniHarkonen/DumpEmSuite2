@@ -163,7 +163,6 @@ export default function useFlexibleSplits(props: Props): Returns {
   };
 
   const handleExtraInfo = (targetValue: SplitTreeValue, targetTab: Tab, extraInfo: any) => {
-    console.log(targetTab, extraInfo)
     handleSplitsUpdate((manager: SplitTreeManager): boolean => {
       return manager.setTabExtraInfo(targetValue, targetTab, extraInfo);
     });

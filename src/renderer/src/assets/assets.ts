@@ -8,6 +8,9 @@ import iconFilePNGColor from "./icons/file-png-color-icon.svg";
 import iconFileTXTColor from "./icons/file-txt-color-icon.svg";
 import iconFileUnknownColor from "./icons/file-unknown-white-icon.svg";
 import iconAlertTriangleColor from "./icons/alert-triangle-color-icon.svg";
+import iconBadgeSuccessfulColor from "./icons/badge-successful-color-icon.svg";
+import iconBadgeFailedColor from "./icons/badge-failed-color-icon.svg";
+import iconBadgePendingColor from "./icons/badge-pending-color-icon.svg";
 
 
 export const ASSETS = {
@@ -46,6 +49,17 @@ export const ASSETS = {
     alerts: {
       missing: {
         color: iconAlertTriangleColor
+      }
+    },
+    badges: {
+      successful: {
+        color: iconBadgeSuccessfulColor
+      },
+      failed: {
+        color: iconBadgeFailedColor
+      },
+      pending: {
+        color: iconBadgePendingColor
       }
     }
   }

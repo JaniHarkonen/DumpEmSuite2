@@ -14,9 +14,6 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   const [filePaths, setFilePaths] = useState<string[]>([]);
   const dialogKey: string = "materials-browser-import-" + pDirectoryPath;
 
-
-  console.log(pDirectoryPath);
-
   const importFiles = (path: string[]) => {
     for( let file of path ) {
       filesAPI.parseFilePath({ path: file })
