@@ -65,25 +65,24 @@ export default function Workspace(): ReactNode {
       "module-macro": () => <MacroModule />
     }
   );
-  
+
+  if( !workspaceContext ) {
+    return <>Opening database connection...</>;
+  }
 
   return (
-    <>
-      {workspaceContext ? (
-        <WorkspaceContext.Provider
-          value={{
-            workspaceConfig: workspaceContext.workspaceConfig,
-            databaseAPI: workspaceContext.databaseAPI,
-            workspacePath
-          }}
-        >
-          <ModuleView
-            splitTreeBlueprint={sceneConfig.splitTree} 
-            contentProvider={modulesProvider}
-            onUpdate={handleSplitTreeUpdate}
-          />
-        </WorkspaceContext.Provider>
-      ) : <>Opening database connection...</>}
-    </>
+    <WorkspaceContext.Provider
+      value={{
+        workspaceConfig: workspaceContext.workspaceConfig,
+        databaseAPI: workspaceContext.databaseAPI,
+        workspacePath
+      }}
+    >
+      <ModuleView
+        splitTreeBlueprint={sceneConfig.splitTree} 
+        contentProvider={modulesProvider}
+        onUpdate={handleSplitTreeUpdate}
+      />
+    </WorkspaceContext.Provider>
   );
 }

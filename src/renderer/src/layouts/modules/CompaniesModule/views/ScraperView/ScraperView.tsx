@@ -8,15 +8,23 @@ import PageHeader from "@renderer/components/PageHeader/PageHeader";
 import { FetchResult, PostResult } from "src/shared/database.type";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import PathBrowser from "@renderer/components/PathBrowser/PathBrowser";
+import { TabsContext } from "@renderer/context/TabsContext";
 
 
 export default function ScraperView(): ReactNode {
-  const [scraperInfo, setScraperInfo] = useState<Scraper | null>(null);
-  const [scrapeTarget, setScrapeTarget] = useState<string | null>(null);
-  const [scrapeOutput, setScrapeOutput] = useState<string | null>(null);
-
   const {databaseAPI} = useDatabase();
   const {workspaceConfig} = useContext(WorkspaceContext);
+  const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+
+  const tabExtraInfo: any = tabs[activeTabIndex].extra;
+
+  const [scraperInfo, setScraperInfo] = useState<Scraper | null>(null);
+  const [scrapeTarget, setScrapeTarget] = 
+    useState<string | null>(tabExtraInfo?.scrapeTarget ?? null);
+  const [scrapeOutput, setScrapeOutput] = 
+    useState<string | null>(tabExtraInfo?.scrapeOutput ?? null);
+
+  console.log(tabExtraInfo)
 
   const fetchScraperInfo = () => {
     databaseAPI!.fetchScraperInfo()
@@ -44,10 +52,22 @@ export default function ScraperView(): ReactNode {
 
   const handleTargetSelect = (selectedPath: string) => {
     setScrapeTarget(selectedPath);
+    console.log({
+      ...tabExtraInfo,
+      scrapeTarget: selectedPath
+    })
+    setExtraInfo && setExtraInfo({
+      ...tabExtraInfo,
+      scrapeTarget: selectedPath
+    });
   };
 
   const handleOutputSelect = (selectedPath: string) => {
     setScrapeOutput(selectedPath);
+    setExtraInfo && setExtraInfo({
+      ...tabExtraInfo,
+      scrapeOutput: selectedPath
+    });
   };
 
   return (

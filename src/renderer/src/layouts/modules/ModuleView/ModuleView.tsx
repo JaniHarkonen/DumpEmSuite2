@@ -23,7 +23,8 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
     handleTabRelocation, 
     handleTabReorder,
     handleTabSplit,
-    handleDividerMove
+    handleDividerMove,
+    handleExtraInfo
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
     contentProvider: pContentProvider,
@@ -56,7 +57,8 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
         handleTabRelocation, 
         handleTabReorder,
         handleTabSplit,
-        handleDividerMove
+        handleDividerMove,
+        handleExtraInfo
       }}
     >
       {splitTree && <SplitView renderControls={renderTabControls} />}

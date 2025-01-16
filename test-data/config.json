@@ -47,7 +47,6 @@
                                   "caption": "Companies",
                                   "contentTemplate": "module-companies",
                                   "tags": [],
-                                  "order": 0,
                                   "sceneConfigBlueprint": {
                                     "splitTree": {
                                       "root": {
@@ -72,7 +71,11 @@
                                                   "caption": "Scraper",
                                                   "contentTemplate": "view-scraper",
                                                   "tags": [],
-                                                  "order": 0
+                                                  "order": 0,
+                                                  "extra": {
+                                                    "scrapeTarget": "C:\\Users\\User\\Desktop\\checkup.txt",
+                                                    "scrapeOutput": "C:\\Users\\User\\Desktop\\TESTTESTEST.txt"
+                                                  }
                                                 },
                                                 {
                                                   "id": "view-listings",
@@ -191,7 +194,8 @@
                                         }
                                       }
                                     }
-                                  }
+                                  },
+                                  "order": 0
                                 },
                                 {
                                   "id": "module-analysis",
@@ -199,7 +203,6 @@
                                   "caption": "Analysis",
                                   "contentTemplate": "module-analysis",
                                   "tags": [],
-                                  "order": 0,
                                   "sceneConfigBlueprint": {
                                     "splitTree": {
                                       "root": {
@@ -651,7 +654,8 @@
                                         }
                                       }
                                     }
-                                  }
+                                  },
+                                  "order": 0
                                 },
                                 {
                                   "id": "module-macro",

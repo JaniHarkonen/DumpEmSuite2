@@ -38,7 +38,8 @@ export default function SplitView(props: Props): ReactNode {
     handleTabRelocation, 
     handleTabReorder,
     handleTabSplit,
-    handleDividerMove
+    handleDividerMove,
+    handleExtraInfo
   } = useContext(FlexibleSplitsContext);
 
   const handleTabContentDrop = (dropArea: DropAreaSettings, toFork: SplitTreeFork) => {
@@ -103,7 +104,10 @@ export default function SplitView(props: Props): ReactNode {
             onOpen: (openedTab: Tab) => {
               handleTabOpen && handleTabOpen(valueNode, indexOfTab(nodeTabs, openedTab));
             },
-            onDrop: decideRelocationOrReorder
+            onDrop: decideRelocationOrReorder,
+            setExtraInfo: (extraInfo: any) => {
+              handleExtraInfo && handleExtraInfo(valueNode, nodeTabs[activeTabIndex], extraInfo);
+            }
           }}
         >
           <TabsWithDropArea
