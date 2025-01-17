@@ -120,6 +120,9 @@ export type DatabaseAPI = {
       notes: string;
     } & QueryProps
   ) => Promise<PostResult>;
+  postImportedCompanies: (
+    props: { company: (Company | AsString<Company>)[]; } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; } & QueryProps) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; } & QueryProps) => Promise<DeleteResult>;
@@ -210,6 +213,9 @@ export type BoundDatabaseAPI = {
       macroSectorID: string;
       notes: string;
     }
+  ) => Promise<PostResult>;
+  postImportedCompanies: (
+    props: { company: (Company | AsString<Company>)[]; }
   ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; }) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; }) => Promise<DeleteResult>;
@@ -347,6 +353,12 @@ export function bindAPIToWorkspace(
     },
     postMacroSectorNoteChanges: (props) => {
       return api.postMacroSectorNoteChanges({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postImportedCompanies: (props) => {
+      return api.postImportedCompanies({
         ...props,
         databaseName: workspaceID
       });

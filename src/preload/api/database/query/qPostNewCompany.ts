@@ -7,27 +7,30 @@ import { createError, destructureRunResult } from "../databaseAPI";
 import { AsString } from "../../../../shared/utils";
 
 
+export function sqlPostNewCompany(): string {
+  return query(
+    insertInto(
+      table("company"),
+      col<Company>("company_name"), 
+      col<Company>("stock_ticker"), 
+      col<Company>("stock_price"),
+      col<Company>("volume_price"),
+      col<Company>("volume_quantity"),
+      col<Company>("exchange"),
+      col<Company>("updated"),
+      col<FKCompany>("fk_company_currency_id")
+    ) + values(
+      value(val(), val(), val(), val(), val(), val(), val(), val())
+    )
+  );
+}
+
 export default function qPostNewCompany(
   databaseManager: DatabaseManager, databaseName: string, company: Company | AsString<Company>
 ): Promise<PostResult> {
   return new Promise<PostResult>(
     (resolve, reject) => {
-      const preparedString: string = query(
-        insertInto(
-          table("company"),
-          col<Company>("company_name"), 
-          col<Company>("stock_ticker"), 
-          col<Company>("stock_price"),
-          col<Company>("volume_price"),
-          col<Company>("volume_quantity"),
-          col<Company>("exchange"),
-          col<Company>("updated"),
-          col<FKCompany>("fk_company_currency_id")
-        ) + values(
-          value(val(), val(), val(), val(), val(), val(), val(), val())
-        )
-      );
-
+      const preparedString: string = sqlPostNewCompany();
       databaseManager.post(
         databaseName, preparedString,
         (runResult: RunResult | null, err: Error | null) => {
