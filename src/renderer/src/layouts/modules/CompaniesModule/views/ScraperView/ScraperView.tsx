@@ -13,7 +13,21 @@ import ScraperLog from "@renderer/components/ScraperLog/ScraperLog";
 import useScraperLog from "@renderer/hook/useScraperLog";
 import { CompilationResult, ScrapeResult } from "src/shared/scraper.type";
 import { ScraperLogContext, ScraperLogContextType } from "@renderer/context/ScraperLogContext";
+import { Nullish } from "@renderer/utils/Nullish";
+import { FilePathParse, ReadResult } from "src/shared/files.type";
+import ScraperMetadataDisplay from "@renderer/components/ScraperMetadataDisplay/ScraperMetadataDisplay";
 
+
+export type ScraperMetadata = {
+  "name": string;
+	"version": string;
+	"ss-version": string;
+	"goodFor": string;
+};
+
+type ScraperInfo = {
+  metadata?: ScraperMetadata;
+} & Scraper | null;
 
 const {scraperAPI, filesAPI} = window.api;
 
@@ -25,7 +39,7 @@ export default function ScraperView(): ReactNode {
 
   const tabExtraInfo: any = tabs[activeTabIndex].extra;
 
-  const [scraperInfo, setScraperInfo] = useState<Scraper | null>(null);
+  const [scraperInfo, setScraperInfo] = useState<ScraperInfo>(null);
   const [scrapeTarget, setScrapeTarget] = 
     useState<string | null>(tabExtraInfo?.scrapeTarget ?? null);
   const [scrapeOutput, setScrapeOutput] = 
@@ -33,7 +47,28 @@ export default function ScraperView(): ReactNode {
 
   const fetchScraperInfo = () => {
     databaseAPI!.fetchScraperInfo()
-    .then((result: FetchResult<Scraper>) => setScraperInfo(result.rows[0] ?? null));
+    .then((result: FetchResult<Scraper>) => {
+      const scraper: Scraper | Nullish = result.rows[0];
+
+      if( scraper && scraper.path ) {
+        filesAPI.parseFilePath({ path: scraper.path }).then((parse: FilePathParse) => {
+          console.log(parse.dir + "\\" + parse.name + ".json")
+          filesAPI.readJSON<ScraperMetadata>(parse.dir + "\\" + parse.name + ".json")
+          .then((result: ReadResult<ScraperMetadata>) => {
+            if( result.wasSuccessful ) {
+              setScraperInfo({
+                ...scraper,
+                metadata: result.result
+              });
+            }
+          }).catch(() => {
+            setScraperInfo(scraper);
+          });
+        });
+      } else {
+        setScraperInfo(null);
+      }
+    });
   };
 
   useEffect(() => {
@@ -83,7 +118,7 @@ export default function ScraperView(): ReactNode {
       return;
     }
 
-    scraperLogProps.clearEvents();
+    scraperLogProps.reset();
 
     scraperLogProps.logEvent({
       key: "start",
@@ -142,12 +177,13 @@ export default function ScraperView(): ReactNode {
 
           scraperLogProps.logResult(scrapeResult.scrape);
         });
-      }).catch(() => {
+      }).catch((error) => {
+        console.log(error)
         scraperLogProps.logEvent({
           key: "scrape",
           status: "failed",
           message: "Unable to scrape target file '" + scrapeTarget + "'!"
-        })
+        });
       });
     }).catch(() => {
       scraperLogProps.logEvent({
@@ -162,8 +198,8 @@ export default function ScraperView(): ReactNode {
     <div className="w-100 h-100 overflow-auto user-select-text">
       <PageContainer>
         <PageHeader>Scrape file</PageHeader>
+        <h3>Settings</h3>
         <div>
-          <h3>Settings</h3>
           Scraper: 
           <PathBrowser
             initialPath={scraperInfo?.path}
@@ -178,6 +214,7 @@ export default function ScraperView(): ReactNode {
             saveState={handleScraperSelect}
             nonExistingPathWarningMessage={warningFilePathInvalid}
           />
+          <ScraperMetadataDisplay scraperMetadata={scraperInfo?.metadata} />
         </div>
         <div>
           <span>Target file: </span>

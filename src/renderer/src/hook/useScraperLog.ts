@@ -31,16 +31,17 @@ export default function useScraperLog(): Returns {
 
   const logResult = (result: ScrapedData) => {
     setScrapeResult(result);
-  }
+  };
 
   const removeEvent = (...removedKey: string[]) => {
     removedKey.forEach((key: string) => logRef.current.delete(key));
     setLoggedEvents(generateEventArray(logRef.current));
   };
 
-  const clearEvents = () => {
+  const reset = () => {
     logRef.current.clear();
     generateEventArray(logRef.current);
+    setScrapeResult(null);
   };
 
   return {
@@ -49,6 +50,6 @@ export default function useScraperLog(): Returns {
     logEvent,
     logResult,
     removeEvent,
-    clearEvents
+    reset
   };
 }

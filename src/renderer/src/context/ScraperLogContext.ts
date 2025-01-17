@@ -13,7 +13,7 @@ export type ScraperLogContextType = {
   logEvent: LogScraperEventCallback;
   logResult: LogScraperResultCallback;
   removeEvent: RemoveScraperEventCallback;
-  clearEvents: () => void;
+  reset: () => void;
 };
 
 export const ScraperLogContext = createContext<ScraperLogContextType>({
@@ -22,5 +22,5 @@ export const ScraperLogContext = createContext<ScraperLogContextType>({
   logEvent: () => {},
   logResult: () => {},
   removeEvent: () => {},
-  clearEvents: () => {}
+  reset: () => {}
 });

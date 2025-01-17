@@ -15,8 +15,10 @@ export type ScrapeResult = {
   error?: any;
 };
 
+export type ScrapedStock = Omit<Company, "company_id">;
+
 export type ScrapedData = {
-  symbols: Company[];
+  symbols: ScrapedStock[];
   errors: string[];
 };
 
