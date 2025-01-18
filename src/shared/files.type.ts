@@ -33,7 +33,22 @@ export type ShowOpenDialogProps = {
   options: Electron.OpenDialogOptions;
 };
 
+export type ShowSaveDialogProps = {
+  key: string;
+  options: Electron.SaveDialogOptions;
+}
+
 export type ShowOpenDialog = (props: ShowOpenDialogProps) => void;
+
+export type ShowSaveDialog = (props: ShowSaveDialogProps) => void;
+
+export type FilePathParse = {
+  dir: string;
+  root: string;
+  base: string;
+  name: string;
+  ext: string;
+};
 
 type UnsubscriberCallback = () => void;
 
@@ -42,6 +57,14 @@ export type FilesAPI = {
   readJSON: <T>(filePath: string) => Promise<ReadResult<T>>;
   getWorkingDirectory: () => string;
   showOpenDialog: ShowOpenDialog;
+  showSaveDialog: ShowSaveDialog;
   onOpenDialogResult: (props: { callback: OpenDialogCallback }) => UnsubscriberCallback;
-  makeDirectory: (props: { path: string }) => Promise<void>;
+  onSaveDialogResult: (props: { callback: SaveDialogCallback }) => UnsubscriberCallback;
+  makeDirectory: (props: { path: string, recursive: boolean }) => Promise<string | undefined>;
+  getFilesInDirectory: (props: { path: string }) => Promise<string[]>;
+  parseFilePath: (props: { path: string }) => Promise<FilePathParse>;
+  execute: (props: { command: string }) => void;
+  copyFile: (props: { sourcePath: string, destinationPath: string }) => Promise<void>;
+  deleteFile: (props: { path: string }) => Promise<void>;
+  fileExists: (props: { path: string }) => Promise<boolean>;
 };

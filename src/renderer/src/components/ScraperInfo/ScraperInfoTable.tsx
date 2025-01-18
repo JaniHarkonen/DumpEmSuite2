@@ -1,38 +1,18 @@
-import { Nullish } from "@renderer/utils/Nullish";
 import { PropsWithChildren, ReactNode } from "react";
 
 
-type ScraperInfo = {
-  name: string;
-  scraperVersion: string;
-  scrapeScriptVersion: string;
-  goodForDate: string;
-};
-
-function defaultScraperInfo(): ScraperInfo {
-  return {
-    name: "",
-    scraperVersion: "",
-    scrapeScriptVersion: "",
-    goodForDate: ""
-  };
-}
-
-const DEFAULT_SCRAPER_INFO: ScraperInfo = defaultScraperInfo();
-
 type Props = {
-  scraperInfo: ScraperInfo | Nullish;
+  path: string;
 } & PropsWithChildren;
 
 export default function ScraperInfoTable(props: Props): ReactNode {
-  const pScraperInfo = props.scraperInfo || DEFAULT_SCRAPER_INFO;
+  const pPath = props.path;
   const pChildren: ReactNode[] | ReactNode = props.children;
-
-  const {name: scraperName, scraperVersion, scrapeScriptVersion, goodForDate} = pScraperInfo;
 
   return (
     <div className="w-max-content">
-      <table className="text-align-left">
+      Path: {pPath}
+      {/* <table className="text-align-left">
         <thead>
           <tr><th>Scraper info:</th></tr>
         </thead>
@@ -58,7 +38,7 @@ export default function ScraperInfoTable(props: Props): ReactNode {
             <td>{goodForDate}</td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
       <div>
         {pChildren}
       </div>

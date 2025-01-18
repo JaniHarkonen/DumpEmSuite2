@@ -11,6 +11,7 @@ import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
 import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/database.type";
 import { Metadata } from "src/shared/schemaConfig";
+import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -75,7 +76,6 @@ export default function Toolbar(props: Props): ReactNode {
     }
 
     const path: string = result.path[0];
-    const dbPath: string = path + "\\data.db";
     const databaseName: string = path.substring(path.lastIndexOf("\\") + 1, path.length);
     const valueNode: SplitTreeValue = 
       (splitTreeRef.current.root.left as SplitTreeFork).left as SplitTreeValue;
@@ -86,7 +86,7 @@ export default function Toolbar(props: Props): ReactNode {
         databaseAPI.createDatabase({
           databaseID: id,
           databaseName,
-          databasePath: dbPath
+          databasePath: RELATIVE_APP_PATHS.make.database(path)
         }).then((result: QueryResult) => {
           if( !result.wasSuccessful ) {
             return;
@@ -102,7 +102,7 @@ export default function Toolbar(props: Props): ReactNode {
             sceneConfigBlueprint,
             order: 0,
             extra: {
-              path: dbPath
+              path: path
             }
           }
 
@@ -112,7 +112,7 @@ export default function Toolbar(props: Props): ReactNode {
       case "open-workspace": {
         databaseAPI.fetchWorkspaceStructure({
           databaseName,
-          databasePath: path + "\\data.db"
+          databasePath: RELATIVE_APP_PATHS.make.database(path)
         }).then((result: FetchResult<WorkspaceStructure>) => {
           if( !result.wasSuccessful ) {
             return;
@@ -133,7 +133,7 @@ export default function Toolbar(props: Props): ReactNode {
             sceneConfigBlueprint,
             order: 0,
             extra: {
-              path: dbPath
+              path: path
             }
           };
           pAddWorkspace(workspaceTabBlueprint, valueNode);

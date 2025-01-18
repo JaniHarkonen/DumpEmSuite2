@@ -19,7 +19,6 @@ export default function qFetchAllCompanies(
           col<Company>("volume_price", "c"),
           col<Company>("volume_quantity", "c"),
           col<Company>("exchange", "c"),
-          col<Company>("chart_url", "c"),
           col<Company>("updated", "c"),
           col<Currency>("currency_id", "cx")
         ) + FROM(

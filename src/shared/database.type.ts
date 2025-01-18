@@ -42,6 +42,7 @@ export type DatabaseAPI = {
   fetchScraperInfo: (props: QueryProps) => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: (props: QueryProps) => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: (props: QueryProps) => Promise<FetchResult<Tag>>;
+  fetchAllFiltrationSteps: (props: QueryProps) => Promise<FetchResult<FilterationStep>>;
   fetchCompanyProfile: (
     props: { company: Company; } & QueryProps
   ) => Promise<FetchResult<Profile>>;
@@ -68,6 +69,7 @@ export type DatabaseAPI = {
   postAllStocksFromCompanyListings: (
     props: { filterationStepID: string; defaultTagID: string; } & QueryProps
   ) => Promise<PostResult>;
+  postScraperInfo: (props: { scraperInfo: Scraper } & QueryProps) => Promise<PostResult>;
   postFilterationStepCaption: (
     props: { filterationStep: FilterationStep } & QueryProps
   ) => Promise<PostResult>;
@@ -118,6 +120,9 @@ export type DatabaseAPI = {
       notes: string;
     } & QueryProps
   ) => Promise<PostResult>;
+  postImportedCompanies: (
+    props: { company: (Company | AsString<Company>)[]; } & QueryProps
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; } & QueryProps) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; } & QueryProps) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; } & QueryProps) => Promise<DeleteResult>;
@@ -141,6 +146,7 @@ export type BoundDatabaseAPI = {
   fetchScraperInfo: () => Promise<FetchResult<Scraper>>;
   fetchAllCompanies: () => Promise<FetchResult<Company & Currency>>;
   fetchAllTags: () => Promise<FetchResult<Tag>>;
+  fetchAllFiltrationSteps: () => Promise<FetchResult<FilterationStep>>;
   fetchCompanyProfile: (props: { company: Company; }) => Promise<FetchResult<Profile>>;
   fetchFilterationStepStocks: (
     props: { filterationStepID: string }
@@ -154,6 +160,7 @@ export type BoundDatabaseAPI = {
   fetchMacroSectorNote: (
     props: { macroSectorID: string; }
   ) => Promise<FetchResult<MacroAnalysis>>;
+  postScraperInfo: (props: { scraperInfo: Scraper }) => Promise<PostResult>;
   postNewCompany: (props: { company: Company | AsString<Company>; }) => Promise<PostResult>;
   postNewFilterationStep: (props: { filterationStep: FilterationStep; }) => Promise<PostResult>;
   postNewTag: (props: { tag: Tag | AsString<Tag>; }) => Promise<PostResult>;
@@ -207,6 +214,9 @@ export type BoundDatabaseAPI = {
       notes: string;
     }
   ) => Promise<PostResult>;
+  postImportedCompanies: (
+    props: { company: (Company | AsString<Company>)[]; }
+  ) => Promise<PostResult>;
   deleteCompanies: (props: { companies: Company[]; }) => Promise<DeleteResult>;
   deleteFilterationStep: (props: { step_id: string; }) => Promise<DeleteResult>;
   deleteTag: (props: { tag: Tag; }) => Promise<DeleteResult>;
@@ -232,6 +242,7 @@ export function bindAPIToWorkspace(
     fetchScraperInfo: () => api.fetchScraperInfo({ databaseName: workspaceID }),
     fetchAllCompanies: () => api.fetchAllCompanies({ databaseName: workspaceID }),
     fetchAllTags: () => api.fetchAllTags({ databaseName: workspaceID }),
+    fetchAllFiltrationSteps: () => api.fetchAllFiltrationSteps({ databaseName: workspaceID }),
     fetchCompanyProfile: (props) => {
       return api.fetchCompanyProfile({
         ...props,
@@ -252,6 +263,12 @@ export function bindAPIToWorkspace(
     },
     fetchMacroSectorNote: (props) => {
       return api.fetchMacroSectorNote({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postScraperInfo: (props) => {
+      return api.postScraperInfo({
         ...props,
         databaseName: workspaceID
       });
@@ -336,6 +353,12 @@ export function bindAPIToWorkspace(
     },
     postMacroSectorNoteChanges: (props) => {
       return api.postMacroSectorNoteChanges({
+        ...props,
+        databaseName: workspaceID
+      });
+    },
+    postImportedCompanies: (props) => {
+      return api.postImportedCompanies({
         ...props,
         databaseName: workspaceID
       });

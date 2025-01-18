@@ -36,6 +36,7 @@ type Returns = {
   handleDividerMove: (targetFork: SplitTreeFork, newValue: number) => void;
   handleTabAdd: (targetNode: SplitTreeValue, newTab: Tab, index?: number) => void;
   handleTabRemove: (targetNode: SplitTreeValue, remove: Tab) => void;
+  handleExtraInfo: (targetValue: SplitTreeValue, targetTab: Tab, extraInfo: any) => void;
 };
 
 export type UseFlexibleSplitsReturns = Returns;
@@ -150,14 +151,6 @@ export default function useFlexibleSplits(props: Props): Returns {
   };
 
   const handleTabAdd = (targetValue: SplitTreeValue, newTab: Tab, index: number = Infinity) => {
-    // setSplitTree((prev: SplitTree | null) => {
-    //   const manager: SplitTreeManager | null = treeManager.current;
-    //   if( manager ) {
-    //     manager.addTab(targetValue, newTab, index);
-    //     return manager.snapshot();
-    //   }
-    //   return prev;
-    // });
     handleSplitsUpdate((manager: SplitTreeManager): boolean => {
       return manager.addTab(targetValue, newTab, index);
     });
@@ -169,6 +162,11 @@ export default function useFlexibleSplits(props: Props): Returns {
     });
   };
 
+  const handleExtraInfo = (targetValue: SplitTreeValue, targetTab: Tab, extraInfo: any) => {
+    handleSplitsUpdate((manager: SplitTreeManager): boolean => {
+      return manager.setTabExtraInfo(targetValue, targetTab, extraInfo);
+    });
+  };
 
   return {
     splitTree,
@@ -182,6 +180,7 @@ export default function useFlexibleSplits(props: Props): Returns {
     handleTabSplit,
     handleDividerMove,
     handleTabAdd,
-    handleTabRemove
+    handleTabRemove,
+    handleExtraInfo
   };
 }

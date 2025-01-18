@@ -289,6 +289,18 @@ export class SplitTreeManager {
     return true;
   }
 
+  private setTabExtraInfoLive(liveNode: SplitTreeValue, targetTab: Tab, extraInfo: any): boolean {
+    const tabs: Tab[] = liveNode.value.tabs;
+    const tabIndex: number = indexOfTab(tabs, targetTab);
+
+    if( tabIndex < 0 ) {
+      return false;
+    }
+
+    tabs[tabIndex].extra = extraInfo;
+    return true;
+  }
+
   private removeTabFromLive(
     targetNode: SplitTreeValue, remove: Tab, trackedFork?: SplitTreeFork
   ): RemoveResult {
@@ -393,7 +405,7 @@ export class SplitTreeManager {
         const [liveNode] = liveNodes;
         return this.reorderTabLive(liveNode as SplitTreeValue, targetTab, index);
       }, targetNode
-    )
+    );
   }
 
   public changeTabCaption(targetNode: SplitTreeValue, targetTab: Tab, caption: string): boolean {
@@ -406,7 +418,7 @@ export class SplitTreeManager {
         const [liveNode] = liveNodes;
         return this.changeTabCaptionLive(liveNode as SplitTreeValue, targetTab, caption);
       }, targetNode
-    )
+    );
   }
 
   public relocateTab(
@@ -504,5 +516,18 @@ export class SplitTreeManager {
       (live as SplitTreeFork).divider.value = newValue;
       return true;
     }, targetFork);
+  }
+
+  public setTabExtraInfo(targetNode: SplitTreeValue, targetTab: Tab, extraInfo: any): boolean {
+    return this.getLiveNodeAnd(
+      (liveNodes: SplitTreeNode[] | null) => {
+        if( !liveNodes ) {
+          return false;
+        }
+
+        const [liveNode] = liveNodes;
+        return this.setTabExtraInfoLive(liveNode as SplitTreeValue, targetTab, extraInfo);
+      }, targetNode
+    );
   }
 }

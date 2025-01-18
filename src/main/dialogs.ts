@@ -17,6 +17,23 @@ export function registerDialogHandles(main: Electron.IpcMain, mainWindow: Browse
         cancelled: true,
         path: ""
       });
-    })
+    });
   });
+
+    // Show a dialog window for saving files
+  main.on("show-save-dialog", (event, ...args) => {
+    const {key, options} = args[0];
+    dialog.showSaveDialog(options).then((result: Electron.SaveDialogReturnValue) => {
+      mainWindow.webContents.send("save-dialog-result", {
+        key,
+        cancelled: result.canceled,
+        path: result.filePath
+      });
+    }).catch(() => {
+      mainWindow.webContents.send("save-dialog-result", {
+        cancelled: true,
+        path: ""
+      });
+    });
+  })
 }

@@ -1,4 +1,4 @@
-import { Database, OPEN_CREATE, OPEN_READWRITE, RunResult } from "sqlite3";
+import { Database, OPEN_CREATE, OPEN_READWRITE, RunResult, Statement } from "sqlite3";
 import qCreateDatabase from "./query/qCreateDatabase";
 import { CURRENT_APP_VERSION } from "../../../shared/appConfig";
 
@@ -33,7 +33,7 @@ export class DatabaseManager {
         if( openError ) {
           callback && callback({
             name: "create-error",
-            message: "Database '" + databaseName + "' could not be created!"
+            message: "Database '" + databaseName + "' could not be created! Path: " + databasePath
           });
         } else {
           database.exec(qCreateDatabase({
@@ -157,9 +157,38 @@ export class DatabaseManager {
     }
   }
 
+  public postMultiple(
+    databaseName: string,
+    preparedString: string[],
+    callback: (result: RunResult | null, err: Error | null) => void,
+    values: DatabaseValue[][]
+  ): void {
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
+
+    if( !connection ) {
+      callback(null, new Error(
+        "Unable to connect to database! No database with name '" + databaseName + 
+        "' was registered."
+      ));
+    } else {
+      const statements: Statement[] = preparedString.map((prepared: string) => {
+        return connection.database.prepare(prepared);
+      });
+      connection.database.exec("begin transaction", (err: Error | null) => {
+        if( err ) {
+          callback(null, new Error(
+            "Unable to import companies into the database '" + databaseName + "'!"
+          ));
+        } else {
+          statements.forEach((statement: Statement, index: number) => statement.run(values[index]));
+          connection.database.run("commit transaction", callback);
+        }
+      });
+    }
+  }
+
   public close(databaseName: string, callback?: ErrorCallback): void {
-    const connection: DatabaseConnection | undefined = 
-      this.getDatabase(databaseName);
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
 
     if( connection ) {
       connection.database.close((err: Error | null) => {
@@ -170,5 +199,10 @@ export class DatabaseManager {
         callback && callback(err);
       });
     }
+  }
+
+  public getPath(databaseName: string): string | null {
+    const connection: DatabaseConnection | undefined = this.getDatabase(databaseName);
+    return connection?.path ?? null;
   }
 }

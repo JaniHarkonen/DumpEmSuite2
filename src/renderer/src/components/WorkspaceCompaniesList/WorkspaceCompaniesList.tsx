@@ -6,6 +6,11 @@ import useSelection, { SelectionID, SelectionItem } from "@renderer/hook/useSele
 import useWorkspaceCompanies, { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
 import { AsString } from "src/shared/utils";
 import ifQuerySuccessful from "@renderer/utils/ifQuerySuccessful";
+import { ScrapedData } from "src/shared/scraper.type";
+import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
+import useWorkspaceDialogKeys from "@renderer/hook/useWorkspaceDialogKeys";
+import { OpenDialogResult, ReadResult } from "src/shared/files.type";
+import { PostResult } from "src/shared/database.type";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -15,9 +20,11 @@ export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { accessor: "volume_quantity", caption: "Volume (quant.)" },
   { accessor: "stock_price", caption: "Share price ($)" },
   { accessor: "exchange", caption: "Exchange symbol" },
-  { accessor: "chart_url", caption: "Chart URL" },
   { accessor: "updated", caption: "Updated" }
 ];
+
+
+const {filesAPI} = window.api;
 
 export default function WorkspaceCompaniesList(): ReactNode {
   const {
@@ -32,6 +39,27 @@ export default function WorkspaceCompaniesList(): ReactNode {
     fetchAllCompanies,
     databaseAPI
   } = useWorkspaceCompanies();
+
+  const {formatDialogKey} = useWorkspaceDialogKeys();
+
+  const dialogKeyImportCompanies: string = formatDialogKey("import-companies");
+
+  const {showOpenFileDialog} = useFileSystemDialog({
+    onOpenDialogResult: (result: OpenDialogResult) => {
+      if( !result.cancelled && result.key === dialogKeyImportCompanies ) {
+        filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
+          if( result.wasSuccessful ) {
+            databaseAPI.postImportedCompanies({
+              company: result.result.symbols as Company[]
+            }).then((result: PostResult) => {
+              console.log(result);
+              fetchAllCompanies();
+            });
+          }
+        });
+      }
+    }
+  });
 
   useEffect(() => {
     fetchAllCompanies();
@@ -72,6 +100,14 @@ export default function WorkspaceCompaniesList(): ReactNode {
     }), fetchAllCompanies);
   };
 
+  const handleImport = () => {
+    showOpenFileDialog({
+      key: dialogKeyImportCompanies,
+      options: {
+        title: "Select a JSON of scraped stocks"
+      }
+    });
+  };
 
   return (
     <div className="w-100">
@@ -80,6 +116,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
         onRemove={handleCompanyRemove}
         onSelectAll={() => handleSelection(true, ...stockDataCells)}
         onDeselectAll={resetSelection}
+        onImport={handleImport}
       />
       <TableList<CompanyWithCurrency>
         columns={COMPANIES_LIST_COLUMNS}

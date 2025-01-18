@@ -7,25 +7,25 @@ import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
 import FilterationControls from "@renderer/components/FilterationControls/FilterationControls";
 import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 import useSelection, { SelectionID } from "@renderer/hook/useSelection";
-import { Tag } from "src/shared/schemaConfig";
+import { FilterationStep, Tag } from "src/shared/schemaConfig";
 import useFiltertionTags from "@renderer/hook/useFiltertionTags";
+import FiltrationSubmitForm from "@renderer/components/FiltrationSubmitForm/FiltrationSubmitForm";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
 
 type Props = {
   filterationStepID: string;
-  nextStepID?: string;
+  allowSubmit?: boolean;
   onCompanySelect?: OnCompanyListingSelect;
 };
 
 export default function CompanyAnalysisList(props: Props): ReactNode {
   const pFilterationStepID: string = props.filterationStepID;
-  const pNextStepID: string | undefined = props.nextStepID;
+  const pAllowSubmit: boolean = props.allowSubmit ?? false;
   const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
 
   const [tagFilters, setTagFilters] = useState<Tag[]>([]);
-  const [preserveTags, setPreserveTags] = useState<boolean>(false);
 
   const {
     selectionSet,
@@ -101,9 +101,9 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     }
   };
 
-  const handleStockSubmission = () => {
+  const handleStockSubmission = (targetStep: FilterationStep, preserveTags: boolean) => {
     postStocksToFilterationStep(
-      pNextStepID!,
+      targetStep.step_id,
       [...getSelectedIDs().map((id: SelectionID) => id.toString())],
       preserveTags
     );
@@ -162,16 +162,11 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
         onSelectAll={() => handleSelection(true, ...stockDataCells)}
         onDeselectAll={resetSelection}
       />
-      {pNextStepID && (
-        <div className="d-flex">
-          <button onClick={handleStockSubmission}>
-            Submit
-          </button>
-          <input
-            type="checkbox"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPreserveTags(e.target.checked)}
-          /> Preserve tags
-        </div>
+      {pAllowSubmit && (
+        <FiltrationSubmitForm
+          blackListedMap={{[pFilterationStepID]: true}}
+          onSubmit={handleStockSubmission}
+        />
       )}
       <TagPanel onTagSelect={handleToggleTag} />
       <TableList<FilterationStepStock>

@@ -10,6 +10,7 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import FilterationNote from "../FilterationNote/FilterationNote";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import { ProfileContext } from "@renderer/context/ProfileContext";
+import ProfileChart from "@renderer/components/tradingview/ProfileChart";
 
 
 export default function FilterationView() {
@@ -28,12 +29,12 @@ export default function FilterationView() {
         return (
           <CompanyAnalysisList
             filterationStepID={tabs[activeTabIndex].id}
-            nextStepID={tabs[activeTabIndex + 1]?.id || tabs[activeTabIndex].id}
+            allowSubmit={true}
             onCompanySelect={handleProfileSelection}
           />
         );
       },
-      "view-filteration-tab-chart": () => <>chart</>,
+      "view-filteration-tab-chart": () => <ProfileChart />,
       "view-filteration-tab-notes": () => <FilterationNote filterationStepID={filterationStepID} />
     }
   );

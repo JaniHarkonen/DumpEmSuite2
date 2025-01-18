@@ -5,6 +5,7 @@ import { BoundDatabaseAPI } from "src/shared/database.type";
 
 export type WorkspaceContextType = {
   workspaceConfig: WorkspaceConfig;
+  workspacePath?: string;
   databaseAPI?: BoundDatabaseAPI;
 };
 

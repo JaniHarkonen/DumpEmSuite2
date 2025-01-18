@@ -4,16 +4,20 @@ import { filesAPI } from './api/filesAPI';
 import { databaseAPI } from './api/database/databaseAPI';
 import { FilesAPI } from '../shared/files.type';
 import { DatabaseAPI } from '../shared/database.type';
+import { ScraperAPI } from '../shared/scraper.type';
+import { scraperAPI } from "./api/scraper/scraperAPI";
 
 
 export type APIs = {
   filesAPI: FilesAPI;
-  databaseAPI: DatabaseAPI
+  databaseAPI: DatabaseAPI;
+  scraperAPI: ScraperAPI;
 };
 
 const api: APIs = {
   filesAPI,
-  databaseAPI
+  databaseAPI,
+  scraperAPI
 };
 
 if ( process.contextIsolated ) {

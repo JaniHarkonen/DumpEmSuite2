@@ -23,9 +23,6 @@ export default function qPostNewTag(
         )
       );
 
-      ipcRenderer.send("debug", tag)
-      ipcRenderer.send("debug", preparedString)
-
       databaseManager.post(
         databaseName, preparedString,
         (runResult: RunResult | null, err: Error | null) => {

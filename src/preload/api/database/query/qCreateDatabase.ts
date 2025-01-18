@@ -16,11 +16,8 @@ export default function qCreateDatabase(metadata: Metadata): string {
 
       /* Workspace scraper configuration */
     CREATE TABLE scraper (
-      scraper_name TEXT,
-      scraper_version TEXT,
-      scrape_script_version TEXT,
-      good_for TEXT,
-      scraper_path TEXT
+      unique_column INTEGER NOT NULL UNIQUE,
+      path TEXT
     );
 
 
@@ -34,7 +31,6 @@ export default function qCreateDatabase(metadata: Metadata): string {
       volume_quantity REAL,
       updated TEXT,
       exchange TEXT,
-      chart_url TEXT,
       fk_company_currency_id TEXT,
       
       PRIMARY KEY (company_id AUTOINCREMENT),
@@ -69,7 +65,7 @@ export default function qCreateDatabase(metadata: Metadata): string {
       profile_description TEXT,
       fk_profile_company_id INTEGER NOT NULL UNIQUE,
       
-      FOREIGN KEY (fk_profile_company_id) REFERENCES company(company_id)
+      FOREIGN KEY (fk_profile_company_id) REFERENCES company(company_id) ON DELETE CASCADE
     );
 
 
