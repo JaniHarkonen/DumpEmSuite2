@@ -8,7 +8,7 @@ import { ProfileContext } from "@renderer/context/ProfileContext";
 import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import CompanyProfilesList from "@renderer/components/CompanyList/CompanyProfilesList/CompanyProfilesList";
-import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
+import ModuleView from "@renderer/layouts/ModuleView/ModuleView";
 import ProfileChart from "@renderer/components/tradingview/ProfileChart";
 
 

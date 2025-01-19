@@ -5,7 +5,7 @@ import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
 import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
-import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
+import ModuleView from "@renderer/layouts/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
 import FilterationNote from "../FilterationNote/FilterationNote";
 import useProfileSelection from "@renderer/hook/useProfileSelection";

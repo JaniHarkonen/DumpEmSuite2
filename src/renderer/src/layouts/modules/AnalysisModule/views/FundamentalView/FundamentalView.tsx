@@ -8,7 +8,7 @@ import useProfileSelection from "@renderer/hook/useProfileSelection";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import CompanyProfile from "@renderer/components/CompanyProfile/CompanyProfile";
-import ModuleView from "@renderer/layouts/modules/ModuleView/ModuleView";
+import ModuleView from "@renderer/layouts/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
 import FilterationNote from "../FilterationNote/FilterationNote";
 import ProfileChart from "@renderer/components/tradingview/ProfileChart";

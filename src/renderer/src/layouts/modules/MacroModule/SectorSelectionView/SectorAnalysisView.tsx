@@ -3,7 +3,7 @@ import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { Tab, TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode, useContext } from "react";
-import ModuleView from "../../ModuleView/ModuleView";
+import ModuleView from "../../../ModuleView/ModuleView";
 import MacroSectorNotesView from "../views/MacroSectorNotesView";
 import { TabsContext } from "@renderer/context/TabsContext";
 import MaterialsBrowser from "@renderer/components/MaterialsBrowser/MaterialsBrowser";
