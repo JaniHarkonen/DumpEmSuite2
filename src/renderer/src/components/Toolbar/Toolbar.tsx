@@ -208,7 +208,7 @@ export default function Toolbar(props: Props): ReactNode {
 
   return (
     <div
-      {...theme("ambient-bgc", "outline-bdc-bottom", "toolbar-controls-container")}
+      {...theme("shadow-bgc", "outline-bdc-bottom", "toolbar-controls-container")}
       onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.stopPropagation()}
     >
       {MENU_OPTIONS.map((option: MenuOption) => {

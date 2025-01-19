@@ -1,18 +1,21 @@
 .tab-controls-button {
-  height: 24px;
+  padding: var(--medium-length);
 
   border-style: solid;
-  border-color: dimgray;
-  border-left-width: 1px;
+  border-left-width: var(--tiny-length);
   border-right-width: 0px;
-  border-top-width: 1px;
+  border-top-width: 0px;
   border-bottom-width: 0px;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.tab-controls-button.highlight {
+  border-bottom-width: var(--tiny-length);
 }
 
 .tab-controls-button:last-child {
-  border-right-width: 1px;
+  border-right-width: var(--tiny-length);
 }
 
 .tab-remove-icon {
@@ -23,9 +26,10 @@
 }
 
 .tab-remove-icon-container {
-  margin-left: 5px;
-  padding: 1px;
-  border-radius: 2px;
+  margin-left: var(--medium-length);
+  padding: var(--tiny-length);
+
+  border-radius: var(--small-length);
 
   cursor: pointer;
 

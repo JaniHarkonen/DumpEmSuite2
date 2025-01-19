@@ -1,3 +1,5 @@
+import "../../ModuleView/ModuleView.css";
+
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { buildTab, defaultSceneConfigBlueprint, Tab, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode } from "react";

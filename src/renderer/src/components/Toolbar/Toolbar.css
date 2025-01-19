@@ -3,13 +3,11 @@
 
   width: 100%;
   height: auto;
-  /* background-color: #515151; */
 
   margin: 0px;
   padding: var(--small-length);
 
   border-bottom-style: solid;
-  /* border-bottom-color: #777777; */
   border-bottom-width: var(--tiny-length);
 }
 

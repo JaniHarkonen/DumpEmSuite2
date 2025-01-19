@@ -1,104 +1,146 @@
-/* AMBIENT */
+.theme-dark {
+  --theme-dark-ambient: #333333;
+  --theme-dark-shadow: #515151;
+  --theme-dark-outline: #777777;
+  --theme-dark-glyph: #F9F9F9;
+}
+
+  /* AMBIENT */
 .theme-dark.ambient-bgc {
-  background-color: #515151;
+  background-color: var(--theme-dark-ambient);
 }
 
 .theme-dark.ambient-hl {
   &:hover {
-    background-color: #515151;
+    background-color: var(--theme-dark-ambient);
   }
 }
 
 .theme-dark.ambient-c {
-  color: #515151;
+  color: var(--theme-dark-ambient);
 }
 
 .theme-dark.ambient-bdc {
-  border-color: #515151;
+  border-color: var(--theme-dark-ambient);
 }
 
 .theme-dark.ambient-bdc-top {
-  border-top-color: #515151;
+  border-top-color: var(--theme-dark-ambient);
 }
 
 .theme-dark.ambient-bdc-bottom {
-  border-bottom-color: #515151;
+  border-bottom-color: var(--theme-dark-ambient);
 }
 
 .theme-dark.ambient-bdc-left {
-  border-left-color: #515151;
+  border-left-color: var(--theme-dark-ambient);
 }
 
 .theme-dark.ambient-bdc-right {
-  border-right-color: #515151;
+  border-right-color: var(--theme-dark-ambient);
+}
+
+  /* SHADOW */
+.theme-dark.shadow-bgc {
+  background-color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-hl {
+  &:hover {
+    background-color: var(--theme-dark-shadow);
+  }
+}
+
+.theme-dark.shadow-c {
+  color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-bdc {
+  border-color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-bdc-top {
+  border-top-color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-bdc-bottom {
+  border-bottom-color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-bdc-left {
+  border-left-color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-bdc-right {
+  border-right-color: var(--theme-dark-shadow);
 }
 
   /* OUTLINE */
 .theme-dark.outline-bgc {
-  background-color: #777777;
+  background-color: var(--theme-dark-outline);
 }
 
 .theme-dark.outline-hl {
   &:hover {
-    background-color: #777777;
+    background-color: var(--theme-dark-outline);
   }
 }
 
 .theme-dark.outline-c {
-  color: #777777;
+  color: var(--theme-dark-outline);
 }
 
 .theme-dark.outline-bdc {
-  border-color: #777777;
+  border-color: var(--theme-dark-outline);
 }
 
 .theme-dark.outline-bdc-top {
-  border-top-color: #777777;
+  border-top-color: var(--theme-dark-outline);
 }
 
 .theme-dark.outline-bdc-bottom {
-  border-bottom-color: #777777;
+  border-bottom-color: var(--theme-dark-outline);
 }
 
 .theme-dark.outline-bdc-left {
-  border-left-color: #777777;
+  border-left-color: var(--theme-dark-outline);
 }
 
 .theme-dark.outline-bdc-right {
-  border-right-color: #777777;
+  border-right-color: var(--theme-dark-outline);
 }
 
   /* OUTLINE */
 .theme-dark.glyph-bgc {
-  background-color: white;
+  background-color: var(--theme-dark-glyph);
 }
 
 .theme-dark.glyph-hl {
   &:hover {
-    background-color: white;
+    background-color: var(--theme-dark-glyph);
   }
 }
 
 .theme-dark.glyph-c {
-  color: white;
+  color: var(--theme-dark-glyph);
 }
 
 .theme-dark.glyph-bdc {
-  border-color: white;
+  border-color: var(--theme-dark-glyph);
 }
 
 .theme-dark.glyph-bdc-top {
-  border-top-color: white;
+  border-top-color: var(--theme-dark-glyph);
 }
 
 .theme-dark.glyph-bdc-bottom {
-  border-bottom-color: white;
+  border-bottom-color: var(--theme-dark-glyph);
 }
 
 .theme-dark.glyph-bdc-left {
-  border-left-color: white;
+  border-left-color: var(--theme-dark-glyph);
 }
 
 .theme-dark.glyph-bdc-right {
-  border-right-color: white;
+  border-right-color: var(--theme-dark-glyph);
 }
