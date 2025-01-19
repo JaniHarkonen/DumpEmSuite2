@@ -5,7 +5,6 @@ import { DatabaseManager } from "../database";
 import { col, insertInto, query, table, val, value, values } from "../sql";
 import { createError, destructureRunResult } from "../databaseAPI";
 import { AsString } from "../../../../shared/utils";
-import { ipcRenderer } from "electron";
 
 
 export default function qPostNewTag(

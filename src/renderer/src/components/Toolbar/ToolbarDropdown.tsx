@@ -1,3 +1,5 @@
+import "./Toolbar.css";
+import useTheme from "@renderer/hook/useTheme";
 import { ReactNode } from "react";
 
 
@@ -22,22 +24,27 @@ export default function ToolbarDropdown(props: Props): ReactNode {
   const pIsOpen: boolean = props.isOpen;
   const pOptions: ToolbarOption[] = props.options ?? [];
   const pOnOptionSelect: OnOptionSelect = props.onOptionSelect || function() {};
-  const pOnOpen: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void = props.onOpen || function() {};
+  const pOnOpen: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void = 
+    props.onOpen || function() {};
   const pOnHover: () => void = props.onHover || function() {};
+
+  const {theme} = useTheme();
 
   return (
     <div>
       <button
+        {...theme("ambient-bgc", "glyph-c", "outline-hl")}
         onClick={(e) => pOnOpen(e)}
         onMouseEnter={pOnHover}
       >
         {pCaption}
       </button>
-      {pIsOpen && (
-        <div className="dropdown-menu-container">
+      {pIsOpen && pOptions.length > 0 && (
+        <div {...theme("ambient-bgc", "outline-bdc", "dropdown-menu-container")}>
           {pOptions.map((option: ToolbarOption) => {
             return (
               <button
+                {...theme("ambient-bgc", "glyph-c", "outline-hl")}
                 key={"toolbar-dropdown-option-" + option.key}
                 onClick={() => pOnOptionSelect(option.key)}
               >

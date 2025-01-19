@@ -1,0 +1,104 @@
+/* AMBIENT */
+.theme-dark.ambient-bgc {
+  background-color: #515151;
+}
+
+.theme-dark.ambient-hl {
+  &:hover {
+    background-color: #515151;
+  }
+}
+
+.theme-dark.ambient-c {
+  color: #515151;
+}
+
+.theme-dark.ambient-bdc {
+  border-color: #515151;
+}
+
+.theme-dark.ambient-bdc-top {
+  border-top-color: #515151;
+}
+
+.theme-dark.ambient-bdc-bottom {
+  border-bottom-color: #515151;
+}
+
+.theme-dark.ambient-bdc-left {
+  border-left-color: #515151;
+}
+
+.theme-dark.ambient-bdc-right {
+  border-right-color: #515151;
+}
+
+  /* OUTLINE */
+.theme-dark.outline-bgc {
+  background-color: #777777;
+}
+
+.theme-dark.outline-hl {
+  &:hover {
+    background-color: #777777;
+  }
+}
+
+.theme-dark.outline-c {
+  color: #777777;
+}
+
+.theme-dark.outline-bdc {
+  border-color: #777777;
+}
+
+.theme-dark.outline-bdc-top {
+  border-top-color: #777777;
+}
+
+.theme-dark.outline-bdc-bottom {
+  border-bottom-color: #777777;
+}
+
+.theme-dark.outline-bdc-left {
+  border-left-color: #777777;
+}
+
+.theme-dark.outline-bdc-right {
+  border-right-color: #777777;
+}
+
+  /* OUTLINE */
+.theme-dark.glyph-bgc {
+  background-color: white;
+}
+
+.theme-dark.glyph-hl {
+  &:hover {
+    background-color: white;
+  }
+}
+
+.theme-dark.glyph-c {
+  color: white;
+}
+
+.theme-dark.glyph-bdc {
+  border-color: white;
+}
+
+.theme-dark.glyph-bdc-top {
+  border-top-color: white;
+}
+
+.theme-dark.glyph-bdc-bottom {
+  border-bottom-color: white;
+}
+
+.theme-dark.glyph-bdc-left {
+  border-left-color: white;
+}
+
+.theme-dark.glyph-bdc-right {
+  border-right-color: white;
+}

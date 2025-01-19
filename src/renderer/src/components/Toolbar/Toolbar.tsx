@@ -12,6 +12,8 @@ import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
 import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/database.type";
 import { Metadata } from "src/shared/schemaConfig";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
+import { ThemeContext } from "@renderer/context/ThemeContext";
+import useTheme from "@renderer/hook/useTheme";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -29,11 +31,11 @@ const MENU_OPTIONS: MenuOption[] = [
     menu: [
       {
         key: "new-workspace",
-        label: "New"
+        label: "Create new workspace"
       },
       {
         key: "open-workspace",
-        label: "Open"
+        label: "Open existing workspace"
       }
     ]
   },
@@ -64,6 +66,8 @@ export default function Toolbar(props: Props): ReactNode {
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
 
   const {splitTree} = useContext(FlexibleSplitsContext);
+  const {activeTheme, setTheme} = useContext(ThemeContext);
+  const {theme} = useTheme();
 
     // This ref is only used so that the hooks passed onto the useFileSystemDialog may use 
     // fresh values of the split tree
@@ -175,7 +179,7 @@ export default function Toolbar(props: Props): ReactNode {
           }
         });
         break;
-      case "theme": console.log(optionKey); break;
+      case "theme": setTheme && setTheme(activeTheme === "dark" ? "light" : "dark"); break;
       case "shortcuts": console.log(optionKey); break;
     }
   };
@@ -204,7 +208,7 @@ export default function Toolbar(props: Props): ReactNode {
 
   return (
     <div
-      className="d-flex"
+      {...theme("ambient-bgc", "outline-bdc-bottom", "toolbar-controls-container")}
       onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.stopPropagation()}
     >
       {MENU_OPTIONS.map((option: MenuOption) => {

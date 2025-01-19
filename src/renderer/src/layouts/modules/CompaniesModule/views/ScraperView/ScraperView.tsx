@@ -52,7 +52,6 @@ export default function ScraperView(): ReactNode {
 
       if( scraper && scraper.path ) {
         filesAPI.parseFilePath({ path: scraper.path }).then((parse: FilePathParse) => {
-          console.log(parse.dir + "\\" + parse.name + ".json")
           filesAPI.readJSON<ScraperMetadata>(parse.dir + "\\" + parse.name + ".json")
           .then((result: ReadResult<ScraperMetadata>) => {
             if( result.wasSuccessful ) {
@@ -177,8 +176,7 @@ export default function ScraperView(): ReactNode {
 
           scraperLogProps.logResult(scrapeResult.scrape);
         });
-      }).catch((error) => {
-        console.log(error)
+      }).catch(() => {
         scraperLogProps.logEvent({
           key: "scrape",
           status: "failed",

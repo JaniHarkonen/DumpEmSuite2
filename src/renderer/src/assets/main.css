@@ -1,7 +1,5 @@
-:root {
-  --normal-margin: 5px;
-  --strong-margin: 12px;
-}
+@import url("./global-variables.css");
+@import url("./themes.css");
 
 body {
   height: 100dvh;
@@ -74,8 +72,8 @@ textarea {
 }
 
 .size-tiny-icon {
-  width: 14px;
-  height: 14px;
+  width: var(--tiny-size);
+  height: var(--tiny-size);
 }
 
 .size-medium-icon {
@@ -133,38 +131,6 @@ textarea {
 
 .text-align-left {
   text-align: left;
-}
-
-.ml-norm {
-  margin-left: var(--normal-margin);
-}
-
-.mr-norm {
-  margin-right: var(--normal-margin);
-}
-
-.mt-norm {
-  margin-top: var(--normal-margin);
-}
-
-.mb-norm {
-  margin-bottom: var(--normal-margin);
-}
-
-.ml-strng {
-  margin-left: var(--strong-margin);
-}
-
-.mr-strong {
-  margin-right: var(--strong-margin);
-}
-
-.mt-strong {
-  margin-top: var(--strong-margin);
-}
-
-.mb-strong {
-  margin-bottom: var(--strong-margin);
 }
 
 .user-select-text {

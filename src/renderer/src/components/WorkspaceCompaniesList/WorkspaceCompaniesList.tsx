@@ -10,7 +10,6 @@ import { ScrapedData } from "src/shared/scraper.type";
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import useWorkspaceDialogKeys from "@renderer/hook/useWorkspaceDialogKeys";
 import { OpenDialogResult, ReadResult } from "src/shared/files.type";
-import { PostResult } from "src/shared/database.type";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -51,10 +50,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
           if( result.wasSuccessful ) {
             databaseAPI.postImportedCompanies({
               company: result.result.symbols as Company[]
-            }).then((result: PostResult) => {
-              console.log(result);
-              fetchAllCompanies();
-            });
+            }).then(() => fetchAllCompanies());
           }
         });
       }

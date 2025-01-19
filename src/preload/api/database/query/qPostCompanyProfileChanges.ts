@@ -4,7 +4,6 @@ import { Company, Profile } from "../../../../shared/schemaConfig";
 import { DatabaseManager, DatabaseValue } from "../database";
 import { upsert } from "../sql";
 import { createError, destructureRunResult } from "../databaseAPI";
-import { ipcRenderer } from "electron";
 
 
 export default function qPostCompanyProfileChanges(
