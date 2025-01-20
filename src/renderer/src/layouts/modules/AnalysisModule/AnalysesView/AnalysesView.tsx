@@ -14,6 +14,7 @@ import { BoundDatabaseAPI } from "src/shared/database.type";
 import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
 import { FilterationStep } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 
 
 const TAGS = {
@@ -120,9 +121,9 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
             />
           );
         })}
-        <button onClick={() => handleTabAdd(targetNode)}>
+        <StyledButton onClick={() => handleTabAdd(targetNode)}>
           {"+"}
-        </button>
+        </StyledButton>
       </TabControls>
     );
   };

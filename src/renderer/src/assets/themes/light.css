@@ -3,6 +3,9 @@
   --theme-light-shadow: white;
   --theme-light-outline: #D3D3D3;
   --theme-light-glyph: black;
+  --theme-light-action: #3AADFF;
+  --theme-light-action-hl: #5EBEFF;
+  --theme-light-action-bd: #0094FF;
 }
 
   /* AMBIENT */
@@ -110,7 +113,7 @@
   border-right-color: var(--theme-light-outline);
 }
 
-  /* OUTLINE */
+  /* GLYPH */
 .theme-light.glyph-bgc {
   background-color: var(--theme-light-glyph);
 }
@@ -143,4 +146,25 @@
 
 .theme-light.glyph-bdc-right {
   border-right-color: var(--theme-light-glyph);
+}
+
+.theme-light.glyph-bgc {
+  background-color: var(--theme-light-glyph);
+}
+
+.theme-light.glyph-hl {
+  &:hover {
+    background-color: var(--theme-light-glyph);
+  }
+}
+
+  /* BUTTON */
+.theme-light.button {
+  color: var(--theme-light-glyph-c);
+  background-color: var(--theme-light-action);
+  border-color: var(--theme-light-action-bd);
+
+  &:hover{
+    background-color: var(--theme-light-action-hl);
+  }
 }

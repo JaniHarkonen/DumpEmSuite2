@@ -4,6 +4,7 @@ import { AsString } from "src/shared/utils";
 import { COMPANIES_LIST_COLUMNS } from "../WorkspaceCompaniesList/WorkspaceCompaniesList";
 import { TableListColumn } from "../TableList/TableList";
 import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
+import StyledButton from "../StyledButton/StyledButton";
 
 type OnAddCompany = (company: AsString<Company>) => void;
 type DefaultCallback = () => void;
@@ -38,15 +39,15 @@ export default function CompanyControls(props: Props): ReactNode {
   return (
     <>
       <div className="d-flex">
-        <button onClick={() => setDisplayAddControls(!displayAddControls)}>Add</button>
-        <button onClick={() => pOnRemove()}>Remove</button>
-        <button onClick={() => pOnSelectAll()}>Select all</button>
-        <button onClick={() => pOnDeselectAll()}>De-select all</button>
-        <button onClick={() => pOnImport()}>Import</button>
+        <StyledButton onClick={() => setDisplayAddControls(!displayAddControls)}>Add</StyledButton>
+        <StyledButton onClick={() => pOnRemove()}>Remove</StyledButton>
+        <StyledButton onClick={() => pOnSelectAll()}>Select all</StyledButton>
+        <StyledButton onClick={() => pOnDeselectAll()}>De-select all</StyledButton>
+        <StyledButton onClick={() => pOnImport()}>Import</StyledButton>
       </div>
       {displayAddControls && (
         <div className="d-flex">
-          <button onClick={() => pOnAdd(addCandidateCompany)}>Add</button>
+          <StyledButton onClick={() => pOnAdd(addCandidateCompany)}>Add</StyledButton>
           {COMPANIES_LIST_COLUMNS.map((column: TableListColumn<CompanyWithCurrency>) => {
             const id: string = "companies-list-add-controls-input-" + column.accessor;
             return (

@@ -1,4 +1,5 @@
 import { ASSETS } from "@renderer/assets/assets";
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ReactNode, useEffect, useState } from "react";
 import { FilePathParse } from "src/shared/files.type";
 
@@ -52,7 +53,7 @@ export default function BrowserFile(props: Props): ReactNode {
         src={getFileIcon()}
       />
       {info?.base}
-      <button onClick={handleFileDelete}>Delete</button>
+      <StyledButton onClick={handleFileDelete}>Delete</StyledButton>
     </div>
   );
 }

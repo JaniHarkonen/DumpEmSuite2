@@ -1,3 +1,4 @@
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import "./CompanyTag.css";
 
 import { ASSETS } from "@renderer/assets/assets";
@@ -72,14 +73,14 @@ export default function CompanyTag(props: Props): ReactNode {
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
             autoFocus={true}
           />
-          <button onClick={() => pOnRemove(tag)}>
+          <StyledButton onClick={() => pOnRemove(tag)}>
             <span>
               <img
                 className="size-tiny-icon company-tag-control-remove"
                 src={ASSETS.icons.buttons.trashCan.white}
               />
             </span>
-          </button>
+          </StyledButton>
         </>
       ) : (
         <>

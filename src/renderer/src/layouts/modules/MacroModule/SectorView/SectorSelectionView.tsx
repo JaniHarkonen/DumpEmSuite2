@@ -14,6 +14,7 @@ import { BoundDatabaseAPI } from "src/shared/database.type";
 import buildSectorBlueprint from "./buildSectorBlueprint";
 import { MacroSector } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 
 
 export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
@@ -103,9 +104,9 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
             />
           );
         })}
-        <button onClick={() => handleTabAdd(targetNode)}>
+        <StyledButton onClick={() => handleTabAdd(targetNode)}>
           {"+"}
-        </button>
+        </StyledButton>
       </TabControls>
     );
   };

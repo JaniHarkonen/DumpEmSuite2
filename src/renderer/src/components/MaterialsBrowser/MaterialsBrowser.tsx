@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import BrowserFile from "./BrowserFile/BrowserFile";
 import { FilePathParse } from "src/shared/files.type";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 type Props = {
@@ -109,8 +110,8 @@ export default function MaterialsBrowser(props: Props): ReactNode {
       onDrop={handleFileImportDrop}
       onDragOver={ignoreDragOver}
     >
-      <button onClick={handleFileImportSelection}>Import files</button>
-      <button onClick={handleOpenInExplorer}>Open in system explorer</button>
+      <StyledButton onClick={handleFileImportSelection}>Import files</StyledButton>
+      <StyledButton onClick={handleOpenInExplorer}>Open in system explorer</StyledButton>
       {filePaths.length > 0 ? filePaths.map((path: string, index: number) => {
         return (
           <BrowserFile

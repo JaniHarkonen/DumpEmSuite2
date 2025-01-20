@@ -1,6 +1,7 @@
 import useEditable from "@renderer/hook/useEditable";
 import { renderMarkdown } from "@renderer/model/markdown/markdown";
 import { FocusEvent, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
+import StyledTextarea from "../StyledTextarea/StyledTextarea";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -54,7 +55,7 @@ export default function MarkdownEditor(props: Props) {
       className="w-100 h-100"
     >
       {isEditing && (
-        <textarea
+        <StyledTextarea
           className="w-100 h-100"
           onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
           autoFocus={true}

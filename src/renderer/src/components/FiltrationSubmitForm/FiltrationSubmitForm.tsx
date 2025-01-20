@@ -2,6 +2,7 @@ import useDatabase from "@renderer/hook/useDatabase";
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { BoundDatabaseAPI, FetchResult } from "src/shared/database.type";
 import { FilterationStep } from "src/shared/schemaConfig";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 type OnFiltrationSubmit = (filtrationStep: FilterationStep, preserveTags: boolean) => void;
@@ -52,9 +53,9 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
 
   return (
     <div className="d-flex">
-      <button onClick={handleSubmit}>
+      <StyledButton onClick={handleSubmit}>
         Submit
-      </button>
+      </StyledButton>
       <select onChange={handleSelection}>
         {Object.keys(filtrationSteps).map((key: string) => {
           return (

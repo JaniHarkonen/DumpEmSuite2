@@ -1,0 +1,4 @@
+textarea {
+  border-style: none;
+  border-radius: var(--medium-length);
+}

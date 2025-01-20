@@ -1,0 +1,8 @@
+.styled-button {
+  border-style: solid;
+  border-width: var(--tiny-length);
+  border-radius: var(--small-length);
+  padding: var(--medium-length);
+  padding-top: var(--small-length);
+  padding-bottom: var(--small-length);
+}

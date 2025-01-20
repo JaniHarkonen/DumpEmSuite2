@@ -1,6 +1,7 @@
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import { ReactNode } from "react";
 import { OpenDialogCallback, OpenDialogResult, SaveDialogCallback, SaveDialogResult, ShowOpenDialogProps, ShowSaveDialogProps } from "src/shared/files.type";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 type Action = "open" | "save";
@@ -48,5 +49,5 @@ export default function BrowseFilesButton(props: Props): ReactNode {
     }
   };
 
-  return <button {...{onClick: handleDialogOpen}}>...</button>;
+  return <StyledButton {...{onClick: handleDialogOpen}}>...</StyledButton>;
 }

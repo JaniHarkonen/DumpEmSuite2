@@ -31,11 +31,11 @@ const MENU_OPTIONS: MenuOption[] = [
     menu: [
       {
         key: "new-workspace",
-        label: "Create new workspace"
+        label: "Create new workspace..."
       },
       {
         key: "open-workspace",
-        label: "Open existing workspace"
+        label: "Open existing workspace..."
       }
     ]
   },

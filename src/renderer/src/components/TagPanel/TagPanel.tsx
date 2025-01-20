@@ -5,6 +5,7 @@ import CompanyTag, { OnTagSelect } from "./CompanyTag/CompanyTag";
 import { Tag } from "src/shared/schemaConfig";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import useFiltertionTags from "@renderer/hook/useFiltertionTags";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 export type CompanyTagEditChanges = {
@@ -60,7 +61,7 @@ export default function TagPanel(props: Props): ReactNode {
             </div>
           );
         })}
-        <button onClick={handleNewTag}>{"+"}</button>
+        <StyledButton onClick={handleNewTag}>{"+"}</StyledButton>
       </div>
     </>
   );

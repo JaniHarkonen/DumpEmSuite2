@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 type Props = {
@@ -17,10 +18,10 @@ export default function FilterationControls(props: Props): ReactNode {
 
   return(
     <div>
-      <button onClick={pOnBringAll}>Bring all companies</button>
-      <button onClick={pOnDelist}>De-list</button>
-      <button onClick={pSelectAll}>Select all</button>
-      <button onClick={pOnDeselectAll}>De-select all</button>
+      <StyledButton onClick={pOnBringAll}>Bring all companies</StyledButton>
+      <StyledButton onClick={pOnDelist}>De-list</StyledButton>
+      <StyledButton onClick={pSelectAll}>Select all</StyledButton>
+      <StyledButton onClick={pOnDeselectAll}>De-select all</StyledButton>
     </div>
   );
 }

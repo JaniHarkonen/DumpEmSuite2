@@ -1,3 +1,5 @@
+import "./PathBrowser.css";
+
 import { ChangeEvent, KeyboardEvent, ReactNode, useEffect, useState } from "react";
 import BrowseFilesButton, { BrowseFilesAction, BrowseFilesProps } from "../BrowseFilesButton/BrowseFilesButton";
 import { OpenDialogResult, SaveDialogResult } from "src/shared/files.type";
@@ -65,18 +67,22 @@ export default function PathBrowser(props: Props): ReactNode {
   };
 
   return (
-    <>
+    <div className="path-browser-container">
+      <span>
+        <BrowseFilesButton {...{
+          ...props,
+          onSelect: handlePathSelection
+        }} />
+      </span>
       <input
+        className="ml-medium-length"
         type="text"
         value={input}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target.value)}
         onBlur={() => handleStateSave()}
         onKeyDown={handleEnterPress}
       />
-      <BrowseFilesButton {...{
-        ...props,
-        onSelect: handlePathSelection
-      }} />
+      
       {warning && (
         <>
           <span>
@@ -88,6 +94,6 @@ export default function PathBrowser(props: Props): ReactNode {
           <span>{warning}</span>
         </>
       )}
-    </>
+    </div>
   );
 }

@@ -3,6 +3,9 @@
   --theme-dark-shadow: #515151;
   --theme-dark-outline: #777777;
   --theme-dark-glyph: #F9F9F9;
+  --theme-dark-action: #00A07B;
+  --theme-dark-action-hl: #00BC8D;
+  --theme-dark-action-bd: #008767;
 }
 
   /* AMBIENT */
@@ -110,7 +113,7 @@
   border-right-color: var(--theme-dark-outline);
 }
 
-  /* OUTLINE */
+  /* GLYPH */
 .theme-dark.glyph-bgc {
   background-color: var(--theme-dark-glyph);
 }
@@ -143,4 +146,15 @@
 
 .theme-dark.glyph-bdc-right {
   border-right-color: var(--theme-dark-glyph);
+}
+
+  /* BUTTON */
+.theme-dark.button {
+  color: var(--theme-dark-glyph-c);
+  background-color: var(--theme-dark-action);
+  border-color: var(--theme-dark-action-bd);
+
+  &:hover{
+    background-color: var(--theme-dark-action-hl);
+  }
 }
