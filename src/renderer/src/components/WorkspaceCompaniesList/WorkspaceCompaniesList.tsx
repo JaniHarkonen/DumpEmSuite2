@@ -10,16 +10,85 @@ import { ScrapedData } from "src/shared/scraper.type";
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import useWorkspaceDialogKeys from "@renderer/hook/useWorkspaceDialogKeys";
 import { OpenDialogResult, ReadResult } from "src/shared/files.type";
+import Container from "../Container/Container";
 
+
+function milleFormatter(numberString: string): string {
+  if( numberString === "NaN" ) {
+    return numberString;
+  }
+
+  const split = numberString.split(".");
+  let whole: string = split[0];
+  let fixedWhole: string = "";
+  
+  for( let i = whole.length; i >= 0; i -= 3 ) {
+    const triple: string = whole.substring(i - 3, i);
+    fixedWhole = ((triple.length === 3 && i != 3) ? "," : "") + triple + fixedWhole;
+  }
+
+  return fixedWhole + (split[1] ? "." + split[1] : "");
+}
+
+function decimalFormatter(numberString: string): string {
+  if( numberString === "NaN" ) {
+    return numberString;
+  }
+
+  const split = numberString.split(".");
+  let decimal: string = split[1] || "";
+
+  if( decimal.length === 1 ) {
+    decimal += "0";
+  } else if( decimal.length === 0 ) {
+    decimal += "00";
+  }
+
+  return split[0] + "." + decimal;
+}
+
+function priceFormatter(currencySymbol: string, numberString: string): string {
+  return currencySymbol + decimalFormatter(milleFormatter(numberString));
+}
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
-  { accessor: "company_name", caption: "Name" },
-  { accessor: "stock_ticker", caption: "Ticker" },
-  { accessor: "volume_price", caption: "Volume ($)" },
-  { accessor: "volume_quantity", caption: "Volume (quant.)" },
-  { accessor: "stock_price", caption: "Share price ($)" },
-  { accessor: "exchange", caption: "Exchange symbol" },
-  { accessor: "updated", caption: "Updated" }
+  { 
+    accessor: "company_name", 
+    caption: "Name" 
+  },
+  { 
+    accessor: "stock_ticker", 
+    caption: "Ticker" 
+  },
+  { 
+    accessor: "volume_price", 
+    caption: "Currency volume",
+    formatter: (dataCell: TableListDataCell<CompanyWithCurrency>) => {
+      return priceFormatter(dataCell.data.currency_symbol, "" + dataCell.data.volume_price);
+    }
+  },
+  { 
+    accessor: "volume_quantity", 
+    caption: "Volume",
+    formatter: (dataCell: TableListDataCell<CompanyWithCurrency>) => {
+      return milleFormatter("" + dataCell.data.volume_quantity);
+    }
+  },
+  { 
+    accessor: "stock_price", 
+    caption: "Share price",
+    formatter: (dataCell: TableListDataCell<CompanyWithCurrency>) => {
+      return priceFormatter(dataCell.data.currency_symbol, "" + dataCell.data.stock_price);
+    }
+  },
+  { 
+    accessor: "exchange", 
+    caption: "Exchange symbol" 
+  },
+  { 
+    accessor: "updated", 
+    caption: "Updated"
+  }
 ];
 
 
@@ -47,6 +116,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
     onOpenDialogResult: (result: OpenDialogResult) => {
       if( !result.cancelled && result.key === dialogKeyImportCompanies ) {
         filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
+
           if( result.wasSuccessful ) {
             databaseAPI.postImportedCompanies({
               company: result.result.symbols as Company[]
@@ -57,9 +127,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
     }
   });
 
-  useEffect(() => {
-    fetchAllCompanies();
-  }, []);
+  useEffect(() => fetchAllCompanies(), []);
 
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
     companies.map((stock: CompanyWithCurrency) => {
@@ -107,22 +175,24 @@ export default function WorkspaceCompaniesList(): ReactNode {
 
   return (
     <div className="w-100">
-      <CompanyControls
-        onAdd={handleAddCompany}
-        onRemove={handleCompanyRemove}
-        onSelectAll={() => handleSelection(true, ...stockDataCells)}
-        onDeselectAll={resetSelection}
-        onImport={handleImport}
-      />
-      <TableList<CompanyWithCurrency>
-        columns={COMPANIES_LIST_COLUMNS}
-        cells={stockDataCells}
-        allowSelection
-        allowEdit
-        selectionSet={selectionSet}
-        onItemSelect={handleCompanySelection}
-        onItemFinalize={handleCompanyChange}
-      />
+      <Container>
+        <CompanyControls
+          onAdd={handleAddCompany}
+          onRemove={handleCompanyRemove}
+          onSelectAll={() => handleSelection(true, ...stockDataCells)}
+          onDeselectAll={resetSelection}
+          onImport={handleImport}
+        />
+        <TableList<CompanyWithCurrency>
+          columns={COMPANIES_LIST_COLUMNS}
+          cells={stockDataCells}
+          allowSelection
+          allowEdit
+          selectionSet={selectionSet}
+          onItemSelect={handleCompanySelection}
+          onItemFinalize={handleCompanyChange}
+        />
+      </Container>
     </div>
   );
 }

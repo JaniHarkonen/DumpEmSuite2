@@ -1,0 +1,19 @@
+.table-list-container {
+  display: grid;
+
+  width: 100%;
+  line-height: var(--line-height-standard);
+
+  user-select: text;
+}
+
+.table-list-data-cell-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.table-list-column-header-container {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

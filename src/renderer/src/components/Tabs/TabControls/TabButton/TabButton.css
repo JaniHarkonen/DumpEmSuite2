@@ -32,8 +32,4 @@
   border-radius: var(--small-length);
 
   cursor: pointer;
-
-  &:hover {
-    background-color: lightgray;
-  }
 }

@@ -1,6 +1,9 @@
+import "./TableList.css";
+
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
 import { ChangeEvent, ReactNode } from "react";
 import EditableText from "../editable/EditableText";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 export type TableListColumn<T> = {
@@ -11,6 +14,11 @@ export type TableListColumn<T> = {
     column: TableListColumn<T>, 
     index: number
   ) => ReactNode;
+  formatter?: (
+    dataCell: TableListDataCell<T>, 
+    column: TableListColumn<T>, 
+    index: number
+  ) => string;
 };
 
 export type TableListDataCell<T> = SelectionItem<T>;
@@ -52,6 +60,8 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const pOnItemSelect: OnItemSelect<T> = props.onItemSelect || function(){ };
   const pOnItemFinalize: OnItemFinalize<T> = props.onItemFinalize || function(){ };
 
+  const {formatKey} = useTabKeys();
+
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
@@ -71,64 +81,64 @@ export default function TableList<T>(props: Props<T>): ReactNode {
         })}
         editDisabled={!pAllowEdit}
       >
-        {data as string}
+        {column.formatter ? column.formatter(dataCell, column, index) : (data as string)}
       </EditableText>
     );
 
       // Apply selection checkbox, if first data cell
     if( pAllowSelection && index === 0 ) {
       dataElement = (
-        <>
+        <div className="table-list-data-cell-container">
           <input
+            className="mr-strong-length"
             type="checkbox"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              pOnItemSelect(dataCell, e.target.checked)
+              pOnItemSelect(dataCell, e.target.checked);
             }}
             checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
           />
           {dataElement}
-        </>
+        </div>
       );
     }
 
     return (
-      <td key={"list-table-data-" + (column.accessor as String) + "-" + dataCell.id}>
+      <div
+        key={formatKey("list-table-data-" + (column.accessor as String) + "-" + dataCell.id)}
+        className={(index + 1) % pColumns.length === 0 && index > 0 ? "text-align-right" : ""}
+        onClick={() => pOnItemFocus(dataCell)}
+      >
         {dataElement}
-      </td>
+      </div>
     );
   };
-
   
   return (
-    <table className="text-align-left w-100 user-select-text">
-      <thead>
-        <tr>
-          {pColumns.map((column: TableListColumn<T>) => {
-            return (
-              <th
-                key={"list-table-header-" + (column.accessor as string)}
-                onClick={() => pOnColumnSelect(column)}
-              >
-                {column.caption}
-              </th>
-            );
-          })}
-        </tr>
-      </thead>
-      <tbody>
-        {pData.map((dataCell: TableListDataCell<T>) => {
-          return (
-            <tr
-              key={"list-table-row-" + dataCell.id}
-              onClick={() => pOnItemFocus(dataCell)}
-            >
-              {pColumns.map((column: TableListColumn<T>, index: number) => {
-                return renderDataCell(dataCell, column, index);
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div
+      className="table-list-container"
+      style={{ gridTemplateColumns: "repeat(" + pColumns.length + ", auto)" }}
+    >
+      {pColumns.map((column: TableListColumn<T>, index: number) => {
+        return (
+          <span
+            key={formatKey("list-table-header-" + (column.accessor as string))}
+            className={
+              (index === pColumns.length - 1) ? 
+              "text-align-right table-list-column-header-container" : 
+              "table-list-column-header-container"
+            }
+            role="button"
+            onClick={() => pOnColumnSelect(column)}
+          >
+            <strong>{column.caption}</strong>
+          </span>
+        );
+      })}
+      {pData.map((dataCell: TableListDataCell<T>) => {
+        return pColumns.map((column: TableListColumn<T>, index: number) => {
+          return renderDataCell(dataCell, column, index);
+        });
+      })}
+    </div>
   );
 }

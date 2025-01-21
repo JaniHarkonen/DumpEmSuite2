@@ -11,6 +11,7 @@ import iconAlertTriangleColor from "./icons/alert-triangle-color-icon.svg";
 import iconBadgeSuccessfulColor from "./icons/badge-successful-color-icon.svg";
 import iconBadgeFailedColor from "./icons/badge-failed-color-icon.svg";
 import iconBadgePendingColor from "./icons/badge-pending-color-icon.svg";
+import iconImportBlack from "./icons/import-black-icon.svg";
 
 
 export const ASSETS = {
@@ -21,6 +22,9 @@ export const ASSETS = {
       },
       trashCan: {
         white: iconButtonTrashCanWhite
+      },
+      import: {
+        black: iconImportBlack
       }
     },
     files: {
@@ -61,6 +65,7 @@ export const ASSETS = {
       pending: {
         color: iconBadgePendingColor
       }
-    }
+    },
+
   }
 };

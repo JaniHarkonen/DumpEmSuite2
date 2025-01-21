@@ -5,6 +5,7 @@ import { ASSETS } from "@renderer/assets/assets";
 import useEditable from "@renderer/hook/useEditable";
 import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useState } from "react";
 import { Tag } from "src/shared/schemaConfig";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
 export type OnTagSelect = (tag: Tag) => void;
@@ -67,7 +68,8 @@ export default function CompanyTag(props: Props): ReactNode {
             onChange={handleChangeColor}
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
           />
-          <input
+          <StyledInput
+            type="text"
             value={tag.tag_label || ""}
             onChange={handleChangeLabel}
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}

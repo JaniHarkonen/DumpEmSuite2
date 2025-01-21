@@ -20,7 +20,8 @@ export default function qFetchAllCompanies(
           col<Company>("volume_quantity", "c"),
           col<Company>("exchange", "c"),
           col<Company>("updated", "c"),
-          col<Currency>("currency_id", "cx")
+          col<Currency>("currency_id", "cx"),
+          col<Currency>("currency_symbol", "cx")
         ) + FROM(
           table("company", "c"), table("currency", "cx")
         ) + WHERE(

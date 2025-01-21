@@ -4,6 +4,7 @@ import { ChangeEvent, KeyboardEvent, ReactNode, useEffect, useState } from "reac
 import BrowseFilesButton, { BrowseFilesAction, BrowseFilesProps } from "../BrowseFilesButton/BrowseFilesButton";
 import { OpenDialogResult, SaveDialogResult } from "src/shared/files.type";
 import { ASSETS } from "@renderer/assets/assets";
+import StyledInput from "../StyledInput/StyledInput";
 
 
 type OnPathChange = (selectedPath: string) => void;
@@ -74,7 +75,7 @@ export default function PathBrowser(props: Props): ReactNode {
           onSelect: handlePathSelection
         }} />
       </span>
-      <input
+      <StyledInput
         className="ml-medium-length"
         type="text"
         value={input}

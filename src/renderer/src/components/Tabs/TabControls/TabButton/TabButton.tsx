@@ -5,6 +5,7 @@ import { FocusEvent, KeyboardEvent, PropsWithChildren, ReactNode, useContext, us
 import { TabsContext } from "@renderer/context/TabsContext";
 import useEditable, { OnEditFinalize } from "@renderer/hook/useEditable";
 import useTheme from "@renderer/hook/useTheme";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
 export type OnCaptionEditFinalize = OnEditFinalize<string>;
@@ -52,7 +53,8 @@ export default function TabButton(props: Props): ReactNode {
     >
       <span>
         {isEditing ? (
-          <input
+          <StyledInput
+            type="text"
             defaultValue={caption}
             onBlur={(e: FocusEvent<HTMLInputElement, Element>) => {
               handleFinalize(e.currentTarget.value);

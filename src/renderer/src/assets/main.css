@@ -23,6 +23,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
 }
 
 button {
@@ -76,8 +77,8 @@ textarea {
 }
 
 .size-medium-icon {
-  width: 64px;
-  height: 64px;
+  width: var(--medium-size);
+  height: var(--medium-size);
 }
 
 .h-auto {
@@ -100,6 +101,10 @@ textarea {
   overflow: auto;
 }
 
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
 .p-absolute {
   position: absolute;
 }
@@ -116,6 +121,14 @@ textarea {
   display: flex;
 }
 
+.d-direction-column {
+  flex-direction: column;
+}
+
+.d-direction-row {
+  flex-direction: row;
+}
+
 .d-justify-center {
   justify-content: center;
 }
@@ -128,12 +141,28 @@ textarea {
   align-items: center;
 }
 
+.d-grid {
+  display: grid;
+}
+
 .text-align-left {
   text-align: left;
 }
 
+.text-align-right {
+  text-align: right;
+}
+
 .user-select-text {
   user-select: text;
+}
+
+.white-space-nowrap {
+  white-space: nowrap;
+}
+
+.text-overflow-ellipsis {
+  text-overflow: ellipsis;
 }
 
 .indent-dot-size {
@@ -238,6 +267,10 @@ textarea {
 
 .mb-ultra-strong-length {
   margin-bottom: var(--ultra-strong-length);
+}
+
+.line-height-standard {
+  line-height: var(--line-height-standard);
 }
 
 .debug-bg-red {
