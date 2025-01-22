@@ -14,7 +14,6 @@ export default function AnalysisModule(): ReactNode {
     { "view-fundamental": () => <FundamentalView /> },
     <FilterationView />
   );
-
   
   return (
     <AnalysesView

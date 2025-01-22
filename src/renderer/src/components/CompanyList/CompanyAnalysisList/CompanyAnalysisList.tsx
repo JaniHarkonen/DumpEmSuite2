@@ -1,6 +1,6 @@
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
@@ -10,6 +10,13 @@ import useSelection, { SelectionID } from "@renderer/hook/useSelection";
 import { FilterationStep, Tag } from "src/shared/schemaConfig";
 import useFiltertionTags from "@renderer/hook/useFiltertionTags";
 import FiltrationSubmitForm from "@renderer/components/FiltrationSubmitForm/FiltrationSubmitForm";
+import useTabKeys from "@renderer/hook/useTabKeys";
+import { TabsContext } from "@renderer/context/TabsContext";
+import { Tab } from "@renderer/model/tabs";
+import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
+import { ProfileContext } from "@renderer/context/ProfileContext";
+import useTheme from "@renderer/hook/useTheme";
+import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -48,19 +55,40 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     defaultTagID: 1
   });
 
-  const stockDataCells: TableListDataCell<FilterationStepStock>[] = 
-    stocks.map((company: FilterationStepStock) => {
-      return {
-        id: company.company_id,
-        data: company
-      };
-    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
-        // Hide stocks that do not satisfy the filter criteria
-      return (
-        tagFilters.length === 0 || 
-        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
-      );
+  const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+  
+  const activeTab: Tab = tabs[activeTabIndex];
+
+  const {
+    sortedData, 
+    sortField, 
+    sortOrder, 
+    sortBy
+  } = useSortedData({
+    initialOrder: stocks,
+    fieldTypeMap: {
+      company_name: "string",
+      stock_ticker: "string",
+      stock_price: "numeric",
+      volume_price: "numeric",
+      volume_quantity: "numeric"
+    },
+    sortField: activeTab?.extra?.sortField,
+    sortOrder: activeTab?.extra?.sortOrder
+  });
+
+  const {company} = useContext(ProfileContext);
+
+  const {theme} = useTheme();
+  const {formatKey} = useTabKeys();
+
+  const handleSortToggle = (column: TableListColumn<FilterationStepStock>) => {
+    const settings: SortSettings = sortBy(column.accessor);
+    setExtraInfo && setExtraInfo({
+      sortField: settings.sortField,
+      sortOrder: settings.sortOrder
     });
+  };
   
   useEffect(() => {
     fetchFilterationStepStocks();
@@ -112,21 +140,47 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   const COLUMNS: TableListColumn<FilterationStepStock>[] = [
     { accessor: "company_name", caption: "Name" },
     { accessor: "stock_ticker", caption: "Ticker" },
-    { accessor: "stock_price", caption: "Share price" },
-    { accessor: "volume_price", caption: "Volume price" },
-    { accessor: "volume_quantity", caption: "Volume quantity" },
+    { 
+      accessor: "stock_price", 
+      caption: "Share price", 
+      formatter: (
+        data: FilterationStepStock, dataCell: TableListDataCell<FilterationStepStock>
+      ) => {
+        return priceFormatter(dataCell.data.currency_symbol, "" + data.stock_price);
+      }
+    },
+    { 
+      accessor: "volume_price", 
+      caption: "Currency volume",
+      formatter: (
+        data: FilterationStepStock, dataCell: TableListDataCell<FilterationStepStock>
+      ) => {
+        return priceFormatter(dataCell.data.currency_symbol, "" + data.volume_price);
+      }
+    },
+    {
+      accessor: "volume_quantity", 
+      caption: "Volume",
+      formatter: (data: FilterationStepStock) => {
+        return milleFormatter("" + data.volume_quantity);
+      }
+    },
     { 
       accessor: "tag_hex", 
       caption: "Verdict",
       ElementConstructor: (
-        dataCell: TableListDataCell<FilterationStepStock>, 
+        dataCell: TableListDataCell<FilterationStepStock>,
         column: TableListColumn<FilterationStepStock>, 
-        index: number
+        index: number,
+        classNameConstructor: () => string
       ) => {
         return (
-          <>
+          <div
+            {...theme(classNameConstructor())}
+            key={formatKey("datacell-tag-selection-container-" + dataCell.id)}
+          >
             <span
-              className="size-tiny-icon mr-norm"
+              className="size-tiny-icon mr-medium-length"
               style={{ backgroundColor: dataCell.data.tag_hex }}
             />
             <select
@@ -138,20 +192,43 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
               {tags.map((tag: Tag) => {
                 return (
                   <option
-                    key={"datacell-tag-selection-" + dataCell.id}
+                    key={formatKey("datacell-tag-selection-" + dataCell.id + "-" + tag.tag_id)}
                     value={tag.tag_id}
                   >
                     {tag.tag_label}
                   </option>
-                )
+                );
               })}
             </select>
-          </>
+          </div>
         );
       }
     }
   ];
 
+  const stockDataCells: TableListDataCell<FilterationStepStock>[] = 
+    sortedData.map((c: FilterationStepStock) => {
+      return {
+        id: c.company_id,
+        data: c,
+        hasHighlight: (company?.company_id === c.company_id)
+      };
+    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
+        // Hide stocks that do not satisfy the filter criteria
+      return (
+        tagFilters.length === 0 || 
+        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
+      );
+    });
+
+    // Determine which column is being sorted, and assign its sort order
+  const stockDataColumns: TableListColumn<FilterationStepStock>[] = 
+    COLUMNS.map((column: TableListColumn<FilterationStepStock>) => {
+      return {
+        ...column,
+        ...(sortField === column.accessor ? { sortOrder } : {})
+      };
+    });
 
   return (
     <PageContainer>
@@ -171,11 +248,12 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       <TagPanel onTagSelect={handleToggleTag} />
       <TableList<FilterationStepStock>
         onItemFocus={handleStockFocus}
-        columns={COLUMNS}
+        columns={stockDataColumns}
         cells={stockDataCells}
         allowSelection={true}
         selectionSet={selectionSet}
         onItemSelect={handleStockSelect}
+        onColumnSelect={handleSortToggle}
       />
     </PageContainer>
   );

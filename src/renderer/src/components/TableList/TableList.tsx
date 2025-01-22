@@ -15,7 +15,8 @@ export type TableListColumn<T> = {
   ElementConstructor?: (
     dataCell: TableListDataCell<T>, 
     column: TableListColumn<T>, 
-    index: number
+    index: number,
+    classNameConstructor: () => string
   ) => ReactNode;
   formatter?: (
     data: T,
@@ -73,9 +74,35 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
+    const classNameConstructor = () => {
+      const isFirstColumn: boolean = index % pColumns.length === 0;
+      const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
+      let className: string = "table-list-data-cell-container";
+
+      if( dataCell.hasHighlight ) {
+        className += " action-bdc";
+
+        if( isFirstColumn ) {
+          className += " table-list-first";
+        } else if( isLastColumn ) {
+          className += " table-list-last";
+        } else {
+          className += " table-list-highlight";
+        }
+      }
+
+      if( isFirstColumn ) {
+        className +=" pl-medium-length"
+      } else if( isLastColumn ) {
+        className += " text-align-right pr-medium-length";
+      }
+
+      return className;
+    }
+
       // Use the element constructor, if one has been provided
     if( column.ElementConstructor ) {
-      return column.ElementConstructor(dataCell, column, index);
+      return column.ElementConstructor(dataCell, column, index, classNameConstructor);
     }
     
       // Apply input fields, if editing
@@ -110,34 +137,10 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       );
     }
 
-    const isFirstColumn: boolean = index % pColumns.length === 0;
-    const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
-    let className: string = "table-list-data-cell-container";
-
-    if( dataCell.hasHighlight ) {
-      className += " action-bdc";
-
-      if( isFirstColumn ) {
-        className += " table-list-first";
-      } else if( isLastColumn ) {
-        className += " table-list-last";
-      } else {
-        className += " table-list-highlight";
-      }
-    }
-
-    if( isFirstColumn ) {
-      className +=" pl-medium-length"
-    }
-    if( isLastColumn ) {
-      className += " text-align-right pr-medium-length";
-    }
-
     return (
       <div
-        {...theme(className)}
-        key={formatKey("list-table-data-" + (column.accessor as String) + "-" + dataCell.id)}
-        onClick={() => pOnItemFocus(dataCell)}
+        {...theme(classNameConstructor())}
+        key={formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id)}
       >
         {dataElement}
       </div>
@@ -158,27 +161,41 @@ export default function TableList<T>(props: Props<T>): ReactNode {
               " table-list-column-header-container"
             }
           >
+            <span className="mr-medium-length">
+              {(column.sortOrder === "ascending") && (
+                <img 
+                  className="size-tiny-icon" 
+                  src={ASSETS.icons.buttons.arrow.up.black} 
+                />
+              )} 
+              {(column.sortOrder === "descending") && (
+                <img 
+                  className="size-tiny-icon" 
+                  src={ASSETS.icons.buttons.arrow.down.black} 
+                />
+              )}
+            </span>
             <span
               role="button"
               onClick={() => pOnColumnSelect(column)}
             >
               <strong>{column.caption}</strong>
             </span>
-            <span className="ml-medium-length">
-              {(column.sortOrder === "ascending") && (
-                <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.up.black} />
-              )} 
-              {(column.sortOrder === "descending") && (
-                <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.down.black} />
-              )}
-            </span>
           </div>
         );
       })}
       {pData.map((dataCell: TableListDataCell<T>) => {
-        return pColumns.map((column: TableListColumn<T>, index: number) => {
-          return renderDataCell(dataCell, column, index);
-        });
+        return (
+          <div
+            key={formatKey("list-table-row-" + dataCell.id)}
+            className="table-list-data-row"
+            onClick={() => pOnItemFocus(dataCell)}
+          >
+            {pColumns.map((column: TableListColumn<T>, index: number) => {
+              return renderDataCell(dataCell, column, index);
+            })}
+          </div>
+        );
       })}
     </div>
   );

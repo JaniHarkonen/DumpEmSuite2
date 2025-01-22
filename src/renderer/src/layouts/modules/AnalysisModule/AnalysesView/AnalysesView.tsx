@@ -108,16 +108,16 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
 
           return(
             <EditableTabButton
-                key={tab.workspace + "-tab-control-button-" + tab.id}
-                tab={tab}
-                allowEdit={!isFundamental}
-                allowRemove={!isFundamental}
-                onCaptionEdit={(value: string) => {
-                  handleTabCaptionChange(targetNode, tab, value);
-                }}
-                onRemove={(e: MouseEvent<HTMLImageElement>) => {
-                  handleTabRemove(e, targetNode, tab);
-                }}
+              key={tab.workspace + "-tab-control-button-" + tab.id}
+              tab={tab}
+              allowEdit={!isFundamental}
+              allowRemove={!isFundamental}
+              onCaptionEdit={(value: string) => {
+                handleTabCaptionChange(targetNode, tab, value);
+              }}
+              onRemove={(e: MouseEvent<HTMLImageElement>) => {
+                handleTabRemove(e, targetNode, tab);
+              }}
             />
           );
         })}

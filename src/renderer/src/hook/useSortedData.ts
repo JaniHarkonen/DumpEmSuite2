@@ -56,6 +56,10 @@ export default function useSortedData(props: Props): Returns {
   }, [pInitialOrder]);
 
   const sortBy = (field: string, order?: SortOrder) => {
+    if( !pFieldTypeMap[field.toString()] ) {
+      return sorted;
+    }
+
       // If order is not provided, cycle between orders
     if( !order ) {
       if( field === sorted.sortField ) {
