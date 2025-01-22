@@ -7,6 +7,9 @@
 ### React keys
 - utilize useTabKeys to generate keys for all workspace views
 
+### Extra info
+- don't forget to add "extra infos" written by modules to the app config (though this isn't necessary, it will make the code clearer)
+
 ### AnalysesView.tsx
 - currently a `span`-element is being used as a button, change this when styles are added
 

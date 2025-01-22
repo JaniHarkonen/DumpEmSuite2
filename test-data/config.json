@@ -83,7 +83,11 @@
                                                   "caption": "Listings",
                                                   "contentTemplate": "view-listings",
                                                   "tags": [],
-                                                  "order": 0
+                                                  "order": 0,
+                                                  "extra": {
+                                                    "sortField": null,
+                                                    "sortOrder": "none"
+                                                  }
                                                 },
                                                 {
                                                   "id": "view-profiles",

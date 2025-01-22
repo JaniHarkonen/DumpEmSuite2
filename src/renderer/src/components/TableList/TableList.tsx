@@ -138,12 +138,14 @@ export default function TableList<T>(props: Props<T>): ReactNode {
             >
               <strong>{column.caption}</strong>
             </span>
-            {(column.sortOrder === "ascending") && (
-              <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.up.black} />
-            )} 
-            {(column.sortOrder === "descending") && (
-              <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.down.black} />
-            )}
+            <span className="ml-medium-length">
+              {(column.sortOrder === "ascending") && (
+                <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.up.black} />
+              )} 
+              {(column.sortOrder === "descending") && (
+                <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.down.black} />
+              )}
+            </span>
           </div>
         );
       })}

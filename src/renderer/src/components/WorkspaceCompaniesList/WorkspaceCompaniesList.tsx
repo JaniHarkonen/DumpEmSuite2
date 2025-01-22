@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList/TableList";
 import { Company } from "src/shared/schemaConfig";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
@@ -12,7 +12,9 @@ import useWorkspaceDialogKeys from "@renderer/hook/useWorkspaceDialogKeys";
 import { OpenDialogResult, ReadResult } from "src/shared/files.type";
 import Container from "../Container/Container";
 import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
-import useSortedData from "@renderer/hook/useSortedData";
+import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
+import { TabsContext } from "@renderer/context/TabsContext";
+import { Tab } from "@renderer/model/tabs";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -97,7 +99,16 @@ export default function WorkspaceCompaniesList(): ReactNode {
 
   useEffect(() => fetchAllCompanies(), []);
 
-  const {sortedData, sortField, sortOrder, sortBy} = useSortedData({
+  const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+
+  const activeTab: Tab = tabs[activeTabIndex];
+
+  const {
+    sortedData, 
+    sortField, 
+    sortOrder, 
+    sortBy
+  } = useSortedData({
     initialOrder: companies,
     fieldTypeMap: {
       company_name: "string",
@@ -107,8 +118,18 @@ export default function WorkspaceCompaniesList(): ReactNode {
       volume_quantity: "numeric",
       exchange: "string",
       updated: "string",
-    }
+    },
+    sortField: activeTab?.extra?.sortField,
+    sortOrder: activeTab?.extra?.sortOrder
   });
+
+  const handleSortToggle = (column: TableListColumn<CompanyWithCurrency>) => {
+    const settings: SortSettings = sortBy(column.accessor);
+    setExtraInfo && setExtraInfo({
+      sortField: settings.sortField,
+      sortOrder: settings.sortOrder
+    });
+  };
 
     // Fix the stock data to be compatible with the table component
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
@@ -182,7 +203,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
           selectionSet={selectionSet}
           onItemSelect={handleCompanySelection}
           onItemFinalize={handleCompanyChange}
-          onColumnSelect={(column: TableListColumn<CompanyWithCurrency>) => sortBy(column.accessor)}
+          onColumnSelect={handleSortToggle}
         />
       </Container>
     </div>
