@@ -12,7 +12,7 @@
 
 .divider-handle {
   position: absolute;
-  border-width: var(--strong-length);
+  border-width: var(--small-length);
 }
 
 .divider-handle.horizontal {

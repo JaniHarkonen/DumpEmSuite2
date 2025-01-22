@@ -2,6 +2,7 @@ import { ASSETS } from "@renderer/assets/assets";
 import { ScraperLogContext } from "@renderer/context/ScraperLogContext";
 import { ReactNode, useContext } from "react";
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
+import Panel from "../Panel/Panel";
 
 
 export type ScraperLogEventStatus= "successful" | "pending" | "failed" | "exceptions" | "none";
@@ -29,14 +30,16 @@ export default function ScraperLog(): ReactNode {
 
   return (
     <div>
-      {loggedEvents.map((event: ScraperLogEvent) => {
-        return (
-          <div key={"scraper-log-event-" + event.key}>
-            <span className="mr-medium-length">{BADGES[event.status] || <></>}</span>
-            <span>{event.message}</span>
-          </div>
-        );
-      })}
+      <Panel>
+        {loggedEvents.map((event: ScraperLogEvent) => {
+          return (
+            <div key={"scraper-log-event-" + event.key}>
+              <span className="mr-medium-length">{BADGES[event.status] || <></>}</span>
+              <span>{event.message}</span>
+            </div>
+          );
+        })}
+      </Panel>
       <h3>Results</h3>
       <StyledTextarea
         className="w-100"

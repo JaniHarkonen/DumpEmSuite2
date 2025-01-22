@@ -11,6 +11,8 @@
   --small-size: 32px;
   --medium-size: 64px;
   --big-size: 128px;
+  --large-size: 256px;
+  --card-size: 512px;
 
   --line-height-standard: 1.6;
 }

@@ -8,7 +8,7 @@
   --theme-light-action-bd: #0094FF;
 }
 
-  /* AMBIENT */
+/* AMBIENT */
 .theme-light.ambient-bgc {
   background-color: var(--theme-light-ambient);
 }
@@ -43,7 +43,7 @@
   border-right-color: var(--theme-light-ambient);
 }
 
-  /* SHADOW */
+/* SHADOW */
 .theme-light.shadow-bgc {
   background-color: var(--theme-light-shadow);
 }
@@ -78,7 +78,7 @@
   border-right-color: var(--theme-light-shadow);
 }
 
-  /* OUTLINE */
+/* OUTLINE */
 .theme-light.outline-bgc {
   background-color: var(--theme-light-outline);
 }
@@ -113,7 +113,7 @@
   border-right-color: var(--theme-light-outline);
 }
 
-  /* GLYPH */
+/* GLYPH */
 .theme-light.glyph-bgc {
   background-color: var(--theme-light-glyph);
 }
@@ -156,6 +156,41 @@
   &:hover {
     background-color: var(--theme-light-glyph);
   }
+}
+
+/* ACTION */
+.theme-light.action-bgc {
+  background-color: var(--theme-light-action);
+}
+
+.theme-light.action-hl {
+  &:hover {
+    background-color: var(--theme-light-action);
+  }
+}
+
+.theme-light.action-c {
+  color: var(--theme-light-action);
+}
+
+.theme-light.action-bdc {
+  border-color: var(--theme-light-action);
+}
+
+.theme-light.action-bdc-top {
+  border-top-color: var(--theme-light-action);
+}
+
+.theme-light.action-bdc-bottom {
+  border-bottom-color: var(--theme-light-action);
+}
+
+.theme-light.action-bdc-left {
+  border-left-color: var(--theme-light-action);
+}
+
+.theme-light.action-bdc-right {
+  border-right-color: var(--theme-light-action);
 }
 
   /* BUTTON */

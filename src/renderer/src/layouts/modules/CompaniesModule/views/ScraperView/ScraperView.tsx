@@ -253,12 +253,11 @@ export default function ScraperView(): ReactNode {
           </Container>
           <h3>Log</h3>
           <Container>
-            <div>
-              <ScraperLogContext.Provider value={scraperLogProps}>
-                <ScraperLog />
-              </ScraperLogContext.Provider>
-            </div></Container>
+            <ScraperLogContext.Provider value={scraperLogProps}>
+              <ScraperLog />
+            </ScraperLogContext.Provider>
           </Container>
+        </Container>
       </PageContainer>
     </div>
   );

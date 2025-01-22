@@ -5,6 +5,7 @@ import PageContainer from "../PageContainer/PageContainer";
 import PageHeader from "../PageHeader/PageHeader";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import { Profile } from "src/shared/schemaConfig";
+import Container from "../Container/Container";
 
 
 
@@ -32,12 +33,11 @@ export default function CompanyProfile(props: Props): ReactNode {
       values: [value]
     });
   };
-
   
   return (
     <PageContainer>
       <PageHeader>{company.company_name as string}</PageHeader>
-      <div className="user-select-text">
+      <Container className="user-select-text">
         <h4>Sector</h4>
         <EditableText
           value={sector}
@@ -70,7 +70,7 @@ export default function CompanyProfile(props: Props): ReactNode {
         >
           {description}
         </EditableTextArea>
-      </div>
+      </Container>
     </PageContainer>
   );
 }

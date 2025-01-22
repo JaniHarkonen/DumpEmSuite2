@@ -189,6 +189,10 @@ textarea {
   margin-left: var(--big-size);
 }
 
+/**************** MARGINS ****************/
+
+/**** LEFT ****/
+
 .ml-tiny-length {
   margin-left: var(--tiny-length);
 }
@@ -208,6 +212,9 @@ textarea {
 .ml-ultra-strong-length {
   margin-left: var(--ultra-strong-length);
 }
+
+
+/**** RIGHT ****/
 
 .mr-tiny-length {
   margin-right: var(--tiny-length);
@@ -229,6 +236,9 @@ textarea {
   margin-right: var(--ultra-strong-length);
 }
 
+
+/**** TOP ****/
+
 .mt-tiny-length {
   margin-top: var(--tiny-length);
 }
@@ -249,6 +259,9 @@ textarea {
   margin-top: var(--ultra-strong-length);
 }
 
+
+/**** BOTTOM ****/
+
 .mb-tiny-length {
   margin-bottom: var(--tiny-length);
 }
@@ -267,6 +280,100 @@ textarea {
 
 .mb-ultra-strong-length {
   margin-bottom: var(--ultra-strong-length);
+}
+
+
+/**************** PADDINGS ****************/
+
+/**** LEFT ****/
+
+.pl-tiny-length {
+  padding-left: var(--tiny-length);
+}
+
+.pl-small-length {
+  padding-left: var(--small-length);
+}
+
+.pl-medium-length {
+  padding-left: var(--medium-length);
+}
+
+.pl-strong-length {
+  padding-left: var(--strong-length);
+}
+
+.pl-ultra-strong-length {
+  padding-left: var(--ultra-strong-length);
+}
+
+
+/**** RIGHT ****/
+
+.pr-tiny-length {
+  padding-right: var(--tiny-length);
+}
+
+.pr-small-length {
+  padding-right: var(--small-length);
+}
+
+.pr-medium-length {
+  padding-right: var(--medium-length);
+}
+
+.pr-strong-length {
+  padding-right: var(--strong-length);
+}
+
+.pr-ultra-strong-length {
+  padding-right: var(--ultra-strong-length);
+}
+
+
+/**** TOP ****/
+
+.pt-tiny-length {
+  padding-top: var(--tiny-length);
+}
+
+.pt-small-length {
+  padding-top: var(--small-length);
+}
+
+.pt-medium-length {
+  padding-top: var(--medium-length);
+}
+
+.pt-strong-length {
+  padding-top: var(--strong-length);
+}
+
+.pt-ultra-strong-length {
+  padding-top: var(--ultra-strong-length);
+}
+
+
+/**** BOTTOM ****/
+
+.pb-tiny-length {
+  padding-bottom: var(--tiny-length);
+}
+
+.pb-small-length {
+  padding-bottom: var(--small-length);
+}
+
+.pb-medium-length {
+  padding-bottom: var(--medium-length);
+}
+
+.pb-strong-length {
+  padding-bottom: var(--strong-length);
+}
+
+.pb-ultra-strong-length {
+  padding-bottom: var(--ultra-strong-length);
 }
 
 .line-height-standard {

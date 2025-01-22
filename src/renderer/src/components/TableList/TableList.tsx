@@ -6,6 +6,7 @@ import EditableText from "../editable/EditableText";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { ASSETS } from "@renderer/assets/assets";
 import { SortOrder } from "@renderer/hook/useSortedData";
+import useTheme from "@renderer/hook/useTheme";
 
 
 export type TableListColumn<T> = {
@@ -25,7 +26,9 @@ export type TableListColumn<T> = {
   sortOrder?: SortOrder;
 };
 
-export type TableListDataCell<T> = SelectionItem<T>;
+export type TableListDataCell<T> = {
+  hasHighlight?: boolean;
+} & SelectionItem<T>;
 
 export type EditChanges<T> = {
   columns: (keyof T)[];
@@ -64,6 +67,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const pOnItemSelect: OnItemSelect<T> = props.onItemSelect || function(){ };
   const pOnItemFinalize: OnItemFinalize<T> = props.onItemFinalize || function(){ };
 
+  const {theme} = useTheme();
   const {formatKey} = useTabKeys();
 
   const renderDataCell = (
@@ -92,7 +96,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       // Apply selection checkbox, if first data cell
     if( pAllowSelection && index === 0 ) {
       dataElement = (
-        <div className="table-list-data-cell-container">
+        <div className="table-list-data-cell">
           <input
             className="mr-strong-length"
             type="checkbox"
@@ -106,10 +110,33 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       );
     }
 
+    const isFirstColumn: boolean = index % pColumns.length === 0;
+    const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
+    let className: string = "table-list-data-cell-container";
+
+    if( dataCell.hasHighlight ) {
+      className += " action-bdc";
+
+      if( isFirstColumn ) {
+        className += " table-list-first";
+      } else if( isLastColumn ) {
+        className += " table-list-last";
+      } else {
+        className += " table-list-highlight";
+      }
+    }
+
+    if( isFirstColumn ) {
+      className +=" pl-medium-length"
+    }
+    if( isLastColumn ) {
+      className += " text-align-right pr-medium-length";
+    }
+
     return (
       <div
+        {...theme(className)}
         key={formatKey("list-table-data-" + (column.accessor as String) + "-" + dataCell.id)}
-        className={(index + 1) % pColumns.length === 0 && index > 0 ? "text-align-right" : ""}
         onClick={() => pOnItemFocus(dataCell)}
       >
         {dataElement}
@@ -127,9 +154,8 @@ export default function TableList<T>(props: Props<T>): ReactNode {
           <div 
             key={formatKey("list-table-header-" + (column.accessor as string))}
             className={
-              (index === pColumns.length - 1) ? 
-              "text-align-right table-list-column-header-container" : 
-              "table-list-column-header-container"
+              ((index === pColumns.length - 1) ? "text-align-right" : "") +
+              " table-list-column-header-container"
             }
           >
             <span

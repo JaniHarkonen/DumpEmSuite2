@@ -5,13 +5,16 @@
   width: 100%;
   height: 100%;
   overflow: auto;
+  margin-bottom: 100px;
 
   container-name: page-container;
   container-type: inline-size;
 }
 
+
 .page-content-container {
   width: 75%;
+  height: 100%;
 }
 
 @container page-container (width < 500px) {

@@ -1,9 +1,13 @@
 import "./StyledTextarea.css";
+
 import useTheme from "@renderer/hook/useTheme";
 import { HTMLProps, ReactNode } from "react";
 
 
-export default function StyledTextarea(props: HTMLProps<HTMLTextAreaElement>): ReactNode {
+type Props = {
+} & HTMLProps<HTMLTextAreaElement>;
+
+export default function StyledTextarea(props: Props): ReactNode {
   const pClassName = props.className || "";
   const {theme} = useTheme();
 

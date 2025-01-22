@@ -1,5 +1,6 @@
 import { TabsContext } from '@renderer/context/TabsContext';
 import { WorkspaceContext } from '@renderer/context/WorkspaceContext';
+import useTheme from '@renderer/hook/useTheme';
 import { useEffect, useRef, memo, MutableRefObject, ReactNode, useContext } from 'react';
 
 
@@ -13,6 +14,7 @@ function TradingViewWidget(props: Props): ReactNode {
   const pTicker: string = props.ticker;
   const container: MutableRefObject<HTMLDivElement | null> = useRef(null);
 
+  const {activeTheme} = useTheme();
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {activeTabIndex, tabs} = useContext(TabsContext);
 
@@ -30,7 +32,7 @@ function TradingViewWidget(props: Props): ReactNode {
         "symbol": "${pExchange}:${pTicker}",
         "interval": "D",
         "timezone": "Etc/UTC",
-        "theme": "light",
+        "theme": "${activeTheme}",
         "style": "1",
         "locale": "en",
         "allow_symbol_change": true,
@@ -38,19 +40,14 @@ function TradingViewWidget(props: Props): ReactNode {
         "support_host": "https://www.tradingview.com"
       }`;
     container.current!.appendChild(script);
-  }, [pExchange, pTicker]);
+  }, [pExchange, pTicker, activeTheme]);
 
   
   return (
     <div
-      className="tradingview-widget-container" 
-      ref={container} 
-      style={{
-        position: "relative", 
-        aspectRatio: "16/9", 
-        width: "100%" 
-      }}
-      key={keyPrefix + "-trading-view-real-time-chart-" + pExchange + "_" + pTicker}
+      className="tradingview-widget-container w-100 h-100" 
+      ref={container}
+      key={keyPrefix + "-trading-view-real-time-chart-" + pExchange + "_" + pTicker + "_" + activeTheme}
     >
       <div 
         className="tradingview-widget-container__widget" 

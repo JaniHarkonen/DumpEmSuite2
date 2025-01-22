@@ -125,7 +125,11 @@
                                                                     "caption": "Companies",
                                                                     "contentTemplate": "view-company-list",
                                                                     "tags": [],
-                                                                    "order": 0
+                                                                    "order": 0,
+                                                                    "extra": {
+                                                                      "sortField": null,
+                                                                      "sortOrder": "none"
+                                                                    }
                                                                   }
                                                                 ],
                                                                 "activeTabIndex": 0
@@ -192,7 +196,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }

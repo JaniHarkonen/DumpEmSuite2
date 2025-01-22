@@ -8,7 +8,7 @@
   --theme-dark-action-bd: #008767;
 }
 
-  /* AMBIENT */
+/* AMBIENT */
 .theme-dark.ambient-bgc {
   background-color: var(--theme-dark-ambient);
 }
@@ -43,7 +43,7 @@
   border-right-color: var(--theme-dark-ambient);
 }
 
-  /* SHADOW */
+/* SHADOW */
 .theme-dark.shadow-bgc {
   background-color: var(--theme-dark-shadow);
 }
@@ -78,7 +78,7 @@
   border-right-color: var(--theme-dark-shadow);
 }
 
-  /* OUTLINE */
+/* OUTLINE */
 .theme-dark.outline-bgc {
   background-color: var(--theme-dark-outline);
 }
@@ -113,7 +113,7 @@
   border-right-color: var(--theme-dark-outline);
 }
 
-  /* GLYPH */
+/* GLYPH */
 .theme-dark.glyph-bgc {
   background-color: var(--theme-dark-glyph);
 }
@@ -148,7 +148,42 @@
   border-right-color: var(--theme-dark-glyph);
 }
 
-  /* BUTTON */
+/* ACTION */
+.theme-dark.action-bgc {
+  background-color: var(--theme-dark-action);
+}
+
+.theme-dark.action-hl {
+  &:hover {
+    background-color: var(--theme-dark-action);
+  }
+}
+
+.theme-dark.action-c {
+  color: var(--theme-dark-action);
+}
+
+.theme-dark.action-bdc {
+  border-color: var(--theme-dark-action);
+}
+
+.theme-dark.action-bdc-top {
+  border-top-color: var(--theme-dark-action);
+}
+
+.theme-dark.action-bdc-bottom {
+  border-bottom-color: var(--theme-dark-action);
+}
+
+.theme-dark.action-bdc-left {
+  border-left-color: var(--theme-dark-action);
+}
+
+.theme-dark.action-bdc-right {
+  border-right-color: var(--theme-dark-action);
+}
+
+/* BUTTON */
 .theme-dark.button {
   color: var(--theme-dark-glyph-c);
   background-color: var(--theme-dark-action);

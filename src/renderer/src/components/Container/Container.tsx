@@ -1,10 +1,16 @@
-import { PropsWithChildren, ReactNode } from "react";
+import "./Container.css";
+
+import { HTMLProps, ReactNode } from "react";
 
 
-export default function Container(props: PropsWithChildren): ReactNode {
+export default function Container(props: HTMLProps<HTMLDivElement>): ReactNode {
   return (
-    <div className="indent-small-size">
+    <div
+      {...props}
+      className={"indent-small-size " + props.className}
+    >
       {props.children}
+      <div className="container-footer-pad" />
     </div>
   );
 }

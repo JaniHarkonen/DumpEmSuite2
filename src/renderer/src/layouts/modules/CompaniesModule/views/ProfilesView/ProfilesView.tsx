@@ -29,7 +29,6 @@ export default function ProfilesView() {
     }
   );
 
-
   return (
     <ProfileContext.Provider value={profileSelection}>
       <ModuleView
