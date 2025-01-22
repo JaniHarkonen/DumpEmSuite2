@@ -4,6 +4,8 @@ import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
 import { ChangeEvent, ReactNode } from "react";
 import EditableText from "../editable/EditableText";
 import useTabKeys from "@renderer/hook/useTabKeys";
+import { ASSETS } from "@renderer/assets/assets";
+import { SortOrder } from "@renderer/hook/useSortedData";
 
 
 export type TableListColumn<T> = {
@@ -15,10 +17,12 @@ export type TableListColumn<T> = {
     index: number
   ) => ReactNode;
   formatter?: (
+    data: T,
     dataCell: TableListDataCell<T>, 
     column: TableListColumn<T>, 
     index: number
   ) => string;
+  sortOrder?: SortOrder;
 };
 
 export type TableListDataCell<T> = SelectionItem<T>;
@@ -71,17 +75,17 @@ export default function TableList<T>(props: Props<T>): ReactNode {
     }
     
       // Apply input fields, if editing
-    const data = dataCell.data[column.accessor];
+    const data = dataCell.data[column.accessor] as string;
     let dataElement: ReactNode = (
       <EditableText
-        value={data as string}
+        value={data}
         onFinalize={(value: string) => pOnItemFinalize(dataCell, {
           columns: [column.accessor], 
           values: [value]
         })}
         editDisabled={!pAllowEdit}
       >
-        {column.formatter ? column.formatter(dataCell, column, index) : (data as string)}
+        {column.formatter ? column.formatter(dataCell.data, dataCell, column, index) : data}
       </EditableText>
     );
 
@@ -120,18 +124,27 @@ export default function TableList<T>(props: Props<T>): ReactNode {
     >
       {pColumns.map((column: TableListColumn<T>, index: number) => {
         return (
-          <span
+          <div 
             key={formatKey("list-table-header-" + (column.accessor as string))}
             className={
               (index === pColumns.length - 1) ? 
               "text-align-right table-list-column-header-container" : 
               "table-list-column-header-container"
             }
-            role="button"
-            onClick={() => pOnColumnSelect(column)}
           >
-            <strong>{column.caption}</strong>
-          </span>
+            <span
+              role="button"
+              onClick={() => pOnColumnSelect(column)}
+            >
+              <strong>{column.caption}</strong>
+            </span>
+            {(column.sortOrder === "ascending") && (
+              <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.up.black} />
+            )} 
+            {(column.sortOrder === "descending") && (
+              <img className="size-tiny-icon" src={ASSETS.icons.buttons.arrow.down.black} />
+            )}
+          </div>
         );
       })}
       {pData.map((dataCell: TableListDataCell<T>) => {

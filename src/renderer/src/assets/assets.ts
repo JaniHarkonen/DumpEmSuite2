@@ -12,6 +12,8 @@ import iconBadgeSuccessfulColor from "./icons/badge-successful-color-icon.svg";
 import iconBadgeFailedColor from "./icons/badge-failed-color-icon.svg";
 import iconBadgePendingColor from "./icons/badge-pending-color-icon.svg";
 import iconImportBlack from "./icons/import-black-icon.svg";
+import iconUpArrowBlack from "./icons/up-arrow-black-icon.svg";
+import iconDownArrowBlack from "./icons/down-arrow-black-icon.svg";
 
 
 export const ASSETS = {
@@ -25,6 +27,14 @@ export const ASSETS = {
       },
       import: {
         black: iconImportBlack
+      },
+      arrow: {
+        up: {
+          black: iconUpArrowBlack
+        },
+        down: {
+          black: iconDownArrowBlack
+        }
       }
     },
     files: {

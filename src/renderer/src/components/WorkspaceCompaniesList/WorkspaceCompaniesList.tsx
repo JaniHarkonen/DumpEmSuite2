@@ -11,45 +11,9 @@ import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import useWorkspaceDialogKeys from "@renderer/hook/useWorkspaceDialogKeys";
 import { OpenDialogResult, ReadResult } from "src/shared/files.type";
 import Container from "../Container/Container";
+import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
+import useSortedData from "@renderer/hook/useSortedData";
 
-
-function milleFormatter(numberString: string): string {
-  if( numberString === "NaN" ) {
-    return numberString;
-  }
-
-  const split = numberString.split(".");
-  let whole: string = split[0];
-  let fixedWhole: string = "";
-  
-  for( let i = whole.length; i >= 0; i -= 3 ) {
-    const triple: string = whole.substring(i - 3, i);
-    fixedWhole = ((triple.length === 3 && i != 3) ? "," : "") + triple + fixedWhole;
-  }
-
-  return fixedWhole + (split[1] ? "." + split[1] : "");
-}
-
-function decimalFormatter(numberString: string): string {
-  if( numberString === "NaN" ) {
-    return numberString;
-  }
-
-  const split = numberString.split(".");
-  let decimal: string = split[1] || "";
-
-  if( decimal.length === 1 ) {
-    decimal += "0";
-  } else if( decimal.length === 0 ) {
-    decimal += "00";
-  }
-
-  return split[0] + "." + decimal;
-}
-
-function priceFormatter(currencySymbol: string, numberString: string): string {
-  return currencySymbol + decimalFormatter(milleFormatter(numberString));
-}
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { 
@@ -63,22 +27,26 @@ export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
   { 
     accessor: "volume_price", 
     caption: "Currency volume",
-    formatter: (dataCell: TableListDataCell<CompanyWithCurrency>) => {
-      return priceFormatter(dataCell.data.currency_symbol, "" + dataCell.data.volume_price);
+    formatter: (
+      data: CompanyWithCurrency, dataCell: TableListDataCell<CompanyWithCurrency>
+    ) => {
+      return priceFormatter(dataCell.data.currency_symbol, "" + data.volume_price);
     }
   },
   { 
     accessor: "volume_quantity", 
     caption: "Volume",
-    formatter: (dataCell: TableListDataCell<CompanyWithCurrency>) => {
-      return milleFormatter("" + dataCell.data.volume_quantity);
+    formatter: (data: CompanyWithCurrency) => {
+      return milleFormatter("" + data.volume_quantity);
     }
   },
   { 
     accessor: "stock_price", 
     caption: "Share price",
-    formatter: (dataCell: TableListDataCell<CompanyWithCurrency>) => {
-      return priceFormatter(dataCell.data.currency_symbol, "" + dataCell.data.stock_price);
+    formatter: (
+      data: CompanyWithCurrency, dataCell: TableListDataCell<CompanyWithCurrency>
+    ) => {
+      return priceFormatter(dataCell.data.currency_symbol, "" + data.stock_price);
     }
   },
   { 
@@ -129,11 +97,34 @@ export default function WorkspaceCompaniesList(): ReactNode {
 
   useEffect(() => fetchAllCompanies(), []);
 
+  const {sortedData, sortField, sortOrder, sortBy} = useSortedData({
+    initialOrder: companies,
+    fieldTypeMap: {
+      company_name: "string",
+      stock_ticker: "string",
+      stock_price: "numeric",
+      volume_price: "numeric",
+      volume_quantity: "numeric",
+      exchange: "string",
+      updated: "string",
+    }
+  });
+
+    // Fix the stock data to be compatible with the table component
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
-    companies.map((stock: CompanyWithCurrency) => {
+    sortedData.map((stock: CompanyWithCurrency) => {
       return {
         id: stock.company_id,
         data: stock
+      };
+    });
+
+    // Determine which column is being sorted, and assign its sort order
+  const stockDataColumns: TableListColumn<CompanyWithCurrency>[] = 
+    COMPANIES_LIST_COLUMNS.map((column: TableListColumn<CompanyWithCurrency>) => {
+      return {
+        ...column,
+        ...(sortField === column.accessor ? { sortOrder } : {})
       };
     });
 
@@ -184,13 +175,14 @@ export default function WorkspaceCompaniesList(): ReactNode {
           onImport={handleImport}
         />
         <TableList<CompanyWithCurrency>
-          columns={COMPANIES_LIST_COLUMNS}
+          columns={stockDataColumns}
           cells={stockDataCells}
           allowSelection
           allowEdit
           selectionSet={selectionSet}
           onItemSelect={handleCompanySelection}
           onItemFinalize={handleCompanyChange}
+          onColumnSelect={(column: TableListColumn<CompanyWithCurrency>) => sortBy(column.accessor)}
         />
       </Container>
     </div>
