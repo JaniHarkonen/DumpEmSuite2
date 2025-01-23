@@ -1,6 +1,6 @@
-import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import "./CompanyTag.css";
 
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
 import useEditable from "@renderer/hook/useEditable";
 import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useState } from "react";
@@ -19,6 +19,8 @@ type Props = {
   onRemove?: OnCompanyTagRemove;
   onSelect?: OnTagSelect;
   allowEdit?: boolean;
+  isSelected?: boolean;
+  displayLabel?: boolean;
 };
 
 export default function CompanyTag(props: Props): ReactNode {
@@ -27,10 +29,11 @@ export default function CompanyTag(props: Props): ReactNode {
   const pOnRemove: OnCompanyTagRemove = props.onRemove || function(){ };
   const pOnSelect: OnTagSelect = props.onSelect || function(){ };
   const pAllowEdit: boolean = props.allowEdit ?? false;
+  const pIsSelected: boolean = props.isSelected ?? false;
+  const pDisplayLabel: boolean = props.displayLabel ?? true;
 
   const [isEditing, handleStartEdit, handleFinalize, handleEnter] = useEditable<Tag>({ onFinalize: pOnUpdate });
   const [tag, setTag] = useState<Tag>(pTag);
-
 
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
     setTag({
@@ -52,13 +55,11 @@ export default function CompanyTag(props: Props): ReactNode {
     }
   };
 
-
   return (
     <div
       className="d-flex d-align-items-center"
       onDoubleClick={() => pAllowEdit && handleStartEdit()}
       onBlur={handleBlur}
-      onClick={() => pOnSelect(tag)}
     >
       {isEditing ? (
         <>
@@ -87,10 +88,12 @@ export default function CompanyTag(props: Props): ReactNode {
       ) : (
         <>
           <span
-            className="size-tiny-icon mr-norm"
+            className={"company-tag-color mr-medium-length" + (pIsSelected ? " active" : "")}
             style={{ backgroundColor: tag.tag_hex }}
+            role="button"
+            onClick={() => pOnSelect(tag)}
           />
-          {tag.tag_label}
+          {pDisplayLabel && tag.tag_label}
         </>
       )}
     </div>

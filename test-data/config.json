@@ -349,7 +349,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 50
+                                                            "value": 56.25
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -473,7 +473,11 @@
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
-                                                                    "order": 0
+                                                                    "order": 0,
+                                                                    "extra": {
+                                                                      "sortField": null,
+                                                                      "sortOrder": "none"
+                                                                    }
                                                                   }
                                                                 ],
                                                                 "activeTabIndex": 0
@@ -625,7 +629,7 @@
                                                                       "order": 0
                                                                     }
                                                                   ],
-                                                                  "activeTabIndex": 0
+                                                                  "activeTabIndex": 1
                                                                 }
                                                               }
                                                             },

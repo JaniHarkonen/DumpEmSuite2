@@ -1,3 +1,5 @@
+import "./FilterationControls.css";
+
 import { ReactNode } from "react";
 import StyledButton from "../StyledButton/StyledButton";
 
@@ -15,9 +17,8 @@ export default function FilterationControls(props: Props): ReactNode {
   const pOnDeselectAll: () => void = props.onDeselectAll || function(){ };
   const pOnDelist: () => void = props.onDelist || function(){ };
 
-
   return(
-    <div>
+    <div className="filteration-controls-container">
       <StyledButton onClick={pOnBringAll}>Bring all companies</StyledButton>
       <StyledButton onClick={pOnDelist}>De-list</StyledButton>
       <StyledButton onClick={pSelectAll}>Select all</StyledButton>

@@ -141,6 +141,10 @@ textarea {
   align-items: center;
 }
 
+.d-align-items-end {
+  align-items: center;
+}
+
 .d-grid {
   display: grid;
 }
@@ -155,6 +159,10 @@ textarea {
 
 .user-select-text {
   user-select: text;
+}
+
+.pointer-events-none {
+  pointer-events: none;
 }
 
 .white-space-nowrap {
@@ -190,6 +198,29 @@ textarea {
 }
 
 /**************** MARGINS ****************/
+
+/**** GENERAL ****/
+
+.m-tiny-length {
+  margin: var(--tiny-length);
+}
+
+.m-small-length {
+  margin: var(--small-length);
+}
+
+.m-medium-length {
+  margin: var(--medium-length);
+}
+
+.m-strong-length {
+  margin: var(--strong-length);
+}
+
+.m-ultra-strong-length {
+  margin: var(--ultra-strong-length);
+}
+
 
 /**** LEFT ****/
 
@@ -284,6 +315,29 @@ textarea {
 
 
 /**************** PADDINGS ****************/
+
+/**** GENERAL ****/
+
+.p-tiny-length {
+  padding: var(--tiny-length);
+}
+
+.p-small-length {
+  padding: var(--small-length);
+}
+
+.p-medium-length {
+  padding: var(--medium-length);
+}
+
+.p-strong-length {
+  padding: var(--strong-length);
+}
+
+.p-ultra-strong-length {
+  padding: var(--ultra-strong-length);
+}
+
 
 /**** LEFT ****/
 

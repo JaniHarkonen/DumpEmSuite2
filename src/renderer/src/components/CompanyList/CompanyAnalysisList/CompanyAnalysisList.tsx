@@ -1,3 +1,6 @@
+
+import "../../TagPanel/CompanyTag/CompanyTag.css";
+
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
 import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
@@ -15,8 +18,12 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import { Tab } from "@renderer/model/tabs";
 import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
 import { ProfileContext } from "@renderer/context/ProfileContext";
-import useTheme from "@renderer/hook/useTheme";
 import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
+import Panel from "@renderer/components/Panel/Panel";
+import Container from "@renderer/components/Container/Container";
+import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
+import CompanyTag from "@renderer/components/TagPanel/CompanyTag/CompanyTag";
+import checkIfHexBelowThreshold from "@renderer/utils/checkIfHexBelowThreshold";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -79,7 +86,6 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
 
   const {company} = useContext(ProfileContext);
 
-  const {theme} = useTheme();
   const {formatKey} = useTabKeys();
 
   const handleSortToggle = (column: TableListColumn<FilterationStepStock>) => {
@@ -168,31 +174,34 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     { 
       accessor: "tag_hex", 
       caption: "Verdict",
-      ElementConstructor: (
-        dataCell: TableListDataCell<FilterationStepStock>,
-        column: TableListColumn<FilterationStepStock>, 
-        index: number,
-        classNameConstructor: () => string
-      ) => {
+      ElementConstructor: (dataCell: TableListDataCell<FilterationStepStock>) => {
         return (
-          <div
-            {...theme(classNameConstructor())}
-            key={formatKey("datacell-tag-selection-container-" + dataCell.id)}
-          >
+          <div className="d-flex d-align-items-center h-100 w-100 p-relative d-justify-end">
             <span
-              className="size-tiny-icon mr-medium-length"
-              style={{ backgroundColor: dataCell.data.tag_hex }}
+              className="company-tag-color mr-medium-length"
+              style={{
+                backgroundColor: dataCell.data.tag_hex
+              }}
             />
             <select
               onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 postFilterationTagChange(e.target.value, dataCell.data.company_id.toString());
               }}
               defaultValue={dataCell.data.tag_id}
+              style={{
+                color: checkIfHexBelowThreshold(dataCell.data.tag_hex, 100) ? "white" : "black",
+                backgroundColor: dataCell.data.tag_hex
+              }}
             >
               {tags.map((tag: Tag) => {
                 return (
                   <option
+                  className="test"
                     key={formatKey("datacell-tag-selection-" + dataCell.id + "-" + tag.tag_id)}
+                    style={{
+                      color: checkIfHexBelowThreshold(tag.tag_hex, 100) ? "white" : "black",
+                      backgroundColor: tag.tag_hex
+                    }}
                     value={tag.tag_id}
                   >
                     {tag.tag_label}
@@ -233,19 +242,35 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
-      <FilterationControls
-        onBringAll={bringAllStocksToFilterationStep}
-        onDelist={handleStockDelist}
-        onSelectAll={() => handleSelection(true, ...stockDataCells)}
-        onDeselectAll={resetSelection}
-      />
-      {pAllowSubmit && (
-        <FiltrationSubmitForm
-          blackListedMap={{[pFilterationStepID]: true}}
-          onSubmit={handleStockSubmission}
-        />
-      )}
-      <TagPanel onTagSelect={handleToggleTag} />
+      <Panel className="d-flex mb-medium-length">
+        <div className="w-100">
+          <FilterationControls
+            onBringAll={bringAllStocksToFilterationStep}
+            onDelist={handleStockDelist}
+            onSelectAll={() => handleSelection(true, ...stockDataCells)}
+            onDeselectAll={resetSelection}
+          />
+        </div>
+        {pAllowSubmit && (
+          <div className="d-flex d-justify-end w-100">
+            <FiltrationSubmitForm
+              blackListedMap={{[pFilterationStepID]: true}}
+              onSubmit={handleStockSubmission}
+            />
+          </div>
+        )}
+      </Panel>
+      <div>
+        <h3>Filters</h3>
+        <Container>
+          <TagPanel
+            onTagSelect={handleToggleTag}
+            selectedTagMap={
+              arrayToOccurrenceMap<Tag>(tagFilters, (tag: Tag) => tag.tag_id.toString())
+            }
+          />
+        </Container>
+      </div>
       <TableList<FilterationStepStock>
         onItemFocus={handleStockFocus}
         columns={stockDataColumns}

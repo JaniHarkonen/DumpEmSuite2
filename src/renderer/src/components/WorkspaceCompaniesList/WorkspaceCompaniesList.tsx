@@ -15,6 +15,7 @@ import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
 import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
 import { TabsContext } from "@renderer/context/TabsContext";
 import { Tab } from "@renderer/model/tabs";
+import Panel from "../Panel/Panel";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -188,13 +189,15 @@ export default function WorkspaceCompaniesList(): ReactNode {
   return (
     <div className="w-100">
       <Container>
-        <CompanyControls
-          onAdd={handleAddCompany}
-          onRemove={handleCompanyRemove}
-          onSelectAll={() => handleSelection(true, ...stockDataCells)}
-          onDeselectAll={resetSelection}
-          onImport={handleImport}
-        />
+        <Panel>
+          <CompanyControls
+            onAdd={handleAddCompany}
+            onRemove={handleCompanyRemove}
+            onSelectAll={() => handleSelection(true, ...stockDataCells)}
+            onDeselectAll={resetSelection}
+            onImport={handleImport}
+          />
+        </Panel>
         <TableList<CompanyWithCurrency>
           columns={stockDataColumns}
           cells={stockDataCells}

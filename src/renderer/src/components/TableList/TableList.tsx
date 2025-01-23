@@ -15,8 +15,7 @@ export type TableListColumn<T> = {
   ElementConstructor?: (
     dataCell: TableListDataCell<T>, 
     column: TableListColumn<T>, 
-    index: number,
-    classNameConstructor: () => string
+    index: number
   ) => ReactNode;
   formatter?: (
     data: T,
@@ -100,41 +99,43 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       return className;
     }
 
+    let dataElement: ReactNode;
+
       // Use the element constructor, if one has been provided
     if( column.ElementConstructor ) {
-      return column.ElementConstructor(dataCell, column, index, classNameConstructor);
-    }
-    
-      // Apply input fields, if editing
-    const data = dataCell.data[column.accessor] as string;
-    let dataElement: ReactNode = (
-      <EditableText
-        value={data}
-        onFinalize={(value: string) => pOnItemFinalize(dataCell, {
-          columns: [column.accessor], 
-          values: [value]
-        })}
-        editDisabled={!pAllowEdit}
-      >
-        {column.formatter ? column.formatter(dataCell.data, dataCell, column, index) : data}
-      </EditableText>
-    );
-
-      // Apply selection checkbox, if first data cell
-    if( pAllowSelection && index === 0 ) {
+      dataElement = column.ElementConstructor(dataCell, column, index);
+    } else {
+        // Apply input fields, if editing
+      const data = dataCell.data[column.accessor] as string;
       dataElement = (
-        <div className="table-list-data-cell">
-          <input
-            className="mr-strong-length"
-            type="checkbox"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              pOnItemSelect(dataCell, e.target.checked);
-            }}
-            checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
-          />
-          {dataElement}
-        </div>
+        <EditableText
+          value={data}
+          onFinalize={(value: string) => pOnItemFinalize(dataCell, {
+            columns: [column.accessor], 
+            values: [value]
+          })}
+          editDisabled={!pAllowEdit}
+        >
+          {column.formatter ? column.formatter(dataCell.data, dataCell, column, index) : data}
+        </EditableText>
       );
+
+        // Apply selection checkbox, if first data cell
+      if( pAllowSelection && index === 0 ) {
+        dataElement = (
+          <div className="table-list-data-cell">
+            <input
+              className="mr-strong-length"
+              type="checkbox"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                pOnItemSelect(dataCell, e.target.checked);
+              }}
+              checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
+            />
+            {dataElement}
+          </div>
+        );
+      }
     }
 
     return (

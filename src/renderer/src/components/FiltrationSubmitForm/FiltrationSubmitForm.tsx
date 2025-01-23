@@ -52,10 +52,10 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
   };
 
   return (
-    <div className="d-flex">
-      <StyledButton onClick={handleSubmit}>
-        Submit
-      </StyledButton>
+    <div className="text-align-right">
+      <span className="mr-medium-length">
+        Submit to:
+      </span>
       <select onChange={handleSelection}>
         {Object.keys(filtrationSteps).map((key: string) => {
           return (
@@ -68,10 +68,19 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
           );
         })}
       </select>
-      <input
-        type="checkbox"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setPreserveTags(e.target.checked)}
-      /> Preserve tags
+      <div>
+      <span className="mr-medium-length">Preserve tags</span>
+        <input
+          type="checkbox"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setPreserveTags(e.target.checked)}
+        />
+        
+      </div>
+      <div >
+        <StyledButton onClick={handleSubmit}>
+          Submit
+        </StyledButton>
+      </div>
     </div>
   );
 }
