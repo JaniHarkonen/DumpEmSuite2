@@ -1,0 +1,12 @@
+.browser-file-delete-button {
+  display: flex;
+  align-items: center;
+
+  margin-right: var(--medium-length);
+  padding: var(--small-length);
+
+  border-style: none;
+  border-radius: var(--small-length);
+
+  background: none;
+}

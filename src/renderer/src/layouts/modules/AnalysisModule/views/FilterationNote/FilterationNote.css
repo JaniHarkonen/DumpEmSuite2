@@ -1,0 +1,3 @@
+.filteration-note-markdown-editor-container {
+  height: calc(100% - var(--strong-length));
+}

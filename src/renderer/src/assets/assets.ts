@@ -14,6 +14,7 @@ import iconBadgePendingColor from "./icons/badge-pending-color-icon.svg";
 import iconImportBlack from "./icons/import-black-icon.svg";
 import iconUpArrowBlack from "./icons/up-arrow-black-icon.svg";
 import iconDownArrowBlack from "./icons/down-arrow-black-icon.svg";
+import iconExternalLinkBlack from "./icons/external-link-black-icon.svg";
 
 
 export const ASSETS = {
@@ -35,6 +36,9 @@ export const ASSETS = {
         down: {
           black: iconDownArrowBlack
         }
+      },
+      link: {
+        black: iconExternalLinkBlack
       }
     },
     files: {

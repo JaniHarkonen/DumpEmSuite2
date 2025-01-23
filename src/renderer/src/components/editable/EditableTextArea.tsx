@@ -10,7 +10,7 @@ export default function EditableTextArea(props: Props): ReactNode {
     return (
       <StyledTextarea
         {...props}
-        className="w-100"
+        className="w-100 h-100"
       />
     );
   };

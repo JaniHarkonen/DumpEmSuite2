@@ -71,14 +71,30 @@ textarea {
   width: auto;
 }
 
+.aspect-ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
 .size-tiny-icon {
   width: var(--tiny-size);
   height: var(--tiny-size);
 }
 
+.size-small-icon {
+  width: var(--small-size);
+  height: var(--small-size);
+}
+
 .size-medium-icon {
   width: var(--medium-size);
   height: var(--medium-size);
+}
+
+.grid-auto-top {
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  height: 100%;
 }
 
 .h-auto {

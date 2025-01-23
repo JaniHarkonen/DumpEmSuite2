@@ -7,7 +7,6 @@ import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
-import FilterationNote from "../FilterationNote/FiltrationNote";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import ProfileChart from "@renderer/components/tradingview/ProfileChart";

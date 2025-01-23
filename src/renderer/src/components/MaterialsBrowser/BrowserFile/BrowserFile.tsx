@@ -1,5 +1,7 @@
+import "./BrowserFile.css";
+
 import { ASSETS } from "@renderer/assets/assets";
-import StyledButton from "@renderer/components/StyledButton/StyledButton";
+import useTheme from "@renderer/hook/useTheme";
 import { ReactNode, useEffect, useState } from "react";
 import { FilePathParse } from "src/shared/files.type";
 
@@ -17,12 +19,14 @@ type Props = {
 const {filesAPI} = window.api;
 
 export default function BrowserFile(props: Props): ReactNode {
-  const [info, setInfo] = useState<FilePathParse | null>(null);
-
   const pFileName: string = props.fileName;
   const pFileDirectory: string = props.fileDirectory;
   const pOnClick: OnBrowserFileClick = props.onClick || function() {};
   const pOnDelete: OnBrowserFileDelete = props.onDelete || function() {};
+
+  const [info, setInfo] = useState<FilePathParse | null>(null);
+
+  const {theme} = useTheme();
 
   const filePath: string = pFileDirectory + "\\" + pFileName;
 
@@ -47,13 +51,24 @@ export default function BrowserFile(props: Props): ReactNode {
   };
 
   return (
-    <div onClick={handleFileClick}>
+    <div
+      className="d-flex d-align-items-center"
+      onClick={handleFileClick}
+    >
+      <button
+        {...theme("outline-hl", "browser-file-delete-button")}
+        onClick={handleFileDelete}
+      >
+        <img
+          className="size-tiny-icon"
+          src={ASSETS.icons.buttons.trashCan.white}
+        />
+      </button>
       <img
-        className="size-medium-icon"
+        className="size-small-icon mr-medium-length"
         src={getFileIcon()}
       />
       {info?.base}
-      <StyledButton onClick={handleFileDelete}>Delete</StyledButton>
     </div>
   );
 }

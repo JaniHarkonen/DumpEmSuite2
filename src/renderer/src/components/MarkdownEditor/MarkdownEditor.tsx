@@ -76,10 +76,16 @@ export default function MarkdownEditor(props: Props) {
     >
       {isEditing && (
         <div className="markdown-editor-textarea-container">
+          {wasEdited ? (
+            <div className="m-strong-length">
+              <StyledIcon src={ASSETS.icons.alerts.missing.color} />
+              <span className="ml-medium-length">* Unsaved changes detected! Press CTRL + S to save...</span>
+            </div>
+          ) : <div />}
           <StyledTextarea
             className="w-100 h-100"
             style={{
-              opacity: wasEdited ? "90%" : "100%"
+              opacity: wasEdited ? "70%" : "100%"
             }}
             onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
             autoFocus={true}
@@ -87,12 +93,6 @@ export default function MarkdownEditor(props: Props) {
             onKeyDown={handleTab}
             onChange={handleChange}
           />
-          {wasEdited && (
-            <div className="m-strong-length">
-              <StyledIcon src={ASSETS.icons.alerts.missing.color} />
-              <span className="ml-medium-length">Unsaved changes detected! Press CTRL + S to save...</span>
-            </div>
-          )}
         </div>
       )}
         <div

@@ -63,13 +63,15 @@ export default function CompanyProfile(props: Props): ReactNode {
           {presence}
         </EditableText>
         <h3>Description</h3>
-        <EditableTextArea
-          value={description}
-          onFinalize={(value: string) => handleEditProfile("profile_description", value)}
-          editDisabled={!pAllowEdit}
-        >
-          {description}
-        </EditableTextArea>
+        <div className="aspect-ratio-16-9 w-100">
+          <EditableTextArea
+            value={description}
+            onFinalize={(value: string) => handleEditProfile("profile_description", value)}
+            editDisabled={!pAllowEdit}
+          >
+            {description}
+          </EditableTextArea>
+        </div>
       </Container>
     </PageContainer>
   );
