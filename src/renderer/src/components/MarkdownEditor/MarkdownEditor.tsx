@@ -1,7 +1,11 @@
+import "./MarkdownEditor.css";
+
 import useEditable from "@renderer/hook/useEditable";
 import { renderMarkdown } from "@renderer/model/markdown/markdown";
-import { FocusEvent, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from "react";
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
+import { ASSETS } from "@renderer/assets/assets";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -16,19 +20,23 @@ export default function MarkdownEditor(props: Props) {
   const pOnSaveChanges: OnSaveNoteChanges = props.onSaveChange || function(){ };
 
   const [markdown, setMarkdown] = useState<string>("");
+  const [wasEdited, setWasEdited] = useState<boolean>(false);
   
+  const handleSave = (value: string) => {
+    pOnSaveChanges(value);
+    setMarkdown(value);
+    setWasEdited(false);
+  };
+
   const [
     isEditing,
     handleEditStart,
     handleFinalize
   ] = useEditable<string>({
-    onFinalize: (value: string) => setMarkdown(value)
+    onFinalize: handleSave
   });
 
   useEffect(() => setMarkdown(pInitialValue), [pInitialValue]);
-
-  const textAreaRef: MutableRefObject<HTMLTextAreaElement | null> = 
-    useRef<HTMLTextAreaElement | null>(null);
 
   const handleTab = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     const target: HTMLTextAreaElement = e.currentTarget;
@@ -43,32 +51,59 @@ export default function MarkdownEditor(props: Props) {
         target.value.substring(selectionStart);
       target.selectionStart = selectionStart + 1;
       target.selectionEnd = selectionStart + 1;
-    } else if( e.ctrlKey && e.key.toLowerCase() === "s" ) {
-      e.preventDefault();
-      pOnSaveChanges(target.value);
+    } else if( e.ctrlKey ) {
+      const secondaryKey: string = e.key.toLowerCase();
+
+      if( secondaryKey === "s" ) {
+          // Save without finalizing
+        e.preventDefault();
+        handleSave(target.value);
+      } else if( e.key === "Enter" ) {
+          // Finalize and save
+        handleFinalize(target.value);
+      }
     }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setWasEdited(e.target.value !== markdown);
   };
 
   return (
     <div
-      onDoubleClick={handleEditStart}
       className="w-100 h-100"
+      onDoubleClick={handleEditStart}
     >
       {isEditing && (
-        <StyledTextarea
-          className="w-100 h-100"
-          onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
-          autoFocus={true}
-          defaultValue={markdown}
-          onKeyDown={handleTab}
-          ref={textAreaRef}
-        />
+        <div className="markdown-editor-textarea-container">
+          <StyledTextarea
+            className="w-100 h-100"
+            style={{
+              opacity: wasEdited ? "90%" : "100%"
+            }}
+            onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
+            autoFocus={true}
+            defaultValue={markdown}
+            onKeyDown={handleTab}
+            onChange={handleChange}
+          />
+          {wasEdited && (
+            <div className="m-strong-length">
+              <StyledIcon src={ASSETS.icons.alerts.missing.color} />
+              <span className="ml-medium-length">Unsaved changes detected! Press CTRL + S to save...</span>
+            </div>
+          )}
+        </div>
       )}
         <div
-          className="user-select-text"
+          className="user-select-text h-100"
           style={{display: isEditing ? "none" : "block"}}
         >
-          {renderMarkdown(markdown)}
+          {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown) : (
+            <div className="markdown-editor-start-suggestion">
+              Double-click to here start editing
+            </div>
+          )}
         </div>
     </div>
   );

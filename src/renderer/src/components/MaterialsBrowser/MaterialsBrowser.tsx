@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import BrowserFile from "./BrowserFile/BrowserFile";
 import { FilePathParse } from "src/shared/files.type";
 import StyledButton from "../StyledButton/StyledButton";
+import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 
 
 type Props = {
@@ -102,7 +103,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   };
 
   if( !pDirectoryPath ) {
-    return <>Please, select a company...</>;
+    return <CompanyNotSelected />;
   }
 
   return (

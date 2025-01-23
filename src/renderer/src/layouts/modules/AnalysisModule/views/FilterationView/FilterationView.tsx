@@ -7,10 +7,11 @@ import { useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
-import FilterationNote from "../FilterationNote/FilterationNote";
+import FilterationNote from "../FilterationNote/FiltrationNote";
 import useProfileSelection from "@renderer/hook/useProfileSelection";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import ProfileChart from "@renderer/components/tradingview/ProfileChart";
+import FiltrationNote from "../FilterationNote/FiltrationNote";
 
 
 export default function FilterationView() {
@@ -35,10 +36,9 @@ export default function FilterationView() {
         );
       },
       "view-filteration-tab-chart": () => <ProfileChart />,
-      "view-filteration-tab-notes": () => <FilterationNote filterationStepID={filterationStepID} />
+      "view-filteration-tab-notes": () => <FiltrationNote filtrationStepID={filterationStepID} />
     }
   );
-
 
   return (
     <ProfileContext.Provider value={profileSelection}>

@@ -3,6 +3,7 @@ import { ScraperLogContext } from "@renderer/context/ScraperLogContext";
 import { ReactNode, useContext } from "react";
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
 import Panel from "../Panel/Panel";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 export type ScraperLogEventStatus= "successful" | "pending" | "failed" | "exceptions" | "none";
@@ -18,10 +19,10 @@ type LogEventBadges = {
 };
 
 const BADGES: LogEventBadges = {
-  successful: <img className="size-tiny-icon" src={ASSETS.icons.badges.successful.color} />,
-  exceptions: <img className="size-tiny-icon" src={ASSETS.icons.alerts.missing.color} />,
-  pending: <img className="size-tiny-icon" src={ASSETS.icons.badges.pending.color} />,
-  failed: <img className="size-tiny-icon" src={ASSETS.icons.badges.failed.color} />,
+  successful: <StyledIcon src={ASSETS.icons.badges.successful.color} />,
+  exceptions: <StyledIcon src={ASSETS.icons.alerts.missing.color} />,
+  pending: <StyledIcon src={ASSETS.icons.badges.pending.color} />,
+  failed: <StyledIcon src={ASSETS.icons.badges.failed.color} />,
   none: <></>
 };
 

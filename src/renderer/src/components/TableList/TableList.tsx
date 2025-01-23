@@ -7,6 +7,7 @@ import useTabKeys from "@renderer/hook/useTabKeys";
 import { ASSETS } from "@renderer/assets/assets";
 import { SortOrder } from "@renderer/hook/useSortedData";
 import useTheme from "@renderer/hook/useTheme";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 export type TableListColumn<T> = {
@@ -164,16 +165,10 @@ export default function TableList<T>(props: Props<T>): ReactNode {
           >
             <span className="mr-medium-length">
               {(column.sortOrder === "ascending") && (
-                <img 
-                  className="size-tiny-icon" 
-                  src={ASSETS.icons.buttons.arrow.up.black} 
-                />
+                <StyledIcon src={ASSETS.icons.buttons.arrow.up.black} />
               )} 
               {(column.sortOrder === "descending") && (
-                <img 
-                  className="size-tiny-icon" 
-                  src={ASSETS.icons.buttons.arrow.down.black} 
-                />
+                <StyledIcon src={ASSETS.icons.buttons.arrow.down.black} />
               )}
             </span>
             <span

@@ -3,6 +3,7 @@ import MaterialsBrowser from "../MaterialsBrowser/MaterialsBrowser";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
+import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 
 
 export default function FundamentalMaterials(): ReactNode {
@@ -10,7 +11,7 @@ export default function FundamentalMaterials(): ReactNode {
   const {workspacePath} = useContext(WorkspaceContext);
 
   if( !company || !workspacePath ) {
-    return <>Please, select a company...</>;
+    return <CompanyNotSelected />;
   }
 
   const getMaterialsPath = () => {

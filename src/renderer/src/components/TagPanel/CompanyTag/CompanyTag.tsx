@@ -6,6 +6,7 @@ import useEditable from "@renderer/hook/useEditable";
 import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useState } from "react";
 import { Tag } from "src/shared/schemaConfig";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
+import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
 
 
 export type OnTagSelect = (tag: Tag) => void;
@@ -78,8 +79,8 @@ export default function CompanyTag(props: Props): ReactNode {
           />
           <StyledButton onClick={() => pOnRemove(tag)}>
             <span>
-              <img
-                className="size-tiny-icon company-tag-control-remove"
+              <StyledIcon
+                className="company-tag-control-remove"
                 src={ASSETS.icons.buttons.trashCan.white}
               />
             </span>

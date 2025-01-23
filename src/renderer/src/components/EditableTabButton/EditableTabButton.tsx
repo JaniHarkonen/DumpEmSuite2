@@ -4,6 +4,7 @@ import { Tab } from "@renderer/model/tabs";
 import { MouseEvent, ReactNode } from "react";
 import { ASSETS } from "@renderer/assets/assets";
 import TabButton, { OnCaptionEditFinalize } from "../Tabs/TabControls/TabButton/TabButton";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 type OnTabRemove = (e: MouseEvent<HTMLImageElement>) => void;
@@ -37,7 +38,7 @@ export default function EditableTabButton(props: Props): ReactNode {
           className="tab-remove-icon-container"
           onClick={pOnRemove}
         >
-          <img
+          <StyledIcon
             className="size-tiny-icon tab-remove-icon"
             src={pIconURL}
           />

@@ -1,0 +1,16 @@
+.markdown-editor-textarea-container {
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  height: 100%;
+}
+
+.markdown-editor-start-suggestion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+
+  font-size: var(--font-size-backdrop);
+}

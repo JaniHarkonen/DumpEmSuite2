@@ -4,6 +4,7 @@ import { ChangeEvent, ReactNode, useState } from "react";
 import StyledButton from "../StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
 import CompanyAddPanel, { OnAddCompany } from "../CompanyAddPanel/CompanyAddPanel";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 type DefaultCallback = () => void;
@@ -56,7 +57,7 @@ export default function CompanyControls(props: Props): ReactNode {
         <div></div>
         <StyledButton onClick={() => pOnImport()}>
           <span>Import</span>
-          <img 
+          <StyledIcon 
             className="size-tiny-icon ml-medium-length" 
             src={ASSETS.icons.buttons.import.black}
           />

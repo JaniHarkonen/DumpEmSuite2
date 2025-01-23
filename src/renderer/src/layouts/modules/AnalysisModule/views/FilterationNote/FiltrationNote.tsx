@@ -1,16 +1,18 @@
+import CompanyNotSelected from "@renderer/components/CompanyNotSelected/CompanyNotSelected";
 import MarkdownEditor from "@renderer/components/MarkdownEditor/MarkdownEditor";
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
+import Panel from "@renderer/components/Panel/Panel";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import useFilterationStepNote from "@renderer/hook/useFilterationStepNote";
 import { ReactNode, useContext, useEffect } from "react";
 
 
 type Props = {
-  filterationStepID: string;
+  filtrationStepID: string;
 };
 
-export default function FilterationNote(props: Props): ReactNode {
-  const pFilterationStepID: string = props.filterationStepID;
+export default function FiltrationNote(props: Props): ReactNode {
+  const pFiltrationStepID: string = props.filtrationStepID;
 
   const {company} = useContext(ProfileContext);
 
@@ -19,7 +21,7 @@ export default function FilterationNote(props: Props): ReactNode {
     fetchFilterationNote,
     postFilterationNoteChange
   } = useFilterationStepNote({
-    filterationStepID: pFilterationStepID
+    filterationStepID: pFiltrationStepID
   });
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function FilterationNote(props: Props): ReactNode {
     }
   }, [company]);
 
-  const handleFilterationNoteChange = (value: string) => {
+  const handleFiltrationStepNoteChange = (value: string) => {
     if( company ) {
       postFilterationNoteChange(company.company_id.toString(), value);
     }
@@ -36,10 +38,12 @@ export default function FilterationNote(props: Props): ReactNode {
 
   return (
     <PageContainer>
-      <MarkdownEditor
+      {company ? (<MarkdownEditor
         initialValue={filterationNote || ""}
-        onSaveChange={handleFilterationNoteChange}
-      />
+        onSaveChange={handleFiltrationStepNoteChange}
+      />) : (
+        <CompanyNotSelected />
+      )}
     </PageContainer>
   );
 }
