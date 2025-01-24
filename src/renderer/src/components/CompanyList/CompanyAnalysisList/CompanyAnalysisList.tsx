@@ -22,7 +22,6 @@ import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
 import Panel from "@renderer/components/Panel/Panel";
 import Container from "@renderer/components/Container/Container";
 import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
-import CompanyTag from "@renderer/components/TagPanel/CompanyTag/CompanyTag";
 import checkIfHexBelowThreshold from "@renderer/utils/checkIfHexBelowThreshold";
 
 
@@ -176,7 +175,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       caption: "Verdict",
       ElementConstructor: (dataCell: TableListDataCell<FilterationStepStock>) => {
         return (
-          <div className="d-flex d-align-items-center h-100 w-100 p-relative d-justify-end">
+          <div className="d-flex d-align-items-center w-100 h-100 p-relative d-justify-end">
             <span
               className="company-tag-color mr-medium-length"
               style={{
@@ -196,7 +195,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
               {tags.map((tag: Tag) => {
                 return (
                   <option
-                  className="test"
+                    className="test"
                     key={formatKey("datacell-tag-selection-" + dataCell.id + "-" + tag.tag_id)}
                     style={{
                       color: checkIfHexBelowThreshold(tag.tag_hex, 100) ? "white" : "black",
@@ -271,15 +270,17 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
           />
         </Container>
       </div>
-      <TableList<FilterationStepStock>
-        onItemFocus={handleStockFocus}
-        columns={stockDataColumns}
-        cells={stockDataCells}
-        allowSelection={true}
-        selectionSet={selectionSet}
-        onItemSelect={handleStockSelect}
-        onColumnSelect={handleSortToggle}
-      />
+      <Container>
+        <TableList<FilterationStepStock>
+          onItemFocus={handleStockFocus}
+          columns={stockDataColumns}
+          cells={stockDataCells}
+          allowSelection={true}
+          selectionSet={selectionSet}
+          onItemSelect={handleStockSelect}
+          onColumnSelect={handleSortToggle}
+        />
+      </Container>
     </PageContainer>
   );
 }

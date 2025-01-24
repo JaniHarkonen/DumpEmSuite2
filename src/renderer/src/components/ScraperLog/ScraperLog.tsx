@@ -19,10 +19,10 @@ type LogEventBadges = {
 };
 
 const BADGES: LogEventBadges = {
-  successful: <StyledIcon src={ASSETS.icons.badges.successful.color} />,
-  exceptions: <StyledIcon src={ASSETS.icons.alerts.missing.color} />,
-  pending: <StyledIcon src={ASSETS.icons.badges.pending.color} />,
-  failed: <StyledIcon src={ASSETS.icons.badges.failed.color} />,
+  successful: <StyledIcon src={ASSETS.icons.badges.successful.color} enableFilter={false} />,
+  exceptions: <StyledIcon src={ASSETS.icons.alerts.missing.color} enableFilter={false} />,
+  pending: <StyledIcon src={ASSETS.icons.badges.pending.color} enableFilter={false} />,
+  failed: <StyledIcon src={ASSETS.icons.badges.failed.color} enableFilter={false} />,
   none: <></>
 };
 

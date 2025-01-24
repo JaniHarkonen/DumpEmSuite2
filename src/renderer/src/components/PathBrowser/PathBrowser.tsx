@@ -5,6 +5,7 @@ import BrowseFilesButton, { BrowseFilesAction, BrowseFilesProps } from "../Brows
 import { OpenDialogResult, SaveDialogResult } from "src/shared/files.type";
 import { ASSETS } from "@renderer/assets/assets";
 import StyledInput from "../StyledInput/StyledInput";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 type OnPathChange = (selectedPath: string) => void;
@@ -87,9 +88,9 @@ export default function PathBrowser(props: Props): ReactNode {
       {warning && (
         <>
           <span>
-            <img
-              className="size-tiny-icon"
+            <StyledIcon
               src={ASSETS.icons.alerts.missing.color}
+              enableFilter={false}
             />
           </span>
           <span>{warning}</span>

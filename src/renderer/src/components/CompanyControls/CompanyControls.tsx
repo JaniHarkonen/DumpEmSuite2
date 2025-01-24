@@ -56,7 +56,7 @@ export default function CompanyControls(props: Props): ReactNode {
         <div></div>
         <StyledButton
           onClick={() => pOnImport()}
-          icon={ASSETS.icons.buttons.import.black}
+          icon={ASSETS.icons.action.import.black}
         >
           Import
         </StyledButton>

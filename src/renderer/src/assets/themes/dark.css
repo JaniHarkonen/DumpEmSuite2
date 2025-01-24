@@ -3,6 +3,7 @@
   --theme-dark-shadow: #515151;
   --theme-dark-outline: #777777;
   --theme-dark-glyph: #F9F9F9;
+  --theme-dark-script: #E5E5E5;
   --theme-dark-action: #00A07B;
   --theme-dark-action-hl: #00BC8D;
   --theme-dark-action-bd: #008767;
@@ -43,6 +44,12 @@
   border-right-color: var(--theme-dark-ambient);
 }
 
+.theme-dark.ambient-svg {
+  filter: brightness(0) saturate(100%) invert(18%) 
+          sepia(2%) saturate(0%) hue-rotate(53deg) 
+          brightness(104%) contrast(91%);
+}
+
 /* SHADOW */
 .theme-dark.shadow-bgc {
   background-color: var(--theme-dark-shadow);
@@ -76,6 +83,12 @@
 
 .theme-dark.shadow-bdc-right {
   border-right-color: var(--theme-dark-shadow);
+}
+
+.theme-dark.shadow-svg {
+  filter: brightness(0) saturate(100%) invert(26%) 
+          sepia(0%) saturate(171%) hue-rotate(201deg) 
+          brightness(102%) contrast(78%);
 }
 
 /* OUTLINE */
@@ -113,6 +126,12 @@
   border-right-color: var(--theme-dark-outline);
 }
 
+.theme-dark.outline-svg {
+  filter: brightness(0) saturate(100%) invert(48%) 
+          sepia(1%) saturate(0%) hue-rotate(63deg) 
+          brightness(97%) contrast(94%);
+}
+
 /* GLYPH */
 .theme-dark.glyph-bgc {
   background-color: var(--theme-dark-glyph);
@@ -148,6 +167,55 @@
   border-right-color: var(--theme-dark-glyph);
 }
 
+.theme-dark.glyph-svg {
+  filter: brightness(0) saturate(100%) invert(100%) 
+          sepia(81%) saturate(0%) hue-rotate(289deg) 
+          brightness(109%) contrast(95%);
+}
+
+
+/* SCRIPT */
+
+.theme-dark.script-bgc {
+  background-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-hl {
+  &:hover {
+    background-color: var(--theme-dark-script);
+  }
+}
+
+.theme-dark.script-c {
+  color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc {
+  border-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-top {
+  border-top-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-bottom {
+  border-bottom-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-left {
+  border-left-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-right {
+  border-right-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-svg {
+  filter: brightness(0) saturate(100%) invert(100%) 
+          sepia(81%) saturate(0%) hue-rotate(289deg) 
+          brightness(109%) contrast(95%);
+}
+
 /* ACTION */
 .theme-dark.action-bgc {
   background-color: var(--theme-dark-action);
@@ -181,6 +249,12 @@
 
 .theme-dark.action-bdc-right {
   border-right-color: var(--theme-dark-action);
+}
+
+.theme-dark.action-svg {
+  filter: brightness(0) saturate(100%) invert(71%) 
+          sepia(63%) saturate(7118%) hue-rotate(137deg) 
+          brightness(88%) contrast(101%);
 }
 
 /* BUTTON */

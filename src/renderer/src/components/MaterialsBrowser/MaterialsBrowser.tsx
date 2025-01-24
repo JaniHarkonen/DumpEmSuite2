@@ -6,6 +6,7 @@ import StyledButton from "../StyledButton/StyledButton";
 import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 import { ASSETS } from "@renderer/assets/assets";
 import useTabKeys from "@renderer/hook/useTabKeys";
+import Panel from "../Panel/Panel";
 
 
 type Props = {
@@ -123,35 +124,39 @@ export default function MaterialsBrowser(props: Props): ReactNode {
         <StyledButton
           className="mr-medium-length"
           onClick={handleFileImportSelection}
-          icon={ASSETS.icons.buttons.import.black}
+          icon={ASSETS.icons.action.import.black}
         >
           Import files
         </StyledButton>
         <StyledButton
           onClick={handleOpenInExplorer}
-          icon={ASSETS.icons.buttons.link.black}
+          icon={ASSETS.icons.action.link.black}
         >
           Open in system explorer
         </StyledButton>
       </div>
       <div className="w-100 h-100">
-        <div className="materials-browser-file-container">
-          {filePaths.length > 0 ? filePaths.map((path: string, index: number) => {
-            return (
-              <div
-                key={formatKey(path)}
-                className="materials-browser-file-item-container"
-              >
-                <BrowserFile
-                  fileDirectory={pDirectoryPath}
-                  fileName={path}
-                  onClick={handleFileClick}
-                  onDelete={(fileInfo: FilePathParse) => removeFile(index, fileInfo)}
-                />
-              </div>
-            );
-          }) : <div>No materials yet.</div>}
-          </div>
+        {filePaths.length > 0 ? (
+          <Panel className="materials-browser-file-container">
+            {filePaths.map((path: string, index: number) => {
+              return (
+                <div
+                  key={formatKey(path)}
+                  className="materials-browser-file-item-container"
+                >
+                  <BrowserFile
+                    fileDirectory={pDirectoryPath}
+                    fileName={path}
+                    onClick={handleFileClick}
+                    onDelete={(fileInfo: FilePathParse) => removeFile(index, fileInfo)}
+                  />
+                </div>
+              );
+            })}
+          </Panel>
+        ) : (
+          <div>No materials yet.</div>
+        )}
       </div>
     </div>
   );

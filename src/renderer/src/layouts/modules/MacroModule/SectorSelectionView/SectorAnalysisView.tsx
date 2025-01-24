@@ -6,7 +6,6 @@ import { ReactNode, useContext } from "react";
 import ModuleView from "../../../ModuleView/ModuleView";
 import MacroSectorNotesView from "../views/MacroSectorNotesView";
 import { TabsContext } from "@renderer/context/TabsContext";
-import MaterialsBrowser from "@renderer/components/MaterialsBrowser/MaterialsBrowser";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import { RELATIVE_APP_PATHS } from "../../../../../../../src/shared/appConfig";
 import MacroSectorMaterialsView from "../views/MacroSectorMaterialsView";

@@ -24,8 +24,7 @@ export default function EditableTabButton(props: Props): ReactNode {
   const pAllowRemove: boolean = props.allowRemove ?? true;
   const pOnCaptionEdit: OnCaptionEditFinalize = props.onCaptionEdit || function() {};
   const pOnRemove: OnTabRemove = props.onRemove || function() {};
-  const pIconURL: string = props.iconURL || ASSETS.icons.buttons.trashCan.white;
-
+  const pIconURL: string = props.iconURL || ASSETS.icons.action.trashCan.black;
 
   return (
     <TabButton

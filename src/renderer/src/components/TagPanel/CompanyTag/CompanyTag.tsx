@@ -81,7 +81,7 @@ export default function CompanyTag(props: Props): ReactNode {
             <span>
               <StyledIcon
                 className="company-tag-control-remove"
-                src={ASSETS.icons.buttons.trashCan.white}
+                src={ASSETS.icons.action.trashCan.black}
               />
             </span>
           </StyledButton>

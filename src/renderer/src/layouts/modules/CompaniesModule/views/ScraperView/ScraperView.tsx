@@ -37,6 +37,7 @@ export default function ScraperView(): ReactNode {
   const {databaseAPI} = useDatabase();
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+
   const scraperLogProps: ScraperLogContextType = useScraperLog();
 
   const tabExtraInfo: any = tabs[activeTabIndex].extra;

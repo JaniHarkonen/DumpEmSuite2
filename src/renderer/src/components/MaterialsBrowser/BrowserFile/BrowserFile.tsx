@@ -1,3 +1,4 @@
+import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
 import "./BrowserFile.css";
 
 import { ASSETS } from "@renderer/assets/assets";
@@ -37,35 +38,32 @@ export default function BrowserFile(props: Props): ReactNode {
 
   const handleFileClick = () => {
     info && pOnClick(info);
-  }
+  };
 
   const handleFileDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     info && pOnDelete(info);
-  }
+  };
 
   const getFileIcon = (): string => {
     return ASSETS.icons.files[
       info?.ext.substring(1) || "unknown"
-    ].color || ASSETS.icons.files.unknown.white;
+    ]?.black || ASSETS.icons.files.unknown.black;
   };
 
   return (
     <div
-      className="d-flex d-align-items-center"
+      {...theme("outline-hl", "browser-file-container")}
       onClick={handleFileClick}
     >
       <button
         {...theme("outline-hl", "browser-file-delete-button")}
         onClick={handleFileDelete}
       >
-        <img
-          className="size-tiny-icon"
-          src={ASSETS.icons.buttons.trashCan.white}
-        />
+        <StyledIcon src={ASSETS.icons.action.trashCan.black} />
       </button>
       <img
-        className="size-small-icon mr-medium-length"
+        {...theme("script-svg", "size-small-icon mr-medium-length")}
         src={getFileIcon()}
       />
       {info?.base}

@@ -77,7 +77,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
     const classNameConstructor = () => {
       const isFirstColumn: boolean = index % pColumns.length === 0;
       const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
-      let className: string = "table-list-data-cell-container";
+      let className: string = "table-list-data-cell-container pl-medium-length";
 
       if( dataCell.hasHighlight ) {
         className += " action-bdc";
@@ -91,14 +91,12 @@ export default function TableList<T>(props: Props<T>): ReactNode {
         }
       }
 
-      if( isFirstColumn ) {
-        className +=" pl-medium-length"
-      } else if( isLastColumn ) {
+      if( isLastColumn ) {
         className += " text-align-right pr-medium-length";
       }
 
       return className;
-    }
+    };
 
     let dataElement: ReactNode;
 
@@ -151,7 +149,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   
   return (
     <div
-      className="table-list-container"
+      className="table-list-container box-sizing-border"
       style={{ gridTemplateColumns: "repeat(" + pColumns.length + ", auto)" }}
     >
       {pColumns.map((column: TableListColumn<T>, index: number) => {
@@ -165,10 +163,10 @@ export default function TableList<T>(props: Props<T>): ReactNode {
           >
             <span className="mr-medium-length">
               {(column.sortOrder === "ascending") && (
-                <StyledIcon src={ASSETS.icons.buttons.arrow.up.black} />
+                <StyledIcon src={ASSETS.icons.indicator.arrow.up.black} />
               )} 
               {(column.sortOrder === "descending") && (
-                <StyledIcon src={ASSETS.icons.buttons.arrow.down.black} />
+                <StyledIcon src={ASSETS.icons.indicator.arrow.down.black} />
               )}
             </span>
             <span

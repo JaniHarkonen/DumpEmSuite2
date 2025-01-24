@@ -1,41 +1,33 @@
-import iconButtonCloseBlack from "./icons/close-round-icon.svg";
-import iconButtonTrashCanWhite from "./icons/trash-can-white-icon.svg";
-import iconFilePDFColor from "./icons/file-pdf-color-icon.svg";
-import iconFileCSVColor from "./icons/file-csv-color-icon.svg";
-import iconFileHTMLColor from "./icons/file-html-color-icon.svg";
-import iconFileJPGColor from "./icons/file-jpg-color-icon.svg";
-import iconFilePNGColor from "./icons/file-png-color-icon.svg";
-import iconFileTXTColor from "./icons/file-txt-color-icon.svg";
-import iconFileUnknownColor from "./icons/file-unknown-white-icon.svg";
+import iconButtonCloseBlack from "./icons/action/close-round-black-icon.svg";
+import iconButtonTrashCanBlack from "./icons/action/trash-can-black-icon.svg";
+import iconFilePDFBlack from "./icons/file/file-pdf-black-icon.svg";
+import iconFileCSVBlack from "./icons/file/file-csv-black-icon.svg";
+import iconFileHTMLBlack from "./icons/file/file-html-black-icon.svg";
+import iconFileJPGBlack from "./icons/file/file-jpg-black-icon.svg";
+import iconFilePNGBlack from "./icons/file/file-png-black-icon.svg";
+import iconFileTXTBlack from "./icons/file/file-txt-black-icon.svg";
+import iconFileUnknownBlack from "./icons/file/file-unknown-black-icon.svg";
 import iconAlertTriangleColor from "./icons/alert-triangle-color-icon.svg";
-import iconBadgeSuccessfulColor from "./icons/badge-successful-color-icon.svg";
-import iconBadgeFailedColor from "./icons/badge-failed-color-icon.svg";
-import iconBadgePendingColor from "./icons/badge-pending-color-icon.svg";
-import iconImportBlack from "./icons/import-black-icon.svg";
-import iconUpArrowBlack from "./icons/up-arrow-black-icon.svg";
-import iconDownArrowBlack from "./icons/down-arrow-black-icon.svg";
-import iconExternalLinkBlack from "./icons/external-link-black-icon.svg";
+import iconBadgeSuccessfulColor from "./icons/badge/badge-successful-color-icon.svg";
+import iconBadgeFailedColor from "./icons/badge/badge-failed-color-icon.svg";
+import iconBadgePendingColor from "./icons/badge/badge-pending-color-icon.svg";
+import iconImportBlack from "./icons/action/import-black-icon.svg";
+import iconUpArrowBlack from "./icons/indicator/up-arrow-black-icon.svg";
+import iconDownArrowBlack from "./icons/indicator/down-arrow-black-icon.svg";
+import iconExternalLinkBlack from "./icons/action/external-link-black-icon.svg";
 
 
 export const ASSETS = {
   icons: {
-    buttons: {
+    action: {
       close: {
         black: iconButtonCloseBlack
       },
       trashCan: {
-        white: iconButtonTrashCanWhite
+        black: iconButtonTrashCanBlack
       },
       import: {
         black: iconImportBlack
-      },
-      arrow: {
-        up: {
-          black: iconUpArrowBlack
-        },
-        down: {
-          black: iconDownArrowBlack
-        }
       },
       link: {
         black: iconExternalLinkBlack
@@ -43,25 +35,25 @@ export const ASSETS = {
     },
     files: {
       pdf: {
-        color: iconFilePDFColor
+        black: iconFilePDFBlack
       },
       csv: {
-        color: iconFileCSVColor
+        black: iconFileCSVBlack
       },
       html: {
-        color: iconFileHTMLColor
+        black: iconFileHTMLBlack
       },
       jpg: {
-        color: iconFileJPGColor
+        black: iconFileJPGBlack
       },
       png: {
-        color: iconFilePNGColor
+        black: iconFilePNGBlack
       },
       txt: {
-        color: iconFileTXTColor
+        black: iconFileTXTBlack
       },
       unknown: {
-        white: iconFileUnknownColor
+        black: iconFileUnknownBlack
       }
     },
     alerts: {
@@ -80,6 +72,15 @@ export const ASSETS = {
         color: iconBadgePendingColor
       }
     },
-
+    indicator: {
+      arrow: {
+        up: {
+          black: iconUpArrowBlack
+        },
+        down: {
+          black: iconDownArrowBlack
+        }
+      }
+    }
   }
 };

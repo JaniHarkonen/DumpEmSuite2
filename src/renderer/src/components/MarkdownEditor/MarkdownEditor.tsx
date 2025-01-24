@@ -78,7 +78,10 @@ export default function MarkdownEditor(props: Props) {
         <div className="markdown-editor-textarea-container">
           {wasEdited ? (
             <div className="m-strong-length">
-              <StyledIcon src={ASSETS.icons.alerts.missing.color} />
+              <StyledIcon
+                src={ASSETS.icons.alerts.missing.color}
+                enableFilter={false}
+              />
               <span className="ml-medium-length">* Unsaved changes detected! Press CTRL + S to save...</span>
             </div>
           ) : <div />}
@@ -96,7 +99,7 @@ export default function MarkdownEditor(props: Props) {
         </div>
       )}
         <div
-          className="user-select-text h-100"
+          className="user-select-text w-100 h-100"
           style={{display: isEditing ? "none" : "block"}}
         >
           {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown) : (

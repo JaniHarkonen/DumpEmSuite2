@@ -1,3 +1,15 @@
+.browser-file-container {
+  display: flex;
+  align-items: center;
+
+  border-radius: var(--medium-length);
+
+  margin-bottom: var(--medium-length);
+  padding: var(--medium-length);
+
+  user-select: none;
+}
+
 .browser-file-delete-button {
   display: flex;
   align-items: center;

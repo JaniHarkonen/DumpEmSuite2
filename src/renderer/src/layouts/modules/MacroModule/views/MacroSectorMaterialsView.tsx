@@ -14,10 +14,10 @@ export default function MacroSectorMaterialsView(props: Props): ReactNode {
 
   return (
     <PageContainer>
-      <PageHeader>{pSectorCaption + " materials"}</PageHeader>
-      <MaterialsBrowser
-        directoryPath={pDirectoryPath}
-      />
+      <div className="grid-auto-top">
+        <PageHeader>{pSectorCaption + " materials"}</PageHeader>
+        <MaterialsBrowser directoryPath={pDirectoryPath} />
+      </div>
     </PageContainer>
   );
 }

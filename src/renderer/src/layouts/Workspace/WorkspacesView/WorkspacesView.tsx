@@ -73,7 +73,7 @@ export default function WorkspacesView(): ReactNode {
               tab={tab}
               allowEdit={false}
               allowRemove={true}
-              iconURL={ASSETS.icons.buttons.close.black}
+              iconURL={ASSETS.icons.action.close.black}
               onRemove={(e: React.MouseEvent<HTMLImageElement>) => {
                 handleTabRemove(e, targetNode, tab);
               }}

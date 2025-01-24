@@ -35,7 +35,7 @@
                           "isFork": true,
                           "divider": {
                             "direction": "horizontal",
-                            "value": 68.75
+                            "value": 43.75
                           },
                           "left": {
                             "isFork": false,
@@ -196,7 +196,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }
@@ -563,7 +563,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 43.75
+                                                            "value": 44.44444444444444
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -581,7 +581,11 @@
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
-                                                                    "order": 0
+                                                                    "order": 0,
+                                                                    "extra": {
+                                                                      "sortField": null,
+                                                                      "sortOrder": "none"
+                                                                    }
                                                                   }
                                                                 ],
                                                                 "activeTabIndex": 0
@@ -629,7 +633,7 @@
                                                                       "order": 0
                                                                     }
                                                                   ],
-                                                                  "activeTabIndex": 0
+                                                                  "activeTabIndex": 1
                                                                 }
                                                               }
                                                             },
@@ -724,27 +728,49 @@
                                                               "value": 50
                                                             },
                                                             "left": {
-                                                              "isFork": false,
-                                                              "value": {
-                                                                "tabs": [
-                                                                  {
-                                                                    "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-notes",
-                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                                    "caption": "Notes",
-                                                                    "contentTemplate": "view-sector-tab-notes",
-                                                                    "tags": [],
-                                                                    "order": 0
-                                                                  },
-                                                                  {
-                                                                    "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-materials",
-                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                                    "caption": "Materials",
-                                                                    "contentTemplate": "view-sector-tab-materials",
-                                                                    "tags": [],
-                                                                    "order": 0
-                                                                  }
-                                                                ],
-                                                                "activeTabIndex": 0
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-notes",
+                                                                      "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                      "caption": "Notes",
+                                                                      "contentTemplate": "view-sector-tab-notes",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "isFork": true,
+                                                              "divider": {
+                                                                "direction": "horizontal",
+                                                                "value": 50
+                                                              },
+                                                              "left": {
+                                                                "isFork": false,
+                                                                "value": {
+                                                                  "tabs": [
+                                                                    {
+                                                                      "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-materials",
+                                                                      "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                      "caption": "Materials",
+                                                                      "contentTemplate": "view-sector-tab-materials",
+                                                                      "tags": [],
+                                                                      "order": 0
+                                                                    }
+                                                                  ],
+                                                                  "activeTabIndex": 0
+                                                                }
                                                               }
                                                             }
                                                           }
