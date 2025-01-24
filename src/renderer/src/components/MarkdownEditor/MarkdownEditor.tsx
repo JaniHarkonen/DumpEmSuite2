@@ -101,7 +101,7 @@ export default function MarkdownEditor(props: Props) {
         >
           {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown) : (
             <div className="markdown-editor-start-suggestion">
-              Double-click to here start editing
+              Double-click here to start editing
             </div>
           )}
         </div>

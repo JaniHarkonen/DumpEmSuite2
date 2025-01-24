@@ -12,9 +12,9 @@ export default function MacroModule(): ReactNode {
   const sceneBlueprint: SplitTreeBlueprint = sceneConfig.splitTree;
 
   const tabsProvider: TabContentProvider = createTabContentProvider(
-    { "view-sector-analysis": () => <SectorAnalysisView /> }, <>failed</>
+    { "view-sector-analysis": () => <SectorAnalysisView /> },
+    <>failed</>
   );
-  
 
   return (
     <SectorSelectionView

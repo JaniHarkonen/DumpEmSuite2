@@ -8,7 +8,8 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
     let key: string = `${keyPrefix}-${astNode.type}-${index.toString()}`;
 
     if( astNode.type === "plain-text" || astNode.type === "white-space" ) {
-      return <span key={`${key}-span`}>{astNode.value}</span>;
+      return astNode.value;
+      // return <span key={`${key}-span`}>{astNode.value}</span>;
     }
 
     const childNodes: ReactNode[] = renderAST(astNode.children, key);

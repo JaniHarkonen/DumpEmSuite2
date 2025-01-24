@@ -121,9 +121,14 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
             />
           );
         })}
-        <StyledButton onClick={() => handleTabAdd(targetNode)}>
-          {"+"}
-        </StyledButton>
+        <div>
+          <StyledButton
+            className="ml-medium-length"
+            onClick={() => handleTabAdd(targetNode)}
+          >
+            {"+"}
+          </StyledButton>
+        </div>
       </TabControls>
     );
   };

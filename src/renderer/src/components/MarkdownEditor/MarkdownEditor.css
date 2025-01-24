@@ -1,8 +1,10 @@
 .markdown-editor-textarea-container {
   display: grid;
   grid-template-rows: auto 1fr;
+  box-sizing: border-box;
 
   height: 100%;
+  padding-bottom: var(--strong-length);
 }
 
 .markdown-editor-start-suggestion {

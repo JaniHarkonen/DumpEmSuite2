@@ -196,7 +196,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 2
+                                              "activeTabIndex": 1
                                             }
                                           }
                                         }
@@ -563,7 +563,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 50
+                                                            "value": 43.75
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -592,7 +592,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 49.55564375571623
+                                                              "value": 50
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -700,7 +700,7 @@
                                                 {
                                                   "id": "view-sector-e3c6286e4af49e7cf12f829a8b8",
                                                   "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                  "caption": "New sector",
+                                                  "caption": "Mining sector",
                                                   "contentTemplate": "view-sector-analysis",
                                                   "tags": [],
                                                   "sceneConfigBlueprint": {
@@ -744,7 +744,7 @@
                                                                     "order": 0
                                                                   }
                                                                 ],
-                                                                "activeTabIndex": 1
+                                                                "activeTabIndex": 0
                                                               }
                                                             }
                                                           }
@@ -765,7 +765,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 1
+                              "activeTabIndex": 2
                             }
                           }
                         }

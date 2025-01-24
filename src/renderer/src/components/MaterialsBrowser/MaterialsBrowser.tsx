@@ -10,7 +10,9 @@ import useTabKeys from "@renderer/hook/useTabKeys";
 
 type Props = {
   directoryPath: string;
-}
+};
+
+export type MaterialsBrowserProps = Props;
 
 const {filesAPI} = window.api;
 
