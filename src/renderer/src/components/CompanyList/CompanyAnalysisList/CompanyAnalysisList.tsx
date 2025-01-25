@@ -23,6 +23,7 @@ import Panel from "@renderer/components/Panel/Panel";
 import Container from "@renderer/components/Container/Container";
 import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
 import checkIfHexBelowThreshold from "@renderer/utils/checkIfHexBelowThreshold";
+import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -271,6 +272,10 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
         </Container>
       </div>
       <Container>
+        <CompanyListStatisticsPanel
+          shownNumberOfCompanies={stockDataCells.length}
+          numberOfCompanies={stocks.length}
+        />
         <TableList<FilterationStepStock>
           onItemFocus={handleStockFocus}
           columns={stockDataColumns}

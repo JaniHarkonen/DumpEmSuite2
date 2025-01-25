@@ -16,6 +16,7 @@ import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
 import { TabsContext } from "@renderer/context/TabsContext";
 import { Tab } from "@renderer/model/tabs";
 import Panel from "../Panel/Panel";
+import CompanyListStatisticsPanel from "../CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -198,6 +199,9 @@ export default function WorkspaceCompaniesList(): ReactNode {
             onImport={handleImport}
           />
         </Panel>
+        <CompanyListStatisticsPanel
+          numberOfCompanies={companies.length}
+        />
         <TableList<CompanyWithCurrency>
           columns={stockDataColumns}
           cells={stockDataCells}
