@@ -251,6 +251,19 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
     };
   };
 
+  const tabCharacter = (): ASTNode | null => {
+    if( !check(peek(), "tab-character") ) {
+      return null;
+    }
+
+    advance();
+
+    return {
+      type: "tab-character",
+      children: []
+    };
+  };
+
   const chart = (): ASTNode | null => {
     if( !check(peek(), "chart-open") ) {
       return null;
@@ -343,6 +356,7 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
       (astNode = newLine()) || 
       (astNode = underlined()) || 
       (astNode = row()) || 
+      (astNode = tabCharacter()) ||
       (astNode = asPlainText())
     ) {
       pushNode(astNode);

@@ -1,4 +1,5 @@
 {
+  "activeTheme": "dark",
   "sceneConfigBlueprint": {
     "splitTree": {
       "root": {
@@ -196,7 +197,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }
@@ -349,7 +350,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 56.25
+                                                            "value": 43.75
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -563,7 +564,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 44.44444444444444
+                                                            "value": 50
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -668,7 +669,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 0
+                                              "activeTabIndex": 3
                                             }
                                           }
                                         }

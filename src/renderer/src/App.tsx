@@ -27,8 +27,7 @@ export default function App(): ReactNode {
     // A ref is used throughout the application to access the config instead of 
     // passing the 'configFileInfo'. This way the global app state doesn't have 
     // to be set each time the app config changes.
-  const appConfigRef: MutableRefObject<AppConfig | null> = 
-    useRef(configFileInfo?.appConfig || null);
+  const appConfigRef: MutableRefObject<AppConfig | null> = useRef(configFileInfo?.appConfig || null);
 
   useEffect(() => {
     const configPath: string = 
@@ -43,6 +42,7 @@ export default function App(): ReactNode {
         appConfig: read.result,
         configFileUpdater: updater
       });
+      setTheme(read.result.activeTheme);
     })
     .catch((err: Error) => console.log(err));
   }, []);

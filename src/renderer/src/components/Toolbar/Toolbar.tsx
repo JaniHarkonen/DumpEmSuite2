@@ -12,7 +12,6 @@ import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
 import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/database.type";
 import { Metadata } from "src/shared/schemaConfig";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
-import { ThemeContext } from "@renderer/context/ThemeContext";
 import useTheme from "@renderer/hook/useTheme";
 
 
@@ -66,8 +65,8 @@ export default function Toolbar(props: Props): ReactNode {
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
 
   const {splitTree} = useContext(FlexibleSplitsContext);
-  const {activeTheme, setTheme} = useContext(ThemeContext);
-  const {theme} = useTheme();
+  // const {activeTheme, setTheme} = useContext(ThemeContext);
+  const {activeTheme, setTheme, theme} = useTheme();
 
     // This ref is only used so that the hooks passed onto the useFileSystemDialog may use 
     // fresh values of the split tree

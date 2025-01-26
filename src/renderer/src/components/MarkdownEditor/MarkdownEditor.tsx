@@ -88,7 +88,8 @@ export default function MarkdownEditor(props: Props) {
           <StyledTextarea
             className="w-100 h-100"
             style={{
-              opacity: wasEdited ? "70%" : "100%"
+              opacity: wasEdited ? "70%" : "100%",
+              tabSize: "2"
             }}
             onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
             autoFocus={true}

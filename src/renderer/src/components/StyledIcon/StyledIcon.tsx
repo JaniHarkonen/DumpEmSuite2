@@ -1,4 +1,5 @@
 import useTheme from "@renderer/hook/useTheme";
+import copyJSON from "@renderer/utils/copyJSON";
 import { HTMLProps, ReactNode } from "react";
 
 
@@ -14,7 +15,7 @@ export default function StyledIcon(props: Props): ReactNode {
 
   return (
     <img
-      {...props}
+      {...copyJSON<HTMLProps<HTMLImageElement>>(props, ["enableFilter"])}
       {...theme(pEnableFilter ? "glyph-svg" : "", pClassName + " size-tiny-icon")}
     />
   );

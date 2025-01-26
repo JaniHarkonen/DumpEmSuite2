@@ -6,6 +6,8 @@ import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRea
 export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNode[] {
   return astNodes.map((astNode: ASTNode, index: number) => {
     let key: string = `${keyPrefix}-${astNode.type}-${index.toString()}`;
+    
+    console.log(astNode.type === "tab-character")
 
     if( astNode.type === "plain-text" || astNode.type === "white-space" ) {
       return astNode.value;
@@ -13,18 +15,20 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
     }
 
     const childNodes: ReactNode[] = renderAST(astNode.children, key);
+    const indent1: ReactNode = <>&emsp;</>;
 
     switch( astNode.type ) {
       case "new-line": return <br key={key} />;
+      case "tab-character": return indent1;
       case "strong": return <strong key={key}>{childNodes}</strong>;
       case "emphasized": return <em key={key}>{childNodes}</em>;
-      case "list-con": return <span key={key}><strong>-</strong>{childNodes}</span>;
-      case "list-conclusion": return <span key={key}><strong>⇛</strong>{childNodes}</span>;
-      case "list-important": return <span key={key}><strong>!</strong>{childNodes}</span>;
-      case "list-info": return <span key={key}><strong>––</strong>{childNodes}</span>;
-      case "list-main": return <span key={key}><strong>–</strong>{childNodes}</span>;
-      case "list-pro": return <span key={key}><strong>+</strong>{childNodes}</span>;
-      case "list-question": return <span key={key}><strong>?</strong>{childNodes}</span>;
+      case "list-con": return <span key={key}><strong>-</strong>{indent1}{childNodes}</span>;
+      case "list-conclusion": return <span key={key}><strong>⇛</strong>{indent1}{childNodes}</span>;
+      case "list-important": return <span key={key}><strong>!</strong>{indent1}{childNodes}</span>;
+      case "list-info": return <span key={key}><strong>––</strong>{indent1}{childNodes}</span>;
+      case "list-main": return <span key={key}><strong>–</strong>{indent1}{childNodes}</span>;
+      case "list-pro": return <span key={key}><strong>+</strong>{indent1}{childNodes}</span>;
+      case "list-question": return <span key={key}><strong>?</strong>{indent1}{childNodes}</span>;
       case "underlined": return <u key={key}>{childNodes}</u>;
       case "header": {
         switch( astNode.value ) {
