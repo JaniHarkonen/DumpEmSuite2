@@ -726,52 +726,30 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "horizontal",
-                                                              "value": 50
+                                                              "value": 43.75
                                                             },
                                                             "left": {
-                                                              "isFork": true,
-                                                              "divider": {
-                                                                "direction": "horizontal",
-                                                                "value": 50
-                                                              },
-                                                              "left": {
-                                                                "isFork": false,
-                                                                "value": {
-                                                                  "tabs": [
-                                                                    {
-                                                                      "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-notes",
-                                                                      "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                                      "caption": "Notes",
-                                                                      "contentTemplate": "view-sector-tab-notes",
-                                                                      "tags": [],
-                                                                      "order": 0
-                                                                    }
-                                                                  ],
-                                                                  "activeTabIndex": 0
-                                                                }
-                                                              }
-                                                            },
-                                                            "right": {
-                                                              "isFork": true,
-                                                              "divider": {
-                                                                "direction": "horizontal",
-                                                                "value": 50
-                                                              },
-                                                              "left": {
-                                                                "isFork": false,
-                                                                "value": {
-                                                                  "tabs": [
-                                                                    {
-                                                                      "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-materials",
-                                                                      "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                                      "caption": "Materials",
-                                                                      "contentTemplate": "view-sector-tab-materials",
-                                                                      "tags": [],
-                                                                      "order": 0
-                                                                    }
-                                                                  ],
-                                                                  "activeTabIndex": 0
-                                                                }
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-notes",
+                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                    "caption": "Notes",
+                                                                    "contentTemplate": "view-sector-tab-notes",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  },
+                                                                  {
+                                                                    "id": "view-sector-e3c6286e4af49e7cf12f829a8b8-materials",
+                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                    "caption": "Materials",
+                                                                    "contentTemplate": "view-sector-tab-materials",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
                                                               }
                                                             }
                                                           }

@@ -6,6 +6,7 @@ import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from "rea
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
 import { ASSETS } from "@renderer/assets/assets";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -35,6 +36,8 @@ export default function MarkdownEditor(props: Props) {
   ] = useEditable<string>({
     onFinalize: handleSave
   });
+
+  const {formatKey} = useTabKeys();
 
   useEffect(() => setMarkdown(pInitialValue), [pInitialValue]);
 
@@ -103,7 +106,7 @@ export default function MarkdownEditor(props: Props) {
           className="user-select-text w-100 h-100"
           style={{display: isEditing ? "none" : "block"}}
         >
-          {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown) : (
+          {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
             <div className="markdown-editor-start-suggestion">
               Double-click here to start editing
             </div>

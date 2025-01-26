@@ -1,34 +1,40 @@
+import "./markdown.css";
+
 import { ReactNode } from "react";
 import { ASTNode } from "./parser";
 import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRealTimeWidget";
 
 
+const INDENT1: ReactNode = <>&emsp;</>;
+
 export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNode[] {
   return astNodes.map((astNode: ASTNode, index: number) => {
-    let key: string = `${keyPrefix}-${astNode.type}-${index.toString()}`;
-    
-    console.log(astNode.type === "tab-character")
+    let key: string = `${keyPrefix !== "" ? keyPrefix + "-" : ""}${astNode.type}-${index.toString()}`;
 
     if( astNode.type === "plain-text" || astNode.type === "white-space" ) {
       return astNode.value;
-      // return <span key={`${key}-span`}>{astNode.value}</span>;
     }
 
     const childNodes: ReactNode[] = renderAST(astNode.children, key);
-    const indent1: ReactNode = <>&emsp;</>;
+
+    const buildListPoint = (pointCharacter: string): ReactNode => {
+      return (
+        <span key={key}><strong>{pointCharacter}</strong>{INDENT1}{childNodes}</span>
+      );
+    };
 
     switch( astNode.type ) {
       case "new-line": return <br key={key} />;
-      case "tab-character": return indent1;
+      case "tab-character": return <span key={key}>{INDENT1}</span>;
       case "strong": return <strong key={key}>{childNodes}</strong>;
       case "emphasized": return <em key={key}>{childNodes}</em>;
-      case "list-con": return <span key={key}><strong>-</strong>{indent1}{childNodes}</span>;
-      case "list-conclusion": return <span key={key}><strong>⇛</strong>{indent1}{childNodes}</span>;
-      case "list-important": return <span key={key}><strong>!</strong>{indent1}{childNodes}</span>;
-      case "list-info": return <span key={key}><strong>––</strong>{indent1}{childNodes}</span>;
-      case "list-main": return <span key={key}><strong>–</strong>{indent1}{childNodes}</span>;
-      case "list-pro": return <span key={key}><strong>+</strong>{indent1}{childNodes}</span>;
-      case "list-question": return <span key={key}><strong>?</strong>{indent1}{childNodes}</span>;
+      case "list-con": return buildListPoint("-");
+      case "list-conclusion": return buildListPoint("⇛");
+      case "list-important": return buildListPoint("!");
+      case "list-info": return buildListPoint("––");
+      case "list-main": return buildListPoint("–");
+      case "list-pro": return buildListPoint("+");
+      case "list-question": return buildListPoint("?");
       case "underlined": return <u key={key}>{childNodes}</u>;
       case "header": {
         switch( astNode.value ) {
@@ -55,20 +61,26 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         }
 
         return (
-          <AdvancedRealTimeWidget
+          <div
             key={`${key}-${astNode.value}`}
-            exchange={split[0]}
-            ticker={split[1]}
-          />
+            className="aspect-ratio-16-9 w-100"
+          >
+            <AdvancedRealTimeWidget
+              exchange={split[0]}
+              ticker={split[1]}
+            />
+          </div>
         );
       }
       case "row": {
         return (
           <div
             key={key}
-            className="d-flex"
+            className="markdown-row"
           >
-            {childNodes}
+            <div className="markdown-row-content-container">
+              {childNodes}
+            </div>
           </div>
         );
       }

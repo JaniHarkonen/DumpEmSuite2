@@ -4,6 +4,6 @@ import { tokenize } from "./tokenizer";
 import { parse } from "./parser";
 
 
-export function renderMarkdown(markdownString: string): ReactNode[] {
-  return renderAST(parse(tokenize(markdownString)));
+export function renderMarkdown(markdownString: string, keyPrefix: string): ReactNode[] {
+  return renderAST(parse(tokenize(markdownString)), keyPrefix);
 }

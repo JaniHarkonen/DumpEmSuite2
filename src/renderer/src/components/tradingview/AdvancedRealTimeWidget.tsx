@@ -41,7 +41,6 @@ function TradingViewWidget(props: Props): ReactNode {
       }`;
     container.current!.appendChild(script);
   }, [pExchange, pTicker, activeTheme]);
-
   
   return (
     <div
