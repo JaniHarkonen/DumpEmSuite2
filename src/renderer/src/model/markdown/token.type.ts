@@ -32,5 +32,8 @@ export type TokenType =
   "row-open" | 
   "row-close" |
   "row" |
+  "col" | 
+  "col-open" | 
+  "col-close" | 
   ListPoint;
   

@@ -61,7 +61,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   };
 
   const handleOpenInExplorer = () => {
-    filesAPI.execute({ command: 'explorer "' + pDirectoryPath + '"' })
+    filesAPI.execute({ command: 'explorer "' + pDirectoryPath + '"' });
   };
 
   const ensureMaterialsDirectoryExists = (after: () => void) => {

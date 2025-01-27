@@ -16,6 +16,8 @@ TAG_TRIE.put("<u>", "underline-open");
 TAG_TRIE.put("</u>", "underline-close");
 TAG_TRIE.put("<row>", "row-open");
 TAG_TRIE.put("</row>", "row-close");
+TAG_TRIE.put("<col>", "col-open");
+TAG_TRIE.put("</col>", "col-close");
 
   // Plain characters of the list points
 const LIST_CHARACTERS: { [key in ListPoint]: string } = {

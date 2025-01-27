@@ -7,6 +7,12 @@ export type ASTNode = {
   value?: string;
 };
 
+type FormattingTokenInfo = {
+  opener: TokenType;
+  closer: TokenType;
+  type: TokenType;
+} | null;
+
 export function parse(input: MarkdownToken[]): ASTNode[] {
   if( input.length === 0 ) {
     return [];
@@ -52,6 +58,29 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
 
   const isNewParagraph = (position: number): boolean => {
     return check(peekAt(position), "new-line") && check(peekAt(position + 1), "new-line");
+  };
+
+  const resolveClosingFormattingToken = (
+    token: MarkdownToken | undefined
+  ): FormattingTokenInfo => {
+    if( !token ) {
+      return null;
+    }
+
+    if(
+      !check(token, "row-open") && 
+      !check(token, "underline-open") && 
+      !check(token, "col-open")
+    ) {
+      return null;
+    }
+
+    const type: string = token.type.substring(0, token.type.lastIndexOf("-"));
+    return {
+      opener: token.type,
+      closer: (type + "-close") as TokenType,
+      type: type as TokenType
+    };
   };
 
   const header = (): ASTNode | null => {
@@ -288,42 +317,44 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
     };
   };
 
-  const underlined = (): ASTNode | null => {
-    if( !check(peek(), "underline-open") ) {
+  // const underlined = (): ASTNode | null => {
+  //   if( !check(peek(), "underline-open") ) {
+  //     return null;
+  //   }
+
+  //   advance();
+
+  //   const start: number = cursor(1);
+  //   while( peek() && !check(peek(), "underline-close") ) {
+  //     advance();
+  //   }
+
+  //   advance();
+
+  //   return {
+  //     type: "underlined",
+  //     children: parse(input.slice(start, cursor()))
+  //   };
+  // };
+
+  const formatting = (): ASTNode | null => {
+    const formattingTokenInfo: FormattingTokenInfo = resolveClosingFormattingToken(peek());
+
+    if( !formattingTokenInfo ) {
       return null;
     }
 
     advance();
 
     const start: number = cursor(1);
-    while( peek() && !check(peek(), "underline-close") ) {
+    while( peek() && !check(peek(), formattingTokenInfo.closer) ) {
       advance();
     }
 
     advance();
 
     return {
-      type: "underlined",
-      children: parse(input.slice(start, cursor()))
-    };
-  };
-
-  const row = (): ASTNode | null => {
-    if( !check(peek(), "row-open") ) {
-      return null;
-    }
-
-    advance();
-
-    const start: number = cursor(1);
-    while( peek() && !check(peek(), "row-close") ) {
-      advance();
-    }
-
-    advance();
-
-    return {
-      type: "row",
+      type: formattingTokenInfo.type,
       children: parse(input.slice(start, cursor()))
     };
   };
@@ -354,8 +385,9 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
       (astNode = strongOrEmphasized()) ||
       (astNode = chart()) || 
       (astNode = newLine()) || 
-      (astNode = underlined()) || 
-      (astNode = row()) || 
+      (astNode = formatting()) || 
+      // (astNode = underlined()) || 
+      // (astNode = row()) || 
       (astNode = tabCharacter()) ||
       (astNode = asPlainText())
     ) {

@@ -3,6 +3,7 @@ import "./markdown.css";
 import { ReactNode } from "react";
 import { ASTNode } from "./parser";
 import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRealTimeWidget";
+import StyledLink from "@renderer/components/StyledLink/StyledLink";
 
 
 const INDENT1: ReactNode = <>&emsp;</>;
@@ -44,13 +45,14 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         }
       } break;
       case "link": {
+        console.log(astNode.value)
         return (
-          <a
+          <StyledLink
             key={key}
             href={astNode.value}
           >
             {childNodes}
-          </a>
+          </StyledLink>
         );
       }
       case "chart": {
@@ -81,6 +83,16 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
             <div className="markdown-row-content-container">
               {childNodes}
             </div>
+          </div>
+        );
+      }
+      case "col": {
+        return (
+          <div
+            key={key}
+            className="d-flex d-direction-column w-100"
+          >
+            {childNodes}
           </div>
         );
       }
