@@ -19,9 +19,9 @@ export default function StyledTextarea(props: Props): ReactNode {
     if( e.key === "Tab" ) {
       e.preventDefault();
         
+      const isShiftDown: boolean = e.shiftKey;
       let selectionStart: number = target.selectionStart;
       let selectionEnd: number = target.selectionEnd;
-      const isShiftDown: boolean = e.shiftKey;
 
         // If a section is selected, append tabs in front of each new line character
         // (unless the new line is followed by another new line)
@@ -40,33 +40,47 @@ export default function StyledTextarea(props: Props): ReactNode {
 
           // Unindent
         if( isShiftDown ) {
+          let deleteCount = 0;
+
           for( let i = selectionStart; i <= selectionEnd; i++ ) {
             const charAt: string = target.value.charAt(i);
             
+              // Ignore indentations in the beginning of the line
             if( charAt === "\t" && (i === 0 || target.value.charAt(i - 1) === "\n") ) {
+              deleteCount++;
               continue;
             }
 
             fixedValue += charAt;
           }
+
+          target.value = fixedValue + target.value.substring(selectionEnd + 1);
+          target.selectionStart = selectionStart + 1;
+          target.selectionEnd = selectionEnd - deleteCount;
         } else {
             // Indent
-          selectionEnd--;
-          for( let i = selectionStart; i <= selectionEnd; i++ ) {
+          let addCount = 0;
+
+          for( let i = selectionStart; i < selectionEnd; i++ ) {
             const charAt: string = target.value.charAt(i);
             fixedValue += charAt;
-  
-            if( i === 0 ) {
-              fixedValue = "\t" + fixedValue;
-            } else if( charAt === "\n" && target.value.charAt(i + 1) !== "\n" ) {
-              fixedValue += "\t";
+
+              // Add indentations to the beginning of new lines
+            if( i === 0 || (charAt === "\n" && target.value.charAt(i + 1) !== "\n") ) {
+              if( i === 0 ) {
+                fixedValue = "\t" + fixedValue;
+              } else {
+                fixedValue += "\t";
+              }
+
+              addCount++;
             }
           }
-        }
 
-        target.value = fixedValue + target.value.substring(selectionEnd + 1);
-        target.selectionStart = selectionStart;
-        target.selectionEnd = selectionEnd;
+          target.value = fixedValue + target.value.substring(selectionEnd);
+          target.selectionStart = selectionStart + 1;
+          target.selectionEnd = selectionEnd + addCount;
+        }
       } else {
         // Apply tab to the textarea and fix the cursor position
         target.value = 
