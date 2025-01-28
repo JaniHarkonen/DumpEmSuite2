@@ -4,11 +4,19 @@ import { ReactNode } from "react";
 import { ASTNode } from "./parser";
 import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRealTimeWidget";
 import StyledLink from "@renderer/components/StyledLink/StyledLink";
+import { TAGS } from "./tokenizer";
+import { TagInfo } from "./token.type";
 
+
+type RenderContext = {
+  onChange: (valueString: string, ) => void;
+};
 
 const INDENT1: ReactNode = <>&emsp;</>;
 
-export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNode[] {
+export function renderAST(
+  astNodes: ASTNode[], keyPrefix: string = "", renderContext?: RenderContext
+): ReactNode[] {
   return astNodes.map((astNode: ASTNode, index: number) => {
     let key: string = `${keyPrefix !== "" ? keyPrefix + "-" : ""}${astNode.type}-${index.toString()}`;
 
@@ -16,11 +24,31 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
       return astNode.value;
     }
 
-    const childNodes: ReactNode[] = renderAST(astNode.children, key);
+    let culledChildren: ASTNode[] = astNode.children;
+    const tagInfo: TagInfo | undefined = TAGS[astNode.type];
+
+    if( tagInfo ) {
+      if( tagInfo.allowedTokens ) {
+        culledChildren = culledChildren.filter((astNode: ASTNode) => {
+          return tagInfo.allowedTokens!.includes(astNode.type);
+        });
+      } else if( tagInfo.ignoredTokens ) {
+        culledChildren = culledChildren.filter((astNode: ASTNode) => {
+          return !tagInfo.ignoredTokens!.includes(astNode.type);
+        });
+      }
+    }
+
+    const childNodes: ReactNode[] = renderAST(culledChildren, key);
 
     const buildListPoint = (pointCharacter: string): ReactNode => {
       return (
-        <span key={key}><strong>{pointCharacter}</strong>{INDENT1}{childNodes}</span>
+        <span key={key}>
+          <strong>{pointCharacter}</strong>
+          {INDENT1}
+          {childNodes}
+          <br />
+        </span>
       );
     };
 
@@ -36,7 +64,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
       case "list-main": return buildListPoint("–");
       case "list-pro": return buildListPoint("+");
       case "list-question": return buildListPoint("?");
-      case "underlined": return <u key={key}>{childNodes}</u>;
+      case "underline": return <u key={key}>{childNodes}</u>;
       case "header": {
         switch( astNode.value ) {
           case "3": return <h3 key={key}>{childNodes}</h3>;
@@ -45,7 +73,6 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         }
       } break;
       case "link": {
-        console.log(astNode.value)
         return (
           <StyledLink
             key={key}
@@ -56,7 +83,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         );
       }
       case "chart": {
-        const split: string[] = astNode.value!.split(":");
+        const split: string[] = culledChildren[0].value?.split(":") || [];
 
         if( split.length !== 2 ) {
           return [];

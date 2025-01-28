@@ -1,14 +1,15 @@
-import { TokenType } from "./token.type";
+import { TagInfo } from "./token.type";
+
 
 export class TagTrieNode {
   private children: {[key in string]: TagTrieNode};
   private tagString: string;
-  private tokenType: TokenType | null;
+  private tagInfo: TagInfo | null;
 
   constructor() {
     this.children = {};
     this.tagString = "";
-    this.tokenType = null;
+    this.tagInfo = null;
   }
 
   public add(char: string): TagTrieNode {
@@ -19,17 +20,17 @@ export class TagTrieNode {
     return this.children[char];
   }
 
-  public putValue(tagString: string, tokenType: TokenType) {
+  public putValue(tagString: string, tagInfo: TagInfo) {
     this.tagString = tagString;
-    this.tokenType = tokenType;
+    this.tagInfo = tagInfo;
   }
 
   public search(char: string): TagTrieNode {
     return this.children[char];
   }
 
-  public getTokenType(): TokenType | null {
-    return this.tokenType;
+  public getTagInfo(): TagInfo | null {
+    return this.tagInfo;
   }
 
   public getTagString(): string {
@@ -45,14 +46,14 @@ export class TagTrie {
   }
 
 
-  public put(tagString: string, tokenType: TokenType): void {
+  public put(tagString: string, tagToken: TagInfo): void {
     let finalNode: TagTrieNode = this.root;
 
     for( let i = 0; i < tagString.length; i++ ) {
       finalNode = finalNode.add(tagString.charAt(i));
     }
 
-    finalNode.putValue(tagString, tokenType);
+    finalNode.putValue(tagString, tagToken);
   }
 
   public getRoot(): TagTrieNode {

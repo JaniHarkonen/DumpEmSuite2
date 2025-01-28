@@ -21,12 +21,11 @@ export default function useExternalLinks(): Returns {
   };
   
   const openLink = (link: string) => {
-      // Check if the link has HTTPS in front of it
+      // Check if the link has the protocol in front of it, if not, append it
     if( !link.startsWith("https://") && !link.startsWith("http://") ) {
       link = "https://" + link;
     }
 
-    console.log(link)
     filesAPI.execute({ command: 'explorer "' + link + '"' });
   };
   

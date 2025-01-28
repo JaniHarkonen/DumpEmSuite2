@@ -8,6 +8,17 @@ export type ListPoint =
   "list-con"
 ;
 
+export type TagType = 
+  "chart" | 
+  "underline" | 
+  "row" | 
+  "col" | 
+  "quarterly-projection" | 
+  "annual-projection" | 
+  "id" | 
+  "years"
+;
+
 export type TokenType = 
   "strong" | 
   "emphasized" | 
@@ -25,15 +36,35 @@ export type TokenType =
   "link" | 
   "chart-open" |
   "chart-close" |
-  "chart" | 
+  "underline" | 
   "underline-open" | 
   "underline-close" |
-  "underlined" |
   "row-open" | 
   "row-close" |
-  "row" |
-  "col" | 
   "col-open" | 
   "col-close" | 
-  ListPoint;
-  
+  "quarterly-projection-open" |
+  "quarterly-projection-close" |
+  "annual-projection-open" | 
+  "annual-projection-close" | 
+  "id-open" |
+  "id-close" |
+  "years-open" | 
+  "years-close" | 
+  ListPoint |
+  TagType
+;
+
+export type MarkdownToken = {
+  type: TokenType;
+  value: string;
+  isTag?: boolean;
+};
+
+export type TagInfo = {
+  opener: MarkdownToken;
+  closer: MarkdownToken;
+  type: TagType;
+  ignoredTokens?: TokenType[];
+  allowedTokens?: TokenType[];
+};

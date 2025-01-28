@@ -7,6 +7,7 @@ import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 import { ASSETS } from "@renderer/assets/assets";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import Panel from "../Panel/Panel";
+import useExternalLinks from "@renderer/hook/useExternalLinks";
 
 
 type Props = {
@@ -23,6 +24,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   const dialogKey: string = "materials-browser-import-" + pDirectoryPath;
 
   const {formatKey} = useTabKeys();
+  const {openFile, openDirectory} = useExternalLinks();
 
   const importFiles = (path: string[]) => {
     for( let file of path ) {
@@ -57,11 +59,11 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   }, [pDirectoryPath]);
 
   const handleFileClick = (fileInfo: FilePathParse) => {
-    filesAPI.execute({ command: '"' + fileInfo.dir + "\\" + fileInfo.base + '"' });
+    openFile(fileInfo.dir + "\\" + fileInfo.base);
   };
 
   const handleOpenInExplorer = () => {
-    filesAPI.execute({ command: 'explorer "' + pDirectoryPath + '"' });
+    openDirectory(pDirectoryPath);
   };
 
   const ensureMaterialsDirectoryExists = (after: () => void) => {

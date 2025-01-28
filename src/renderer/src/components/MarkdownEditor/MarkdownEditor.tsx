@@ -41,20 +41,10 @@ export default function MarkdownEditor(props: Props) {
 
   useEffect(() => setMarkdown(pInitialValue), [pInitialValue]);
 
-  const handleTab = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleHotkeys = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     const target: HTMLTextAreaElement = e.currentTarget;
 
-    if( e.key === "Tab" ) {
-      e.preventDefault();
-
-        // Apply tab to the textarea and fix the cursor position
-      const selectionStart: number = target.selectionStart;
-      target.value = 
-        target.value.substring(0, selectionStart) + "\t" + 
-        target.value.substring(selectionStart);
-      target.selectionStart = selectionStart + 1;
-      target.selectionEnd = selectionStart + 1;
-    } else if( e.ctrlKey ) {
+    if( e.ctrlKey ) {
       const secondaryKey: string = e.key.toLowerCase();
 
       if( secondaryKey === "s" ) {
@@ -97,7 +87,7 @@ export default function MarkdownEditor(props: Props) {
             onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
             autoFocus={true}
             defaultValue={markdown}
-            onKeyDown={handleTab}
+            onKeyDown={handleHotkeys}
             onChange={handleChange}
           />
         </div>

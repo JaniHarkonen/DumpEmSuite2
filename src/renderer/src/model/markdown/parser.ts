@@ -1,5 +1,7 @@
 import { TokenType } from "./token.type";
-import { MarkdownToken } from "./tokenizer";
+import { MarkdownToken } from "./token.type";
+import { TAGS } from "./tokenizer";
+
 
 export type ASTNode = {
   type: TokenType;
@@ -7,11 +9,11 @@ export type ASTNode = {
   value?: string;
 };
 
-type FormattingTokenInfo = {
-  opener: TokenType;
-  closer: TokenType;
-  type: TokenType;
-} | null;
+// type FormattingTokenInfo = {
+//   opener: TokenType;
+//   closer: TokenType;
+//   type: TokenType;
+// } | null;
 
 export function parse(input: MarkdownToken[]): ASTNode[] {
   if( input.length === 0 ) {
@@ -60,28 +62,28 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
     return check(peekAt(position), "new-line") && check(peekAt(position + 1), "new-line");
   };
 
-  const resolveClosingFormattingToken = (
-    token: MarkdownToken | undefined
-  ): FormattingTokenInfo => {
-    if( !token ) {
-      return null;
-    }
+  // const resolveClosingFormattingToken = (
+  //   token: MarkdownToken | undefined
+  // ): FormattingTokenInfo => {
+  //   if( !token ) {
+  //     return null;
+  //   }
 
-    if(
-      !check(token, "row-open") && 
-      !check(token, "underline-open") && 
-      !check(token, "col-open")
-    ) {
-      return null;
-    }
+  //   if(
+  //     !check(token, "row-open") && 
+  //     !check(token, "underline-open") && 
+  //     !check(token, "col-open")
+  //   ) {
+  //     return null;
+  //   }
 
-    const type: string = token.type.substring(0, token.type.lastIndexOf("-"));
-    return {
-      opener: token.type,
-      closer: (type + "-close") as TokenType,
-      type: type as TokenType
-    };
-  };
+  //   const type: string = token.type.substring(0, token.type.lastIndexOf("-"));
+  //   return {
+  //     opener: token.type,
+  //     closer: (type + "-close") as TokenType,
+  //     type: type as TokenType
+  //   };
+  // };
 
   const header = (): ASTNode | null => {
     if( peek(0) && !check(peek(0), "new-line") ) {
@@ -268,11 +270,11 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
   };
 
   const newLine = (): ASTNode | null => {
-    if( !check(peek(), "new-line") ) {
+    if( !check(peek(), "new-line") || !check(peek(2), "new-line") ) {
       return null;
     }
 
-    advance();
+    advance(2);
 
     return {
       type: "new-line",
@@ -293,71 +295,33 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
     };
   };
 
-  const chart = (): ASTNode | null => {
-    if( !check(peek(), "chart-open") ) {
+  const tag = (): ASTNode | null => {
+    const next: MarkdownToken | undefined = peek();
+    if( !next || !next.isTag || next.value !== TAGS[next?.type ?? -1].opener.value ) {
       return null;
     }
 
-    let chartLink: string = "";
+    const closeTag: MarkdownToken = TAGS[next.type].closer;
     advance();
+    let start: number = cursor(1);
 
-    while( peek() && !check(peek(), "chart-close") ) {
-      if( peek()?.type !== "new-line" ) {
-        chartLink += peek()!.value;
+    while( true ) { 
+      if( !peek() ) {
+        return null;
+      } else if( check(peek(), next.type, closeTag.value) ) {
+        break;
       }
+
       advance();
     }
 
     advance();
 
     return {
-      type: "chart",
-      children: [],
-      value: chartLink
-    };
-  };
-
-  // const underlined = (): ASTNode | null => {
-  //   if( !check(peek(), "underline-open") ) {
-  //     return null;
-  //   }
-
-  //   advance();
-
-  //   const start: number = cursor(1);
-  //   while( peek() && !check(peek(), "underline-close") ) {
-  //     advance();
-  //   }
-
-  //   advance();
-
-  //   return {
-  //     type: "underlined",
-  //     children: parse(input.slice(start, cursor()))
-  //   };
-  // };
-
-  const formatting = (): ASTNode | null => {
-    const formattingTokenInfo: FormattingTokenInfo = resolveClosingFormattingToken(peek());
-
-    if( !formattingTokenInfo ) {
-      return null;
-    }
-
-    advance();
-
-    const start: number = cursor(1);
-    while( peek() && !check(peek(), formattingTokenInfo.closer) ) {
-      advance();
-    }
-
-    advance();
-
-    return {
-      type: formattingTokenInfo.type,
+      type: next.type,
       children: parse(input.slice(start, cursor()))
     };
-  };
+  }
 
   const asPlainText = (): ASTNode | null => {
     const token: MarkdownToken | undefined = peek();
@@ -368,27 +332,34 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
 
     advance();
 
-    return {
+    const node: ASTNode = {
       type: "plain-text",
       children: [],
       value: token.value
     };
+
+      // Try to consume as many of the upcoming tokens as possible in order to merge them
+      // into a single AST-node
+    let next: MarkdownToken | undefined;
+    while( (next = peek()) && (next.type === "plain-text" || next.type === "white-space") ) {
+      node.value += " " + next.value;
+      advance();
+    }
+
+    return node;
   }
 
   while( peek() ) {
     let astNode: ASTNode | null;
 
     if(
-      (astNode = header()) ||
+      (astNode = header()) || 
       (astNode = listPoint()) || 
       (astNode = link()) || 
-      (astNode = strongOrEmphasized()) ||
-      (astNode = chart()) || 
+      (astNode = strongOrEmphasized()) || 
+      (astNode = tag()) || 
       (astNode = newLine()) || 
-      (astNode = formatting()) || 
-      // (astNode = underlined()) || 
-      // (astNode = row()) || 
-      (astNode = tabCharacter()) ||
+      (astNode = tabCharacter()) || 
       (astNode = asPlainText())
     ) {
       pushNode(astNode);

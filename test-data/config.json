@@ -67,18 +67,6 @@
                                             "value": {
                                               "tabs": [
                                                 {
-                                                  "id": "view-scraper",
-                                                  "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                  "caption": "Scraper",
-                                                  "contentTemplate": "view-scraper",
-                                                  "tags": [],
-                                                  "order": 0,
-                                                  "extra": {
-                                                    "scrapeTarget": "D:\\javascript\\DumpEmSuite2\\project\\dumpem-suite-2\\test-data\\snapshot.htm",
-                                                    "scrapeOutput": "C:\\Users\\User\\Desktop\\OUTPUT.txt"
-                                                  }
-                                                },
-                                                {
                                                   "id": "view-listings",
                                                   "workspace": "ws-526a3948e0a0d20a9f7906fad6",
                                                   "caption": "Listings",
@@ -195,6 +183,18 @@
                                                     }
                                                   },
                                                   "order": 0
+                                                },
+                                                {
+                                                  "id": "view-scraper",
+                                                  "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                  "caption": "Scraper",
+                                                  "contentTemplate": "view-scraper",
+                                                  "tags": [],
+                                                  "order": 0,
+                                                  "extra": {
+                                                    "scrapeTarget": "D:\\javascript\\DumpEmSuite2\\project\\dumpem-suite-2\\test-data\\snapshot.htm",
+                                                    "scrapeOutput": "C:\\Users\\User\\Desktop\\OUTPUT.txt"
+                                                  }
                                                 }
                                               ],
                                               "activeTabIndex": 0
