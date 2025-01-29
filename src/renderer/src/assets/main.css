@@ -197,6 +197,13 @@ textarea {
   text-overflow: ellipsis;
 }
 
+
+.font-size-subscript {
+  font-size: var(--font-size-subscript);
+}
+
+/**************** INDENTATIONS ****************/
+
 .indent-dot-size {
   margin-left: var(--dot-size);
 }

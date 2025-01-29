@@ -68,6 +68,11 @@ export default function QuarterlyEarningsProjector(props: Props): ReactNode {
   };
 
   const renderQuarterInput = (label: string, quarterIndex: number) => {
+    const value: string = componentState.quarters[quarterIndex];
+    const difference: string = (
+      "" + (parseFloat(value) - parseFloat(componentState.quarters[quarterIndex - 1] ?? 0))
+    );
+    
     return (
       <div className="w-100">
         <span>
@@ -81,6 +86,9 @@ export default function QuarterlyEarningsProjector(props: Props): ReactNode {
             handleComponentChange(quarterIndex, e.target.value);
           }}
         />
+        <span className="font-size-subscript">
+          {difference}
+        </span>
       </div>
     );
   };

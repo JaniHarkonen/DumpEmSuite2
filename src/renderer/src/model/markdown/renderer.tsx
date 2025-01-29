@@ -123,7 +123,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         return (
           <Container key={key}>
             <QuarterlyEarningsProjector
-              componentID={culledChildren[0].children[0].value}
+              componentID={culledChildren[0]?.children[0]?.value}
             />
           </Container>
         );
