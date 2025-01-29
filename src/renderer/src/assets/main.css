@@ -221,6 +221,30 @@ textarea {
   margin-left: var(--big-size);
 }
 
+
+/**************** GAPS ****************/
+
+.gap-tiny-length {
+  gap: var(--tiny-length);
+}
+
+.gap-small-length {
+  gap: var(--small-length);
+}
+
+.gap-medium-length {
+  gap: var(--medium-length);
+}
+
+.gap-strong-length {
+  gap: var(--strong-length);
+}
+
+.gap-ultra-strong-length {
+  gap: var(--ultra-strong-length);
+}
+
+
 /**************** MARGINS ****************/
 
 /**** GENERAL ****/

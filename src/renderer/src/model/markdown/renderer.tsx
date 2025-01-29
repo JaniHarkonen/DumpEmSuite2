@@ -6,17 +6,13 @@ import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRea
 import StyledLink from "@renderer/components/StyledLink/StyledLink";
 import { TAGS } from "./tokenizer";
 import { TagInfo } from "./token.type";
+import QuarterlyEarningsProjector from "@renderer/components/QuarterlyEarningsProjector/QuarterlyEarningsProjector";
+import Container from "@renderer/components/Container/Container";
 
-
-type RenderContext = {
-  onChange: (valueString: string, ) => void;
-};
 
 const INDENT1: ReactNode = <>&emsp;</>;
 
-export function renderAST(
-  astNodes: ASTNode[], keyPrefix: string = "", renderContext?: RenderContext
-): ReactNode[] {
+export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNode[] {
   return astNodes.map((astNode: ASTNode, index: number) => {
     let key: string = `${keyPrefix !== "" ? keyPrefix + "-" : ""}${astNode.type}-${index.toString()}`;
 
@@ -121,6 +117,15 @@ export function renderAST(
           >
             {childNodes}
           </div>
+        );
+      }
+      case "quarterly-projection": {
+        return (
+          <Container key={key}>
+            <QuarterlyEarningsProjector
+              componentID={culledChildren[0].children[0].value}
+            />
+          </Container>
         );
       }
     }
