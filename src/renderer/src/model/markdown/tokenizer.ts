@@ -66,7 +66,22 @@ export const TAGS: {[key in TagType]: TagInfo} = {
       value: "</quarterly>"
     },
     type: "quarterly-projection",
-    allowedTokens: ["id"]
+    allowedTokens: [
+      "id",
+      "data"
+    ]
+  },
+  "data": {
+    opener: {
+      type: "data-open",
+      value: "<data>"
+    },
+    closer: {
+      type: "data-close",
+      value: "</data>"
+    },
+    type: "data",
+    allowedTokens: ["plain-text"]
   },
   "annual-projection": {
     opener: {
@@ -80,7 +95,8 @@ export const TAGS: {[key in TagType]: TagInfo} = {
     type: "annual-projection",
     allowedTokens: [
       "id",
-      "years"
+      "years",
+      "start-year"
     ]
   },
   "id": {
@@ -105,6 +121,18 @@ export const TAGS: {[key in TagType]: TagInfo} = {
       value: "</years>"
     },
     type: "years",
+    allowedTokens: ["plain-text"]
+  },
+  "start-year": {
+    opener: {
+      type: "start-year-open",
+      value: "<start-year>"
+    },
+    closer: {
+      type: "start-year-close",
+      value: "</start-year>"
+    },
+    type: "start-year",
     allowedTokens: ["plain-text"]
   }
 };
@@ -310,7 +338,8 @@ export function tokenize(input: string): MarkdownToken[] {
             token({
               type: finalNode.getTagInfo()!.type,
               value: tagString,
-              isTag: true
+              isTag: true,
+              position: cursorPosition - tagString.length + 2
             });
           } else if( tagString === "<" || tagString === "<>" ) {
             plainTextAccumulator += tagString;

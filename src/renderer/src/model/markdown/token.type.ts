@@ -14,9 +14,11 @@ export type TagType =
   "row" | 
   "col" | 
   "quarterly-projection" | 
+  "data" | 
   "annual-projection" | 
   "id" | 
-  "years"
+  "years" | 
+  "start-year" 
 ;
 
 export type TokenType = 
@@ -45,12 +47,16 @@ export type TokenType =
   "col-close" | 
   "quarterly-projection-open" |
   "quarterly-projection-close" |
+  "data-open" | 
+  "data-close" | 
   "annual-projection-open" | 
   "annual-projection-close" | 
   "id-open" |
   "id-close" |
   "years-open" | 
   "years-close" | 
+  "start-year-open" | 
+  "start-year-close" |
   ListPoint |
   TagType
 ;
@@ -59,6 +65,7 @@ export type MarkdownToken = {
   type: TokenType;
   value: string;
   isTag?: boolean;
+  position?: number;
 };
 
 export type TagInfo = {

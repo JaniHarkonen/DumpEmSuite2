@@ -7,13 +7,9 @@ export type ASTNode = {
   type: TokenType;
   children: ASTNode[];
   value?: string;
+  contentPositionStart?: number;
+  contentPositionEnd?: number;
 };
-
-// type FormattingTokenInfo = {
-//   opener: TokenType;
-//   closer: TokenType;
-//   type: TokenType;
-// } | null;
 
 export function parse(input: MarkdownToken[]): ASTNode[] {
   if( input.length === 0 ) {
@@ -297,18 +293,24 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
 
   const tag = (): ASTNode | null => {
     const next: MarkdownToken | undefined = peek();
-    if( !next || !next.isTag || next.value !== TAGS[next?.type ?? -1].opener.value ) {
+    const opener: MarkdownToken | undefined = TAGS[next?.type ?? -1]?.opener;
+
+    if( !next || !next.isTag || next.value !== opener?.value ) {
       return null;
     }
 
     const closeTag: MarkdownToken = TAGS[next.type].closer;
     advance();
+
     let start: number = cursor(1);
+    let lastContentTag: MarkdownToken | undefined;
 
     while( true ) { 
-      if( !peek() ) {
+      lastContentTag = peek();
+
+      if( !lastContentTag ) {
         return null;
-      } else if( check(peek(), next.type, closeTag.value) ) {
+      } else if( check(lastContentTag, next.type, closeTag.value) ) {
         break;
       }
 
@@ -319,7 +321,9 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
 
     return {
       type: next.type,
-      children: parse(input.slice(start, cursor()))
+      children: parse(input.slice(start, cursor())),
+      contentPositionStart: next.position! + opener.value.length,
+      contentPositionEnd: lastContentTag.position
     };
   }
 

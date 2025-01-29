@@ -7,6 +7,7 @@ import StyledTextarea from "../StyledTextarea/StyledTextarea";
 import { ASSETS } from "@renderer/assets/assets";
 import StyledIcon from "../StyledIcon/StyledIcon";
 import useTabKeys from "@renderer/hook/useTabKeys";
+import { MarkdownContext } from "@renderer/context/MarkdownContext";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -63,45 +64,50 @@ export default function MarkdownEditor(props: Props) {
   };
 
   return (
-    <div
-      className="w-100 h-100"
-      onDoubleClick={handleEditStart}
-    >
-      {isEditing && (
-        <div className="markdown-editor-textarea-container">
-          {wasEdited ? (
-            <div className="m-strong-length">
-              <StyledIcon
-                src={ASSETS.icons.alerts.missing.color}
-                enableFilter={false}
-              />
-              <span className="ml-medium-length">* Unsaved changes detected! Press CTRL + S to save...</span>
-            </div>
-          ) : <div />}
-          <StyledTextarea
-            className="w-100 h-100"
-            style={{
-              opacity: wasEdited ? "70%" : "100%",
-              tabSize: "2"
-            }}
-            onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
-            autoFocus={true}
-            defaultValue={markdown}
-            onKeyDown={handleHotkeys}
-            onChange={handleChange}
-          />
-        </div>
-      )}
-        <div
-          className="user-select-text w-100 h-100"
-          style={{display: isEditing ? "none" : "block"}}
-        >
-          {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
-            <div className="markdown-editor-start-suggestion">
-              Double-click here to start editing
-            </div>
-          )}
-        </div>
-    </div>
+    <MarkdownContext.Provider value={{
+      markdown,
+      onComponentChange: handleSave
+    }}>
+      <div
+        className="w-100 h-100"
+        onDoubleClick={handleEditStart}
+      >
+        {isEditing && (
+          <div className="markdown-editor-textarea-container">
+            {wasEdited ? (
+              <div className="m-strong-length">
+                <StyledIcon
+                  src={ASSETS.icons.alerts.missing.color}
+                  enableFilter={false}
+                />
+                <span className="ml-medium-length">* Unsaved changes detected! Press CTRL + S to save...</span>
+              </div>
+            ) : <div />}
+            <StyledTextarea
+              className="w-100 h-100"
+              style={{
+                opacity: wasEdited ? "70%" : "100%",
+                tabSize: "2"
+              }}
+              onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
+              autoFocus={true}
+              defaultValue={markdown}
+              onKeyDown={handleHotkeys}
+              onChange={handleChange}
+            />
+          </div>
+        )}
+          <div
+            className="user-select-text w-100 h-100"
+            style={{display: isEditing ? "none" : "block"}}
+          >
+            {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
+              <div className="markdown-editor-start-suggestion">
+                Double-click here to start editing
+              </div>
+            )}
+          </div>
+      </div>
+    </MarkdownContext.Provider>
   );
 }

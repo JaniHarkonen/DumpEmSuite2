@@ -8,6 +8,7 @@ import { TAGS } from "./tokenizer";
 import { TagInfo } from "./token.type";
 import QuarterlyEarningsProjector from "@renderer/components/QuarterlyEarningsProjector/QuarterlyEarningsProjector";
 import Container from "@renderer/components/Container/Container";
+import AnnualEarningsProjector from "@renderer/components/AnnualEarningsProjector/AnnualEarningsProjector";
 
 
 const INDENT1: ReactNode = <>&emsp;</>;
@@ -120,10 +121,36 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         );
       }
       case "quarterly-projection": {
+        const idNode: ASTNode | undefined = 
+          culledChildren.find((child: ASTNode) => child.type === "id");
+        const dataNode: ASTNode[] = culledChildren.filter((child: ASTNode) => child.type === "data");
+
         return (
           <Container key={key}>
             <QuarterlyEarningsProjector
-              componentID={culledChildren[0]?.children[0]?.value}
+              idNode={idNode}
+              dataNode={dataNode}
+              // contentStart={astNode.contentPositionStart}
+              // contentEnd={astNode.contentPositionEnd}
+            />
+          </Container>
+        );
+      }
+      case "annual-projection": {
+          // Resolve the props info from child nodes
+        const idNode: ASTNode | undefined = 
+          culledChildren.find((child: ASTNode) => child.type === "id");
+        const yearsNode: ASTNode | undefined = 
+          culledChildren.find((child: ASTNode) => child.type === "years");
+        const startYearNode: ASTNode | undefined = 
+          culledChildren.find((child: ASTNode) => child.type === "start-year");
+
+        return (
+          <Container key={key}>
+            <AnnualEarningsProjector
+              componentID={idNode?.children[0]?.value}
+              years={yearsNode?.children[0]?.value}
+              startYear={startYearNode?.children[0]?.value}
             />
           </Container>
         );
