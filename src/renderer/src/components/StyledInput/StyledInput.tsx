@@ -4,13 +4,13 @@ import { HTMLProps, ReactNode } from "react";
 
 
 export default function StyledInput(props: HTMLProps<HTMLInputElement>): ReactNode {
-  const pClassName = props.className || "";
+  const pClassName: string = props.className || "";
   const {theme} = useTheme();
 
   return (
     <input
       {...props}
-      {...theme("outline-bgc", "glyph-c", pClassName)}
+      {...theme("outline-bgc", "glyph-c", "line-height-standard",  pClassName)}
     />
   );
 }

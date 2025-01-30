@@ -67,7 +67,6 @@ export const TAGS: {[key in TagType]: TagInfo} = {
     },
     type: "quarterly-projection",
     allowedTokens: [
-      "id",
       "data"
     ]
   },
@@ -94,22 +93,11 @@ export const TAGS: {[key in TagType]: TagInfo} = {
     },
     type: "annual-projection",
     allowedTokens: [
-      "id",
       "years",
-      "start-year"
+      "start-year",
+      "market-cap",
+      "cashflow"
     ]
-  },
-  "id": {
-    opener: {
-      type: "id-open",
-      value: "<id>"
-    },
-    closer: {
-      type: "id-close",
-      value: "</id>"
-    },
-    type: "id",
-    allowedTokens: ["plain-text"]
   },
   "years": {
     opener: {
@@ -133,6 +121,30 @@ export const TAGS: {[key in TagType]: TagInfo} = {
       value: "</start-year>"
     },
     type: "start-year",
+    allowedTokens: ["plain-text"]
+  },
+  "market-cap" : {
+    opener: {
+      type: "market-cap-open",
+      value: "<market-cap>"
+    },
+    closer: {
+      type: "market-cap-close",
+      value: "</market-cap>"
+    },
+    type: "market-cap",
+    allowedTokens: ["plain-text"]
+  },
+  "cashflow" : {
+    opener: {
+      type: "cashflow-open",
+      value: "<cashflow>"
+    },
+    closer: {
+      type: "cashflow-close",
+      value: "</cashflow>"
+    },
+    type: "cashflow",
     allowedTokens: ["plain-text"]
   }
 };

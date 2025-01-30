@@ -121,36 +121,34 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         );
       }
       case "quarterly-projection": {
-        const idNode: ASTNode | undefined = 
-          culledChildren.find((child: ASTNode) => child.type === "id");
         const dataNode: ASTNode[] = culledChildren.filter((child: ASTNode) => child.type === "data");
 
         return (
           <Container key={key}>
             <QuarterlyEarningsProjector
-              idNode={idNode}
               dataNode={dataNode}
-              // contentStart={astNode.contentPositionStart}
-              // contentEnd={astNode.contentPositionEnd}
             />
           </Container>
         );
       }
       case "annual-projection": {
           // Resolve the props info from child nodes
-        const idNode: ASTNode | undefined = 
-          culledChildren.find((child: ASTNode) => child.type === "id");
         const yearsNode: ASTNode | undefined = 
           culledChildren.find((child: ASTNode) => child.type === "years");
         const startYearNode: ASTNode | undefined = 
           culledChildren.find((child: ASTNode) => child.type === "start-year");
+        const marketCapNode: ASTNode | undefined = 
+          culledChildren.find((child: ASTNode) => child.type === "market-cap");
+        const cashflowNode: ASTNode | undefined = 
+          culledChildren.find((child: ASTNode) => child.type === "cashflow");
 
         return (
           <Container key={key}>
             <AnnualEarningsProjector
-              componentID={idNode?.children[0]?.value}
-              years={yearsNode?.children[0]?.value}
-              startYear={startYearNode?.children[0]?.value}
+              yearsNode={yearsNode}
+              startYearNode={startYearNode}
+              marketCapNode={marketCapNode}
+              cashflowNode={cashflowNode}
             />
           </Container>
         );

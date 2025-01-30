@@ -2,4 +2,5 @@
   display: flex;
   gap: var(--medium-length);
   line-height: var(--line-height-standard);
+  width: 100%;
 }

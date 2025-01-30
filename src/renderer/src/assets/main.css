@@ -101,6 +101,10 @@ textarea {
   box-sizing: border-box;
 }
 
+.box-sizing-content {
+  box-sizing: content-box;
+}
+
 .h-auto {
   height: auto;
 }
@@ -200,6 +204,41 @@ textarea {
 
 .font-size-subscript {
   font-size: var(--font-size-subscript);
+}
+
+
+/**************** MAX WIDTH ****************/
+
+.max-width-dot-size-length {
+  max-width: var(--dot-size);
+}
+
+.max-width-extra-tiny-length {
+  max-width: var(--extra-tiny-size);
+}
+
+.max-width-tiny-length {
+  max-width: var(--tiny-size);
+}
+
+.max-width-small-size {
+  max-width: var(--small-size);
+}
+
+.max-width-medium-size {
+  max-width: var(--medium-size);
+}
+
+.max-width-big-size {
+  max-width: var(--big-size);
+}
+
+.max-width-large-size {
+  max-width: var(--ultra-large-size);
+}
+
+.max-width-card-size {
+  max-width: var(--ultra-card-size);
 }
 
 /**************** INDENTATIONS ****************/

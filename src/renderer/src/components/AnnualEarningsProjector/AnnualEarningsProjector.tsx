@@ -1,33 +1,101 @@
-import { ReactNode } from "react";
-import StyledInput from "../StyledInput/StyledInput";
+import "./AnnualEarningsProjector.css";
+
+import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
+import { ASTNode } from "@renderer/model/markdown/parser";
+import useTabKeys from "@renderer/hook/useTabKeys";
+import { fixMarkdown } from "@renderer/model/markdown/utils";
+import { MarkdownContext } from "@renderer/context/MarkdownContext";
+import compoundInterest from "@renderer/utils/compoundInterest";
+import approximateCompoundRate from "@renderer/utils/approximateCompoundRate";
+import roundDecimals from "@renderer/utils/roundDecimals";
+import StopDoubleClickPropagation from "../StopDoubleClickPropagation/StopDoubleClickPropagation";
+import InputPanel from "../InputPanel/InputPanel";
+import { decimalFormatter } from "@renderer/utils/formatter";
 
 
-export type AnnualEarningsProjectorState = {
-  
+type StartingConditions = {
+  marketCap: string;
+  cashflow: string;
 };
 
-type State = AnnualEarningsProjectorState;
-
 type Props = {
-  componentID: string | undefined;
-  years: string | number | undefined;
-  startYear: string | number | undefined;
-}
+  yearsNode?: ASTNode;
+  startYearNode?: ASTNode;
+  marketCapNode?: ASTNode;
+  cashflowNode?: ASTNode;
+};
 
 export default function AnnualEarningsProjector(props: Props): ReactNode {
-  const pComponentID: string = props.componentID || "";
-  const pYears: number = parseInt(props.years + "");
-  const pStartYear: number = parseInt(props.startYear + "");
+  const pYearsNode: ASTNode | undefined = props.yearsNode;
+  const pStartYearNode: ASTNode | undefined = props.startYearNode;
+  const pMarketCapNode: ASTNode | undefined = props.marketCapNode;
+  const pCashflowNode: ASTNode | undefined = props.cashflowNode;
 
-  if( pComponentID === "" ) {
-    return (
-      <div>
-        Invalid <strong>annual earnings projector</strong> ID!
-      </div>
+  const [startConditions, setStartConditions] = useState<StartingConditions>({
+    marketCap: "",
+    cashflow: "",
+  });
+
+  const {markdown, onComponentChange} = useContext(MarkdownContext);
+
+  useEffect(() => {
+    if( pMarketCapNode && pCashflowNode ) {
+      setStartConditions({
+        marketCap: pMarketCapNode.children[0]?.value || "",
+        cashflow: pCashflowNode.children[0]?.value || ""
+      });
+    }
+  }, [
+    pYearsNode, pStartYearNode, pMarketCapNode, pCashflowNode, markdown
+  ]);
+
+  const {formatKey} = useTabKeys();
+
+  const years: number = parseInt("" + (pYearsNode?.children[0].value));
+  const startYear: number = parseInt("" + (pStartYearNode?.children[0].value));
+  const compoundRate: number = approximateCompoundRate(
+    parseFloat(startConditions.cashflow), parseFloat(startConditions.marketCap), years, 0.0005
+  );
+
+  const handleChange = (value: string, field: keyof StartingConditions) => {
+    const numeric: number = parseFloat(value);
+    const data: StartingConditions = { ...startConditions };
+
+    if( isNaN(numeric) ) {
+      data[field] = value;
+      setStartConditions(data);
+      return;
+    }
+
+    data[field] = value;
+
+    const updaterMarkdown: string = fixMarkdown(
+      markdown, [data.marketCap, data.cashflow], [pMarketCapNode!, pCashflowNode!]
     );
-  }
+    onComponentChange(updaterMarkdown);
+    setStartConditions(data);
+  };
 
-  if( isNaN(pYears) ) {
+  const renderProjections = () => {
+    const projectionElements: ReactNode[] = [];
+
+    for( let i = 1; i <= years; i++ ) {
+      const numeric: number = 
+        roundDecimals(compoundInterest(parseFloat(startConditions.cashflow), compoundRate, i), 2);
+      projectionElements.push(
+        <InputPanel
+          key={formatKey("annual-earnings-projector-" + i)}
+          label={startYear + i + "*"}
+          readOnly={true}
+          value={decimalFormatter("" + numeric)}
+        />
+      );
+    }
+
+    return projectionElements;
+  };
+
+  if( isNaN(years) ) {
     return (
       <div>
         Invalid number of years for <strong>annual earnings projector</strong>!
@@ -35,7 +103,7 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
     );
   }
 
-  if( isNaN(pStartYear) ) {
+  if( isNaN(startYear) ) {
     return (
       <div>
         Invalid starting year for <strong>annual earnings projector</strong>!
@@ -43,23 +111,51 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
     );
   }
 
-  return (
-    <div className="d-flex gap-medium-length w-100">
-      <div className="w-100">
-        <span>
-          <strong>Market cap:</strong>
-        </span>
-        <StyledInput 
-          className="w-100"
-        />
-        <span>
-          <strong>Cashflow start:</strong>
-        </span>
-        <StyledInput
-          className="w-100"
-        />
+  if( !pMarketCapNode ) {
+    return (
+      <div>
+        Missing market cap attribute from <strong>annual earnings projector</strong>!
       </div>
-      {}
+    );
+  }
+
+  if( !pCashflowNode ) {
+    return (
+      <div>
+        Missing cashflow attribute from <strong>annual earnings projector</strong>!
+      </div>
+    );
+  }
+  
+  return (
+    <div>
+      <div className="annual-earnings-projector-controls-container">
+        <StopDoubleClickPropagation>
+          <InputPanel 
+            label="Market cap"
+            value={startConditions.marketCap}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, "marketCap")}
+          />
+          <InputPanel
+            label="Cash flow start"
+            value={startConditions.cashflow}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, "cashflow")}
+          />
+          <InputPanel
+            label="Annual earnings growth rate"
+            value={roundDecimals(compoundRate * 100, 2) + "%"}
+            readOnly={true}
+          />
+        </StopDoubleClickPropagation>
+        <div className="annual-earnings-projector-projections-row">
+          <StopDoubleClickPropagation className="annual-earnings-projector-projections-container">
+            {renderProjections()}
+          </StopDoubleClickPropagation>
+        </div>
+      </div>
+      <div className="d-flex d-justify-end mt-strong-length">
+        <span>* projected earnings</span>
+      </div>
     </div>
   );
 }

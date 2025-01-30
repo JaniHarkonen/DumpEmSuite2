@@ -16,9 +16,10 @@ export type TagType =
   "quarterly-projection" | 
   "data" | 
   "annual-projection" | 
-  "id" | 
   "years" | 
-  "start-year" 
+  "start-year" |  
+  "market-cap" | 
+  "cashflow"
 ;
 
 export type TokenType = 
@@ -51,12 +52,14 @@ export type TokenType =
   "data-close" | 
   "annual-projection-open" | 
   "annual-projection-close" | 
-  "id-open" |
-  "id-close" |
   "years-open" | 
   "years-close" | 
   "start-year-open" | 
   "start-year-close" |
+  "market-cap-open" | 
+  "market-cap-close" | 
+  "cashflow-open" |
+  "cashflow-close" | 
   ListPoint |
   TagType
 ;
