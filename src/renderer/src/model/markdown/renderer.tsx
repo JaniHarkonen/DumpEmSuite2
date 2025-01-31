@@ -1,14 +1,14 @@
-import "./markdown.css";
-
 import { ReactNode } from "react";
 import { ASTNode } from "./parser";
 import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRealTimeWidget";
 import StyledLink from "@renderer/components/StyledLink/StyledLink";
 import { TAGS } from "./tokenizer";
 import { TagInfo } from "./token.type";
-import QuarterlyEarningsProjector from "@renderer/components/QuarterlyEarningsProjector/QuarterlyEarningsProjector";
+import QuarterlyEarningsProjector from "@renderer/components/markdown/QuarterlyEarningsProjector/QuarterlyEarningsProjector";
 import Container from "@renderer/components/Container/Container";
-import AnnualEarningsProjector from "@renderer/components/AnnualEarningsProjector/AnnualEarningsProjector";
+import AnnualEarningsProjector from "@renderer/components/markdown/AnnualEarningsProjector/AnnualEarningsProjector";
+import MarkdownRow from "@renderer/components/markdown/MarkdownRow/MarkdownRow";
+import MarkdownCol from "@renderer/components/markdown/MarkdownCol/MarkdownCol";
 
 
 const INDENT1: ReactNode = <>&emsp;</>;
@@ -100,24 +100,16 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
       }
       case "row": {
         return (
-          <div
-            key={key}
-            className="markdown-row"
-          >
-            <div className="markdown-row-content-container">
-              {childNodes}
-            </div>
-          </div>
+          <MarkdownRow key={key}>
+            {childNodes}
+          </MarkdownRow>
         );
-      }
+      } 
       case "col": {
         return (
-          <div
-            key={key}
-            className="d-flex d-direction-column w-100"
-          >
+          <MarkdownCol key={key}>
             {childNodes}
-          </div>
+          </MarkdownCol>
         );
       }
       case "quarterly-projection": {

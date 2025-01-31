@@ -7,6 +7,7 @@
 
 .markdown-row-content-container {
   display: flex;
+  gap: var(--strong-length);
 }
 
 @container markdown-row-container (width < 800px) {

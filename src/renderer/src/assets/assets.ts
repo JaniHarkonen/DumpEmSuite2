@@ -1,5 +1,6 @@
 import iconButtonCloseBlack from "./icons/action/close-round-black-icon.svg";
 import iconButtonTrashCanBlack from "./icons/action/trash-can-black-icon.svg";
+import iconButtonEditBlack from "./icons/action/edit-black-icon.svg";
 import iconFilePDFBlack from "./icons/file/file-pdf-black-icon.svg";
 import iconFileCSVBlack from "./icons/file/file-csv-black-icon.svg";
 import iconFileHTMLBlack from "./icons/file/file-html-black-icon.svg";
@@ -31,6 +32,9 @@ export const ASSETS = {
       },
       link: {
         black: iconExternalLinkBlack
+      },
+      edit: {
+        black: iconButtonEditBlack
       }
     },
     files: {

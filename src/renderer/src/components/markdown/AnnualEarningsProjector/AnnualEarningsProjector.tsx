@@ -8,8 +8,7 @@ import { MarkdownContext } from "@renderer/context/MarkdownContext";
 import compoundInterest from "@renderer/utils/compoundInterest";
 import approximateCompoundRate from "@renderer/utils/approximateCompoundRate";
 import roundDecimals from "@renderer/utils/roundDecimals";
-import StopDoubleClickPropagation from "../StopDoubleClickPropagation/StopDoubleClickPropagation";
-import InputPanel from "../InputPanel/InputPanel";
+import InputPanel from "@renderer/components/InputPanel/InputPanel";
 import { decimalFormatter } from "@renderer/utils/formatter";
 
 
@@ -130,7 +129,7 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
   return (
     <div>
       <div className="annual-earnings-projector-controls-container">
-        <StopDoubleClickPropagation>
+        <div>
           <InputPanel 
             label="Market cap"
             value={startConditions.marketCap}
@@ -146,11 +145,11 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
             value={roundDecimals(compoundRate * 100 - 100, 2) + "%"}
             readOnly={true}
           />
-        </StopDoubleClickPropagation>
+        </div>
         <div className="annual-earnings-projector-projections-row">
-          <StopDoubleClickPropagation className="annual-earnings-projector-projections-container">
+          <div className="annual-earnings-projector-projections-container">
             {renderProjections()}
-          </StopDoubleClickPropagation>
+          </div>
         </div>
       </div>
       <div className="d-flex d-justify-end mt-strong-length">

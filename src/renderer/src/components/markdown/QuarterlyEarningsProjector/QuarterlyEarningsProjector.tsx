@@ -6,7 +6,7 @@ import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
 import { ASTNode } from "@renderer/model/markdown/parser";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { fixMarkdown } from "@renderer/model/markdown/utils";
-import InputPanel from "../InputPanel/InputPanel";
+import InputPanel from "@renderer/components/InputPanel/InputPanel";
 
 
 type Props = {

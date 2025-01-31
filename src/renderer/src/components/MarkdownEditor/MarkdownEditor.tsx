@@ -8,6 +8,8 @@ import { ASSETS } from "@renderer/assets/assets";
 import StyledIcon from "../StyledIcon/StyledIcon";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { MarkdownContext } from "@renderer/context/MarkdownContext";
+import StyledButton from "../StyledButton/StyledButton";
+import useTheme from "@renderer/hook/useTheme";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -23,6 +25,8 @@ export default function MarkdownEditor(props: Props) {
 
   const [markdown, setMarkdown] = useState<string>("");
   const [wasEdited, setWasEdited] = useState<boolean>(false);
+
+  const {theme} = useTheme();
   
   const handleSave = (value: string) => {
     pOnSaveChanges(value);
@@ -68,10 +72,17 @@ export default function MarkdownEditor(props: Props) {
       markdown,
       onComponentChange: handleSave
     }}>
-      <div
-        className="w-100 h-100"
-        onDoubleClick={handleEditStart}
-      >
+      <div className="w-100 h-100">
+        {!isEditing && (
+          <div className="d-flex d-justify-end">
+            <StyledButton
+              icon={ASSETS.icons.action.edit.black  }
+              onClick={handleEditStart}
+            >
+              Edit
+            </StyledButton>
+          </div>
+        )}
         {isEditing && (
           <div className="markdown-editor-textarea-container">
             {wasEdited ? (
@@ -102,8 +113,8 @@ export default function MarkdownEditor(props: Props) {
             style={{display: isEditing ? "none" : "block"}}
           >
             {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
-              <div className="markdown-editor-start-suggestion">
-                Double-click here to start editing
+              <div {...theme("script-c", "markdown-editor-start-suggestion")}>
+                Click "Edit" to start taking notes.
               </div>
             )}
           </div>
