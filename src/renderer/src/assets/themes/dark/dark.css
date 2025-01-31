@@ -1,0 +1,24 @@
+@import url("./ambient.css");
+@import url("./shadow.css");
+@import url("./baseline.css");
+@import url("./highlight.css");
+@import url("./outline.css");
+@import url("./glyph.css");
+@import url("./script.css");
+@import url("./action.css");
+
+.theme-dark {
+  --theme-dark-action-hl: #00BC8D;
+  --theme-dark-action-bd: #008767;
+}
+
+/* BUTTON */
+.theme-dark.button {
+  color: var(--theme-dark-glyph-c);
+  background-color: var(--theme-dark-action);
+  border-color: var(--theme-dark-action-bd);
+
+  &:hover{
+    background-color: var(--theme-dark-action-hl);
+  }
+}

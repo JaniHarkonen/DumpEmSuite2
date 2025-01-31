@@ -1,0 +1,47 @@
+/*
+  For higlighting active elements in the UI.
+*/
+
+.theme-dark  {
+  --theme-dark-highlight: #5E5E5E;
+}
+
+.theme-dark.highlight-bgc {
+  background-color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-hl {
+  &:hover {
+    background-color: var(--theme-dark-highlight);
+  }
+}
+
+.theme-dark.highlight-c {
+  color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-bdc {
+  border-color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-bdc-top {
+  border-top-color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-bdc-bottom {
+  border-bottom-color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-bdc-left {
+  border-left-color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-bdc-right {
+  border-right-color: var(--theme-dark-highlight);
+}
+
+.theme-dark.highlight-svg {
+  filter: brightness(0) saturate(100%) invert(42%) 
+          sepia(0%) saturate(42%) hue-rotate(148deg) 
+          brightness(87%) contrast(96%);
+}

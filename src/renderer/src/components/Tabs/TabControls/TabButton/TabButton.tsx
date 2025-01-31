@@ -25,7 +25,7 @@ export default function TabButton(props: Props): ReactNode {
   const {tabs, activeTabIndex, onSelect, onOpen, onDrop} = useContext(TabsContext);
   const {theme} = useTheme();
 
-  const isTabActive: boolean = pTab.id === tabs[activeTabIndex]?.id;
+  const isTabActive: boolean = pTab.id === (tabs[activeTabIndex]?.id);
   const variableStyle: string = 
     isTabActive ? "shadow-bgc highlight glyph-bdc-bottom" : "ambient-bgc";
 
@@ -45,7 +45,7 @@ export default function TabButton(props: Props): ReactNode {
 
   return (
     <button
-      {...theme("glyph-c", variableStyle, "outline-bdc", "outline-hl", "tab-controls-button")}
+      {...theme("glyph-c", variableStyle, "outline-bdc", "highlight-hl", "tab-controls-button")}
       onMouseDown={() => onSelect && onSelect(pTab)}
       onClick={() => onOpen && onOpen(pTab)}
       onMouseUp={handleTabDrop}

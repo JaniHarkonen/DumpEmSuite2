@@ -1,5 +1,5 @@
 @import url("./global-variables.css");
-@import url("./themes.css");
+@import url("./themes/themes.css");
 
 body {
   height: 100dvh;
@@ -526,20 +526,4 @@ textarea {
 
 .line-height-standard {
   line-height: var(--line-height-standard);
-}
-
-.debug-bg-red {
-  background-color: red;
-}
-
-.debug-bg-green {
-  background-color: green;
-}
-
-.debug-bg-blue {
-  background-color: blue;
-}
-
-.debug-gb-black {
-  background-color: black;
 }

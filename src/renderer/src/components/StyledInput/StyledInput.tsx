@@ -10,7 +10,7 @@ export default function StyledInput(props: HTMLProps<HTMLInputElement>): ReactNo
   return (
     <input
       {...props}
-      {...theme("outline-bgc", "glyph-c", "line-height-standard",  pClassName)}
+      {...theme("baseline-bgc", "glyph-c", "line-height-standard",  pClassName)}
     />
   );
 }

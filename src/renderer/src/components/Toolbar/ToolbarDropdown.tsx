@@ -33,7 +33,7 @@ export default function ToolbarDropdown(props: Props): ReactNode {
   return (
     <div>
       <button
-        {...theme("shadow-bgc", "glyph-c", "outline-hl")}
+        {...theme("shadow-bgc", "glyph-c", "highlight-hl")}
         onClick={(e) => pOnOpen(e)}
         onMouseEnter={pOnHover}
       >
@@ -44,7 +44,7 @@ export default function ToolbarDropdown(props: Props): ReactNode {
           {pOptions.map((option: ToolbarOption) => {
             return (
               <button
-                {...theme("ambient-bgc", "glyph-c", "outline-hl")}
+                {...theme("ambient-bgc", "glyph-c", "highlight-hl")}
                 key={"toolbar-dropdown-option-" + option.key}
                 onClick={() => pOnOptionSelect(option.key)}
               >

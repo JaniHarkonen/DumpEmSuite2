@@ -1,0 +1,47 @@
+/*
+  For painting distinct objects and areas in the background of the UI.
+*/
+
+.theme-light {
+  --theme-light-shadow: white;
+}
+
+.theme-light.shadow-bgc {
+  background-color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-hl {
+  &:hover {
+    background-color: var(--theme-light-shadow);
+  }
+}
+
+.theme-light.shadow-c {
+  color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-bdc {
+  border-color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-bdc-top {
+  border-top-color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-bdc-bottom {
+  border-bottom-color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-bdc-left {
+  border-left-color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-bdc-right {
+  border-right-color: var(--theme-light-shadow);
+}
+
+.theme-light.shadow-svg {
+  filter: brightness(0) saturate(100%) invert(100%) 
+          sepia(100%) saturate(0%) hue-rotate(288deg) 
+          brightness(102%) contrast(102%);
+}

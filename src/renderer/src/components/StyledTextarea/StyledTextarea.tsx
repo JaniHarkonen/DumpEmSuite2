@@ -97,7 +97,7 @@ export default function StyledTextarea(props: Props): ReactNode {
   return (
     <textarea
       {...props}
-      {...theme("outline-bgc", "glyph-c", pClassName)}
+      {...theme("baseline-bgc", "glyph-c", pClassName)}
       onKeyDown={handleKeyDown}
     />
   );

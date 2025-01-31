@@ -53,11 +53,11 @@ export default function BrowserFile(props: Props): ReactNode {
 
   return (
     <div
-      {...theme("outline-hl", "browser-file-container")}
+      {...theme("highlight-hl", "browser-file-container")}
       onClick={handleFileClick}
     >
       <button
-        {...theme("outline-hl", "browser-file-delete-button")}
+        {...theme("highlight-hl", "browser-file-delete-button")}
         onClick={handleFileDelete}
       >
         <StyledIcon src={ASSETS.icons.action.trashCan.black} />
