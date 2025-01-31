@@ -1,0 +1,47 @@
+/*
+  For outlining elements and distinct areas in the UI.
+*/
+
+.theme-light {
+  --theme-light-outline: #CFCFCF;
+}
+
+.theme-light.outline-bgc {
+  background-color: var(--theme-light-outline);
+}
+
+.theme-light.outline-hl {
+  &:hover {
+    background-color: var(--theme-light-outline);
+  }
+}
+
+.theme-light.outline-c {
+  color: var(--theme-light-outline);
+}
+
+.theme-light.outline-bdc {
+  border-color: var(--theme-light-outline);
+}
+
+.theme-light.outline-bdc-top {
+  border-top-color: var(--theme-light-outline);
+}
+
+.theme-light.outline-bdc-bottom {
+  border-bottom-color: var(--theme-light-outline);
+}
+
+.theme-light.outline-bdc-left {
+  border-left-color: var(--theme-light-outline);
+}
+
+.theme-light.outline-bdc-right {
+  border-right-color: var(--theme-light-outline);
+}
+
+.theme-light.outline-svg {
+  filter: brightness(0) saturate(100%) invert(100%) 
+          sepia(0%) saturate(2802%) hue-rotate(341deg) 
+          brightness(110%) contrast(62%);
+}

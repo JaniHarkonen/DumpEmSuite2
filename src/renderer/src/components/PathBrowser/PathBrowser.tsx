@@ -1,7 +1,11 @@
+import "./PathBrowser.css";
+
 import { ChangeEvent, KeyboardEvent, ReactNode, useEffect, useState } from "react";
 import BrowseFilesButton, { BrowseFilesAction, BrowseFilesProps } from "../BrowseFilesButton/BrowseFilesButton";
 import { OpenDialogResult, SaveDialogResult } from "src/shared/files.type";
 import { ASSETS } from "@renderer/assets/assets";
+import StyledInput from "../StyledInput/StyledInput";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 type OnPathChange = (selectedPath: string) => void;
@@ -65,29 +69,33 @@ export default function PathBrowser(props: Props): ReactNode {
   };
 
   return (
-    <>
-      <input
+    <div className="path-browser-container">
+      <span>
+        <BrowseFilesButton {...{
+          ...props,
+          onSelect: handlePathSelection
+        }} />
+      </span>
+      <StyledInput
+        className="ml-medium-length"
         type="text"
         value={input}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target.value)}
         onBlur={() => handleStateSave()}
         onKeyDown={handleEnterPress}
       />
-      <BrowseFilesButton {...{
-        ...props,
-        onSelect: handlePathSelection
-      }} />
+      
       {warning && (
         <>
           <span>
-            <img
-              className="size-tiny-icon"
+            <StyledIcon
               src={ASSETS.icons.alerts.missing.color}
+              enableFilter={false}
             />
           </span>
           <span>{warning}</span>
         </>
       )}
-    </>
+    </div>
   );
 }

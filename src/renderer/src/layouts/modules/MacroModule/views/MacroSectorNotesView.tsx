@@ -25,14 +25,15 @@ export default function MacroSectorNotesView(props: Props): ReactNode {
     fetchMacroSectorNote();
   }, [pMacroSector]);
 
-
   return (
     <PageContainer>
-      <PageHeader>{pMacroSector.sector_name}</PageHeader>
-      <MarkdownEditor
-        initialValue={macroSectorNote || ""}
-        onSaveChange={(value: string) => postMacroSectorNoteChange(value)}
-      />
+      <div className="grid-auto-top">
+        <PageHeader>{pMacroSector.sector_name}</PageHeader>
+        <MarkdownEditor
+          initialValue={macroSectorNote || ""}
+          onSaveChange={(value: string) => postMacroSectorNoteChange(value)}
+        />
+      </div>
     </PageContainer>
   );
 }

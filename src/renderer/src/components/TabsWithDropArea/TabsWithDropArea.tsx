@@ -1,4 +1,4 @@
-import "../Tabs/Tabs.css";
+import "../../layouts/ModuleView/ModuleView.css";
 import "../DropArea/DropArea.css";
 
 import { TabsProps } from "../Tabs/Tabs";
@@ -6,6 +6,7 @@ import { PropsWithChildren, ReactNode } from "react";
 import DropArea, { DropAreaSettings } from "../DropArea/DropArea";
 import useDropAreas from "@renderer/hook/useDropAreas";
 import reactNodeToArray from "@renderer/utils/reactNodeToArray";
+import useTheme from "@renderer/hook/useTheme";
 
 
 type OnContentDrop = (dropArea: DropAreaSettings) => void;
@@ -30,10 +31,13 @@ export default function TabsWithDropArea(props: Props): ReactNode {
     activeDropArea
   } = useDropAreas({ dropAreas: pDropAreas, onDrop: pOnContentDrop });
 
+  const {theme} = useTheme();
   
   return (
-    <div className="tabs-container">
-      <div className="tab-controls-container">{pControls}</div>
+    <div {...theme("shadow-bgc", "tabs-container")}>
+      <div {...theme("ambient-bgc", "outline-bdc-bottom", "tab-controls-container")}>
+        {pControls}
+      </div>
       <div
         className="p-relative w-100 h-100 overflow-hidden"
         onMouseMove={handleDropAreaHighlight}

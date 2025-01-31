@@ -1,3 +1,4 @@
+import { AppTheme } from "@renderer/context/ThemeContext";
 import { defaultSplitTreeBlueprint } from "./splits";
 import { SceneConfigBlueprint } from "./tabs";
 
@@ -10,6 +11,7 @@ export type WorkspaceConfig = {
 
 export type AppConfig = {
   sceneConfigBlueprint: SceneConfigBlueprint;
+  activeTheme: AppTheme;
 };
 
 export function defaultWorkspaceConfig(): WorkspaceConfig {

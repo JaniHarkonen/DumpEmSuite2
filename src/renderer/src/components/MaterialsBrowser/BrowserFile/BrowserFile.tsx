@@ -1,4 +1,8 @@
+import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
+import "./BrowserFile.css";
+
 import { ASSETS } from "@renderer/assets/assets";
+import useTheme from "@renderer/hook/useTheme";
 import { ReactNode, useEffect, useState } from "react";
 import { FilePathParse } from "src/shared/files.type";
 
@@ -16,12 +20,14 @@ type Props = {
 const {filesAPI} = window.api;
 
 export default function BrowserFile(props: Props): ReactNode {
-  const [info, setInfo] = useState<FilePathParse | null>(null);
-
   const pFileName: string = props.fileName;
   const pFileDirectory: string = props.fileDirectory;
   const pOnClick: OnBrowserFileClick = props.onClick || function() {};
   const pOnDelete: OnBrowserFileDelete = props.onDelete || function() {};
+
+  const [info, setInfo] = useState<FilePathParse | null>(null);
+
+  const {theme} = useTheme();
 
   const filePath: string = pFileDirectory + "\\" + pFileName;
 
@@ -32,27 +38,35 @@ export default function BrowserFile(props: Props): ReactNode {
 
   const handleFileClick = () => {
     info && pOnClick(info);
-  }
+  };
 
   const handleFileDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     info && pOnDelete(info);
-  }
+  };
 
   const getFileIcon = (): string => {
     return ASSETS.icons.files[
       info?.ext.substring(1) || "unknown"
-    ].color || ASSETS.icons.files.unknown.white;
+    ]?.black || ASSETS.icons.files.unknown.black;
   };
 
   return (
-    <div onClick={handleFileClick}>
+    <div
+      {...theme("highlight-hl", "browser-file-container")}
+      onClick={handleFileClick}
+    >
+      <button
+        {...theme("highlight-hl", "browser-file-delete-button")}
+        onClick={handleFileDelete}
+      >
+        <StyledIcon src={ASSETS.icons.action.trashCan.black} />
+      </button>
       <img
-        className="size-medium-icon"
+        {...theme("script-svg", "size-small-icon mr-medium-length")}
         src={getFileIcon()}
       />
       {info?.base}
-      <button onClick={handleFileDelete}>Delete</button>
     </div>
   );
 }

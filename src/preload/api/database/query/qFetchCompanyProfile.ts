@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import { FetchResult } from "../../../../shared/database.type";
 import { Company, FKProfile, Profile } from "../../../../shared/schemaConfig";
 import { DatabaseManager } from "../database";

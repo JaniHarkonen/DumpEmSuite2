@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import EditableComponent, { EditableComponentProps } from "./EditableComponent";
+import StyledTextarea from "../StyledTextarea/StyledTextarea";
 
 
 type Props = Omit<EditableComponentProps, "controlledElement">;
@@ -7,9 +8,9 @@ type Props = Omit<EditableComponentProps, "controlledElement">;
 export default function EditableTextArea(props: Props): ReactNode {
   const renderTextArea = (props: any): ReactNode => {
     return (
-      <textarea
+      <StyledTextarea
         {...props}
-        className="w-100"
+        className="w-100 h-100"
       />
     );
   };

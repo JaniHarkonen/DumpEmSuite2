@@ -6,7 +6,7 @@ import { ReactNode, useContext } from "react";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import ProfilesView from "./views/ProfilesView/ProfilesView";
 import ListingsView from "./views/ListingsView/ListingsView";
-import ModuleView from "../ModuleView/ModuleView";
+import ModuleView from "../../ModuleView/ModuleView";
 import ScraperView from "./views/ScraperView/ScraperView";
 
 

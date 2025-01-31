@@ -6,6 +6,7 @@ import useDraggable from "@renderer/hook/useDraggable";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import clamp from "@renderer/utils/clamp";
 import { DividerDirection, DividerSettings } from "@renderer/model/splits";
+import useTheme from "@renderer/hook/useTheme";
 
 type OnDividerMove = (newValue: number) => void;
 
@@ -48,6 +49,8 @@ export default function Divider(props: Props): ReactNode {
     }
   }, [pDividerSettings]);
 
+  const {theme} = useTheme();
+
   /**
    * Returns either the given value as a CSS percentage, if the content direction of the
    * divider is set to a given value. Otherwise, returns "100%".
@@ -77,7 +80,7 @@ export default function Divider(props: Props): ReactNode {
         {mainContent}
         {alternativeContent && (
           <div 
-            className={`divider-handle ${pDividerSettings.direction}`}
+            {...theme("outline-bdc", `divider-handle ${pDividerSettings.direction}`)}
             onMouseDown={handleDragStart}
           />
         )}

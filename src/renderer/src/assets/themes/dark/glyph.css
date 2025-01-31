@@ -1,0 +1,47 @@
+/*
+  For painting significant, though infrequent, text in he UI.
+*/
+
+.theme-dark {
+  --theme-dark-glyph: #F9F9F9;
+}
+
+.theme-dark.glyph-bgc {
+  background-color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-hl {
+  &:hover {
+    background-color: var(--theme-dark-glyph);
+  }
+}
+
+.theme-dark.glyph-c {
+  color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-bdc {
+  border-color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-bdc-top {
+  border-top-color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-bdc-bottom {
+  border-bottom-color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-bdc-left {
+  border-left-color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-bdc-right {
+  border-right-color: var(--theme-dark-glyph);
+}
+
+.theme-dark.glyph-svg {
+  filter: brightness(0) saturate(100%) invert(100%) 
+          sepia(81%) saturate(0%) hue-rotate(289deg) 
+          brightness(109%) contrast(95%);
+}

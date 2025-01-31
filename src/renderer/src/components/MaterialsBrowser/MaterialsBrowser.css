@@ -1,0 +1,18 @@
+.materials-browser-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  width: 100%;
+  height: 100%;
+  
+  user-select: text;
+}
+
+.materials-browser-file-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.materials-browser-file-item-container {
+  flex-basis: 50%;
+}

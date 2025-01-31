@@ -13,7 +13,6 @@ const DEFAULT_JSON_STRINGIFY_SETTINGS = {
 export const filesAPI: FilesAPI = {
   writeJSON: (filePath: string, json: any) => {
     return new Promise((resolve, reject) => {
-      console.log(json)
       writeFile(filePath, JSON.stringify(json, null, DEFAULT_JSON_STRINGIFY_SETTINGS.space))
       .then(() => resolve({
         wasSuccessful: true

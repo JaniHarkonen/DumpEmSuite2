@@ -1,0 +1,50 @@
+.table-list-container {
+  display: grid;
+
+  width: 100%;
+  line-height: var(--line-height-standard);
+
+  user-select: text;
+}
+
+.table-list-data-cell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.table-list-data-cell-container {
+    /* Invisible border to avoid jumping when rows are highlighted */
+  border-style: solid;
+  border-left-style: none;
+  border-right-style: none;
+  border-color: rgba(0,0,0,0);
+  border-width: var(--small-length);
+}
+
+.table-list-first {
+  border-left-style: solid;
+  border-top-left-radius: var(--medium-length);
+  border-bottom-left-radius: var(--medium-length);
+}
+
+.table-list-last {
+  border-right-style: solid;
+  border-top-right-radius: var(--medium-length);
+  border-bottom-right-radius: var(--medium-length);
+}
+
+.table-list-highlight {
+  border-style: solid;
+  border-left-style: none;
+  border-right-style: none;
+}
+
+.table-list-column-header-container {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.table-list-data-row {
+  display: contents;
+}

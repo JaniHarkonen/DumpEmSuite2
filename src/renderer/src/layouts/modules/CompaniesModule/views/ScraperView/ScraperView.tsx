@@ -16,6 +16,8 @@ import { ScraperLogContext, ScraperLogContextType } from "@renderer/context/Scra
 import { Nullish } from "@renderer/utils/Nullish";
 import { FilePathParse, ReadResult } from "src/shared/files.type";
 import ScraperMetadataDisplay from "@renderer/components/ScraperMetadataDisplay/ScraperMetadataDisplay";
+import Container from "@renderer/components/Container/Container";
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 
 
 export type ScraperMetadata = {
@@ -35,6 +37,7 @@ export default function ScraperView(): ReactNode {
   const {databaseAPI} = useDatabase();
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+
   const scraperLogProps: ScraperLogContextType = useScraperLog();
 
   const tabExtraInfo: any = tabs[activeTabIndex].extra;
@@ -52,7 +55,6 @@ export default function ScraperView(): ReactNode {
 
       if( scraper && scraper.path ) {
         filesAPI.parseFilePath({ path: scraper.path }).then((parse: FilePathParse) => {
-          console.log(parse.dir + "\\" + parse.name + ".json")
           filesAPI.readJSON<ScraperMetadata>(parse.dir + "\\" + parse.name + ".json")
           .then((result: ReadResult<ScraperMetadata>) => {
             if( result.wasSuccessful ) {
@@ -177,8 +179,7 @@ export default function ScraperView(): ReactNode {
 
           scraperLogProps.logResult(scrapeResult.scrape);
         });
-      }).catch((error) => {
-        console.log(error)
+      }).catch(() => {
         scraperLogProps.logEvent({
           key: "scrape",
           status: "failed",
@@ -195,65 +196,69 @@ export default function ScraperView(): ReactNode {
   };
 
   return (
-    <div className="w-100 h-100 overflow-auto user-select-text">
+    <div className="scraper-view-container">
       <PageContainer>
         <PageHeader>Scrape file</PageHeader>
-        <h3>Settings</h3>
-        <div>
-          Scraper: 
-          <PathBrowser
-            initialPath={scraperInfo?.path}
-            actionKey={dialogKeySelectScraper}
-            action="open"
-            dialogProps={{
-              key: dialogKeySelectScraper,
-              options: {
-                title: "Select scraper"
-              }
-            }}
-            saveState={handleScraperSelect}
-            nonExistingPathWarningMessage={warningFilePathInvalid}
-          />
-          <ScraperMetadataDisplay scraperMetadata={scraperInfo?.metadata} />
-        </div>
-        <div>
-          <span>Target file: </span>
-          <PathBrowser
-            initialPath={scrapeTarget}
-            actionKey={dialogKeySelectTarget}
-            action="open"
-            dialogProps={{
-              key: dialogKeySelectTarget,
-              options: {
-                title: "Select target file to be scraped"
-              }
-            }}
-            saveState={handleTargetSelect}
-            nonExistingPathWarningMessage={warningFilePathInvalid}
-          />
-        </div>
-        <div>
-          <span>Output file: </span>
-          <PathBrowser
-            initialPath={scrapeOutput}
-            actionKey={dialogKeySelectOutput}
-            action="save"
-            dialogProps={{
-              key: dialogKeySelectOutput,
-              options: {
-                title: "Select output file for the scrape result"
-              }
-            }}
-            saveState={handleOutputSelect}
-          />
-        </div>
-        <button onClick={handleScrape}>Scrape</button>
-        <h3>Log</h3>
-        <div>
-          <ScraperLogContext.Provider value={scraperLogProps}>
-            <ScraperLog />
-          </ScraperLogContext.Provider>
-        </div>
+        <Container>
+          <h3>Settings</h3>
+          <Container>
+            <div>
+              <span>Scraper: </span>
+              <PathBrowser
+                initialPath={scraperInfo?.path}
+                actionKey={dialogKeySelectScraper}
+                action="open"
+                dialogProps={{
+                  key: dialogKeySelectScraper,
+                  options: {
+                    title: "Select scraper"
+                  }
+                }}
+                saveState={handleScraperSelect}
+                nonExistingPathWarningMessage={warningFilePathInvalid}
+              />
+              <ScraperMetadataDisplay scraperMetadata={scraperInfo?.metadata} />
+            </div>
+            <div>
+              <span>Target file: </span>
+              <PathBrowser
+                initialPath={scrapeTarget}
+                actionKey={dialogKeySelectTarget}
+                action="open"
+                dialogProps={{
+                  key: dialogKeySelectTarget,
+                  options: {
+                    title: "Select target file to be scraped"
+                  }
+                }}
+                saveState={handleTargetSelect}
+                nonExistingPathWarningMessage={warningFilePathInvalid}
+              />
+            </div>
+            <div>
+              <span>Output file: </span>
+              <PathBrowser
+                initialPath={scrapeOutput}
+                actionKey={dialogKeySelectOutput}
+                action="save"
+                dialogProps={{
+                  key: dialogKeySelectOutput,
+                  options: {
+                    title: "Select output file for the scrape result"
+                  }
+                }}
+                saveState={handleOutputSelect}
+              />
+            </div>
+            <StyledButton onClick={handleScrape}>Scrape</StyledButton>
+          </Container>
+          <h3>Log</h3>
+          <Container>
+            <ScraperLogContext.Provider value={scraperLogProps}>
+              <ScraperLog />
+            </ScraperLogContext.Provider>
+          </Container>
+        </Container>
       </PageContainer>
     </div>
   );

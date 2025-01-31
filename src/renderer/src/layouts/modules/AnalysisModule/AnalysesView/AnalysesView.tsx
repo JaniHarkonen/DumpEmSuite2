@@ -14,6 +14,7 @@ import { BoundDatabaseAPI } from "src/shared/database.type";
 import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
 import { FilterationStep } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 
 
 const TAGS = {
@@ -101,12 +102,13 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     const tabs: Tab[] = targetNode.value.tabs;
 
     return (
-      <TabControls>
-        {tabs.map((tab: Tab) => {
-          const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
+      <div className="d-flex">
+        <TabControls>
+          {tabs.map((tab: Tab) => {
+            const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
 
-          return(
-            <EditableTabButton
+            return(
+              <EditableTabButton
                 key={tab.workspace + "-tab-control-button-" + tab.id}
                 tab={tab}
                 allowEdit={!isFundamental}
@@ -117,13 +119,19 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
                 onRemove={(e: MouseEvent<HTMLImageElement>) => {
                   handleTabRemove(e, targetNode, tab);
                 }}
-            />
-          );
-        })}
-        <button onClick={() => handleTabAdd(targetNode)}>
-          {"+"}
-        </button>
-      </TabControls>
+              />
+            );
+          })}
+        </TabControls>
+        <div >
+          <StyledButton
+            className="ml-medium-length"
+            onClick={() => handleTabAdd(targetNode)}
+          >
+            {"+"}
+          </StyledButton>
+        </div>
+      </div>
     );
   };
 

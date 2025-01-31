@@ -21,6 +21,7 @@ export default function qFetchFilterationStepStocks(
           col<Company>("exchange", "c"),
           col<Company>("updated", "c"),
           col<Currency>("currency_id", "cx"),
+          col<Currency>("currency_symbol", "cx"),
           col<Tag>("tag_id", "t"),
           col<Tag>("tag_hex", "t"),
           col<Tag>("tag_label", "t")

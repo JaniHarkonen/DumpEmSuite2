@@ -1,0 +1,7 @@
+.markdown-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--strong-length);
+
+  width: 100%;
+}

@@ -2,6 +2,7 @@ import useDatabase from "@renderer/hook/useDatabase";
 import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { BoundDatabaseAPI, FetchResult } from "src/shared/database.type";
 import { FilterationStep } from "src/shared/schemaConfig";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 type OnFiltrationSubmit = (filtrationStep: FilterationStep, preserveTags: boolean) => void;
@@ -51,10 +52,10 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
   };
 
   return (
-    <div className="d-flex">
-      <button onClick={handleSubmit}>
-        Submit
-      </button>
+    <div className="text-align-right">
+      <span className="mr-medium-length">
+        Submit to:
+      </span>
       <select onChange={handleSelection}>
         {Object.keys(filtrationSteps).map((key: string) => {
           return (
@@ -67,10 +68,19 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
           );
         })}
       </select>
-      <input
-        type="checkbox"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setPreserveTags(e.target.checked)}
-      /> Preserve tags
+      <div>
+      <span className="mr-medium-length">Preserve tags</span>
+        <input
+          type="checkbox"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setPreserveTags(e.target.checked)}
+        />
+        
+      </div>
+      <div >
+        <StyledButton onClick={handleSubmit}>
+          Submit
+        </StyledButton>
+      </div>
     </div>
   );
 }

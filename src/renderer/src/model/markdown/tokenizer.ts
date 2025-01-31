@@ -1,21 +1,160 @@
 import { TagTrie, TagTrieNode } from "./TagTrie";
-import { ListPoint, TokenType } from "./token.type";
+import { ListPoint, TagInfo, TagType } from "./token.type";
+import { MarkdownToken } from "./token.type";
 
-
-export type MarkdownToken = {
-  type: TokenType;
-  value: string;
+  // Available markdown tags along with their info
+export const TAGS: {[key in TagType]: TagInfo} = {
+  "chart": {
+    opener: {
+      type: "chart-open",
+      value: "<chart>"
+    },
+    closer: {
+      type: "chart-close",
+      value: "</chart>"
+    },
+    type: "chart",
+    allowedTokens: ["plain-text"]
+  },
+  "underline": {
+    opener: {
+      type: "underline-open",
+      value: "<u>"
+    },
+    closer: {
+      type: "underline-close",
+      value: "</u>"
+    },
+    type: "underline"
+  },
+  "row": {
+    opener: {
+      type: "row-open",
+      value: "<row>"
+    },
+    closer: {
+      type: "row-close",
+      value: "</row>"
+    },
+    type: "row",
+    ignoredTokens: [
+      "tab-character",
+      "new-line"
+    ]
+  },
+  "col": {
+    opener: {
+      type: "col-open",
+      value: "<col>"
+    },
+    closer: {
+      type: "col-close",
+      value: "</col>"
+    },
+    type: "col",
+    ignoredTokens: [
+      "tab-character"
+    ]
+  },
+  "quarterly-projection": {
+    opener: {
+      type: "quarterly-projection-open",
+      value: "<quarterly>"
+    },
+    closer: {
+      type: "quarterly-projection-close",
+      value: "</quarterly>"
+    },
+    type: "quarterly-projection",
+    allowedTokens: [
+      "data"
+    ]
+  },
+  "data": {
+    opener: {
+      type: "data-open",
+      value: "<data>"
+    },
+    closer: {
+      type: "data-close",
+      value: "</data>"
+    },
+    type: "data",
+    allowedTokens: ["plain-text"]
+  },
+  "annual-projection": {
+    opener: {
+      type: "annual-projection-open",
+      value: "<annual>"
+    },
+    closer: {
+      type: "annual-projection-close",
+      value: "</annual>"
+    },
+    type: "annual-projection",
+    allowedTokens: [
+      "years",
+      "start-year",
+      "market-cap",
+      "cashflow"
+    ]
+  },
+  "years": {
+    opener: {
+      type: "years-open",
+      value: "<years>"
+    },
+    closer: {
+      type: "years-close",
+      value: "</years>"
+    },
+    type: "years",
+    allowedTokens: ["plain-text"]
+  },
+  "start-year": {
+    opener: {
+      type: "start-year-open",
+      value: "<start-year>"
+    },
+    closer: {
+      type: "start-year-close",
+      value: "</start-year>"
+    },
+    type: "start-year",
+    allowedTokens: ["plain-text"]
+  },
+  "market-cap" : {
+    opener: {
+      type: "market-cap-open",
+      value: "<market-cap>"
+    },
+    closer: {
+      type: "market-cap-close",
+      value: "</market-cap>"
+    },
+    type: "market-cap",
+    allowedTokens: ["plain-text"]
+  },
+  "cashflow" : {
+    opener: {
+      type: "cashflow-open",
+      value: "<cashflow>"
+    },
+    closer: {
+      type: "cashflow-close",
+      value: "</cashflow>"
+    },
+    type: "cashflow",
+    allowedTokens: ["plain-text"]
+  }
 };
-
 
   // Trie for custom tags that will be queried when tokenizing
 const TAG_TRIE = new TagTrie();
-TAG_TRIE.put("<chart>", "chart-open");
-TAG_TRIE.put("</chart>", "chart-close");
-TAG_TRIE.put("<u>", "underline-open");
-TAG_TRIE.put("</u>", "underline-close");
-TAG_TRIE.put("<row>", "row-open");
-TAG_TRIE.put("</row>", "row-close");
+Object.keys(TAGS).forEach((key: string) => {
+  TAG_TRIE.put(TAGS[key].opener.value, TAGS[key]);
+  TAG_TRIE.put(TAGS[key].closer.value, TAGS[key]);
+});
 
   // Plain characters of the list points
 const LIST_CHARACTERS: { [key in ListPoint]: string } = {
@@ -188,8 +327,8 @@ export function tokenize(input: string): MarkdownToken[] {
         if( peek() === "<" ) {
           let finalNode: TagTrieNode = TAG_TRIE.getRoot();
           let tagString: string = "";
-
           let i = cursorPosition;
+
           for( i = cursorPosition + 1; i < input.length; i++ ) {
             const charAt: string = input.charAt(i);
             tagString += charAt;
@@ -209,17 +348,18 @@ export function tokenize(input: string): MarkdownToken[] {
           
           if( finalNode?.getTagString() === tagString ) {
             token({
-              type: finalNode.getTokenType()!,
-              value: tagString
+              type: finalNode.getTagInfo()!.type,
+              value: tagString,
+              isTag: true,
+              position: cursorPosition - tagString.length + 2
             });
-          } else {
+          } else if( tagString === "<" || tagString === "<>" ) {
             plainTextAccumulator += tagString;
           }
         } else {
             // Text between tokens is considered plain text
           plainTextAccumulator += peek();
         }
-
       } break;
     }
 

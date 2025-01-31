@@ -1,9 +1,12 @@
 import "./CompanyTag.css";
 
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
 import useEditable from "@renderer/hook/useEditable";
 import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useState } from "react";
 import { Tag } from "src/shared/schemaConfig";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
+import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
 
 
 export type OnTagSelect = (tag: Tag) => void;
@@ -17,6 +20,8 @@ type Props = {
   onRemove?: OnCompanyTagRemove;
   onSelect?: OnTagSelect;
   allowEdit?: boolean;
+  isSelected?: boolean;
+  displayLabel?: boolean;
 };
 
 export default function CompanyTag(props: Props): ReactNode {
@@ -25,10 +30,11 @@ export default function CompanyTag(props: Props): ReactNode {
   const pOnRemove: OnCompanyTagRemove = props.onRemove || function(){ };
   const pOnSelect: OnTagSelect = props.onSelect || function(){ };
   const pAllowEdit: boolean = props.allowEdit ?? false;
+  const pIsSelected: boolean = props.isSelected ?? false;
+  const pDisplayLabel: boolean = props.displayLabel ?? true;
 
   const [isEditing, handleStartEdit, handleFinalize, handleEnter] = useEditable<Tag>({ onFinalize: pOnUpdate });
   const [tag, setTag] = useState<Tag>(pTag);
-
 
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
     setTag({
@@ -50,13 +56,11 @@ export default function CompanyTag(props: Props): ReactNode {
     }
   };
 
-
   return (
     <div
       className="d-flex d-align-items-center"
       onDoubleClick={() => pAllowEdit && handleStartEdit()}
       onBlur={handleBlur}
-      onClick={() => pOnSelect(tag)}
     >
       {isEditing ? (
         <>
@@ -66,28 +70,31 @@ export default function CompanyTag(props: Props): ReactNode {
             onChange={handleChangeColor}
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
           />
-          <input
+          <StyledInput
+            type="text"
             value={tag.tag_label || ""}
             onChange={handleChangeLabel}
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
             autoFocus={true}
           />
-          <button onClick={() => pOnRemove(tag)}>
+          <StyledButton onClick={() => pOnRemove(tag)}>
             <span>
-              <img
-                className="size-tiny-icon company-tag-control-remove"
-                src={ASSETS.icons.buttons.trashCan.white}
+              <StyledIcon
+                className="company-tag-control-remove"
+                src={ASSETS.icons.action.trashCan.black}
               />
             </span>
-          </button>
+          </StyledButton>
         </>
       ) : (
         <>
           <span
-            className="size-tiny-icon mr-norm"
+            className={"company-tag-color mr-medium-length" + (pIsSelected ? " active" : "")}
             style={{ backgroundColor: tag.tag_hex }}
+            role="button"
+            onClick={() => pOnSelect(tag)}
           />
-          {tag.tag_label}
+          {pDisplayLabel && tag.tag_label}
         </>
       )}
     </div>

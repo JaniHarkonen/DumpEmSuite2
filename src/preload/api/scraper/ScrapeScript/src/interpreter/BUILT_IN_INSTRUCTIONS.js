@@ -10,7 +10,6 @@ export const BUILT_IN_INSTRUCTIONS = {
     // Print message into console
   prnt: (getArgument) => {
     ipcRenderer.send("debug", destructureValue(getArgument()));
-    // console.log(destructureValue(getArgument()));
     return null;
   },
     // Rounds a value down to the nearest integer

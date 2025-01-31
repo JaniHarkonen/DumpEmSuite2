@@ -3,12 +3,12 @@ import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { Tab, TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode, useContext } from "react";
-import ModuleView from "../../ModuleView/ModuleView";
+import ModuleView from "../../../ModuleView/ModuleView";
 import MacroSectorNotesView from "../views/MacroSectorNotesView";
 import { TabsContext } from "@renderer/context/TabsContext";
-import MaterialsBrowser from "@renderer/components/MaterialsBrowser/MaterialsBrowser";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import { RELATIVE_APP_PATHS } from "../../../../../../../src/shared/appConfig";
+import MacroSectorMaterialsView from "../views/MacroSectorMaterialsView";
 
 
 export default function SectorAnalysisView(): ReactNode {
@@ -31,7 +31,8 @@ export default function SectorAnalysisView(): ReactNode {
       },
       "view-sector-tab-materials": () => {
         return (
-          <MaterialsBrowser
+          <MacroSectorMaterialsView
+            sectorCaption={activeTab.caption}
             directoryPath={RELATIVE_APP_PATHS.make.sector(workspacePath!, activeTab.id)}
           />
         );
@@ -39,7 +40,6 @@ export default function SectorAnalysisView(): ReactNode {
     },
     <>failed</>
   );
-
 
   return (
     <ModuleView

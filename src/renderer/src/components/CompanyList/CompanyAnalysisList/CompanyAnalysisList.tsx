@@ -1,6 +1,9 @@
+
+import "../../TagPanel/CompanyTag/CompanyTag.css";
+
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ChangeEvent, ReactNode, useEffect, useState } from "react";
+import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
@@ -10,6 +13,17 @@ import useSelection, { SelectionID } from "@renderer/hook/useSelection";
 import { FilterationStep, Tag } from "src/shared/schemaConfig";
 import useFiltertionTags from "@renderer/hook/useFiltertionTags";
 import FiltrationSubmitForm from "@renderer/components/FiltrationSubmitForm/FiltrationSubmitForm";
+import useTabKeys from "@renderer/hook/useTabKeys";
+import { TabsContext } from "@renderer/context/TabsContext";
+import { Tab } from "@renderer/model/tabs";
+import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
+import { ProfileContext } from "@renderer/context/ProfileContext";
+import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
+import Panel from "@renderer/components/Panel/Panel";
+import Container from "@renderer/components/Container/Container";
+import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
+import checkIfHexBelowThreshold from "@renderer/utils/checkIfHexBelowThreshold";
+import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -48,19 +62,39 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     defaultTagID: 1
   });
 
-  const stockDataCells: TableListDataCell<FilterationStepStock>[] = 
-    stocks.map((company: FilterationStepStock) => {
-      return {
-        id: company.company_id,
-        data: company
-      };
-    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
-        // Hide stocks that do not satisfy the filter criteria
-      return (
-        tagFilters.length === 0 || 
-        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
-      );
+  const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+  
+  const activeTab: Tab = tabs[activeTabIndex];
+
+  const {
+    sortedData, 
+    sortField, 
+    sortOrder, 
+    sortBy
+  } = useSortedData({
+    initialOrder: stocks,
+    fieldTypeMap: {
+      company_name: "string",
+      stock_ticker: "string",
+      stock_price: "numeric",
+      volume_price: "numeric",
+      volume_quantity: "numeric"
+    },
+    sortField: activeTab?.extra?.sortField,
+    sortOrder: activeTab?.extra?.sortOrder
+  });
+
+  const {company} = useContext(ProfileContext);
+
+  const {formatKey} = useTabKeys();
+
+  const handleSortToggle = (column: TableListColumn<FilterationStepStock>) => {
+    const settings: SortSettings = sortBy(column.accessor);
+    setExtraInfo && setExtraInfo({
+      sortField: settings.sortField,
+      sortOrder: settings.sortOrder
     });
+  };
   
   useEffect(() => {
     fetchFilterationStepStocks();
@@ -112,71 +146,146 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   const COLUMNS: TableListColumn<FilterationStepStock>[] = [
     { accessor: "company_name", caption: "Name" },
     { accessor: "stock_ticker", caption: "Ticker" },
-    { accessor: "stock_price", caption: "Share price" },
-    { accessor: "volume_price", caption: "Volume price" },
-    { accessor: "volume_quantity", caption: "Volume quantity" },
+    { 
+      accessor: "stock_price", 
+      caption: "Share price", 
+      formatter: (
+        data: FilterationStepStock, dataCell: TableListDataCell<FilterationStepStock>
+      ) => {
+        return priceFormatter(dataCell.data.currency_symbol, "" + data.stock_price);
+      }
+    },
+    { 
+      accessor: "volume_price", 
+      caption: "Currency volume",
+      formatter: (
+        data: FilterationStepStock, dataCell: TableListDataCell<FilterationStepStock>
+      ) => {
+        return priceFormatter(dataCell.data.currency_symbol, "" + data.volume_price);
+      }
+    },
+    {
+      accessor: "volume_quantity", 
+      caption: "Volume",
+      formatter: (data: FilterationStepStock) => {
+        return milleFormatter("" + data.volume_quantity);
+      }
+    },
     { 
       accessor: "tag_hex", 
       caption: "Verdict",
-      ElementConstructor: (
-        dataCell: TableListDataCell<FilterationStepStock>, 
-        column: TableListColumn<FilterationStepStock>, 
-        index: number
-      ) => {
+      ElementConstructor: (dataCell: TableListDataCell<FilterationStepStock>) => {
         return (
-          <>
+          <div className="d-flex d-align-items-center w-100 h-100 p-relative d-justify-end">
             <span
-              className="size-tiny-icon mr-norm"
-              style={{ backgroundColor: dataCell.data.tag_hex }}
+              className="company-tag-color mr-medium-length"
+              style={{
+                backgroundColor: dataCell.data.tag_hex
+              }}
             />
             <select
               onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 postFilterationTagChange(e.target.value, dataCell.data.company_id.toString());
               }}
               defaultValue={dataCell.data.tag_id}
+              style={{
+                color: checkIfHexBelowThreshold(dataCell.data.tag_hex, 100) ? "white" : "black",
+                backgroundColor: dataCell.data.tag_hex
+              }}
             >
               {tags.map((tag: Tag) => {
                 return (
                   <option
-                    key={"datacell-tag-selection-" + dataCell.id}
+                    className="test"
+                    key={formatKey("datacell-tag-selection-" + dataCell.id + "-" + tag.tag_id)}
+                    style={{
+                      color: checkIfHexBelowThreshold(tag.tag_hex, 100) ? "white" : "black",
+                      backgroundColor: tag.tag_hex
+                    }}
                     value={tag.tag_id}
                   >
                     {tag.tag_label}
                   </option>
-                )
+                );
               })}
             </select>
-          </>
+          </div>
         );
       }
     }
   ];
 
+  const stockDataCells: TableListDataCell<FilterationStepStock>[] = 
+    sortedData.map((c: FilterationStepStock) => {
+      return {
+        id: c.company_id,
+        data: c,
+        hasHighlight: (company?.company_id === c.company_id)
+      };
+    }).filter((dataCell: TableListDataCell<FilterationStepStock>) => {
+        // Hide stocks that do not satisfy the filter criteria
+      return (
+        tagFilters.length === 0 || 
+        !!tagFilters.find((tag: Tag) => tag.tag_id === dataCell.data.tag_id)
+      );
+    });
+
+    // Determine which column is being sorted, and assign its sort order
+  const stockDataColumns: TableListColumn<FilterationStepStock>[] = 
+    COLUMNS.map((column: TableListColumn<FilterationStepStock>) => {
+      return {
+        ...column,
+        ...(sortField === column.accessor ? { sortOrder } : {})
+      };
+    });
 
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
-      <FilterationControls
-        onBringAll={bringAllStocksToFilterationStep}
-        onDelist={handleStockDelist}
-        onSelectAll={() => handleSelection(true, ...stockDataCells)}
-        onDeselectAll={resetSelection}
-      />
-      {pAllowSubmit && (
-        <FiltrationSubmitForm
-          blackListedMap={{[pFilterationStepID]: true}}
-          onSubmit={handleStockSubmission}
+      <Panel className="d-flex mb-medium-length">
+        <div className="w-100">
+          <FilterationControls
+            onBringAll={bringAllStocksToFilterationStep}
+            onDelist={handleStockDelist}
+            onSelectAll={() => handleSelection(true, ...stockDataCells)}
+            onDeselectAll={resetSelection}
+          />
+        </div>
+        {pAllowSubmit && (
+          <div className="d-flex d-justify-end w-100">
+            <FiltrationSubmitForm
+              blackListedMap={{[pFilterationStepID]: true}}
+              onSubmit={handleStockSubmission}
+            />
+          </div>
+        )}
+      </Panel>
+      <div>
+        <h3>Filters</h3>
+        <Container>
+          <TagPanel
+            onTagSelect={handleToggleTag}
+            selectedTagMap={
+              arrayToOccurrenceMap<Tag>(tagFilters, (tag: Tag) => tag.tag_id.toString())
+            }
+          />
+        </Container>
+      </div>
+      <Container>
+        <CompanyListStatisticsPanel
+          shownNumberOfCompanies={stockDataCells.length}
+          numberOfCompanies={stocks.length}
         />
-      )}
-      <TagPanel onTagSelect={handleToggleTag} />
-      <TableList<FilterationStepStock>
-        onItemFocus={handleStockFocus}
-        columns={COLUMNS}
-        cells={stockDataCells}
-        allowSelection={true}
-        selectionSet={selectionSet}
-        onItemSelect={handleStockSelect}
-      />
+        <TableList<FilterationStepStock>
+          onItemFocus={handleStockFocus}
+          columns={stockDataColumns}
+          cells={stockDataCells}
+          allowSelection={true}
+          selectionSet={selectionSet}
+          onItemSelect={handleStockSelect}
+          onColumnSelect={handleSortToggle}
+        />
+      </Container>
     </PageContainer>
   );
 }

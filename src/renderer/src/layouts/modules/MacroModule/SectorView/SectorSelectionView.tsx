@@ -14,6 +14,7 @@ import { BoundDatabaseAPI } from "src/shared/database.type";
 import buildSectorBlueprint from "./buildSectorBlueprint";
 import { MacroSector } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
+import StyledButton from "@renderer/components/StyledButton/StyledButton";
 
 
 export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
@@ -90,23 +91,30 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
     const tabs: Tab[] = targetNode.value.tabs;
 
     return (
-      <TabControls>
-        {tabs.map((tab: Tab) => {
-          return(
-            <EditableTabButton
-              key={tab.workspace + "-tab-control-button-" + tab.id}
-              tab={tab}
-              onCaptionEdit={(value: string) => {
-                handleTabCaptionChange(targetNode, tab, value);
-              }}
-              onRemove={(e: MouseEvent<HTMLImageElement>) => handleTabRemove(e, targetNode, tab)}
-            />
-          );
-        })}
-        <button onClick={() => handleTabAdd(targetNode)}>
-          {"+"}
-        </button>
-      </TabControls>
+      <div className="d-flex">
+        <TabControls>
+          {tabs.map((tab: Tab) => {
+            return(
+              <EditableTabButton
+                key={tab.workspace + "-tab-control-button-" + tab.id}
+                tab={tab}
+                onCaptionEdit={(value: string) => {
+                  handleTabCaptionChange(targetNode, tab, value);
+                }}
+                onRemove={(e: MouseEvent<HTMLImageElement>) => handleTabRemove(e, targetNode, tab)}
+              />
+            );
+          })}
+        </TabControls>
+        <div>
+          <StyledButton
+            className="ml-medium-length"
+            onClick={() => handleTabAdd(targetNode)}
+          >
+            {"+"}
+          </StyledButton>
+        </div>
+      </div>
     );
   };
   

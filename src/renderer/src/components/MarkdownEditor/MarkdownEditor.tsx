@@ -1,6 +1,15 @@
+import "./MarkdownEditor.css";
+
 import useEditable from "@renderer/hook/useEditable";
 import { renderMarkdown } from "@renderer/model/markdown/markdown";
-import { FocusEvent, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from "react";
+import StyledTextarea from "../StyledTextarea/StyledTextarea";
+import { ASSETS } from "@renderer/assets/assets";
+import StyledIcon from "../StyledIcon/StyledIcon";
+import useTabKeys from "@renderer/hook/useTabKeys";
+import { MarkdownContext } from "@renderer/context/MarkdownContext";
+import StyledButton from "../StyledButton/StyledButton";
+import useTheme from "@renderer/hook/useTheme";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -15,60 +24,101 @@ export default function MarkdownEditor(props: Props) {
   const pOnSaveChanges: OnSaveNoteChanges = props.onSaveChange || function(){ };
 
   const [markdown, setMarkdown] = useState<string>("");
+  const [wasEdited, setWasEdited] = useState<boolean>(false);
+
+  const {theme} = useTheme();
   
+  const handleSave = (value: string) => {
+    pOnSaveChanges(value);
+    setMarkdown(value);
+    setWasEdited(false);
+  };
+
   const [
     isEditing,
     handleEditStart,
     handleFinalize
   ] = useEditable<string>({
-    onFinalize: (value: string) => setMarkdown(value)
+    onFinalize: handleSave
   });
+
+  const {formatKey} = useTabKeys();
 
   useEffect(() => setMarkdown(pInitialValue), [pInitialValue]);
 
-  const textAreaRef: MutableRefObject<HTMLTextAreaElement | null> = 
-    useRef<HTMLTextAreaElement | null>(null);
-
-  const handleTab = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleHotkeys = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     const target: HTMLTextAreaElement = e.currentTarget;
 
-    if( e.key === "Tab" ) {
-      e.preventDefault();
+    if( e.ctrlKey ) {
+      const secondaryKey: string = e.key.toLowerCase();
 
-        // Apply tab to the textarea and fix the cursor position
-      const selectionStart: number = target.selectionStart;
-      target.value = 
-        target.value.substring(0, selectionStart) + "\t" + 
-        target.value.substring(selectionStart);
-      target.selectionStart = selectionStart + 1;
-      target.selectionEnd = selectionStart + 1;
-    } else if( e.ctrlKey && e.key.toLowerCase() === "s" ) {
-      e.preventDefault();
-      pOnSaveChanges(target.value);
+      if( secondaryKey === "s" ) {
+          // Save without finalizing
+        e.preventDefault();
+        handleSave(target.value);
+      } else if( e.key === "Enter" ) {
+          // Finalize and save
+        handleFinalize(target.value);
+      }
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setWasEdited(e.target.value !== markdown);
+  };
+
   return (
-    <div
-      onDoubleClick={handleEditStart}
-      className="w-100 h-100"
-    >
-      {isEditing && (
-        <textarea
-          className="w-100 h-100"
-          onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
-          autoFocus={true}
-          defaultValue={markdown}
-          onKeyDown={handleTab}
-          ref={textAreaRef}
-        />
-      )}
-        <div
-          className="user-select-text"
-          style={{display: isEditing ? "none" : "block"}}
-        >
-          {renderMarkdown(markdown)}
-        </div>
-    </div>
+    <MarkdownContext.Provider value={{
+      markdown,
+      onComponentChange: handleSave
+    }}>
+      <div className="w-100 h-100">
+        {!isEditing && (
+          <div className="d-flex d-justify-end">
+            <StyledButton
+              icon={ASSETS.icons.action.edit.black  }
+              onClick={handleEditStart}
+            >
+              Edit
+            </StyledButton>
+          </div>
+        )}
+        {isEditing && (
+          <div className="markdown-editor-textarea-container">
+            {wasEdited ? (
+              <div className="m-strong-length">
+                <StyledIcon
+                  src={ASSETS.icons.alerts.missing.color}
+                  enableFilter={false}
+                />
+                <span className="ml-medium-length">* Unsaved changes detected! Press CTRL + S to save...</span>
+              </div>
+            ) : <div />}
+            <StyledTextarea
+              className="w-100 h-100"
+              style={{
+                opacity: wasEdited ? "70%" : "100%",
+                tabSize: "2"
+              }}
+              onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
+              autoFocus={true}
+              defaultValue={markdown}
+              onKeyDown={handleHotkeys}
+              onChange={handleChange}
+            />
+          </div>
+        )}
+          <div
+            className="user-select-text w-100 h-100"
+            style={{display: isEditing ? "none" : "block"}}
+          >
+            {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
+              <div {...theme("script-c", "markdown-editor-start-suggestion")}>
+                Click "Edit" to start taking notes.
+              </div>
+            )}
+          </div>
+      </div>
+    </MarkdownContext.Provider>
   );
 }

@@ -6,7 +6,7 @@ import { createTabContentProvider } from "../layoutUtils";
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { WorkspaceContext, WorkspaceContextType } from "@renderer/context/WorkspaceContext";
 import { bindAPIToWorkspace, BoundDatabaseAPI, QueryResult } from "../../../../shared/database.type";
-import ModuleView from "../modules/ModuleView/ModuleView";
+import ModuleView from "../ModuleView/ModuleView";
 import MacroModule from "../modules/MacroModule/MacroModule";
 import { TabsContext } from "@renderer/context/TabsContext";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";

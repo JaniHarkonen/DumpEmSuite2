@@ -1,0 +1,7 @@
+.panel-container {
+  border-style: none;
+  border-radius: var(--medium-length);
+  padding: var(--medium-length);
+  padding-left: var(--strong-length);
+  padding-right: var(--strong-length);
+}

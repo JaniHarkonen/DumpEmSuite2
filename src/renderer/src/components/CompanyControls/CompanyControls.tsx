@@ -1,11 +1,11 @@
-import { ChangeEvent, ReactNode, useState } from "react";
-import { Company } from "src/shared/schemaConfig";
-import { AsString } from "src/shared/utils";
-import { COMPANIES_LIST_COLUMNS } from "../WorkspaceCompaniesList/WorkspaceCompaniesList";
-import { TableListColumn } from "../TableList/TableList";
-import { CompanyWithCurrency } from "@renderer/hook/useWorkspaceCompanies";
+import "./CompanyControls.css";
 
-type OnAddCompany = (company: AsString<Company>) => void;
+import { ChangeEvent, ReactNode, useState } from "react";
+import StyledButton from "../StyledButton/StyledButton";
+import { ASSETS } from "@renderer/assets/assets";
+import CompanyAddPanel, { OnAddCompany } from "../CompanyAddPanel/CompanyAddPanel";
+
+
 type DefaultCallback = () => void;
 
 type Props = {
@@ -24,49 +24,43 @@ export default function CompanyControls(props: Props): ReactNode {
   const pOnImport: DefaultCallback = props.onImport || function(){ };
 
   const [displayAddControls, setDisplayAddControls] = useState<boolean>(false);
-  const [addCandidateCompany, setAddCandidateCompany] = useState<AsString<Company>>({
-    company_id: "",
-    company_name: "",
-    stock_ticker: "",
-    stock_price: "",
-    volume_price: "",
-    volume_quantity: "",
-    exchange: "",
-    updated: ""
-  });
+
+  const handleAllSelectionToggle = (e: ChangeEvent<HTMLInputElement>) => {
+    if( e.target.checked ) {
+      pOnSelectAll();
+    } else {
+      pOnDeselectAll();
+    }
+  };
 
   return (
-    <>
-      <div className="d-flex">
-        <button onClick={() => setDisplayAddControls(!displayAddControls)}>Add</button>
-        <button onClick={() => pOnRemove()}>Remove</button>
-        <button onClick={() => pOnSelectAll()}>Select all</button>
-        <button onClick={() => pOnDeselectAll()}>De-select all</button>
-        <button onClick={() => pOnImport()}>Import</button>
+    <div>
+      <div className="mb-medium-length">
+        <StyledButton
+          className="mr-medium-length"
+          onClick={() => setDisplayAddControls(!displayAddControls)}
+        >
+          {displayAddControls ? "Cancel" : "Add company"}
+        </StyledButton>
+        <StyledButton onClick={() => pOnRemove()}>Remove selected</StyledButton>
       </div>
-      {displayAddControls && (
-        <div className="d-flex">
-          <button onClick={() => pOnAdd(addCandidateCompany)}>Add</button>
-          {COMPANIES_LIST_COLUMNS.map((column: TableListColumn<CompanyWithCurrency>) => {
-            const id: string = "companies-list-add-controls-input-" + column.accessor;
-            return (
-              <div key={id}>
-                <label htmlFor={id}>{column.caption}</label>
-                <input 
-                  id={id} 
-                  type="text"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setAddCandidateCompany({
-                      ...addCandidateCompany,
-                      [column.accessor]: e.target.value
-                    });
-                  }}
-                />
-              </div>
-            );
-          })}
+      {displayAddControls && <CompanyAddPanel onAdd={pOnAdd} />}
+      <div className="company-controls-secondary-control-container">
+        <div>
+          <input
+            type="checkbox"
+            onChange={handleAllSelectionToggle}
+          />
+          <span className="ml-strong-length">(De)select all</span>
         </div>
-      )}
-    </>
+        <div></div>
+        <StyledButton
+          onClick={() => pOnImport()}
+          icon={ASSETS.icons.action.import.black}
+        >
+          Import
+        </StyledButton>
+      </div>
+    </div>
   );
 }

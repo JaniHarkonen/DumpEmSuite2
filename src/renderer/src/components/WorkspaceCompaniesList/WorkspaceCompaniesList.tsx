@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import TableList, { EditChanges, TableListColumn, TableListDataCell } from "../TableList/TableList";
 import { Company } from "src/shared/schemaConfig";
 import CompanyControls from "@renderer/components/CompanyControls/CompanyControls";
@@ -10,17 +10,57 @@ import { ScrapedData } from "src/shared/scraper.type";
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import useWorkspaceDialogKeys from "@renderer/hook/useWorkspaceDialogKeys";
 import { OpenDialogResult, ReadResult } from "src/shared/files.type";
-import { PostResult } from "src/shared/database.type";
+import Container from "../Container/Container";
+import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
+import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
+import { TabsContext } from "@renderer/context/TabsContext";
+import { Tab } from "@renderer/model/tabs";
+import Panel from "../Panel/Panel";
+import CompanyListStatisticsPanel from "../CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
-  { accessor: "company_name", caption: "Name" },
-  { accessor: "stock_ticker", caption: "Ticker" },
-  { accessor: "volume_price", caption: "Volume ($)" },
-  { accessor: "volume_quantity", caption: "Volume (quant.)" },
-  { accessor: "stock_price", caption: "Share price ($)" },
-  { accessor: "exchange", caption: "Exchange symbol" },
-  { accessor: "updated", caption: "Updated" }
+  { 
+    accessor: "company_name", 
+    caption: "Name" 
+  },
+  { 
+    accessor: "stock_ticker", 
+    caption: "Ticker" 
+  },
+  { 
+    accessor: "volume_price", 
+    caption: "Currency volume",
+    formatter: (
+      data: CompanyWithCurrency, dataCell: TableListDataCell<CompanyWithCurrency>
+    ) => {
+      return priceFormatter(dataCell.data.currency_symbol, "" + data.volume_price);
+    }
+  },
+  { 
+    accessor: "volume_quantity", 
+    caption: "Volume",
+    formatter: (data: CompanyWithCurrency) => {
+      return milleFormatter("" + data.volume_quantity);
+    }
+  },
+  { 
+    accessor: "stock_price", 
+    caption: "Share price",
+    formatter: (
+      data: CompanyWithCurrency, dataCell: TableListDataCell<CompanyWithCurrency>
+    ) => {
+      return priceFormatter(dataCell.data.currency_symbol, "" + data.stock_price);
+    }
+  },
+  { 
+    accessor: "exchange", 
+    caption: "Exchange symbol" 
+  },
+  { 
+    accessor: "updated", 
+    caption: "Updated"
+  }
 ];
 
 
@@ -48,28 +88,66 @@ export default function WorkspaceCompaniesList(): ReactNode {
     onOpenDialogResult: (result: OpenDialogResult) => {
       if( !result.cancelled && result.key === dialogKeyImportCompanies ) {
         filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
+
           if( result.wasSuccessful ) {
             databaseAPI.postImportedCompanies({
               company: result.result.symbols as Company[]
-            }).then((result: PostResult) => {
-              console.log(result);
-              fetchAllCompanies();
-            });
+            }).then(() => fetchAllCompanies());
           }
         });
       }
     }
   });
 
-  useEffect(() => {
-    fetchAllCompanies();
-  }, []);
+  useEffect(() => fetchAllCompanies(), []);
 
+  const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+
+  const activeTab: Tab = tabs[activeTabIndex];
+
+  const {
+    sortedData, 
+    sortField, 
+    sortOrder, 
+    sortBy
+  } = useSortedData({
+    initialOrder: companies,
+    fieldTypeMap: {
+      company_name: "string",
+      stock_ticker: "string",
+      stock_price: "numeric",
+      volume_price: "numeric",
+      volume_quantity: "numeric",
+      exchange: "string",
+      updated: "string",
+    },
+    sortField: activeTab?.extra?.sortField,
+    sortOrder: activeTab?.extra?.sortOrder
+  });
+
+  const handleSortToggle = (column: TableListColumn<CompanyWithCurrency>) => {
+    const settings: SortSettings = sortBy(column.accessor);
+    setExtraInfo && setExtraInfo({
+      sortField: settings.sortField,
+      sortOrder: settings.sortOrder
+    });
+  };
+
+    // Fix the stock data to be compatible with the table component
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
-    companies.map((stock: CompanyWithCurrency) => {
+    sortedData.map((stock: CompanyWithCurrency) => {
       return {
         id: stock.company_id,
         data: stock
+      };
+    });
+
+    // Determine which column is being sorted, and assign its sort order
+  const stockDataColumns: TableListColumn<CompanyWithCurrency>[] = 
+    COMPANIES_LIST_COLUMNS.map((column: TableListColumn<CompanyWithCurrency>) => {
+      return {
+        ...column,
+        ...(sortField === column.accessor ? { sortOrder } : {})
       };
     });
 
@@ -111,22 +189,30 @@ export default function WorkspaceCompaniesList(): ReactNode {
 
   return (
     <div className="w-100">
-      <CompanyControls
-        onAdd={handleAddCompany}
-        onRemove={handleCompanyRemove}
-        onSelectAll={() => handleSelection(true, ...stockDataCells)}
-        onDeselectAll={resetSelection}
-        onImport={handleImport}
-      />
-      <TableList<CompanyWithCurrency>
-        columns={COMPANIES_LIST_COLUMNS}
-        cells={stockDataCells}
-        allowSelection
-        allowEdit
-        selectionSet={selectionSet}
-        onItemSelect={handleCompanySelection}
-        onItemFinalize={handleCompanyChange}
-      />
+      <Container>
+        <Panel>
+          <CompanyControls
+            onAdd={handleAddCompany}
+            onRemove={handleCompanyRemove}
+            onSelectAll={() => handleSelection(true, ...stockDataCells)}
+            onDeselectAll={resetSelection}
+            onImport={handleImport}
+          />
+        </Panel>
+        <CompanyListStatisticsPanel
+          numberOfCompanies={companies.length}
+        />
+        <TableList<CompanyWithCurrency>
+          columns={stockDataColumns}
+          cells={stockDataCells}
+          allowSelection
+          allowEdit
+          selectionSet={selectionSet}
+          onItemSelect={handleCompanySelection}
+          onItemFinalize={handleCompanyChange}
+          onColumnSelect={handleSortToggle}
+        />
+      </Container>
     </div>
   );
 }

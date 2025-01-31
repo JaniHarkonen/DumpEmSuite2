@@ -1,0 +1,47 @@
+/*
+  Baseline color for general-purpose painting.
+*/
+
+.theme-dark {
+  --theme-dark-baseline: #515151;
+}
+
+.theme-dark.baseline-bgc {
+  background-color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-hl {
+  &:hover {
+    background-color: var(--theme-dark-baseline);
+  }
+}
+
+.theme-dark.baseline-c {
+  color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-bdc {
+  border-color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-bdc-top {
+  border-top-color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-bdc-bottom {
+  border-bottom-color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-bdc-left {
+  border-left-color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-bdc-right {
+  border-right-color: var(--theme-dark-baseline);
+}
+
+.theme-dark.baseline-svg {
+  filter: brightness(0) saturate(100%) invert(31%) 
+          sepia(0%) saturate(0%) hue-rotate(35deg) 
+          brightness(94%) contrast(87%);
+}

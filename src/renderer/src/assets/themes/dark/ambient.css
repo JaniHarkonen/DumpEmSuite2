@@ -1,0 +1,47 @@
+/*
+  Most background color. Should be used to paint the least important aspects of the UI.
+*/
+
+.theme-dark {
+  --theme-dark-ambient: #333333;
+}
+
+.theme-dark.ambient-bgc {
+  background-color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-hl {
+  &:hover {
+    background-color: var(--theme-dark-ambient);
+  }
+}
+
+.theme-dark.ambient-c {
+  color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-bdc {
+  border-color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-bdc-top {
+  border-top-color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-bdc-bottom {
+  border-bottom-color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-bdc-left {
+  border-left-color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-bdc-right {
+  border-right-color: var(--theme-dark-ambient);
+}
+
+.theme-dark.ambient-svg {
+  filter: brightness(0) saturate(100%) invert(17%) 
+          sepia(51%) saturate(0%) hue-rotate(157deg) 
+          brightness(96%) contrast(95%);
+}

@@ -1,5 +1,16 @@
+.scraper-view-container {
+  width: 100%;
+  height: 100%;
+  user-select: text;
+  line-height: var(--line-height-standard);
+}
+
 .scraper-info-controls {
   display: flex;
   justify-content: end;
-  margin-top: var(--normal-margin);
+  margin-top: var(--medium-length);
+}
+
+p {
+  margin-left: var(--strong-length);
 }

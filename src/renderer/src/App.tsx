@@ -9,6 +9,7 @@ import AppModal from "./components/AppModal/AppModal";
 import { ModalContext } from "./context/ModalContext";
 import { ReadResult } from "src/shared/files.type";
 import WorkspacesView from "./layouts/Workspace/WorkspacesView/WorkspacesView";
+import { AppTheme, ThemeContext } from "./context/ThemeContext";
 
 
 type ConfigFileInfo = {
@@ -21,12 +22,12 @@ const {filesAPI} = window.api;
 export default function App(): ReactNode {
   const [configFileInfo, setConfigFileInfo] = useState<ConfigFileInfo>(null);
   const [modalElement, setModalElement] = useState<ReactNode>(undefined);
+  const [activeTheme, setTheme] = useState<AppTheme>("dark");
 
     // A ref is used throughout the application to access the config instead of 
     // passing the 'configFileInfo'. This way the global app state doesn't have 
     // to be set each time the app config changes.
-  const appConfigRef: MutableRefObject<AppConfig | null> = 
-    useRef(configFileInfo?.appConfig || null);
+  const appConfigRef: MutableRefObject<AppConfig | null> = useRef(configFileInfo?.appConfig || null);
 
   useEffect(() => {
     const configPath: string = 
@@ -41,6 +42,7 @@ export default function App(): ReactNode {
         appConfig: read.result,
         configFileUpdater: updater
       });
+      setTheme(read.result.activeTheme);
     })
     .catch((err: Error) => console.log(err));
   }, []);
@@ -51,33 +53,38 @@ export default function App(): ReactNode {
   }
 
   return (
-    <ModalContext.Provider value={{
-        openModal: setModalElement,
-        closeModal: () => setModalElement(undefined)
-      }}
-    >
-      <GlobalContext.Provider value={{
-          config: {
-            appConfigRef,
-            configFileUpdater: configFileInfo.configFileUpdater
-          }
+    <ThemeContext.Provider value={{
+      activeTheme,
+      setTheme
+    }}>
+      <ModalContext.Provider value={{
+          openModal: setModalElement,
+          closeModal: () => setModalElement(undefined)
         }}
       >
-        <div className="app-container">
-          {modalElement && (
-            <AppModal>
-              {modalElement}
-            </AppModal>
-          )}
-          <SceneContext.Provider
-            value={{
-              sceneConfig: appConfigRef.current.sceneConfigBlueprint
-            }}
-          >
-            <WorkspacesView />
-          </SceneContext.Provider>
-        </div>
-      </GlobalContext.Provider>
-    </ModalContext.Provider>
+        <GlobalContext.Provider value={{
+            config: {
+              appConfigRef,
+              configFileUpdater: configFileInfo.configFileUpdater
+            }
+          }}
+        >
+          <div className="app-container">
+            {modalElement && (
+              <AppModal>
+                {modalElement}
+              </AppModal>
+            )}
+            <SceneContext.Provider
+              value={{
+                sceneConfig: appConfigRef.current.sceneConfigBlueprint
+              }}
+            >
+              <WorkspacesView />
+            </SceneContext.Provider>
+          </div>
+        </GlobalContext.Provider>
+      </ModalContext.Provider>
+    </ThemeContext.Provider>
   );
 }

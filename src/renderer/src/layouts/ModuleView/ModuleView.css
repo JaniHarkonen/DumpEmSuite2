@@ -1,0 +1,19 @@
+.tabs-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tab-controls-container {
+  width: 100%;
+  min-width: max-content;
+  height: max-content;
+
+  overflow: hidden;
+
+  border-bottom-style: solid;
+  border-bottom-width: var(--tiny-length);
+}

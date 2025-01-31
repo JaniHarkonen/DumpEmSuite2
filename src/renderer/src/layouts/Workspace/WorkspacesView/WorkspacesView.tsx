@@ -1,3 +1,5 @@
+import "../../ModuleView/ModuleView.css";
+
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { buildTab, defaultSceneConfigBlueprint, Tab, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
 import { ReactNode } from "react";
@@ -71,7 +73,7 @@ export default function WorkspacesView(): ReactNode {
               tab={tab}
               allowEdit={false}
               allowRemove={true}
-              iconURL={ASSETS.icons.buttons.close.black}
+              iconURL={ASSETS.icons.action.close.black}
               onRemove={(e: React.MouseEvent<HTMLImageElement>) => {
                 handleTabRemove(e, targetNode, tab);
               }}

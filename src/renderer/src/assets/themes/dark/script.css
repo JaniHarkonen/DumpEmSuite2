@@ -1,0 +1,47 @@
+/*
+  For painting large quantities of text or text of lesser importance in the UI.
+*/
+
+.theme-dark {
+  --theme-dark-script: #E5E5E5;
+}
+
+.theme-dark.script-bgc {
+  background-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-hl {
+  &:hover {
+    background-color: var(--theme-dark-script);
+  }
+}
+
+.theme-dark.script-c {
+  color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc {
+  border-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-top {
+  border-top-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-bottom {
+  border-bottom-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-left {
+  border-left-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-bdc-right {
+  border-right-color: var(--theme-dark-script);
+}
+
+.theme-dark.script-svg {
+  filter: brightness(0) saturate(100%) invert(100%) 
+          sepia(81%) saturate(0%) hue-rotate(289deg) 
+          brightness(109%) contrast(95%);
+}

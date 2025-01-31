@@ -8,6 +8,7 @@ import { quadrantDropAreas } from "../DropArea/quadrantDropAreas";
 import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
+import useTheme from "@renderer/hook/useTheme";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -41,6 +42,8 @@ export default function SplitView(props: Props): ReactNode {
     handleDividerMove,
     handleExtraInfo
   } = useContext(FlexibleSplitsContext);
+
+  const {theme} = useTheme();
 
   const handleTabContentDrop = (dropArea: DropAreaSettings, toFork: SplitTreeFork) => {
       // Maps drop areas to DividerDirections and DividerDirections to SplitBranches
@@ -140,7 +143,7 @@ export default function SplitView(props: Props): ReactNode {
 
 
   return (
-    <div className="w-100 h-100 overflow-hidden">
+    <div {...theme("glyph-c", "w-100 h-100 overflow-hidden")}>
       {splitTree && renderSplits(splitTree.root)}
     </div>
   );

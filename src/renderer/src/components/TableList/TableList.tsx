@@ -1,6 +1,13 @@
+import "./TableList.css";
+
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
 import { ChangeEvent, ReactNode } from "react";
 import EditableText from "../editable/EditableText";
+import useTabKeys from "@renderer/hook/useTabKeys";
+import { ASSETS } from "@renderer/assets/assets";
+import { SortOrder } from "@renderer/hook/useSortedData";
+import useTheme from "@renderer/hook/useTheme";
+import StyledIcon from "../StyledIcon/StyledIcon";
 
 
 export type TableListColumn<T> = {
@@ -11,9 +18,18 @@ export type TableListColumn<T> = {
     column: TableListColumn<T>, 
     index: number
   ) => ReactNode;
+  formatter?: (
+    data: T,
+    dataCell: TableListDataCell<T>, 
+    column: TableListColumn<T>, 
+    index: number
+  ) => string;
+  sortOrder?: SortOrder;
 };
 
-export type TableListDataCell<T> = SelectionItem<T>;
+export type TableListDataCell<T> = {
+  hasHighlight?: boolean;
+} & SelectionItem<T>;
 
 export type EditChanges<T> = {
   columns: (keyof T)[];
@@ -52,83 +68,129 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const pOnItemSelect: OnItemSelect<T> = props.onItemSelect || function(){ };
   const pOnItemFinalize: OnItemFinalize<T> = props.onItemFinalize || function(){ };
 
+  const {theme} = useTheme();
+  const {formatKey} = useTabKeys();
+
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
+    const classNameConstructor = () => {
+      const isFirstColumn: boolean = index % pColumns.length === 0;
+      const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
+      let className: string = "table-list-data-cell-container pl-medium-length";
+
+      if( dataCell.hasHighlight ) {
+        className += " action-bdc";
+
+        if( isFirstColumn ) {
+          className += " table-list-first";
+        } else if( isLastColumn ) {
+          className += " table-list-last";
+        } else {
+          className += " table-list-highlight";
+        }
+      }
+
+      if( isLastColumn ) {
+        className += " text-align-right pr-medium-length";
+      }
+
+      return className;
+    };
+
+    let dataElement: ReactNode;
+
       // Use the element constructor, if one has been provided
     if( column.ElementConstructor ) {
-      return column.ElementConstructor(dataCell, column, index);
-    }
-    
-      // Apply input fields, if editing
-    const data = dataCell.data[column.accessor];
-    let dataElement: ReactNode = (
-      <EditableText
-        value={data as string}
-        onFinalize={(value: string) => pOnItemFinalize(dataCell, {
-          columns: [column.accessor], 
-          values: [value]
-        })}
-        editDisabled={!pAllowEdit}
-      >
-        {data as string}
-      </EditableText>
-    );
-
-      // Apply selection checkbox, if first data cell
-    if( pAllowSelection && index === 0 ) {
+      dataElement = column.ElementConstructor(dataCell, column, index);
+    } else {
+        // Apply input fields, if editing
+      const data = dataCell.data[column.accessor] as string;
       dataElement = (
-        <>
-          <input
-            type="checkbox"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              pOnItemSelect(dataCell, e.target.checked)
-            }}
-            checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
-          />
-          {dataElement}
-        </>
+        <EditableText
+          value={data}
+          onFinalize={(value: string) => pOnItemFinalize(dataCell, {
+            columns: [column.accessor], 
+            values: [value]
+          })}
+          editDisabled={!pAllowEdit}
+        >
+          {column.formatter ? column.formatter(dataCell.data, dataCell, column, index) : data}
+        </EditableText>
       );
+
+        // Apply selection checkbox, if first data cell
+      if( pAllowSelection && index === 0 ) {
+        dataElement = (
+          <div className="table-list-data-cell">
+            <input
+              className="mr-strong-length"
+              type="checkbox"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                pOnItemSelect(dataCell, e.target.checked);
+              }}
+              checked={pSelectionSet[dataCell.id]?.isSelected ?? false}
+            />
+            {dataElement}
+          </div>
+        );
+      }
     }
 
     return (
-      <td key={"list-table-data-" + (column.accessor as String) + "-" + dataCell.id}>
+      <div
+        {...theme(classNameConstructor())}
+        key={formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id)}
+      >
         {dataElement}
-      </td>
+      </div>
     );
   };
-
   
   return (
-    <table className="text-align-left w-100 user-select-text">
-      <thead>
-        <tr>
-          {pColumns.map((column: TableListColumn<T>) => {
-            return (
-              <th
-                key={"list-table-header-" + (column.accessor as string)}
-                onClick={() => pOnColumnSelect(column)}
-              >
-                {column.caption}
-              </th>
-            );
-          })}
-        </tr>
-      </thead>
-      <tbody>
-        {pData.map((dataCell: TableListDataCell<T>) => {
-          return (
-            <tr
-              key={"list-table-row-" + dataCell.id}
-              onClick={() => pOnItemFocus(dataCell)}
+    <div
+      className="table-list-container box-sizing-border"
+      style={{ gridTemplateColumns: "repeat(" + pColumns.length + ", auto)" }}
+    >
+      {pColumns.map((column: TableListColumn<T>, index: number) => {
+        return (
+          <div 
+            key={formatKey("list-table-header-" + (column.accessor as string))}
+            className={
+              ((index === pColumns.length - 1) ? "text-align-right" : "") +
+              " table-list-column-header-container"
+            }
+          >
+            <span className="mr-medium-length">
+              {(column.sortOrder === "ascending") && (
+                <StyledIcon src={ASSETS.icons.indicator.arrow.up.black} />
+              )} 
+              {(column.sortOrder === "descending") && (
+                <StyledIcon src={ASSETS.icons.indicator.arrow.down.black} />
+              )}
+            </span>
+            <span
+              role="button"
+              onClick={() => pOnColumnSelect(column)}
             >
-              {pColumns.map((column: TableListColumn<T>, index: number) => {
-                return renderDataCell(dataCell, column, index);
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+              <strong>{column.caption}</strong>
+            </span>
+          </div>
+        );
+      })}
+      {pData.map((dataCell: TableListDataCell<T>) => {
+        return (
+          <div
+            key={formatKey("list-table-row-" + dataCell.id)}
+            className="table-list-data-row"
+            onClick={() => pOnItemFocus(dataCell)}
+          >
+            {pColumns.map((column: TableListColumn<T>, index: number) => {
+              return renderDataCell(dataCell, column, index);
+            })}
+          </div>
+        );
+      })}
+    </div>
   );
 }

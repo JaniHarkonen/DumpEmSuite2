@@ -1,0 +1,17 @@
+.markdown-row {
+  width: 100%;
+
+  container-name: markdown-row-container;
+  container-type: inline-size;
+}
+
+.markdown-row-content-container {
+  display: flex;
+  gap: var(--strong-length);
+}
+
+@container markdown-row-container (width < 800px) {
+  .markdown-row-content-container {
+    display: block
+  }
+}

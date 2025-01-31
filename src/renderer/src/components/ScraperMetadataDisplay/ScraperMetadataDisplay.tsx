@@ -1,7 +1,10 @@
+import "./ScraperMetadataDisplay.css";
 
 import { ScraperMetadata } from "@renderer/layouts/modules/CompaniesModule/views/ScraperView/ScraperView";
 import { Nullish } from "@renderer/utils/Nullish";
 import { ReactNode, useState } from "react";
+import StyledTextarea from "../StyledTextarea/StyledTextarea";
+import StyledButton from "../StyledButton/StyledButton";
 
 
 const METADATA_LOADING_ERROR: string = 
@@ -19,18 +22,19 @@ export default function ScraperMetadataDisplay(props: Props): ReactNode {
 
   return (
     <div>
-      <button onClick={() => setShow(!show)}>{show ? "Close" : "Metadata"}</button>
-      {show && (
-        <textarea
-          className="w-100"
-          style={{ height: "96px" }}
-          readOnly={true}
-          value={
-            pScraperMetadata ? JSON.stringify(pScraperMetadata, null, 2) : 
-            METADATA_LOADING_ERROR
-          }
-        />
-      )}
+      <StyledButton onClick={() => setShow(!show)}>{show ? "Close" : "Metadata"}</StyledButton>
+      <div className="mt-medium-length">
+        {show && (
+          <StyledTextarea
+            className="scraper-metadata-display-textarea"
+            readOnly={true}
+            value={
+              pScraperMetadata ? JSON.stringify(pScraperMetadata, null, 2) : 
+              METADATA_LOADING_ERROR
+            }
+          />
+        )}
+      </div>
     </div>
   );
 }

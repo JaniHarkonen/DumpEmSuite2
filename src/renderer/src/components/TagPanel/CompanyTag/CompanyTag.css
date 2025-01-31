@@ -1,3 +1,17 @@
 .company-tag-control-remove {
   filter: brightness(0) saturate(100%);
 }
+
+.company-tag-color {
+  border-radius: var(--small-length);
+  
+  width: var(--tiny-size);
+  height: var(--tiny-size);
+
+  cursor: pointer;
+}
+
+.company-tag-color.active {
+  border-style: solid;
+  border-radius: 0px;
+}

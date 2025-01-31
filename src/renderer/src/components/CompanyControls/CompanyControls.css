@@ -1,0 +1,11 @@
+.company-controls-main-control-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto auto;
+}
+
+.company-controls-secondary-control-container {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  margin-top: var(--medium-length);
+}

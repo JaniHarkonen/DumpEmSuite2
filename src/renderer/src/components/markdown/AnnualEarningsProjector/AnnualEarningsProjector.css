@@ -1,0 +1,25 @@
+.annual-earnings-projector-controls-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--medium-length);
+}
+
+.annual-earnings-projector-projections-row {
+  width: 100%;
+
+  container-name: annual-earnings-projector-projections-row;
+  container-type: inline-size;
+}
+
+.annual-earnings-projector-projections-container {
+  display: flex;
+  gap: var(--medium-length);
+
+  width: 100%;
+}
+
+@container annual-earnings-projector-projections-row (width < 400px) {
+  .annual-earnings-projector-projections-container {
+    display: block
+  }
+}

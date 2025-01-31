@@ -1,8 +1,8 @@
 import "./PageContainer.css";
-import { PropsWithChildren, ReactNode } from "react";
+import { HTMLProps, ReactNode } from "react";
 
 
-export default function PageContainer(props: PropsWithChildren) {
+export default function PageContainer(props: HTMLProps<HTMLDivElement>) {
   const pChildren: ReactNode[] | ReactNode = props.children;
 
   return (

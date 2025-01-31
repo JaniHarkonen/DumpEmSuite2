@@ -1,11 +1,20 @@
+import "./MaterialsBrowser.css";
 import { ReactNode, useEffect, useState } from "react";
 import BrowserFile from "./BrowserFile/BrowserFile";
 import { FilePathParse } from "src/shared/files.type";
+import StyledButton from "../StyledButton/StyledButton";
+import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
+import { ASSETS } from "@renderer/assets/assets";
+import useTabKeys from "@renderer/hook/useTabKeys";
+import Panel from "../Panel/Panel";
+import useExternalLinks from "@renderer/hook/useExternalLinks";
 
 
 type Props = {
   directoryPath: string;
-}
+};
+
+export type MaterialsBrowserProps = Props;
 
 const {filesAPI} = window.api;
 
@@ -13,6 +22,9 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   const pDirectoryPath: string = props.directoryPath;
   const [filePaths, setFilePaths] = useState<string[]>([]);
   const dialogKey: string = "materials-browser-import-" + pDirectoryPath;
+
+  const {formatKey} = useTabKeys();
+  const {openFile, openDirectory} = useExternalLinks();
 
   const importFiles = (path: string[]) => {
     for( let file of path ) {
@@ -47,11 +59,11 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   }, [pDirectoryPath]);
 
   const handleFileClick = (fileInfo: FilePathParse) => {
-    filesAPI.execute({ command: '"' + fileInfo.dir + "\\" + fileInfo.base + '"' });
+    openFile(fileInfo.dir + "\\" + fileInfo.base);
   };
 
   const handleOpenInExplorer = () => {
-    filesAPI.execute({ command: 'explorer "' + pDirectoryPath + '"' })
+    openDirectory(pDirectoryPath);
   };
 
   const ensureMaterialsDirectoryExists = (after: () => void) => {
@@ -101,27 +113,53 @@ export default function MaterialsBrowser(props: Props): ReactNode {
   };
 
   if( !pDirectoryPath ) {
-    return <>Please, select a company...</>;
+    return <CompanyNotSelected />;
   }
 
   return (
     <div
+      className="materials-browser-container"
       onDrop={handleFileImportDrop}
       onDragOver={ignoreDragOver}
     >
-      <button onClick={handleFileImportSelection}>Import files</button>
-      <button onClick={handleOpenInExplorer}>Open in system explorer</button>
-      {filePaths.length > 0 ? filePaths.map((path: string, index: number) => {
-        return (
-          <BrowserFile
-            key={path}
-            fileDirectory={pDirectoryPath}
-            fileName={path}
-            onClick={handleFileClick}
-            onDelete={(fileInfo: FilePathParse) => removeFile(index, fileInfo)}
-          />
-        );
-      }) : <div>No materials yet.</div>}
+      <div className="m-medium-length">
+        <StyledButton
+          className="mr-medium-length"
+          onClick={handleFileImportSelection}
+          icon={ASSETS.icons.action.import.black}
+        >
+          Import files
+        </StyledButton>
+        <StyledButton
+          onClick={handleOpenInExplorer}
+          icon={ASSETS.icons.action.link.black}
+        >
+          Open in system explorer
+        </StyledButton>
+      </div>
+      <div className="w-100 h-100">
+        {filePaths.length > 0 ? (
+          <Panel className="materials-browser-file-container">
+            {filePaths.map((path: string, index: number) => {
+              return (
+                <div
+                  key={formatKey(path)}
+                  className="materials-browser-file-item-container"
+                >
+                  <BrowserFile
+                    fileDirectory={pDirectoryPath}
+                    fileName={path}
+                    onClick={handleFileClick}
+                    onDelete={(fileInfo: FilePathParse) => removeFile(index, fileInfo)}
+                  />
+                </div>
+              );
+            })}
+          </Panel>
+        ) : (
+          <div>No materials yet.</div>
+        )}
+      </div>
     </div>
   );
 }
