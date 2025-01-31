@@ -143,7 +143,7 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
           />
           <InputPanel
             label="Annual earnings growth rate"
-            value={roundDecimals(compoundRate * 100, 2) + "%"}
+            value={roundDecimals(compoundRate * 100 - 100, 2) + "%"}
             readOnly={true}
           />
         </StopDoubleClickPropagation>
@@ -154,7 +154,7 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
         </div>
       </div>
       <div className="d-flex d-justify-end mt-strong-length">
-        <span>* projected earnings</span>
+        <span>* iteratively calculated</span>
       </div>
     </div>
   );
