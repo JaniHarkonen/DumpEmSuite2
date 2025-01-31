@@ -19,15 +19,12 @@
 }
 
 .tab-remove-icon {
-  vertical-align: middle;
-  filter: 
-    brightness(0) saturate(100%) invert(47%) sepia(1%) saturate(3362%) 
-    hue-rotate(59deg) brightness(97%) contrast(93%);
+  vertical-align: top;
 }
 
 .tab-remove-icon-container {
   margin-left: var(--medium-length);
-  padding: var(--tiny-length);
+  padding: var(--small-length);
 
   border-radius: var(--small-length);
 

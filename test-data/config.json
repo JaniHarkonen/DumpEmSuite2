@@ -197,7 +197,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }
@@ -266,7 +266,11 @@
                                                                     "caption": "Stocks",
                                                                     "contentTemplate": "view-filteration-tab-stocks",
                                                                     "tags": [],
-                                                                    "order": 0
+                                                                    "order": 0,
+                                                                    "extra": {
+                                                                      "sortField": null,
+                                                                      "sortOrder": "none"
+                                                                    }
                                                                   }
                                                                 ],
                                                                 "activeTabIndex": 0
@@ -701,7 +705,65 @@
                                           "left": {
                                             "isFork": false,
                                             "value": {
-                                              "tabs": [],
+                                              "tabs": [
+                                                {
+                                                  "id": "view-sector-6ac5820f93bcc87c3f09a0c495",
+                                                  "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                  "caption": "New sector",
+                                                  "contentTemplate": "view-sector-analysis",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-sector-6ac5820f93bcc87c3f09a0c495-notes",
+                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                    "caption": "Notes",
+                                                                    "contentTemplate": "view-sector-tab-notes",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  },
+                                                                  {
+                                                                    "id": "view-sector-6ac5820f93bcc87c3f09a0c495-materials",
+                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                    "caption": "Materials",
+                                                                    "contentTemplate": "view-sector-tab-materials",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                }
+                                              ],
                                               "activeTabIndex": 0
                                             }
                                           }

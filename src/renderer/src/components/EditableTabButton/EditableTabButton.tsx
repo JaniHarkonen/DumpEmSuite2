@@ -5,6 +5,7 @@ import { MouseEvent, ReactNode } from "react";
 import { ASSETS } from "@renderer/assets/assets";
 import TabButton, { OnCaptionEditFinalize } from "../Tabs/TabControls/TabButton/TabButton";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import useTheme from "@renderer/hook/useTheme";
 
 
 type OnTabRemove = (e: MouseEvent<HTMLImageElement>) => void;
@@ -26,6 +27,8 @@ export default function EditableTabButton(props: Props): ReactNode {
   const pOnRemove: OnTabRemove = props.onRemove || function() {};
   const pIconURL: string = props.iconURL || ASSETS.icons.action.trashCan.black;
 
+  const {theme} = useTheme();
+
   return (
     <TabButton
       tab={pTab}
@@ -34,8 +37,9 @@ export default function EditableTabButton(props: Props): ReactNode {
     >
       {pAllowRemove && (
         <span
-          className="tab-remove-icon-container"
+          {...theme("outline-hl", "tab-remove-icon-container")}
           onClick={pOnRemove}
+          tabIndex={1}
         >
           <StyledIcon
             className="size-tiny-icon tab-remove-icon"

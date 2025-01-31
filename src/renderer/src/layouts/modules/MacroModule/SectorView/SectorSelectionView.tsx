@@ -91,19 +91,21 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
     const tabs: Tab[] = targetNode.value.tabs;
 
     return (
-      <TabControls>
-        {tabs.map((tab: Tab) => {
-          return(
-            <EditableTabButton
-              key={tab.workspace + "-tab-control-button-" + tab.id}
-              tab={tab}
-              onCaptionEdit={(value: string) => {
-                handleTabCaptionChange(targetNode, tab, value);
-              }}
-              onRemove={(e: MouseEvent<HTMLImageElement>) => handleTabRemove(e, targetNode, tab)}
-            />
-          );
-        })}
+      <div className="d-flex">
+        <TabControls>
+          {tabs.map((tab: Tab) => {
+            return(
+              <EditableTabButton
+                key={tab.workspace + "-tab-control-button-" + tab.id}
+                tab={tab}
+                onCaptionEdit={(value: string) => {
+                  handleTabCaptionChange(targetNode, tab, value);
+                }}
+                onRemove={(e: MouseEvent<HTMLImageElement>) => handleTabRemove(e, targetNode, tab)}
+              />
+            );
+          })}
+        </TabControls>
         <div>
           <StyledButton
             className="ml-medium-length"
@@ -112,7 +114,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
             {"+"}
           </StyledButton>
         </div>
-      </TabControls>
+      </div>
     );
   };
   

@@ -23,10 +23,12 @@ export default function StyledButton(props: Props): ReactNode {
       {...theme("button", "styled-button", pClassName)}
     >
       {pChildren}
-      {pIcon && (<StyledIcon 
-        className={"size-tiny-icon " + (pChildren ? " ml-medium-length" : "")}
-        src={pIcon}
-      />)}
+      {pIcon && (
+        <StyledIcon 
+          className={"size-tiny-icon " + (pChildren ? " ml-medium-length" : "")}
+          src={pIcon}
+        />
+      )}
     </button>
   );
 }

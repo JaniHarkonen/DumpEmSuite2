@@ -102,26 +102,28 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     const tabs: Tab[] = targetNode.value.tabs;
 
     return (
-      <TabControls>
-        {tabs.map((tab: Tab) => {
-          const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
+      <div className="d-flex">
+        <TabControls>
+          {tabs.map((tab: Tab) => {
+            const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
 
-          return(
-            <EditableTabButton
-              key={tab.workspace + "-tab-control-button-" + tab.id}
-              tab={tab}
-              allowEdit={!isFundamental}
-              allowRemove={!isFundamental}
-              onCaptionEdit={(value: string) => {
-                handleTabCaptionChange(targetNode, tab, value);
-              }}
-              onRemove={(e: MouseEvent<HTMLImageElement>) => {
-                handleTabRemove(e, targetNode, tab);
-              }}
-            />
-          );
-        })}
-        <div>
+            return(
+              <EditableTabButton
+                key={tab.workspace + "-tab-control-button-" + tab.id}
+                tab={tab}
+                allowEdit={!isFundamental}
+                allowRemove={!isFundamental}
+                onCaptionEdit={(value: string) => {
+                  handleTabCaptionChange(targetNode, tab, value);
+                }}
+                onRemove={(e: MouseEvent<HTMLImageElement>) => {
+                  handleTabRemove(e, targetNode, tab);
+                }}
+              />
+            );
+          })}
+        </TabControls>
+        <div >
           <StyledButton
             className="ml-medium-length"
             onClick={() => handleTabAdd(targetNode)}
@@ -129,7 +131,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
             {"+"}
           </StyledButton>
         </div>
-      </TabControls>
+      </div>
     );
   };
 
