@@ -1,5 +1,5 @@
 {
-  "activeTheme": "dark",
+  "activeTheme": "light",
   "sceneConfigBlueprint": {
     "splitTree": {
       "root": {
@@ -197,7 +197,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }

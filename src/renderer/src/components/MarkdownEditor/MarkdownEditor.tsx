@@ -73,16 +73,6 @@ export default function MarkdownEditor(props: Props) {
       onComponentChange: handleSave
     }}>
       <div className="w-100 h-100">
-        {!isEditing && (
-          <div className="d-flex d-justify-end">
-            <StyledButton
-              icon={ASSETS.icons.action.edit.black  }
-              onClick={handleEditStart}
-            >
-              Edit
-            </StyledButton>
-          </div>
-        )}
         {isEditing && (
           <div className="markdown-editor-textarea-container">
             {wasEdited ? (
@@ -108,16 +98,24 @@ export default function MarkdownEditor(props: Props) {
             />
           </div>
         )}
-          <div
-            className="user-select-text w-100 h-100"
-            style={{display: isEditing ? "none" : "block"}}
-          >
-            {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
-              <div {...theme("script-c", "markdown-editor-start-suggestion")}>
-                Click "Edit" to start taking notes.
-              </div>
-            )}
+        <div
+          className="markdown-editor-renderer-container"
+          style={{display: isEditing ? "none" : "grid"}}
+        >
+          <div className="d-flex d-justify-end">
+            <StyledButton
+              icon={ASSETS.icons.action.edit.black}
+              onClick={handleEditStart}
+            >
+              Edit
+            </StyledButton>
           </div>
+          {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
+            <div {...theme("script-c", "markdown-editor-start-suggestion")}>
+              Click "Edit" to start taking notes.
+            </div>
+          )}
+        </div>
       </div>
     </MarkdownContext.Provider>
   );
