@@ -13,16 +13,14 @@ export default function AppModal(props: PropsWithChildren): ReactNode {
       if( e.key === "Escape" ) {
         closeModal();
       }
-    }
+    };
     
     document.addEventListener("keydown", close);
     return () => document.removeEventListener("keydown", close);
-  }, [])
+  }, []);
 
   return (
-    <div
-      className="app-modal-container user-select-text"
-    >
+    <div className="app-modal-container user-select-text">
       {pChildren}
     </div>
   );

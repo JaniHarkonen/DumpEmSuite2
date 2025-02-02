@@ -13,6 +13,8 @@ import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/databas
 import { Metadata } from "src/shared/schemaConfig";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 import useTheme from "@renderer/hook/useTheme";
+import { ModalContext } from "@renderer/context/ModalContext";
+import ThemeModal from "@renderer/layouts/modals/ThemeModal/ThemeModal";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -66,6 +68,7 @@ export default function Toolbar(props: Props): ReactNode {
 
   const {splitTree} = useContext(FlexibleSplitsContext);
   const {activeTheme, setTheme, theme} = useTheme();
+  const {openModal, closeModal} = useContext(ModalContext);
 
     // This ref is only used so that the hooks passed onto the useFileSystemDialog may use 
     // fresh values of the split tree
@@ -106,7 +109,7 @@ export default function Toolbar(props: Props): ReactNode {
             extra: {
               path: path
             }
-          }
+          };
 
           pAddWorkspace(workspaceTabBlueprint, valueNode);
         });
@@ -138,6 +141,7 @@ export default function Toolbar(props: Props): ReactNode {
               path: path
             }
           };
+
           pAddWorkspace(workspaceTabBlueprint, valueNode);
         });
       } break;
@@ -177,7 +181,7 @@ export default function Toolbar(props: Props): ReactNode {
           }
         });
         break;
-      case "theme": setTheme && setTheme(activeTheme === "dark" ? "light" : "dark"); break;
+      case "theme": openModal(<ThemeModal></ThemeModal>); break;
       case "shortcuts": console.log(optionKey); break;
     }
   };
@@ -193,7 +197,7 @@ export default function Toolbar(props: Props): ReactNode {
   };
 
   const handleMainOptionHover = (optionKey: DropMenuOption) => {
-    if( openDropMenu !== "none" ) {
+    if( openDropMenu !== "none" && MENU_OPTIONS[optionKey]?.menu ) {
       setOpenDropMenu(optionKey);
     }
   };
@@ -202,7 +206,6 @@ export default function Toolbar(props: Props): ReactNode {
     dispatchOption(optionKey);
     setOpenDropMenu("none");
   };
-
 
   return (
     <div
