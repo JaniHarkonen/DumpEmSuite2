@@ -1,5 +1,3 @@
-import "./ThemeModal.css";
-
 import { ReactNode, useContext } from "react";
 import { ModalProps, OnModalClose } from "../modal.types";
 import StandardModal from "../StandardModal/StandardModal";
@@ -7,6 +5,7 @@ import useTheme from "@renderer/hook/useTheme";
 import { ModalContext } from "@renderer/context/ModalContext";
 import { APP_THEMES, AppTheme } from "@renderer/context/ThemeContext";
 import firstLetterCapitalized from "@renderer/utils/firstLetterCapitalized";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 export default function ThemeModal(props: ModalProps): ReactNode {
@@ -14,6 +13,7 @@ export default function ThemeModal(props: ModalProps): ReactNode {
 
   const {activeTheme, setTheme, theme} = useTheme();
   const {closeModal} = useContext(ModalContext);
+  const {formatKey} = useTabKeys();
 
   const handleClose = () => {
     if( pOnClose ) {
@@ -26,19 +26,21 @@ export default function ThemeModal(props: ModalProps): ReactNode {
   const renderThemeButtons = () => {
     return APP_THEMES.map((t: AppTheme) => {
       return (
-        <div className="cursor-pointer">
+        <div
+          key={formatKey("theme-modal-theme-selection-" + t)}
+          className="cursor-pointer"
+        >
           <input
             type="radio"
             checked={t === activeTheme}
-            onChange={() => {setTheme && setTheme(t)}}
+            onChange={() => setTheme && setTheme(t)}
           />
-          <label
-            htmlFor=""
+          <span  
             className="ml-medium-length cursor-pointer"
-            onClick={() => {setTheme && setTheme(t)}}
+            onClick={() => setTheme && setTheme(t)}
           >
             {firstLetterCapitalized(t)}
-          </label>
+          </span>
         </div>
       );
     });

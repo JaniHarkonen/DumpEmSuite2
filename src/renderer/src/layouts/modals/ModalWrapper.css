@@ -1,12 +1,3 @@
-.modal-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-}
-
 .modal-wrapper-overlay {
   position: absolute;
   left: 0px;
@@ -17,5 +8,5 @@
   background-color: black;
   opacity: 50%;
 
-  z-index: -1;
+  z-index: 0;
 }

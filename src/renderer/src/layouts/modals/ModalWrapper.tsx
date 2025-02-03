@@ -3,12 +3,20 @@ import "./ModalWrapper.css";
 import { PropsWithChildren, ReactNode } from "react";
 
 
-export default function ModalWrapper(props: PropsWithChildren): ReactNode {
+type Props = {
+  onOverlayClick?: () => void;
+} & PropsWithChildren;
+
+export default function ModalWrapper(props: Props): ReactNode {
   const pChildren: ReactNode = props.children;
+  const pOnOverlayClick: () => void = props.onOverlayClick || function(){ };
   
   return (
-    <div className="modal-wrapper">
-      <div className="modal-wrapper-overlay" />
+    <div className="w-100 h-100">
+      <div 
+        className="modal-wrapper-overlay"
+        onClick={pOnOverlayClick}
+      />
       {pChildren}
     </div>
   );
