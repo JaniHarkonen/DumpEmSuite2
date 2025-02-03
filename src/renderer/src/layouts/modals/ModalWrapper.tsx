@@ -8,6 +8,7 @@ export default function ModalWrapper(props: PropsWithChildren): ReactNode {
   
   return (
     <div className="modal-wrapper">
+      <div className="modal-wrapper-overlay" />
       {pChildren}
     </div>
   );

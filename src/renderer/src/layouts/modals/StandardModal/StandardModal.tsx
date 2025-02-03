@@ -25,9 +25,7 @@ export default function StandardModal(props: Props): ReactNode {
         <div className="standard-modal-content-container">
           <div className="standard-modal-title-container">
             <PageHeader>{pTitle}</PageHeader>
-            <div className="d-flex d-justify-center d-align-items-center">
-              <CloseButton onClick={pOnClose}/>
-            </div>
+            <CloseButton onClick={pOnClose}/>
           </div>
           <div className="w-100 h-100 overflow-auto">
             {pChildren}

@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { ASTNode } from "./parser";
-import AdvancedRealTimeWidget from "@renderer/components/tradingview/AdvancedRealTimeWidget";
 import StyledLink from "@renderer/components/StyledLink/StyledLink";
 import { TAGS } from "./tokenizer";
 import { TagInfo } from "./token.type";
@@ -9,6 +8,7 @@ import Container from "@renderer/components/Container/Container";
 import AnnualEarningsProjector from "@renderer/components/markdown/AnnualEarningsProjector/AnnualEarningsProjector";
 import MarkdownRow from "@renderer/components/markdown/MarkdownRow/MarkdownRow";
 import MarkdownCol from "@renderer/components/markdown/MarkdownCol/MarkdownCol";
+import MarkdownChart from "@renderer/components/markdown/MarkdownChart/MarkdownChart";
 
 
 const INDENT1: ReactNode = <>&emsp;</>;
@@ -87,15 +87,11 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         }
 
         return (
-          <div
+          <MarkdownChart
             key={`${key}-${astNode.value}`}
-            className="aspect-ratio-16-9 w-100"
-          >
-            <AdvancedRealTimeWidget
-              exchange={split[0]}
-              ticker={split[1]}
-            />
-          </div>
+            exchange={split[0]}
+            ticker={split[1]}
+          />
         );
       }
       case "row": {

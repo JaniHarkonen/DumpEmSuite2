@@ -67,8 +67,8 @@ export default function Toolbar(props: Props): ReactNode {
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
 
   const {splitTree} = useContext(FlexibleSplitsContext);
-  const {activeTheme, setTheme, theme} = useTheme();
-  const {openModal, closeModal} = useContext(ModalContext);
+  const {theme} = useTheme();
+  const {openModal} = useContext(ModalContext);
 
     // This ref is only used so that the hooks passed onto the useFileSystemDialog may use 
     // fresh values of the split tree

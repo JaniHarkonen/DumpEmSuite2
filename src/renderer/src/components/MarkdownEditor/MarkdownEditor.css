@@ -1,15 +1,18 @@
 .markdown-editor-textarea-container {
   display: grid;
   grid-template-rows: auto 1fr;
-  box-sizing: border-box;
 
   height: 100%;
   padding-bottom: var(--strong-length);
+
+  box-sizing: border-box;
 }
 
 .markdown-editor-renderer-container {
   display: grid;
   grid-template-rows: auto 1fr;
+
+  gap: var(--medium-length);
 
   width: 100%;
   height: 100%;

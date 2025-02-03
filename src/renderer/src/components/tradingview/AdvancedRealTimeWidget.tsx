@@ -9,6 +9,8 @@ type Props = {
   ticker: string;
 };
 
+export type AdvancedRealTimeWidgetProps = Props;
+
 function TradingViewWidget(props: Props): ReactNode {
   const pExchange: string = props.exchange;
   const pTicker: string = props.ticker;
