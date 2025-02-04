@@ -2,10 +2,10 @@ import "./YesNoModal.css";
 
 import { PropsWithChildren, ReactNode, useContext } from "react";
 import StandardModal from "../StandardModal/StandardModal";
-import { ModalContext } from "@renderer/context/ModalContext";
 import useTheme from "@renderer/hook/useTheme";
 import ModalControlButton from "@renderer/components/ModalControlButton/ModalControlButton";
 import { ModalProps, OnModalClose } from "../modal.types";
+import { ModalContext } from "@renderer/context/ModalContext";
 
 
 type OnModalYes = () => void;
@@ -19,30 +19,32 @@ export default function YesNoModal(props: Props): ReactNode {
   const pOnYes: OnModalYes | undefined = props.onYes;
   const pOnClose: OnModalClose | undefined = props.onClose;
 
-  const {closeModal} = useContext(ModalContext);
   const {theme} = useTheme();
+  const {closeModal} = useContext(ModalContext);
 
-  const handleClose = () => {
-    if( pOnClose ) {
-      pOnClose();
-    } else {
-      closeModal();
-    }
+  const handleYes = () => {
+    pOnYes && pOnYes();
+    closeModal();
+  };
+  
+  const handleCancel = () => {
+    pOnClose && pOnClose();
+    closeModal();
   };
 
   return (
     <StandardModal
       title="Confirmation"
       className="yes-no-modal"
-      onClose={handleClose}
+      onClose={pOnClose}
     >
       <div {...theme("glyph-c")}>
         <div>
           {pChildren}
         </div>
         <div className="yes-no-modal-controls">
-          <ModalControlButton onClick={pOnYes}>Yes</ModalControlButton>
-          <ModalControlButton onClick={handleClose}>Cancel</ModalControlButton>
+          <ModalControlButton onClick={handleYes}>Yes</ModalControlButton>
+          <ModalControlButton onClick={handleCancel}>Cancel</ModalControlButton>
         </div>
       </div>
     </StandardModal>

@@ -1,10 +1,9 @@
 import "./ThemeModal.css";
 
-import { ReactNode, useContext } from "react";
+import { ReactNode } from "react";
 import { ModalProps, OnModalClose } from "../modal.types";
 import StandardModal from "../StandardModal/StandardModal";
 import useTheme from "@renderer/hook/useTheme";
-import { ModalContext } from "@renderer/context/ModalContext";
 import { APP_THEMES, AppTheme } from "@renderer/context/ThemeContext";
 import firstLetterCapitalized from "@renderer/utils/firstLetterCapitalized";
 import useTabKeys from "@renderer/hook/useTabKeys";
@@ -14,16 +13,7 @@ export default function ThemeModal(props: ModalProps): ReactNode {
   const pOnClose: OnModalClose | undefined = props.onClose;
 
   const {activeTheme, setTheme, theme} = useTheme();
-  const {closeModal} = useContext(ModalContext);
   const {formatKey} = useTabKeys();
-
-  const handleClose = () => {
-    if( pOnClose ) {
-      pOnClose();
-    } else {
-      closeModal();
-    }
-  };
 
   const renderThemeButtons = () => {
     return APP_THEMES.map((t: AppTheme) => {
@@ -52,7 +42,7 @@ export default function ThemeModal(props: ModalProps): ReactNode {
     <StandardModal
       className="theme-modal"
       title="Select theme"
-      onClose={handleClose}
+      onClose={pOnClose}
     >
       <div {...theme("ambient-bgc", "script-c")}>
         <fieldset>

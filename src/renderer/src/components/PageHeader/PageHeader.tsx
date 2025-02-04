@@ -7,17 +7,19 @@ type Props = {
   children: string | null | undefined;
   enableTextSelect?: boolean;
   h?: Header;
+  className?: string;
 };
 
 export default function PageHeader(props: Props) {
   const pEnableTextSelect: boolean = props.enableTextSelect ?? true;
   const pH: Header = props.h || "h2"
+  const pClassName: string = props.className || "";
 
   const {theme} = useTheme();
 
   const fixedClass: {
     className: string
-  } = theme("glyph-c", pEnableTextSelect ? "user-select-text" : "user-select-none");
+  } = theme("glyph-c", pEnableTextSelect ? "user-select-text" : "user-select-none", pClassName);
 
   switch( pH ) {
     case "h1": return <h1 {...fixedClass}>{props.children}</h1>;
