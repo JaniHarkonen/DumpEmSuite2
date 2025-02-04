@@ -157,7 +157,7 @@ export default function MaterialsBrowser(props: Props): ReactNode {
             })}
           </Panel>
         ) : (
-          <div>No materials yet.</div>
+          <div>Start by "Importing files" or by dropping files here.</div>
         )}
       </div>
     </div>

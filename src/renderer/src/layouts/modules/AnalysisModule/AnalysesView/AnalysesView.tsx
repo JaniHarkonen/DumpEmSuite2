@@ -15,6 +15,8 @@ import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
 import { FilterationStep } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
+import { ModalContext } from "@renderer/context/ModalContext";
+import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 
 
 const TAGS = {
@@ -26,6 +28,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
+  const {openModal} = useContext(ModalContext);
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {
     splitTree, 
@@ -73,8 +76,22 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     e: MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
   ) => {
     e.stopPropagation();
-    removeTab(targetNode, tab);
-    databaseAPI.deleteFilterationStep({ step_id: tab.id });
+
+    openModal(
+      <YesNoModal onYes={() => {
+        removeTab(targetNode, tab);
+        databaseAPI.deleteFilterationStep({ step_id: tab.id });
+      }}>
+        <div>
+          <div>
+            Are you sure you want to remove filtration step <strong>'{tab.caption}'</strong>?
+          </div>
+          <div>
+            All associated information including the notes of this step and verdicts will be lost.
+          </div>
+        </div>
+      </YesNoModal>
+    );
   };
 
   const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {

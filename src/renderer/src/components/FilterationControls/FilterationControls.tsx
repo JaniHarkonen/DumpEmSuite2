@@ -21,7 +21,7 @@ export default function FilterationControls(props: Props): ReactNode {
 
   const {openModal} = useContext(ModalContext);
 
-  return(
+  return (
     <div className="filteration-controls-container">
       <StyledButton onClick={() => {
         openModal(
@@ -36,7 +36,9 @@ export default function FilterationControls(props: Props): ReactNode {
             </div>
           </YesNoModal>
         );
-      }}>Bring all companies</StyledButton>
+      }}>
+        Bring all companies
+      </StyledButton>
       <StyledButton onClick={() => {
         openModal(
           <YesNoModal onYes={pOnDelist}>

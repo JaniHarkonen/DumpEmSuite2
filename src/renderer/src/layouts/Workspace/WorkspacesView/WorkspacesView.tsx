@@ -67,7 +67,7 @@ export default function WorkspacesView(): ReactNode {
         removeTab(targetNode, tab);
         databaseAPI.close({ databaseName: tab.id });
       }}>
-        Are you sure you want to close '{tab.caption}'
+        Are you sure you want to close <strong>'{tab.caption}'</strong>?
       </YesNoModal>
     );
   };
