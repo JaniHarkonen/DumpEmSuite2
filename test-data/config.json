@@ -1,5 +1,5 @@
 {
-  "activeTheme": "light",
+  "activeTheme": "dark",
   "sceneConfigBlueprint": {
     "splitTree": {
       "root": {
@@ -108,7 +108,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 50
+                                                            "value": 43.75
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -141,7 +141,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 53.94571088370809
+                                                              "value": 53.973509933774835
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -248,7 +248,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 44.44444444444444
+                                                            "value": 50
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -752,7 +752,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 0
+                              "activeTabIndex": 1
                             }
                           }
                         }

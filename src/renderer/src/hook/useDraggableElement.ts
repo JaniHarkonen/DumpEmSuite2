@@ -1,8 +1,7 @@
-import clamp from "@renderer/utils/clamp";
 import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from "react";
 
 
-type Position = {
+export type Position = {
   x: number;
   y: number;
 };
@@ -15,6 +14,8 @@ type Returns = {
   stopDragging: () => void;
   setPosition: Dispatch<SetStateAction<Position>>;
 };
+
+export type UseDraggableElementsReturns = Returns;
 
 export default function useDraggableElement(deps?: any[]): Returns {
   const [isDragging, setDragging] = useState<boolean>(false);
@@ -38,8 +39,8 @@ export default function useDraggableElement(deps?: any[]): Returns {
     const drag = (e: MouseEvent) => {
       if( isDragging ) {
         setPosition({
-          x: clamp(0, e.clientX - offsetRef.current.x, window.innerWidth), 
-          y: clamp(0, e.clientY - offsetRef.current.y, window.innerHeight)
+          x: e.clientX - offsetRef.current.x, 
+          y: e.clientY - offsetRef.current.y
         });
       }
     };

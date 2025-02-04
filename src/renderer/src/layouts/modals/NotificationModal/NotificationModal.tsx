@@ -1,22 +1,14 @@
-import "./StandardModal.css";
-
-import { MouseEvent, MutableRefObject, PropsWithChildren, ReactNode, useRef } from "react";
-import ModalWrapper from "../ModalWrapper";
-import useTheme from "@renderer/hook/useTheme";
-import CloseButton from "@renderer/components/CloseButton/CloseButton";
+import { MutableRefObject, PropsWithChildren, ReactNode, useRef } from "react";
 import { ModalProps, OnModalClose } from "../modal.types";
-import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import useDraggableModal from "@renderer/hook/useDraggableModal";
+import useTheme from "@renderer/hook/useTheme";
 
 
 type Props = {
-  title: string;
-  className?: string;
+  message: string;
 } & PropsWithChildren & ModalProps;
 
-export default function StandardModal(props: Props): ReactNode {
-  const pTitle: string = props.title;
-  const pClassName: string = props.className || "";
+export default function NotificationModal(props: Props): ReactNode {
+  const pMessage: string = props.message;
   const pChildren: ReactNode = props.children;
   const pOnClose: OnModalClose = props.onClose || function(){ };
 
@@ -33,7 +25,7 @@ export default function StandardModal(props: Props): ReactNode {
   return (
     <ModalWrapper onOverlayClick={pOnClose}>
       <div
-        {...theme("outline-bdc", "ambient-bgc", "standard-modal", "user-select-none", pClassName)}
+        {...theme("outline-bdc", "ambient-bgc", "standard-modal", "user-select-none")}
         style={positionStyle()}
         ref={modalRef}
       >
@@ -45,12 +37,7 @@ export default function StandardModal(props: Props): ReactNode {
               cursor: isDragging ? "grabbing" : "grab"
             }}
           >
-            <PageHeader
-              enableTextSelect={false}
-              h="h3"
-            >
-              {pTitle}
-            </PageHeader>
+            <PageHeader enableTextSelect={false}>{pTitle}</PageHeader>
             <CloseButton onClick={handleClose}/>
           </div>
           <div className="w-100 overflow-auto">
@@ -59,5 +46,5 @@ export default function StandardModal(props: Props): ReactNode {
         </div>
       </div>
     </ModalWrapper>
-  );
+    );
 }

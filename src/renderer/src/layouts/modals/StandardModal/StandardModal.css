@@ -1,10 +1,10 @@
 .standard-modal {
   position: absolute; 
-  height: 50%;
+  /* height: 50%;
   min-width: var(--card-size);
-  min-height: var(--card-size);
+  min-height: var(--card-size); */
   
-  aspect-ratio: 1 / 2;
+  /* aspect-ratio: 1 / 2; */
 
   border-style: solid;
   border-width: var(--tiny-length);

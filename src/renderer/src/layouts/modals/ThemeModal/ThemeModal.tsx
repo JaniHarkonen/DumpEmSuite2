@@ -1,3 +1,5 @@
+import "./ThemeModal.css";
+
 import { ReactNode, useContext } from "react";
 import { ModalProps, OnModalClose } from "../modal.types";
 import StandardModal from "../StandardModal/StandardModal";
@@ -48,6 +50,7 @@ export default function ThemeModal(props: ModalProps): ReactNode {
 
   return (
     <StandardModal
+      className="theme-modal"
       title="Select theme"
       onClose={handleClose}
     >
