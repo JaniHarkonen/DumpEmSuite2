@@ -2,7 +2,7 @@ import "../../ModuleView/ModuleView.css";
 
 import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { buildTab, defaultSceneConfigBlueprint, Tab, TabBlueprint, TabContentProvider } from "@renderer/model/tabs";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import Workspace from "../Workspace";
 import { SceneContext } from "@renderer/context/SceneContext";
 import { SplitTreeValue } from "@renderer/model/splits";
@@ -13,6 +13,8 @@ import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import SplitView from "@renderer/components/SplitView/SplitView";
 import { ASSETS } from "@renderer/assets/assets";
 import Toolbar from "@renderer/components/Toolbar/Toolbar";
+import { ModalContext } from "@renderer/context/ModalContext";
+import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 
 
 const {databaseAPI} = window.api;
@@ -28,6 +30,7 @@ export default function WorkspacesView(): ReactNode {
     )
   };
 
+  const {openModal} = useContext(ModalContext);
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
 
   const {
@@ -58,8 +61,15 @@ export default function WorkspacesView(): ReactNode {
     e: React.MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
   ) => {
     e.stopPropagation();
-    removeTab(targetNode, tab);
-    databaseAPI.close({ databaseName: tab.id });
+
+    openModal(
+      <YesNoModal onYes={() => {
+        removeTab(targetNode, tab);
+        databaseAPI.close({ databaseName: tab.id });
+      }}>
+        Are you sure you want to close <strong>'{tab.caption}'</strong>?
+      </YesNoModal>
+    );
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {

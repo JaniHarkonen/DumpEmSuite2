@@ -1,9 +1,11 @@
 import "./CompanyControls.css";
 
-import { ChangeEvent, ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode, useContext, useState } from "react";
 import StyledButton from "../StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
 import CompanyAddPanel, { OnAddCompany } from "../CompanyAddPanel/CompanyAddPanel";
+import { ModalContext } from "@renderer/context/ModalContext";
+import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 
 
 type DefaultCallback = () => void;
@@ -25,6 +27,8 @@ export default function CompanyControls(props: Props): ReactNode {
 
   const [displayAddControls, setDisplayAddControls] = useState<boolean>(false);
 
+  const {openModal, closeModal} = useContext(ModalContext);
+
   const handleAllSelectionToggle = (e: ChangeEvent<HTMLInputElement>) => {
     if( e.target.checked ) {
       pOnSelectAll();
@@ -42,7 +46,18 @@ export default function CompanyControls(props: Props): ReactNode {
         >
           {displayAddControls ? "Cancel" : "Add company"}
         </StyledButton>
-        <StyledButton onClick={() => pOnRemove()}>Remove selected</StyledButton>
+        <StyledButton onClick={() => {
+          openModal(
+            <YesNoModal onYes={() => {
+              pOnRemove();
+              closeModal();
+            }}>
+              Are you sure you want to remove all the selected companies?
+            </YesNoModal>
+          );
+        }}>
+          Remove selected
+        </StyledButton>
       </div>
       {displayAddControls && <CompanyAddPanel onAdd={pOnAdd} />}
       <div className="company-controls-secondary-control-container">

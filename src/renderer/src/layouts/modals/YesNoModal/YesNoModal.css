@@ -1,0 +1,11 @@
+.yes-no-modal {
+  user-select: text;
+}
+
+.yes-no-modal-controls {
+  display: flex;
+  justify-content: end;
+  gap: var(--medium-length);
+
+  margin-top: var(--strong-length);
+}

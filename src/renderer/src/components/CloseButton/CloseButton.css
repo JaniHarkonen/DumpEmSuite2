@@ -1,0 +1,14 @@
+.close-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: var(--small-length);
+  margin: 0;
+
+  border-radius: var(--small-length);
+
+  &:hover {
+    cursor: pointer;
+  }
+}

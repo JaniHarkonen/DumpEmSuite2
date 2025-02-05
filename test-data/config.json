@@ -36,7 +36,7 @@
                           "isFork": true,
                           "divider": {
                             "direction": "horizontal",
-                            "value": 43.75
+                            "value": 50
                           },
                           "left": {
                             "isFork": false,
@@ -74,8 +74,8 @@
                                                   "tags": [],
                                                   "order": 0,
                                                   "extra": {
-                                                    "scrapeTarget": "",
-                                                    "scrapeOutput": ""
+                                                    "scrapeTarget": "D:\\javascript\\DumpEmSuite2\\project\\dumpem-suite-2\\test-data\\snapshot.htm",
+                                                    "scrapeOutput": "C:\\Users\\User\\Desktop\\scrape.txt"
                                                   }
                                                 },
                                                 {
@@ -108,7 +108,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 50
+                                                            "value": 43.75
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -141,7 +141,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 53.94571088370809
+                                                              "value": 53.973509933774835
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -197,7 +197,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 0
                                             }
                                           }
                                         }
@@ -248,7 +248,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 50
+                                                            "value": 56.25
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -281,7 +281,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 53.91787823324239
+                                                              "value": 50
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -354,7 +354,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 43.75
+                                                            "value": 50
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -673,7 +673,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 0
+                                              "activeTabIndex": 3
                                             }
                                           }
                                         }

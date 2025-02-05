@@ -1,6 +1,11 @@
-import { DependencyList, MutableRefObject, useEffect, useRef } from "react";
+import { DependencyList, MutableRefObject, useEffect, useRef, useState } from "react";
 
 export type OnDrag = (e: MouseEvent) => void;
+
+export type DraggableOffset = {
+  x: number;
+  y: number;
+};
 
 type Props = {
   onDrag: OnDrag;
@@ -8,19 +13,22 @@ type Props = {
 
 type Returns = {
   isDragging: MutableRefObject<boolean>;
-  handleDragStart: () => boolean;
+  handleDragStart: (offset?: DraggableOffset) => boolean;
   handleDragEnd: () => boolean;
+  offset: DraggableOffset;
 };
 
 export default function useDraggable(props: Props, deps?: DependencyList): Returns {
   const pOnDrag: OnDrag = props.onDrag;
   const isDragging: MutableRefObject<boolean> = useRef(false);
+  const [offset, setOffset] = useState<DraggableOffset>({ x: 0, y: 0 });
 
   useEffect(() => {
     const dragEvent: OnDrag = (e: MouseEvent) => {
       if( !isDragging.current ) {
         return;
       }
+
       pOnDrag(e);
     };
 
@@ -33,13 +41,20 @@ export default function useDraggable(props: Props, deps?: DependencyList): Retur
     };
   }, deps);
 
-  const handleDragStart = () => isDragging.current = true;
+  const handleDragStart = (offset?: DraggableOffset) => {
+    if( offset ) {
+      setOffset(offset);
+    }
+
+    return (isDragging.current = true);
+  };
 
   const handleDragEnd = () => isDragging.current = false;
 
   return {
     isDragging,
     handleDragStart,
-    handleDragEnd
+    handleDragEnd,
+    offset
   };
 }

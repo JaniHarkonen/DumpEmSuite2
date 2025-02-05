@@ -81,7 +81,7 @@ export default function Divider(props: Props): ReactNode {
         {alternativeContent && (
           <div 
             {...theme("outline-bdc", `divider-handle ${pDividerSettings.direction}`)}
-            onMouseDown={handleDragStart}
+            onMouseDown={() => handleDragStart()}
           />
         )}
       </div>

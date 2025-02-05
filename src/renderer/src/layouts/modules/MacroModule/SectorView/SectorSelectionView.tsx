@@ -15,6 +15,8 @@ import buildSectorBlueprint from "./buildSectorBlueprint";
 import { MacroSector } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
+import { ModalContext } from "@renderer/context/ModalContext";
+import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 
 
 export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
@@ -22,6 +24,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
+  const {openModal} = useContext(ModalContext);
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {
     splitTree, 
@@ -68,8 +71,20 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
     e: MouseEvent<HTMLImageElement>, targetNode: SplitTreeValue, tab: Tab
   ) => {
     e.stopPropagation();
-    removeTab(targetNode, tab);
-    databaseAPI.deleteMacroSector({ macroSectorID: tab.id });
+
+    openModal(
+      <YesNoModal onYes={() => {
+        removeTab(targetNode, tab);
+        databaseAPI.deleteMacroSector({ macroSectorID: tab.id });
+      }}>
+        <div>
+          Are you sure you want to remove sector <strong>'{tab.caption}'</strong>?
+        </div>
+        <div>
+          This will remove the analysis notes and the related materials.
+        </div>
+      </YesNoModal>
+    );
   };
 
   const handleTabReorder = (targetNode: SplitTreeValue, index: number) => {
