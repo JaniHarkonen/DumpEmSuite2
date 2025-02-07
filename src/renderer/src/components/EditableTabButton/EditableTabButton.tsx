@@ -1,11 +1,12 @@
 import "../Tabs/TabControls/TabButton/TabButton.css";
 
 import { Tab } from "@renderer/model/tabs";
-import { MouseEvent, ReactNode } from "react";
+import { MouseEvent, MutableRefObject, ReactNode, useRef } from "react";
 import { ASSETS } from "@renderer/assets/assets";
 import TabButton, { OnCaptionEditFinalize } from "../Tabs/TabControls/TabButton/TabButton";
 import StyledIcon from "../StyledIcon/StyledIcon";
 import useTheme from "@renderer/hook/useTheme";
+import applyKeyListener, { OnKeyDown } from "@renderer/utils/applyKeyListener";
 
 
 type OnTabRemove = (e: MouseEvent<HTMLImageElement>) => void;
@@ -28,18 +29,29 @@ export default function EditableTabButton(props: Props): ReactNode {
   const pIconURL: string = props.iconURL || ASSETS.icons.action.trashCan.black;
 
   const {theme} = useTheme();
+  const captionRef: MutableRefObject<HTMLSpanElement | null> = useRef<HTMLSpanElement | null>(null);
+
+    // Generates the hotkey listener by calling applyKeyListener and extracting its onKeyDown-event
+  const hotkeyListener: OnKeyDown = applyKeyListener({
+    "Delete": (e: React.KeyboardEvent<HTMLElement>) => {
+      e.stopPropagation();
+      e.preventDefault();
+      captionRef.current && captionRef.current.click()
+    }
+  }).onKeyDown;
 
   return (
     <TabButton
       tab={pTab}
       isEditable={pAllowEdit}
       onCaptionEdit={pOnCaptionEdit}
+      hotkeyListener={hotkeyListener}
     >
       {pAllowRemove && (
         <span
           {...theme("outline-hl", "tab-remove-icon-container")}
           onClick={pOnRemove}
-          tabIndex={1}
+          ref={captionRef}
         >
           <StyledIcon
             className="size-tiny-icon tab-remove-icon"

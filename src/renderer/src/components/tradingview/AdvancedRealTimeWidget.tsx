@@ -1,5 +1,6 @@
 import { TabsContext } from '@renderer/context/TabsContext';
 import { WorkspaceContext } from '@renderer/context/WorkspaceContext';
+import useTabKeys from '@renderer/hook/useTabKeys';
 import useTheme from '@renderer/hook/useTheme';
 import { useEffect, useRef, memo, MutableRefObject, ReactNode, useContext } from 'react';
 
@@ -17,6 +18,7 @@ function TradingViewWidget(props: Props): ReactNode {
   const container: MutableRefObject<HTMLDivElement | null> = useRef(null);
 
   const {activeTheme} = useTheme();
+  const {formatKey} = useTabKeys();
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {activeTabIndex, tabs} = useContext(TabsContext);
 
@@ -48,7 +50,9 @@ function TradingViewWidget(props: Props): ReactNode {
     <div
       className="tradingview-widget-container w-100 h-100" 
       ref={container}
-      key={keyPrefix + "-trading-view-real-time-chart-" + pExchange + "_" + pTicker + "_" + activeTheme}
+      key={formatKey(
+        keyPrefix + "-trading-view-real-time-chart-" + pExchange + "_" + pTicker + "_" + activeTheme
+      )}
     >
       <div 
         className="tradingview-widget-container__widget" 

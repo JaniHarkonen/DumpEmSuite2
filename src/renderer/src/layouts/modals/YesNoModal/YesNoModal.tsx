@@ -44,7 +44,12 @@ export default function YesNoModal(props: Props): ReactNode {
         </div>
         <div className="yes-no-modal-controls">
           <ModalControlButton onClick={handleYes}>Yes</ModalControlButton>
-          <ModalControlButton onClick={handleCancel}>Cancel</ModalControlButton>
+          <ModalControlButton
+            autoFocus={true}
+            onClick={handleCancel}
+          >
+            Cancel
+          </ModalControlButton>
         </div>
       </div>
     </StandardModal>

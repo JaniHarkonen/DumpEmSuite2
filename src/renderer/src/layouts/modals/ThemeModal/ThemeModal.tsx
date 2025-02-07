@@ -26,6 +26,7 @@ export default function ThemeModal(props: ModalProps): ReactNode {
             type="radio"
             checked={t === activeTheme}
             onChange={() => setTheme && setTheme(t)}
+            autoFocus={t === activeTheme}
           />
           <span  
             className="ml-medium-length cursor-pointer"

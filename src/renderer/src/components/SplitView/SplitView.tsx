@@ -9,6 +9,7 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import useTheme from "@renderer/hook/useTheme";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -44,6 +45,7 @@ export default function SplitView(props: Props): ReactNode {
   } = useContext(FlexibleSplitsContext);
 
   const {theme} = useTheme();
+  const {formatKey} = useTabKeys();
 
   const handleTabContentDrop = (dropArea: DropAreaSettings, toFork: SplitTreeFork) => {
       // Maps drop areas to DividerDirections and DividerDirections to SplitBranches
@@ -70,7 +72,7 @@ export default function SplitView(props: Props): ReactNode {
     return tabs.map((tab: Tab) => {
       return (
         <TabPanel
-          key={tab.workspace + "-tab-panel-" + tab.id}
+          key={formatKey(tab.workspace + "-tab-panel-" + tab.id)}
           tab={tab}
         >
           {tab.content}

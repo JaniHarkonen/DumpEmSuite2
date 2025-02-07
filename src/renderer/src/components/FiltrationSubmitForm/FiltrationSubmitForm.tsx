@@ -3,6 +3,7 @@ import { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { BoundDatabaseAPI, FetchResult } from "src/shared/database.type";
 import { FilterationStep } from "src/shared/schemaConfig";
 import StyledButton from "../StyledButton/StyledButton";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 type OnFiltrationSubmit = (filtrationStep: FilterationStep, preserveTags: boolean) => void;
@@ -27,6 +28,8 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
   const [filtrationSteps, setFiltrationSteps] = useState<FiltrationStepTable>({});
   const [submitTarget, setSubmitTarget] = useState<FilterationStep | null>(null);
   const [preserveTags, setPreserveTags] = useState<boolean>(false);
+
+  const {formatKey} = useTabKeys();
 
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
@@ -60,7 +63,7 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
         {Object.keys(filtrationSteps).map((key: string) => {
           return (
             <option
-              key={"filtration-step-selection-option-" + key}
+              key={formatKey("filtration-step-selection-option-" + key)}
               value={key}
             >
               {filtrationSteps[key].caption}

@@ -14,6 +14,10 @@ export default function StyledTextarea(props: Props): ReactNode {
   const {theme} = useTheme();
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if( e.currentTarget.readOnly ) {
+      return;
+    }
+
     const target: HTMLTextAreaElement = e.currentTarget;
 
     if( e.key === "Tab" ) {

@@ -465,7 +465,7 @@ export class SplitTreeManager {
         parent: targetFork,
         value: {
           tabs: [tab],
-          activeTabIndex: -1
+          activeTabIndex: 0
         }
       };
 

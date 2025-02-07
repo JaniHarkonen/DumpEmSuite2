@@ -3,10 +3,14 @@ import "./CompanyTag.css";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
 import useEditable from "@renderer/hook/useEditable";
-import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useState } from "react";
+import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useContext, useState } from "react";
 import { Tag } from "src/shared/schemaConfig";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
 import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
+import { ModalContext } from "@renderer/context/ModalContext";
+import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
+import applyKeyboardActivation from "@renderer/utils/applyKeyboardActivation";
+import applyKeyListener from "@renderer/utils/applyKeyListener";
 
 
 export type OnTagSelect = (tag: Tag) => void;
@@ -36,6 +40,8 @@ export default function CompanyTag(props: Props): ReactNode {
   const [isEditing, handleStartEdit, handleFinalize, handleEnter] = useEditable<Tag>({ onFinalize: pOnUpdate });
   const [tag, setTag] = useState<Tag>(pTag);
 
+  const {openModal} = useContext(ModalContext);
+
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
     setTag({
       ...tag,
@@ -56,6 +62,19 @@ export default function CompanyTag(props: Props): ReactNode {
     }
   };
 
+  const handleRemove = () => {
+    openModal(
+      <YesNoModal onYes={() => pOnRemove(tag)}>
+        <div>
+          Are you sure you want to remove tag <strong>'{tag.tag_label}'</strong>?
+        </div>
+        <div>
+          Removing this tag will also unmark every stock labeled with it!
+        </div>
+      </YesNoModal>
+    );
+  };
+
   return (
     <div
       className="d-flex d-align-items-center"
@@ -64,7 +83,7 @@ export default function CompanyTag(props: Props): ReactNode {
     >
       {isEditing ? (
         <>
-          <input
+          <StyledInput
             type="color"
             value={tag.tag_hex}
             onChange={handleChangeColor}
@@ -77,7 +96,7 @@ export default function CompanyTag(props: Props): ReactNode {
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
             autoFocus={true}
           />
-          <StyledButton onClick={() => pOnRemove(tag)}>
+          <StyledButton onClick={handleRemove}>
             <span>
               <StyledIcon
                 className="company-tag-control-remove"
@@ -93,8 +112,25 @@ export default function CompanyTag(props: Props): ReactNode {
             style={{ backgroundColor: tag.tag_hex }}
             role="button"
             onClick={() => pOnSelect(tag)}
+            tabIndex={0}
+            {...applyKeyboardActivation()}
           />
-          {pDisplayLabel && tag.tag_label}
+          <span
+            tabIndex={0}
+            {...applyKeyListener({ 
+              "Delete": () => pAllowEdit && handleRemove(),
+              " ": (e: React.KeyboardEvent<HTMLElement>) => {
+                e.preventDefault();
+                pAllowEdit && handleStartEdit();
+              },
+              "Enter": (e: React.KeyboardEvent<HTMLElement>) => {
+                e.preventDefault();
+                pAllowEdit && handleStartEdit();
+              }
+            })}
+          >
+            {pDisplayLabel && tag.tag_label}
+          </span>
         </>
       )}
     </div>

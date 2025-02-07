@@ -8,6 +8,7 @@ import { ASSETS } from "@renderer/assets/assets";
 import { SortOrder } from "@renderer/hook/useSortedData";
 import useTheme from "@renderer/hook/useTheme";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import applyKeyboardActivation from "@renderer/utils/applyKeyboardActivation";
 
 
 export type TableListColumn<T> = {
@@ -135,6 +136,20 @@ export default function TableList<T>(props: Props<T>): ReactNode {
           </div>
         );
       }
+    }
+
+      // The first column should be focusable and activatable via hotkeys
+    if( index === 0 ) {
+      return (
+        <div
+          {...theme(classNameConstructor())}
+          key={formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id)}
+          {...applyKeyboardActivation()}
+          tabIndex={0}
+        >
+          {dataElement}
+        </div>
+      );
     }
 
     return (

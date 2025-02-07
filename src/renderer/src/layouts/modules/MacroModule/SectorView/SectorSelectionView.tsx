@@ -17,6 +17,7 @@ import EditableTabButton from "@renderer/components/EditableTabButton/EditableTa
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 export default function SectorSelectionView(props: UseFlexibleSplitsProps): ReactNode {
@@ -24,6 +25,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
+  const {formatKey} = useTabKeys();
   const {openModal} = useContext(ModalContext);
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {
@@ -111,7 +113,7 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
           {tabs.map((tab: Tab) => {
             return(
               <EditableTabButton
-                key={tab.workspace + "-tab-control-button-" + tab.id}
+                key={formatKey(tab.workspace + "-tab-control-button-" + tab.id)}
                 tab={tab}
                 onCaptionEdit={(value: string) => {
                   handleTabCaptionChange(targetNode, tab, value);

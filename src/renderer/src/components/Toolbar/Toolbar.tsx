@@ -15,11 +15,12 @@ import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 import useTheme from "@renderer/hook/useTheme";
 import { ModalContext } from "@renderer/context/ModalContext";
 import ThemeModal from "@renderer/layouts/modals/ThemeModal/ThemeModal";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
 
-type MenuOption = {
+export type MenuOption = {
   key: DropMenuOption;
   label: string;
   menu?: ToolbarOption[];
@@ -66,8 +67,9 @@ export default function Toolbar(props: Props): ReactNode {
 
   const [openDropMenu, setOpenDropMenu] = useState<DropMenuOption | "none">("none");
 
-  const {splitTree} = useContext(FlexibleSplitsContext);
   const {theme} = useTheme();
+  const {formatKey} = useTabKeys();
+  const {splitTree} = useContext(FlexibleSplitsContext);
   const {openModal} = useContext(ModalContext);
 
     // This ref is only used so that the hooks passed onto the useFileSystemDialog may use 
@@ -160,7 +162,9 @@ export default function Toolbar(props: Props): ReactNode {
     };
     document.addEventListener("mousedown", outsideClickListener);
 
-    return () => document.removeEventListener("mousedown", outsideClickListener);
+    return () => {
+      document.removeEventListener("mousedown", outsideClickListener);
+    }
   }, [openDropMenu]);
 
   const dispatchOption = (optionKey: string) => {
@@ -215,7 +219,8 @@ export default function Toolbar(props: Props): ReactNode {
       {MENU_OPTIONS.map((option: MenuOption) => {
         return (
           <ToolbarDropdown
-            key={"toolbar-option-" + option.key}
+            key={formatKey("toolbar-option-" + option.key)}
+            option={option}
             caption={option.label}
             options={option.menu}
             isOpen={openDropMenu === option.key}

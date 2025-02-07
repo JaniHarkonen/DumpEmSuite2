@@ -7,6 +7,7 @@ import useFlexibleSplits, { OnSplitsUpdate, UseFlexibleSplitsProps } from "@rend
 import TabControls from "@renderer/components/Tabs/TabControls/TabControls";
 import TabButton from "@renderer/components/Tabs/TabControls/TabButton/TabButton";
 import SplitView from "@renderer/components/SplitView/SplitView";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
@@ -15,6 +16,7 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
   const pContentProvider: TabContentProvider = props.contentProvider;
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
+  const {formatKey} = useTabKeys();
   const {
     splitTree, 
     tabSelection, 
@@ -37,7 +39,7 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
         {targetNode.value.tabs.map((tab: Tab) => {
           return (
             <TabButton
-              key={tab.workspace + "-tab-control-button-" + tab.id}
+              key={formatKey(tab.workspace + "-tab-control-button-" + tab.id)}
               tab={tab}
             />
           );
