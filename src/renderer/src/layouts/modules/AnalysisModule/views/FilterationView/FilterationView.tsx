@@ -3,7 +3,7 @@ import useSceneConfig from "@renderer/hook/useSceneConfig";
 import { createTabContentProvider } from "@renderer/layouts/layoutUtils";
 import { SplitTreeBlueprint } from "@renderer/model/splits";
 import { TabContentProvider } from "@renderer/model/tabs";
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
 import CompanyAnalysisList from "@renderer/components/CompanyList/CompanyAnalysisList/CompanyAnalysisList";
 import ModuleView from "@renderer/layouts/ModuleView/ModuleView";
 import { TabsContext } from "@renderer/context/TabsContext";
@@ -13,7 +13,7 @@ import ProfileChart from "@renderer/components/tradingview/ProfileChart";
 import FiltrationNote from "../FilterationNote/FiltrationNote";
 
 
-export default function FilterationView() {
+export default function FilterationView(): ReactNode {
   const {handleSplitTreeUpdate} = useSceneConfig();
   const {profileSelection, handleProfileSelection} = useProfileSelection();
 

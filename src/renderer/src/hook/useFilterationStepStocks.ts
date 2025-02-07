@@ -11,7 +11,7 @@ export type Returns = {
   fetchFilterationStepStocks: () => void;
   bringAllStocksToFilterationStep: () => void;
   delistStocks: (...companyID: string[]) => void;
-  postFilterationTagChange: (tagID: string, companyID: string) => void;
+  postFilterationTagChange: (tagID: string, companyID: string[]) => void;
   postStocksToFilterationStep: (
     targetStepID: string,
     stockIDs: string[],
@@ -64,7 +64,7 @@ export default function useFilterationStepStocks(props: Props): Returns {
     });
   };
 
-  const postFilterationTagChange = (tagID: string, companyID: string) => {
+  const postFilterationTagChange = (tagID: string, companyID: string[]) => {
     databaseAPI.postFilterationTagChanges({
       filterationStepID: pFilterationStepID,
       companyID,

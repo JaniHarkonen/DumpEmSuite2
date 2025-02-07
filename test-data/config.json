@@ -269,7 +269,11 @@
                                                                     "order": 0,
                                                                     "extra": {
                                                                       "sortField": "volume_price",
-                                                                      "sortOrder": "ascending"
+                                                                      "sortOrder": "ascending",
+                                                                      "extraInfo": {
+                                                                        "sortField": "stock_price",
+                                                                        "sortOrder": "descending"
+                                                                      }
                                                                     }
                                                                   }
                                                                 ],
@@ -673,7 +677,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 0
                                             }
                                           }
                                         }
