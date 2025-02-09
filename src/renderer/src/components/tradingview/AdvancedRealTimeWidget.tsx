@@ -40,6 +40,7 @@ function TradingViewWidget(props: Props): ReactNode {
         "style": "1",
         "locale": "en",
         "allow_symbol_change": true,
+        "hide_side_toolbar": false,
         "calendar": false,
         "support_host": "https://www.tradingview.com"
       }`;

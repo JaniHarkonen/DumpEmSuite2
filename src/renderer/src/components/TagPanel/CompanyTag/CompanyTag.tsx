@@ -9,8 +9,8 @@ import StyledInput from "@renderer/components/StyledInput/StyledInput";
 import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
-import applyKeyboardActivation from "@renderer/utils/applyKeyboardActivation";
-import applyKeyListener from "@renderer/utils/applyKeyListener";
+import keyboardActivation from "@renderer/hotkey/keyboardActivation";
+import hotkeyListener from "@renderer/hotkey/hotkeyListener";
 
 
 export type OnTagSelect = (tag: Tag) => void;
@@ -37,7 +37,8 @@ export default function CompanyTag(props: Props): ReactNode {
   const pIsSelected: boolean = props.isSelected ?? false;
   const pDisplayLabel: boolean = props.displayLabel ?? true;
 
-  const [isEditing, handleStartEdit, handleFinalize, handleEnter] = useEditable<Tag>({ onFinalize: pOnUpdate });
+  const [isEditing, handleStartEdit, handleFinalize, handleEnter] = 
+    useEditable<Tag>({ onFinalize: pOnUpdate });
   const [tag, setTag] = useState<Tag>(pTag);
 
   const {openModal} = useContext(ModalContext);
@@ -113,11 +114,11 @@ export default function CompanyTag(props: Props): ReactNode {
             role="button"
             onClick={() => pOnSelect(tag)}
             tabIndex={0}
-            {...applyKeyboardActivation()}
+            onKeyDown={keyboardActivation()}
           />
           <span
             tabIndex={0}
-            {...applyKeyListener({ 
+            onKeyDown={hotkeyListener({ 
               "Delete": () => pAllowEdit && handleRemove(),
               " ": (e: React.KeyboardEvent<HTMLElement>) => {
                 e.preventDefault();

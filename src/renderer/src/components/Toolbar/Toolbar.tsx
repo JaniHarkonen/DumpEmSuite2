@@ -1,7 +1,8 @@
 import "./Toolbar.css";
 
 import { MutableRefObject, ReactNode, useContext, useEffect, useRef, useState } from "react";
-import ToolbarDropdown, { ToolbarOption } from "./ToolbarDropdown";
+import ToolbarDropdown from "./ToolbarDropdown";
+import { ToolbarOption } from "./Toolbar.type";
 import useFileSystemDialog from "@renderer/hook/useFileSystemDialog";
 import { OpenDialogResult } from "src/shared/files.type";
 import { SplitTree, SplitTreeFork, SplitTreeValue } from "@renderer/model/splits";
@@ -22,9 +23,7 @@ type DropMenuOption = "workspace" | "theme" | "shortcuts";
 
 export type MenuOption = {
   key: DropMenuOption;
-  label: string;
-  menu?: ToolbarOption[];
-};
+} & ToolbarOption;
 
 const MENU_OPTIONS: MenuOption[] = [
   {
@@ -33,21 +32,37 @@ const MENU_OPTIONS: MenuOption[] = [
     menu: [
       {
         key: "new-workspace",
-        label: "Create new workspace..."
+        label: "Create new workspace...",
+        shortcut: {
+          label: "Ctrl + N", 
+          key: "N"
+        }
       },
       {
         key: "open-workspace",
-        label: "Open existing workspace..."
+        label: "Open existing workspace...",
+        shortcut: {
+          label: "Ctrl + O", 
+          key: "O"
+        }
       }
     ]
   },
   {
     key: "theme",
-    label: "Theme"
+    label: "Theme",
+    shortcut: {
+      label: "Ctrl + T", 
+      key: "T"
+    }
   },
   {
     key: "shortcuts",
-    label: "Shortcuts"
+    label: "Shortcuts",
+    shortcut: {
+      label: "Ctrl + H", 
+      key: "H"
+    }
   }
 ];
 
@@ -160,10 +175,35 @@ export default function Toolbar(props: Props): ReactNode {
         setOpenDropMenu("none");
       }
     };
+
+    const shortcutListener = (e: KeyboardEvent) => {
+      if( !e.ctrlKey ) {
+        return;
+      }
+
+      const key: string = e.key.toUpperCase();
+
+      const check = (menu: ToolbarOption[] | undefined) => {
+        if( menu ) {
+          menu.map((option: ToolbarOption) => {
+            if( key === option.shortcut?.key ) {
+              dispatchOption(option.key);
+            } else {
+              check(option.menu);
+            }
+          });
+        }
+      };
+
+      check(MENU_OPTIONS);
+    };
+
     document.addEventListener("mousedown", outsideClickListener);
+    document.addEventListener("keydown", shortcutListener);
 
     return () => {
       document.removeEventListener("mousedown", outsideClickListener);
+      document.removeEventListener("keydown", shortcutListener);
     }
   }, [openDropMenu]);
 

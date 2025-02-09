@@ -3,12 +3,8 @@ import useTheme from "@renderer/hook/useTheme";
 import { ReactNode } from "react";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { MenuOption } from "./Toolbar";
+import { ToolbarOption } from "./Toolbar.type";
 
-
-export type ToolbarOption = {
-  key: string;
-  label: string;
-};
 
 type OnOptionSelect = (optionKey: string) => void;
 
@@ -55,7 +51,11 @@ export default function ToolbarDropdown(props: Props): ReactNode {
                 key={formatKey("toolbar-dropdown-option-" + option.key)}
                 onClick={() => pOnOptionSelect(option.key)}
               >
-                {option.label}
+                <span className="grid-opposites">
+                  <span>{option.label}</span>
+                  <span></span>
+                  <span className="pl-strong-length">{option.shortcut?.label}</span>
+                </span>
               </button>
             );
           })}

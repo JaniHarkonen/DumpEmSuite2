@@ -6,7 +6,7 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import useEditable, { OnEditFinalize } from "@renderer/hook/useEditable";
 import useTheme from "@renderer/hook/useTheme";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
-import { OnKeyDown } from "@renderer/utils/applyKeyListener";
+import { OnHotkeyDown } from "@renderer/hotkey/hotkey.types";
 
 
 export type OnCaptionEditFinalize = OnEditFinalize<string>;
@@ -15,14 +15,14 @@ type Props = {
   tab: Tab;
   isEditable?: boolean;
   onCaptionEdit?: OnEditFinalize<string>;
-  hotkeyListener?: OnKeyDown;
+  hotkeyListener?: OnHotkeyDown;
 } & PropsWithChildren;
 
 export default function TabButton(props: Props): ReactNode {
   const pTab: Tab = props.tab;
   const pIsEditable: boolean = props.isEditable ?? false;
   const pOnCaptionEdit: OnCaptionEditFinalize = props.onCaptionEdit || function(){};
-  const pHotkeyListener: OnKeyDown = props.hotkeyListener || function(){ };
+  const pHotkeyListener: OnHotkeyDown = props.hotkeyListener || function(){ };
   const pChildren: ReactNode[] | ReactNode = props.children;
 
   const {tabs, activeTabIndex, onSelect, onOpen, onDrop} = useContext(TabsContext);

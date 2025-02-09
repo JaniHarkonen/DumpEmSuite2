@@ -1,14 +1,16 @@
 import "./TableList.css";
 
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
-import { ChangeEvent, ReactNode } from "react";
+import { ChangeEvent, KeyboardEvent, ReactNode } from "react";
 import EditableText from "../editable/EditableText";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { ASSETS } from "@renderer/assets/assets";
 import { SortOrder } from "@renderer/hook/useSortedData";
 import useTheme from "@renderer/hook/useTheme";
 import StyledIcon from "../StyledIcon/StyledIcon";
-import applyKeyboardActivation from "@renderer/utils/applyKeyboardActivation";
+import keyboardActivation from "@renderer/hotkey/keyboardActivation";
+import arrowKeysNavigation from "@renderer/hotkey/arrowKeysNavigation";
+import { OnHotkeyDown } from "@renderer/hotkey/hotkey.types";
 
 
 export type TableListColumn<T> = {
@@ -75,8 +77,9 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
+    const relativePosition: number = index % pColumns.length;
     const classNameConstructor = () => {
-      const isFirstColumn: boolean = index % pColumns.length === 0;
+      const isFirstColumn: boolean = (relativePosition === 0);
       const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
       let className: string = "table-list-data-cell-container pl-medium-length";
 
@@ -138,14 +141,40 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       }
     }
 
+    const key: string = 
+      formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id);
+
       // The first column should be focusable and activatable via hotkeys
-    if( index === 0 ) {
+    const onKeyDown: OnHotkeyDown = (e: KeyboardEvent<HTMLElement>) => {
+      arrowKeysNavigation(
+        (e: KeyboardEvent<HTMLElement>) => {
+          return e.currentTarget.previousElementSibling as HTMLElement;
+        },
+        (e: KeyboardEvent<HTMLElement>) => {
+          return e.currentTarget.nextElementSibling as HTMLElement
+        },
+        (e: KeyboardEvent<HTMLElement>) => {
+          return (
+            e.currentTarget.parentElement?.previousElementSibling?.children[index]
+          ) as HTMLElement
+        },
+        (e: KeyboardEvent<HTMLElement>) => {
+          return (
+            e.currentTarget.parentElement?.nextElementSibling?.children[index]
+          ) as HTMLElement;
+        }
+      )(e);
+
+      keyboardActivation()(e);
+    }
+
+    if( index === 0 ) { 
       return (
         <div
           {...theme(classNameConstructor())}
-          key={formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id)}
-          {...applyKeyboardActivation()}
+          key={key}
           tabIndex={0}
+          onKeyDown={onKeyDown}
         >
           {dataElement}
         </div>
@@ -155,7 +184,9 @@ export default function TableList<T>(props: Props<T>): ReactNode {
     return (
       <div
         {...theme(classNameConstructor())}
-        key={formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id)}
+        key={key}
+        tabIndex={0}
+        onKeyDown={onKeyDown}
       >
         {dataElement}
       </div>

@@ -59,13 +59,25 @@
                                         "left": {
                                           "isFork": true,
                                           "divider": {
-                                            "direction": "horizontal",
+                                            "direction": "vertical",
                                             "value": 50
                                           },
                                           "left": {
                                             "isFork": false,
                                             "value": {
                                               "tabs": [
+                                                {
+                                                  "id": "view-scraper",
+                                                  "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                  "caption": "Scraper",
+                                                  "contentTemplate": "view-scraper",
+                                                  "tags": [],
+                                                  "order": 0,
+                                                  "extra": {
+                                                    "scrapeTarget": "D:\\javascript\\DumpEmSuite2\\project\\dumpem-suite-2\\test-data\\snapshot.htm",
+                                                    "scrapeOutput": "C:\\Users\\User\\Desktop\\scrape.txt"
+                                                  }
+                                                },
                                                 {
                                                   "id": "view-listings",
                                                   "workspace": "ws-526a3948e0a0d20a9f7906fad6",
@@ -74,8 +86,8 @@
                                                   "tags": [],
                                                   "order": 0,
                                                   "extra": {
-                                                    "sortField": "volume_price",
-                                                    "sortOrder": "ascending"
+                                                    "sortField": null,
+                                                    "sortOrder": "none"
                                                   }
                                                 },
                                                 {
@@ -183,18 +195,6 @@
                                                     }
                                                   },
                                                   "order": 0
-                                                },
-                                                {
-                                                  "id": "view-scraper",
-                                                  "workspace": "ws-526a3948e0a0d20a9f7906fad6",
-                                                  "caption": "Scraper",
-                                                  "contentTemplate": "view-scraper",
-                                                  "tags": [],
-                                                  "order": 0,
-                                                  "extra": {
-                                                    "scrapeTarget": "D:\\javascript\\DumpEmSuite2\\project\\dumpem-suite-2\\test-data\\snapshot.htm",
-                                                    "scrapeOutput": "C:\\Users\\User\\Desktop\\scrape.txt"
-                                                  }
                                                 }
                                               ],
                                               "activeTabIndex": 0
@@ -223,7 +223,7 @@
                                         "left": {
                                           "isFork": true,
                                           "divider": {
-                                            "direction": "horizontal",
+                                            "direction": "vertical",
                                             "value": 50
                                           },
                                           "left": {
@@ -273,7 +273,8 @@
                                                                       "extraInfo": {
                                                                         "sortField": "stock_price",
                                                                         "sortOrder": "descending"
-                                                                      }
+                                                                      },
+                                                                      "sweepingVerdict": false
                                                                     }
                                                                   }
                                                                 ],
@@ -285,7 +286,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 50
+                                                              "value": 53.973509933774835
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -379,7 +380,8 @@
                                                                     "order": 0,
                                                                     "extra": {
                                                                       "sortField": null,
-                                                                      "sortOrder": "none"
+                                                                      "sortOrder": "none",
+                                                                      "sweepingVerdict": false
                                                                     }
                                                                   }
                                                                 ],
@@ -391,7 +393,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 50
+                                                              "value": 67.21854304635761
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -485,7 +487,8 @@
                                                                     "order": 0,
                                                                     "extra": {
                                                                       "sortField": null,
-                                                                      "sortOrder": "none"
+                                                                      "sortOrder": "none",
+                                                                      "sweepingVerdict": false
                                                                     }
                                                                   }
                                                                 ],
@@ -709,7 +712,65 @@
                                           "left": {
                                             "isFork": false,
                                             "value": {
-                                              "tabs": [],
+                                              "tabs": [
+                                                {
+                                                  "id": "view-sector-1715f4dfb1c8540c958651a2790",
+                                                  "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                  "caption": "Forestry",
+                                                  "contentTemplate": "view-sector-analysis",
+                                                  "tags": [],
+                                                  "sceneConfigBlueprint": {
+                                                    "splitTree": {
+                                                      "root": {
+                                                        "isFork": true,
+                                                        "divider": {
+                                                          "direction": "horizontal",
+                                                          "value": 50
+                                                        },
+                                                        "left": {
+                                                          "isFork": true,
+                                                          "divider": {
+                                                            "direction": "horizontal",
+                                                            "value": 50
+                                                          },
+                                                          "left": {
+                                                            "isFork": true,
+                                                            "divider": {
+                                                              "direction": "horizontal",
+                                                              "value": 50
+                                                            },
+                                                            "left": {
+                                                              "isFork": false,
+                                                              "value": {
+                                                                "tabs": [
+                                                                  {
+                                                                    "id": "view-sector-1715f4dfb1c8540c958651a2790-notes",
+                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                    "caption": "Notes",
+                                                                    "contentTemplate": "view-sector-tab-notes",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  },
+                                                                  {
+                                                                    "id": "view-sector-1715f4dfb1c8540c958651a2790-materials",
+                                                                    "workspace": "ws-526a3948e0a0d20a9f7906fad6",
+                                                                    "caption": "Materials",
+                                                                    "contentTemplate": "view-sector-tab-materials",
+                                                                    "tags": [],
+                                                                    "order": 0
+                                                                  }
+                                                                ],
+                                                                "activeTabIndex": 0
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "order": 0
+                                                }
+                                              ],
                                               "activeTabIndex": 0
                                             }
                                           }
@@ -720,7 +781,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 1
+                              "activeTabIndex": 0
                             }
                           }
                         }

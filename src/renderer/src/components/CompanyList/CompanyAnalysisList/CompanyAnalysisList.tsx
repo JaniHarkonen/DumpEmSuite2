@@ -3,7 +3,7 @@ import "../../TagPanel/CompanyTag/CompanyTag.css";
 
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, ReactNode, useContext, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
@@ -182,7 +182,10 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       caption: "Verdict",
       ElementConstructor: (dataCell: TableListDataCell<FilterationStepStock>) => {
         return (
-          <div className="d-flex d-align-items-center w-100 h-100 p-relative d-justify-end">
+          <div
+            className="d-flex d-align-items-center w-100 h-100 p-relative d-justify-end"
+            onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => e.stopPropagation()}
+          >
             <span
               className="company-tag-color mr-medium-length"
               style={{
