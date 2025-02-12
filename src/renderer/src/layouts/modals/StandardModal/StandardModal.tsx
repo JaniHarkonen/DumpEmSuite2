@@ -68,7 +68,7 @@ export default function StandardModal(props: Props): ReactNode {
               withStoppedPropagation(e, handleClose);
             }}/>
           </div>
-          <div className="w-100 overflow-auto">
+          <div className="w-100 h-100 overflow-hidden">
             {pChildren}
           </div>
         </div>

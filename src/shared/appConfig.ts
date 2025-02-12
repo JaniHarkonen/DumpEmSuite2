@@ -18,3 +18,10 @@ export const RELATIVE_APP_PATHS = {
     fundamental: (path: string, id: string) => path + fundamentalsPath + "\\" + id
   }
 };
+
+/**
+ * Delay between a request to save the current app config and the time when the saving actually
+ * happens. This will be used by the debounced app config file updater function to delay the 
+ * saving process in order to avoid excessive file system calls.
+ */
+export const CONFIG_SAVE_DEBOUNCE_DELAY: number = 1000;

@@ -4,7 +4,7 @@ import { useContext } from "react";
 
 
 type Returns = {
-  theme: (...baseClass: string[]) => { className: string }
+  theme: (...baseClass: string[]) => { className: string };
 } & ThemeContextType;
 
 export default function useTheme(): Returns {

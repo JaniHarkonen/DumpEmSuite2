@@ -1,0 +1,6 @@
+.hotkeys-modal-special-key-row {
+  display: grid;
+  grid-template-columns: auto auto auto;
+
+  width: 100%;
+}

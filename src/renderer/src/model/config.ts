@@ -1,6 +1,8 @@
 import { AppTheme } from "@renderer/context/ThemeContext";
 import { defaultSplitTreeBlueprint } from "./splits";
 import { SceneConfigBlueprint } from "./tabs";
+import { HotkeyConfig } from "./hotkey";
+import debounce from "@renderer/utils/debounce";
 
 
 export type WorkspaceConfig = {
@@ -12,6 +14,7 @@ export type WorkspaceConfig = {
 export type AppConfig = {
   sceneConfigBlueprint: SceneConfigBlueprint;
   activeTheme: AppTheme;
+  hotkeyConfig: HotkeyConfig;
 };
 
 export function defaultWorkspaceConfig(): WorkspaceConfig {
@@ -26,23 +29,12 @@ export function defaultWorkspaceConfig(): WorkspaceConfig {
 
 export type ConfigFileUpdater = (appConfig: AppConfig) => void;
 
-export function createConfigFileUpdater(configPath: string): ConfigFileUpdater {
-  let timeout: NodeJS.Timeout | null = null;
+export function createConfigFileUpdater(configPath: string, delay: number): ConfigFileUpdater {
 
     // Debounced to avoid repeat writes
-  return (appConfig: AppConfig) => {
-      // App config shouldn't be nullish, but if it is, default to doing nothing to avoid wiping
-      // the config file
-    if( !appConfig ) {
-      return;
-    }
-
-    if( timeout ) {
-      clearTimeout(timeout);
-    }
-
-    timeout = setTimeout(() => {
+  return debounce((appConfig: AppConfig) => {
+    if( appConfig ) {
       window.api.filesAPI.writeJSON<AppConfig>(configPath, appConfig);
-    }, 1000);
-  }
+    }
+  }, delay);
 }

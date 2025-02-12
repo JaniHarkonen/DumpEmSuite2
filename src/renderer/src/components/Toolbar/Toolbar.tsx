@@ -17,6 +17,7 @@ import useTheme from "@renderer/hook/useTheme";
 import { ModalContext } from "@renderer/context/ModalContext";
 import ThemeModal from "@renderer/layouts/modals/ThemeModal/ThemeModal";
 import useTabKeys from "@renderer/hook/useTabKeys";
+import HotkeysModal from "@renderer/layouts/modals/HotkeysModal/HotkeysModal";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -225,8 +226,8 @@ export default function Toolbar(props: Props): ReactNode {
           }
         });
         break;
-      case "theme": openModal(<ThemeModal></ThemeModal>); break;
-      case "shortcuts": console.log(optionKey); break;
+      case "theme": openModal(<ThemeModal />); break;
+      case "shortcuts": openModal(<HotkeysModal />); break;
     }
   };
 
