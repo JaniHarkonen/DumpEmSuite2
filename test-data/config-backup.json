@@ -2,34 +2,34 @@
   "hotkeyConfig": {
     "close-remove-tab": {
       "key": [
-        "1 2 3",
-        "ESCAPE"
+        "e q",
+        "Escape"
       ]
     },
     "activate": {
       "key": [
         " ",
-        "ENTER"
+        "Enter"
       ]
     },
     "navigate-up": {
       "key": [
-        "ARROWUP"
+        "ArrowUp"
       ]
     },
     "navigate-down": {
       "key": [
-        "ARROWDOWN"
+        "ArrowDown"
       ]
     },
     "navigate-left": {
       "key": [
-        "ARROWLEFT"
+        "ArrowLeft"
       ]
     },
     "navigate-right": {
       "key": [
-        "ARROWRIGHT"
+        "ArrowRight"
       ]
     }
   },
@@ -805,7 +805,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 0
+                                              "activeTabIndex": 1
                                             }
                                           }
                                         }

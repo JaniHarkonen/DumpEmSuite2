@@ -51,7 +51,7 @@ export default function hotkeyListener<T = Element>(
 
   return {
     onKeyDown: (e: KeyboardEvent<T>) => {
-      keyMap[e.key] = true;
+      keyMap[e.key.toUpperCase()] = true;
       onKeyDown({...keyMap}, e);
     },
     onKeyUp: (e: KeyboardEvent<T>) => {

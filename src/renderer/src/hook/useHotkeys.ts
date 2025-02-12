@@ -1,15 +1,21 @@
 import { GlobalContext } from "@renderer/context/GlobalContext";
 import { HotkeyContext } from "@renderer/context/HotkeyContext";
+import hotkeyListener, { HeldKeyMap, HotkeyListenerReturns } from "@renderer/hotkey/hotkeyListener2";
 import { HotkeyConfig, KeyConfig } from "@renderer/model/hotkey";
 import modifyArray from "@renderer/utils/modifyArray";
 import { Nullish } from "@renderer/utils/Nullish";
 import removeArrayIndex from "@renderer/utils/removeArrayIndex";
-import { useContext } from "react";
+import { KeyboardEvent, useContext } from "react";
 
+
+type HotkeyActionMap<T> = {
+  [key in string]: (e: KeyboardEvent<T>) => void;
+}
 
 type Returns = {
   hotkeyConfig: HotkeyConfig | undefined;
   configureHotkey: (hotkey: string | Nullish, keyConfig: string | null, index?: number) => void;
+  hotkey: <T = Element>(actionMap: HotkeyActionMap<T>) => HotkeyListenerReturns<T>;
 };
 
 export default function useHotkeys(): Returns {
@@ -20,6 +26,10 @@ export default function useHotkeys(): Returns {
       hotkeyAccessor: string | Nullish, hotkey: string | null, index: number = -1
     ) => {
     setHotkeys((prev: HotkeyConfig | undefined) => {
+      if( hotkey ) {
+        hotkey = hotkey.toUpperCase();
+      }
+
       if( hotkeyConfig && hotkeyAccessor && config.appConfigRef?.current ) {
         const newConfig: HotkeyConfig = { ...prev };
 
@@ -65,12 +75,44 @@ export default function useHotkeys(): Returns {
     });
   };
 
-  // const hotkey = (hotkeyAccessor: string, e: KeyboardEvent) => {
-  //   return hotkeyConfig && e.key === hotkeyConfig[hotkeyAccessor.toUpperCase()];
-  // };
+  const hotkey = <T = Element>(actionMap: HotkeyActionMap<T>): HotkeyListenerReturns<T> => {
+    return hotkeyListener((keyMap: HeldKeyMap, e: KeyboardEvent<T>) => {
+      if( !hotkeyConfig ) {
+        return;
+      }
+
+      const heldKeys: string[] = Object.keys(keyMap);
+
+      for( let hotkeyAccessor of Object.keys(actionMap) ) {
+        const keyConfig: KeyConfig | undefined = hotkeyConfig[hotkeyAccessor];
+
+        if( keyConfig ) {
+          for( let key of keyConfig.key ) {
+            if( key ) {
+              const split: string[] = key.split(" ");
+
+                // Number of held keys and number of keys in the checked hotkey configuration
+                // must be the same in order for there to be a match
+              if( heldKeys.length !== split.length ) {
+                continue;
+              }
+
+                // Number of subkeys in the checked hotkey configuration, that are also found in 
+                // the held key map, must be equal to the number of keys in the key map
+              if( split.filter((subKey: string) => !!keyMap[subKey]).length === heldKeys.length ) {
+                actionMap[hotkeyAccessor](e);
+                break;
+              }
+            }
+          }
+        }
+      }
+    });
+  };
 
   return {
     hotkeyConfig,
-    configureHotkey
+    configureHotkey,
+    hotkey,
   };
 }
