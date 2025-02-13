@@ -2,13 +2,13 @@
   "hotkeyConfig": {
     "close-remove-tab": {
       "key": [
-        "1 2 3",
+        "DELETE",
         "ESCAPE"
       ]
     },
     "activate": {
       "key": [
-        " ",
+        "SPACE",
         "ENTER"
       ]
     },
@@ -118,7 +118,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 47.58117958913188
+                                                            "value": 48.345588235294116
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -445,7 +445,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 44.004524886877824
+                                                            "value": 46.91943127962085
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -550,7 +550,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 3
+                                              "activeTabIndex": 0
                                             }
                                           }
                                         }
@@ -815,7 +815,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 2
+                              "activeTabIndex": 0
                             }
                           }
                         }

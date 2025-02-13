@@ -1,12 +1,15 @@
-import { OnHotkeyDown } from "./hotkey.types";
+import { HotkeyApplier } from "@renderer/hook/useHotkeys";
+import { HotkeyListenerReturns } from "./hotkeyListener";
+import { KeyboardEvent } from "react";
 
 
-
-export default function keyboardActivation(): OnHotkeyDown {
-  return (e: React.KeyboardEvent<HTMLElement>) => {
-    if( (e.key === "Enter" || e.key === " ") && document.activeElement === e.currentTarget ) {
+export default function keyboardActivation<T extends HTMLElement>(
+  hotkeyApplier: HotkeyApplier
+): HotkeyListenerReturns<T> {
+  return hotkeyApplier({
+    "activate": (e: KeyboardEvent<T>) => {
       e.preventDefault();
       e.currentTarget.click();
     }
-  };
+  });
 }

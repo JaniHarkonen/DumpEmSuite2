@@ -2,7 +2,7 @@ import { KeyboardEvent, ReactNode, useMemo } from "react";
 import StyledInput from "../StyledInput/StyledInput";
 import StyledButton from "../StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
-import hotkeyListener, { formatKeyString, HeldKeyMap, HotkeyListenerReturns, keyMapToString } from "@renderer/hotkey/hotkeyListener2";
+import hotkeyListener, { formatKeyString, HeldKeyMap, HotkeyListenerReturns, keyMapToString } from "@renderer/hotkey/hotkeyListener";
 import { Nullish } from "@renderer/utils/Nullish";
 import useStateRef from "@renderer/hook/useStateRef";
 

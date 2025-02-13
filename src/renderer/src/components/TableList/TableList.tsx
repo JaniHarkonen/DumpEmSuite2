@@ -8,9 +8,10 @@ import { ASSETS } from "@renderer/assets/assets";
 import { SortOrder } from "@renderer/hook/useSortedData";
 import useTheme from "@renderer/hook/useTheme";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import { HotkeyListenerReturns, mergeListeners } from "@renderer/hotkey/hotkeyListener";
+import useHotkeys from "@renderer/hook/useHotkeys";
+import fourDirectionalNavigation from "@renderer/hotkey/fourDirectionalNavigation";
 import keyboardActivation from "@renderer/hotkey/keyboardActivation";
-import arrowKeysNavigation from "@renderer/hotkey/arrowKeysNavigation";
-import { OnHotkeyDown } from "@renderer/hotkey/hotkey.types";
 
 
 export type TableListColumn<T> = {
@@ -73,6 +74,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
 
   const {theme} = useTheme();
   const {formatKey} = useTabKeys();
+  const {hotkey} = useHotkeys();
 
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
@@ -144,9 +146,9 @@ export default function TableList<T>(props: Props<T>): ReactNode {
     const key: string = 
       formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id);
 
-      // The first column should be focusable and activatable via hotkeys
-    const onKeyDown: OnHotkeyDown = (e: KeyboardEvent<HTMLElement>) => {
-      arrowKeysNavigation(
+    const hotkeyListener: HotkeyListenerReturns<HTMLDivElement> = mergeListeners([
+      fourDirectionalNavigation(
+        hotkey, 
         (e: KeyboardEvent<HTMLElement>) => {
           return e.currentTarget.previousElementSibling as HTMLElement;
         },
@@ -162,11 +164,10 @@ export default function TableList<T>(props: Props<T>): ReactNode {
           return (
             e.currentTarget.parentElement?.nextElementSibling?.children[index]
           ) as HTMLElement;
-        }
-      )(e);
-
-      keyboardActivation()(e);
-    }
+        },
+        { preventDefault: true }
+      ), keyboardActivation(hotkey)
+    ]);
 
     if( index === 0 ) { 
       return (
@@ -174,7 +175,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
           {...theme(classNameConstructor())}
           key={key}
           tabIndex={0}
-          onKeyDown={onKeyDown}
+          {...hotkeyListener}
         >
           {dataElement}
         </div>
@@ -186,7 +187,7 @@ export default function TableList<T>(props: Props<T>): ReactNode {
         {...theme(classNameConstructor())}
         key={key}
         tabIndex={0}
-        onKeyDown={onKeyDown}
+        {...hotkeyListener}
       >
         {dataElement}
       </div>
