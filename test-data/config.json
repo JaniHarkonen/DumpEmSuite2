@@ -2,14 +2,23 @@
   "hotkeyConfig": {
     "close-remove-tab": {
       "key": [
-        "DELETE",
-        "ESCAPE"
+        "DELETE"
+      ]
+    },
+    "edit-tab": {
+      "key": [
+        "E"
       ]
     },
     "activate": {
       "key": [
         "SPACE",
         "ENTER"
+      ]
+    },
+    "blur": {
+      "key": [
+        "P"
       ]
     },
     "navigate-up": {
@@ -30,6 +39,16 @@
     "navigate-right": {
       "key": [
         "ARROWRIGHT"
+      ]
+    },
+    "confirm": {
+      "key": [
+        "Y"
+      ]
+    },
+    "deny": {
+      "key": [
+        "N"
       ]
     }
   },
@@ -118,7 +137,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 48.345588235294116
+                                                            "value": 49.871794871794876
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -138,8 +157,8 @@
                                                                     "tags": [],
                                                                     "order": 0,
                                                                     "extra": {
-                                                                      "sortField": "volume_price",
-                                                                      "sortOrder": "ascending",
+                                                                      "sortField": null,
+                                                                      "sortOrder": "none",
                                                                       "extraInfo": {
                                                                         "sortField": "stock_price",
                                                                         "sortOrder": "descending"

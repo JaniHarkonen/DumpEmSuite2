@@ -12,6 +12,7 @@ import WorkspacesView from "./layouts/Workspace/WorkspacesView/WorkspacesView";
 import { AppTheme, ThemeContext } from "./context/ThemeContext";
 import { HotkeyConfig } from "./model/hotkey";
 import { HotkeyContext } from "./context/HotkeyContext";
+import { documentHotkeyApplier, hotkeyApplier } from "./hook/useHotkeys";
 
 
 type ConfigFileInfo = {
@@ -53,6 +54,31 @@ export default function App(): ReactNode {
     })
     .catch((err: Error) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    return documentHotkeyApplier(
+      hotkeyApplier({
+        "blur": () => {
+          const activeElement: HTMLElement | null = document.activeElement as (HTMLElement | null);
+          activeElement && activeElement.blur();
+        }
+      }, hotkeyConfig), document
+    );
+  }, [hotkeyConfig]);
+
+  // useEffect(() => {
+  //   const blur = (e: unknown) => {
+  //     hotkeyApplier({
+  //       "blur": () => {
+  //         const activeElement: HTMLElement | null = document.activeElement as (HTMLElement | null);
+  //         activeElement && activeElement.blur();
+  //       }
+  //     }, hotkeyConfig).onKeyDown(e as React.KeyboardEvent);
+  //   };
+    
+  //   document.addEventListener("keydown", blur);
+  //   return () => document.removeEventListener("keydown", blur);
+  // }, [hotkeyConfig]);
 
 
   if( !configFileInfo || !appConfigRef.current ) {

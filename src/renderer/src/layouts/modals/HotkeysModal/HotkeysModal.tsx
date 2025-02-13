@@ -67,11 +67,15 @@ export default function HotkeysModal(): ReactNode {
 
         <h3>Actions</h3>
         {renderHotkey("Remove/close tab", "close-remove-tab")}
+        {renderHotkey("Edit tab title", "edit-tab")}
         {renderHotkey("Activate", "activate")}
+        {renderHotkey("Unfocus", "blur")}
         {renderHotkey("Navigate up", "navigate-up")}
         {renderHotkey("Navigate down", "navigate-down")}
         {renderHotkey("Navigate left", "navigate-left")}
         {renderHotkey("Navigate right", "navigate-right")}
+        {renderHotkey("Confirm dialog", "confirm")}
+        {renderHotkey("Deny dialog", "deny")}
 
         <h3>Companies-module</h3>
         {/* {renderHotkey("Companies")}

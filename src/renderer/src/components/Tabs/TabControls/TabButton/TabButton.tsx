@@ -6,7 +6,8 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import useEditable, { OnEditFinalize } from "@renderer/hook/useEditable";
 import useTheme from "@renderer/hook/useTheme";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
-import { HotkeyListenerReturns } from "@renderer/hotkey/hotkeyListener";
+import { HotkeyListenerReturns, mergeListeners } from "@renderer/hotkey/hotkeyListener";
+import useHotkeys from "@renderer/hook/useHotkeys";
 
 
 export type OnCaptionEditFinalize = OnEditFinalize<string>;
@@ -28,6 +29,7 @@ export default function TabButton(props: Props): ReactNode {
 
   const {tabs, activeTabIndex, onSelect, onOpen, onDrop} = useContext(TabsContext);
   const {theme} = useTheme();
+  const {hotkey} = useHotkeys();
 
   const isTabActive: boolean = pTab.id === (tabs[activeTabIndex]?.id);
   const variableStyle: string = 
@@ -54,8 +56,15 @@ export default function TabButton(props: Props): ReactNode {
       onClick={() => onOpen && onOpen(pTab)}
       onMouseUp={handleTabDrop}
       onDoubleClick={() => pIsEditable && handleEditStart()}
-      onKeyDown={pHotkeyListener?.onKeyDown}
-      onKeyUp={pHotkeyListener?.onKeyUp}
+      {...mergeListeners([pHotkeyListener, hotkey({
+        "edit-tab": (e: React.KeyboardEvent<HTMLElement>) => {
+          e.stopPropagation();
+          e.preventDefault();
+          pIsEditable && handleEditStart();
+        }
+      })])}
+      // onKeyDown={pHotkeyListener?.onKeyDown}
+      // onKeyUp={pHotkeyListener?.onKeyUp}
     >
       <span>
         {isEditing ? (

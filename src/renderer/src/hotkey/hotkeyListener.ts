@@ -1,3 +1,4 @@
+import { Nullish } from "@renderer/utils/Nullish";
 import { KeyboardEvent } from "react";
 
 
@@ -63,17 +64,21 @@ export default function hotkeyListener<T = Element>(
 }
 
 export function mergeListeners<T = Element>(
-  listeners: HotkeyListenerReturns<T>[]
+  listeners: (HotkeyListenerReturns<T> | Nullish)[]
 ): HotkeyListenerReturns<T> {
   return {
     onKeyDown: (e: KeyboardEvent<T>) => {
       for( let listener of listeners ) {
-        listener.onKeyDown(e);
+        if( listener ) {
+          listener.onKeyDown(e);
+        }
       }
     },
     onKeyUp: (e: KeyboardEvent<T>) => {
       for( let listener of listeners ) {
-        listener.onKeyUp(e);
+        if( listener ) {
+          listener.onKeyUp(e);
+        }
       }
     }
   };

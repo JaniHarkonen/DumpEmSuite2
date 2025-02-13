@@ -19,7 +19,62 @@ type Returns = {
   hotkeyConfig: HotkeyConfig | undefined;
   configureHotkey: (hotkey: string | Nullish, keyConfig: string | null, index?: number) => void;
   hotkey: HotkeyApplier;
+  documentHotkey: (hotkeyListener: HotkeyListenerReturns<HTMLElement>) => () => void;
 };
+
+export function hotkeyApplier<T = Element>(
+  actionMap: HotkeyActionMap<T>, hotkeyConfig?: HotkeyConfig
+): HotkeyListenerReturns<T> {
+  return hotkeyListener((keyMap: HeldKeyMap, e: KeyboardEvent<T>) => {
+    if( !hotkeyConfig ) {
+      return;
+    }
+
+    const heldKeys: string[] = Object.keys(keyMap);
+
+    for( let hotkeyAccessor of Object.keys(actionMap) ) {
+      const keyConfig: KeyConfig | undefined = hotkeyConfig[hotkeyAccessor];
+
+      if( !keyConfig ) {
+        continue;
+      }
+
+      for( let key of keyConfig.key ) {
+        if( !key ) {
+          continue;
+        }
+
+        const split: string[] = key.split(" ");
+
+          // Number of held keys and number of keys in the checked hotkey configuration
+          // must be the same in order for there to be a match
+        if( heldKeys.length !== split.length ) {
+          continue;
+        }
+
+          // Number of subkeys in the checked hotkey configuration, that are also found in 
+          // the held key map, must be equal to the number of keys in the key map
+        if( split.filter((subKey: string) => !!keyMap[subKey]).length === heldKeys.length ) {
+          actionMap[hotkeyAccessor](e);
+          break;
+        }
+      }
+    }
+  });
+}
+
+export function documentHotkeyApplier(hotkeyListener: HotkeyListenerReturns<HTMLElement>, doc: Document): () => void {
+  const keyDown = (e: unknown) => hotkeyListener.onKeyDown(e as KeyboardEvent<HTMLElement>);
+  const keyUp = (e: unknown) => hotkeyListener.onKeyUp(e as KeyboardEvent<HTMLElement>);
+
+  doc.addEventListener("keydown", keyDown);
+  doc.addEventListener("keyup", keyUp);
+
+  return () => {
+    doc.removeEventListener("keydown", keyDown);
+    doc.removeEventListener("keyup", keyUp);
+  };
+}
 
 export default function useHotkeys(): Returns {
   const {hotkeyConfig, setHotkeys} = useContext(HotkeyContext);
@@ -80,47 +135,17 @@ export default function useHotkeys(): Returns {
   };
 
   const hotkey = <T = Element>(actionMap: HotkeyActionMap<T>): HotkeyListenerReturns<T> => {
-    return hotkeyListener((keyMap: HeldKeyMap, e: KeyboardEvent<T>) => {
-      if( !hotkeyConfig ) {
-        return;
-      }
+    return hotkeyApplier(actionMap, hotkeyConfig);
+  };
 
-      const heldKeys: string[] = Object.keys(keyMap);
-
-      for( let hotkeyAccessor of Object.keys(actionMap) ) {
-        const keyConfig: KeyConfig | undefined = hotkeyConfig[hotkeyAccessor];
-
-        if( !keyConfig ) {
-          continue;
-        }
-
-        for( let key of keyConfig.key ) {
-          if( !key ) {
-            continue;
-          }
-
-          const split: string[] = key.split(" ");
-
-            // Number of held keys and number of keys in the checked hotkey configuration
-            // must be the same in order for there to be a match
-          if( heldKeys.length !== split.length ) {
-            continue;
-          }
-
-            // Number of subkeys in the checked hotkey configuration, that are also found in 
-            // the held key map, must be equal to the number of keys in the key map
-          if( split.filter((subKey: string) => !!keyMap[subKey]).length === heldKeys.length ) {
-            actionMap[hotkeyAccessor](e);
-            break;
-          }
-        }
-      }
-    });
+  const documentHotkey = (hotkeyListener: HotkeyListenerReturns<HTMLElement>) => {
+    return documentHotkeyApplier(hotkeyListener, document);
   };
 
   return {
     hotkeyConfig,
     configureHotkey,
     hotkey,
+    documentHotkey
   };
 }
