@@ -13,6 +13,7 @@ import { AppTheme, ThemeContext } from "./context/ThemeContext";
 import { HotkeyConfig } from "./model/hotkey";
 import { HotkeyContext } from "./context/HotkeyContext";
 import { documentHotkeyApplier, hotkeyApplier } from "./hook/useHotkeys";
+import { SplitTreeForkBlueprint, SplitTreeNodeBlueprint, SplitTreeValueBlueprint } from "./model/splits";
 
 
 type ConfigFileInfo = {
@@ -34,6 +35,9 @@ export default function App(): ReactNode {
   const appConfigRef: MutableRefObject<AppConfig | null> = 
     useRef(configFileInfo?.appConfig || null);
 
+  const activeWorkspaceIDRef: MutableRefObject<string | null> =
+    useRef(null);
+
   useEffect(() => {
     const configPath: string = 
       RELATIVE_APP_PATHS.make.config(filesAPI.getWorkingDirectory());
@@ -44,6 +48,24 @@ export default function App(): ReactNode {
     filesAPI.readJSON<AppConfig>(configPath)
     .then((read: ReadResult<AppConfig>) => {
       appConfigRef.current = read.result;
+
+      let left: SplitTreeNodeBlueprint | null = (
+        appConfigRef.current.sceneConfigBlueprint.splitTree.root as SplitTreeNodeBlueprint ?? null
+      );
+
+      while( left ) {
+        if( (left as SplitTreeValueBlueprint).value ) {
+          break;
+        } else {
+          left = (left as SplitTreeForkBlueprint).left;
+        }
+      }
+      // const valueNode: SplitTreeValueBlueprint = rootLeft.left as SplitTreeValueBlueprint;
+      // activeWorkspaceIDRef.current = valueNode.value?.tabs[valueNode.value.activeTabIndex].id ?? valueNode.left.value?.tabs[valueNode.left.value.activeTabIndex].id ?? null;
+
+      const leftValue: SplitTreeValueBlueprint | null = left as (SplitTreeValueBlueprint | null);
+      activeWorkspaceIDRef.current = leftValue?.value.tabs[leftValue.value.activeTabIndex].id ?? null;
+
       setConfigFileInfo({
         appConfig: read.result,
         configFileUpdater: updater
@@ -66,20 +88,6 @@ export default function App(): ReactNode {
     );
   }, [hotkeyConfig]);
 
-  // useEffect(() => {
-  //   const blur = (e: unknown) => {
-  //     hotkeyApplier({
-  //       "blur": () => {
-  //         const activeElement: HTMLElement | null = document.activeElement as (HTMLElement | null);
-  //         activeElement && activeElement.blur();
-  //       }
-  //     }, hotkeyConfig).onKeyDown(e as React.KeyboardEvent);
-  //   };
-    
-  //   document.addEventListener("keydown", blur);
-  //   return () => document.removeEventListener("keydown", blur);
-  // }, [hotkeyConfig]);
-
 
   if( !configFileInfo || !appConfigRef.current ) {
     return <>Loading...</>;
@@ -101,6 +109,7 @@ export default function App(): ReactNode {
           <GlobalContext.Provider value={{
             config: {
               appConfigRef,
+              activeWorkspaceIDRef,
               configFileUpdater: configFileInfo.configFileUpdater
             }
           }}>

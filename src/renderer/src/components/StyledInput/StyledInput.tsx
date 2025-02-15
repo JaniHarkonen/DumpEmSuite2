@@ -1,7 +1,8 @@
+import { TabsContext } from "@renderer/context/TabsContext";
 import "./StyledInput.css";
 import useTheme from "@renderer/hook/useTheme";
 import copyJSON from "@renderer/utils/copyJSON";
-import { HTMLProps, MutableRefObject, ReactNode } from "react";
+import { HTMLProps, MutableRefObject, ReactNode, useContext } from "react";
 
 
 type Props = {
@@ -13,12 +14,14 @@ export default function StyledInput(props: Props): ReactNode {
   const pRef: MutableRefObject<HTMLInputElement | null> | undefined = props.reactRef ?? undefined;
 
   const {theme} = useTheme();
+  const {tabIndex} = useContext(TabsContext);
 
   return (
     <input
       {...copyJSON(props, ["reactRef"])}
       {...theme("baseline-bgc", "glyph-c", "line-height-standard",  pClassName)}
       {...pRef && {ref: pRef}}
+      tabIndex={Math.max(0, tabIndex())}
     />
   );
 }

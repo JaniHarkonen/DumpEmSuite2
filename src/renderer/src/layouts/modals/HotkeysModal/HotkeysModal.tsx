@@ -18,14 +18,19 @@ export default function HotkeysModal(): ReactNode {
       return <></>;
     }
 
-    const keyConfig: KeyConfig = hotkeyConfig[accessor];
+    const keyConfig: KeyConfig | undefined = hotkeyConfig[accessor];
+
+    if( !keyConfig ) {
+      return <></>;
+    }
+
     return (
       <div className="d-flex w-100 gap-medium-length">
         <div className="w-100 user-select-text">
           <strong>{label}:</strong>
         </div>
         <div>
-          {keyConfig.key ? (keyConfig.key.map((key: string | null, index: number) => {
+          {keyConfig.key && (keyConfig.key.map((key: string | null, index: number) => {
             return (
               <div
                 key={"hotkeys-modal-hotkey-config-" + key + "-" + index}
@@ -37,11 +42,7 @@ export default function HotkeysModal(): ReactNode {
                 />
               </div>
             );
-          })) : (
-            <div>
-              <HotkeyInput/>
-            </div>
-          )}
+          }))}
           <div className="d-flex d-justify-end mt-medium-length">
             <StyledButton onClick={() => {
               configureHotkey(accessor, null)
@@ -69,6 +70,7 @@ export default function HotkeysModal(): ReactNode {
         {renderHotkey("Remove/close tab", "close-remove-tab")}
         {renderHotkey("Edit tab title", "edit-tab")}
         {renderHotkey("Activate", "activate")}
+        {renderHotkey("Finalize edit", "finalize")}
         {renderHotkey("Unfocus", "blur")}
         {renderHotkey("Navigate up", "navigate-up")}
         {renderHotkey("Navigate down", "navigate-down")}
@@ -78,28 +80,30 @@ export default function HotkeysModal(): ReactNode {
         {renderHotkey("Deny dialog", "deny")}
 
         <h3>Companies-module</h3>
-        {/* {renderHotkey("Companies")}
-        {renderHotkey("Companies→Scraper")}
-        {renderHotkey("Companies→Listings")}
-        {renderHotkey("Companies→Profiles")}
-        {renderHotkey("Companies→Profiles→Companies")}
-        {renderHotkey("Companies→Profiles→Chart")}
-        {renderHotkey("Companies→Profiles→Profile")} */}
+        {renderHotkey("Companies", "module-companies")}
+        {renderHotkey("Companies→Scraper", "view-scraper")}
+        {renderHotkey("Companies→Listings", "view-listings")}
+        {renderHotkey("Companies→Profiles", "view-profiles")}
+        {renderHotkey("Companies→Profiles→Companies", "view-company-list")}
+        {renderHotkey("Companies→Profiles→Chart", "view-chart")}
+        {renderHotkey("Companies→Profiles→Profile", "view-company-profile")}
         
         <h3>Analysis-module</h3>
-        {/* {renderHotkey("Analysis")}
-        {renderHotkey("Analysis→STEP→Stocks")}
+        {renderHotkey("Analysis", "module-analysis")}
+        {/* {renderHotkey("Analysis→STEP→Stocks")}
         {renderHotkey("Analysis→STEP→Chart")}
-        {renderHotkey("Analysis→STEP→Notes")}
-        {renderHotkey("Analysis→Fundamental→Stocks")}
-        {renderHotkey("Analysis→Fundamental→Chart")}
-        {renderHotkey("Analysis→Fundamental→Notes")}
-        {renderHotkey("Analysis→Fundamental→Materials")}
-        {renderHotkey("Analysis→Fundamental→Profile")} */}
+        
+        {renderHotkey("Analysis→STEP→Notes")} */}
+        {renderHotkey("Analysis→Fundamental", "view-fundamental-filtration")}
+        {renderHotkey("Analysis→Fundamental→Stocks", "view-fundamental-stocks")}
+        {renderHotkey("Analysis→Fundamental→Chart", "view-fundamental-chart")}
+        {renderHotkey("Analysis→Fundamental→Notes", "view-fundamental-material-browser")}
+        {renderHotkey("Analysis→Fundamental→Materials", "view-fundamental-profile")}
+        {renderHotkey("Analysis→Fundamental→Profile", "view-fundamental-notes")}
 
         <h3>Macro-module</h3>
-        {/* {renderHotkey("Macro")}
-        {renderHotkey("Macro→SECTOR→Notes")}
+        {renderHotkey("Macro", "module-macro")}
+        {/* {renderHotkey("Macro→SECTOR→Notes")}
         {renderHotkey("Macro→SECTOR→Materials")} */}
       </fieldset></div>
     </StandardModal>

@@ -10,6 +10,7 @@ export type SetExtraInfo = (extraInfo: any) => void;
 export type TabsContextType = {
   tabs: Tab[];
   activeTabIndex: number;
+  tabIndex: () => number;
   onSelect?: OnSelect;
   onOpen?: OnOpen;
   onDrop?: OnDrop;
@@ -18,5 +19,6 @@ export type TabsContextType = {
 
 export const TabsContext = createContext<TabsContextType>({
   tabs: [],
-  activeTabIndex: -1
+  activeTabIndex: -1,
+  tabIndex: () => -1
 });

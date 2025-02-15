@@ -59,7 +59,7 @@ const MENU_OPTIONS: MenuOption[] = [
   },
   {
     key: "shortcuts",
-    label: "Shortcuts",
+    label: "Hotkeys",
     shortcut: {
       label: "Ctrl + H", 
       key: "H"

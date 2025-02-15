@@ -22,14 +22,14 @@ export default function fourDirectionalNavigation<T extends HTMLElement>(
   const focusOnNext = (
     e: KeyboardEvent<T>, targetGetter: ElementGetter | Nullish
   ) => {
+    if( eventSettings ) {
+      eventSettings.preventDefault && e.preventDefault();
+      eventSettings.stopPropagation && e.stopPropagation();
+    }
+
     if( targetGetter ) {
       const target: HTMLElement | null = targetGetter(e);
 
-      if( eventSettings ) {
-        eventSettings.preventDefault && e.preventDefault();
-        eventSettings.stopPropagation && e.stopPropagation();
-      }
-      
       if( target ) {
         target.focus();
       }

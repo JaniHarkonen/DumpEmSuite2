@@ -23,6 +23,7 @@ import Container from "@renderer/components/Container/Container";
 import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
 import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 import FiltrationVerdictSelection from "@renderer/components/FiltrationVerdictSelection/FiltrationVerdictSelection";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -266,7 +267,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
         </div>
         <div className="d-flex d-justify-end w-100">
           <span className="mr-medium-length">Apply verdict to selected</span>
-          <input
+          <StyledInput
             type="checkbox"
             checked={sweepingVerdict}
             onChange={(e: ChangeEvent<HTMLInputElement>) => handleSweepingVerdict(e.target.checked)}

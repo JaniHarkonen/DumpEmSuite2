@@ -8,7 +8,7 @@ import removeArrayIndex from "@renderer/utils/removeArrayIndex";
 import { KeyboardEvent, useContext } from "react";
 
 
-type HotkeyActionMap<T> = {
+export type HotkeyActionMap<T> = {
   [key in string]: (e: KeyboardEvent<T>) => void;
 }
 
@@ -30,8 +30,6 @@ export function hotkeyApplier<T = Element>(
       return;
     }
 
-    const heldKeys: string[] = Object.keys(keyMap);
-
     for( let hotkeyAccessor of Object.keys(actionMap) ) {
       const keyConfig: KeyConfig | undefined = hotkeyConfig[hotkeyAccessor];
 
@@ -46,24 +44,21 @@ export function hotkeyApplier<T = Element>(
 
         const split: string[] = key.split(" ");
 
-          // Number of held keys and number of keys in the checked hotkey configuration
-          // must be the same in order for there to be a match
-        if( heldKeys.length !== split.length ) {
-          continue;
-        }
-
-          // Number of subkeys in the checked hotkey configuration, that are also found in 
-          // the held key map, must be equal to the number of keys in the key map
-        if( split.filter((subKey: string) => !!keyMap[subKey]).length === heldKeys.length ) {
+          // If filtering out all the keys that are not being held from the hotkey configuration array
+          // results in an array of equal size, all the hotkeys in the configuration must have been held
+          // down, and the hotkey must trigger
+        if( split.filter((subKey: string) => !!keyMap[subKey]).length === split.length ) {
           actionMap[hotkeyAccessor](e);
-          break;
+          break;  
         }
       }
     }
   });
 }
 
-export function documentHotkeyApplier(hotkeyListener: HotkeyListenerReturns<HTMLElement>, doc: Document): () => void {
+export function documentHotkeyApplier(
+  hotkeyListener: HotkeyListenerReturns<HTMLElement>, doc: Document
+): () => void {
   const keyDown = (e: unknown) => hotkeyListener.onKeyDown(e as KeyboardEvent<HTMLElement>);
   const keyUp = (e: unknown) => hotkeyListener.onKeyUp(e as KeyboardEvent<HTMLElement>);
 

@@ -1,7 +1,8 @@
+import { TabsContext } from "@renderer/context/TabsContext";
 import "./StyledTextarea.css";
 
 import useTheme from "@renderer/hook/useTheme";
-import { HTMLProps, KeyboardEvent, KeyboardEventHandler, ReactNode } from "react";
+import { HTMLProps, KeyboardEvent, KeyboardEventHandler, ReactNode, useContext } from "react";
 
 
 type Props = {
@@ -12,11 +13,14 @@ export default function StyledTextarea(props: Props): ReactNode {
   const pOnKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = props.onKeyDown || function(){ };
 
   const {theme} = useTheme();
+  const {tabIndex} = useContext(TabsContext);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if( e.currentTarget.readOnly ) {
       return;
     }
+
+    e.stopPropagation();
 
     const target: HTMLTextAreaElement = e.currentTarget;
 
@@ -103,6 +107,7 @@ export default function StyledTextarea(props: Props): ReactNode {
       {...props}
       {...theme("baseline-bgc", "glyph-c", pClassName)}
       onKeyDown={handleKeyDown}
+      tabIndex={tabIndex()}
     />
   );
 }

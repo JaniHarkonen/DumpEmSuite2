@@ -39,7 +39,7 @@ export function buildWorkspaceBlueprint(
                   value: {
                     tabs: [
                       {
-                        id: "view-volume-stocks",
+                        id: filterationStep.step_id + "-view-volume-stocks",
                         workspace: workspaceID,
                         caption: "Stocks",
                         contentTemplate: "view-filteration-tab-stocks",
@@ -68,7 +68,7 @@ export function buildWorkspaceBlueprint(
                     value: {
                       tabs: [
                         {
-                          id: "view-volume-chart",
+                          id: filterationStep.step_id + "-view-volume-chart",
                           workspace: workspaceID,
                           caption: "Chart",
                           contentTemplate: "view-filteration-tab-chart",
@@ -91,7 +91,7 @@ export function buildWorkspaceBlueprint(
                     value: {
                       tabs: [
                         {
-                          id: "view-volume-notes",
+                          id: filterationStep.step_id + "-view-volume-notes",
                           workspace: workspaceID,
                           caption: "Notes",
                           contentTemplate: "view-filteration-tab-notes",
@@ -108,13 +108,13 @@ export function buildWorkspaceBlueprint(
           }
         }
       },
-      order: 0
+      order: 0,
     };
   };
 
   const buildFundamentalFilterationStep = (): TabBlueprint => {
     return {
-      id: "view-fundamental",
+      id: "view-fundamental-filtration",
       workspace: workspaceID,
       caption: "Fundamental",
       contentTemplate: "view-fundamental",

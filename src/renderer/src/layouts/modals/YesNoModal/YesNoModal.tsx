@@ -1,12 +1,12 @@
 import "./YesNoModal.css";
 
-import { PropsWithChildren, ReactNode, useContext, useEffect } from "react";
+import { PropsWithChildren, ReactNode, useContext } from "react";
 import StandardModal from "../StandardModal/StandardModal";
 import useTheme from "@renderer/hook/useTheme";
 import ModalControlButton from "@renderer/components/ModalControlButton/ModalControlButton";
 import { ModalProps, OnModalClose } from "../modal.types";
 import { ModalContext } from "@renderer/context/ModalContext";
-import useHotkeys from "@renderer/hook/useHotkeys";
+import useDocumentHotkeys from "@renderer/hook/useDocumentHotkeys";
 
 
 type OnModalYes = () => void;
@@ -22,7 +22,6 @@ export default function YesNoModal(props: Props): ReactNode {
 
   const {theme} = useTheme();
   const {closeModal} = useContext(ModalContext);
-  const {hotkey, documentHotkey} = useHotkeys();
 
   const handleYes = () => {
     pOnYes && pOnYes();
@@ -34,12 +33,10 @@ export default function YesNoModal(props: Props): ReactNode {
     closeModal();
   };
 
-  useEffect(() => {
-    return documentHotkey(hotkey({
-      "confirm": handleYes,
-      "deny": handleCancel
-    }));
-  }, []);
+  useDocumentHotkeys({ actionMap: {
+    "confirm": handleYes,
+    "deny": handleCancel  
+  }});
 
   return (
     <StandardModal

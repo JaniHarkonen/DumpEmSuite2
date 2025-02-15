@@ -7,6 +7,7 @@ import { ASTNode } from "@renderer/model/markdown/parser";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { fixMarkdown } from "@renderer/model/markdown/utils";
 import InputPanel from "@renderer/components/InputPanel/InputPanel";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
 type Props = {
@@ -125,7 +126,7 @@ export default function QuarterlyEarningsProjector(props: Props): ReactNode {
         })}
       </div>
       <div className="d-flex gap-medium-length">
-        <input
+        <StyledInput
           type="checkbox"
           checked={componentState.enableAutoFill}
           onChange={handleAutoFillChange}

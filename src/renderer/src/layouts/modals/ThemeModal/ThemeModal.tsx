@@ -7,6 +7,7 @@ import useTheme from "@renderer/hook/useTheme";
 import { APP_THEMES, AppTheme } from "@renderer/context/ThemeContext";
 import firstLetterCapitalized from "@renderer/utils/firstLetterCapitalized";
 import useTabKeys from "@renderer/hook/useTabKeys";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
 export default function ThemeModal(props: ModalProps): ReactNode {
@@ -22,7 +23,7 @@ export default function ThemeModal(props: ModalProps): ReactNode {
           key={formatKey("theme-modal-theme-selection-" + t)}
           className="cursor-pointer"
         >
-          <input
+          <StyledInput
             type="radio"
             checked={t === activeTheme}
             onChange={() => setTheme && setTheme(t)}

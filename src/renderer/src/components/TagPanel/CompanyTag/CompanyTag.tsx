@@ -11,6 +11,7 @@ import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 import useHotkeys from "@renderer/hook/useHotkeys";
 import keyboardActivation from "@renderer/hotkey/keyboardActivation";
+import { TabsContext } from "@renderer/context/TabsContext";
 
 
 export type OnTagSelect = (tag: Tag) => void;
@@ -42,6 +43,7 @@ export default function CompanyTag(props: Props): ReactNode {
   const [tag, setTag] = useState<Tag>(pTag);
 
   const {openModal} = useContext(ModalContext);
+  const {tabIndex} = useContext(TabsContext);
   const {hotkey} = useHotkeys();
 
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
@@ -114,11 +116,11 @@ export default function CompanyTag(props: Props): ReactNode {
             style={{ backgroundColor: tag.tag_hex }}
             role="button"
             onClick={() => pOnSelect(tag)}
-            tabIndex={0}
+            tabIndex={tabIndex()}
             {...keyboardActivation(hotkey)}
           />
           <span
-            tabIndex={0}
+            tabIndex={tabIndex()}
             {...hotkey({
               "close-remove-tab": () => pAllowEdit && handleRemove(),
               "activate": (e: React.KeyboardEvent<HTMLSpanElement>) => {

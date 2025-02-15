@@ -64,7 +64,7 @@ export default function hotkeyListener<T = Element>(
 }
 
 export function mergeListeners<T = Element>(
-  listeners: (HotkeyListenerReturns<T> | Nullish)[]
+  ...listeners: (HotkeyListenerReturns<T> | Nullish)[]
 ): HotkeyListenerReturns<T> {
   return {
     onKeyDown: (e: KeyboardEvent<T>) => {

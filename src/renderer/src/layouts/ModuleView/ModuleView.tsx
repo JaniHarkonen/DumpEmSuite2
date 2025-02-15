@@ -47,7 +47,6 @@ export default function ModuleView(props: UseFlexibleSplitsProps): ReactNode {
       </TabControls>
     );
   };
-
   
   return (
     <FlexibleSplitsContext.Provider

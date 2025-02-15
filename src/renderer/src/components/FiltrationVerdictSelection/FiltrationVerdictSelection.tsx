@@ -2,6 +2,8 @@ import useTabKeys from "@renderer/hook/useTabKeys";
 import checkIfHexBelowThreshold from "@renderer/utils/checkIfHexBelowThreshold";
 import { ChangeEvent, ReactNode } from "react";
 import { Tag } from "src/shared/schemaConfig";
+import StyledSelect from "../StyledSelect/StyledSelect";
+
 
 type OnVerdictChange = (e: ChangeEvent<HTMLSelectElement>) => void;
 
@@ -21,7 +23,7 @@ export default function FiltrationVerdictSelection(props: Props): ReactNode {
   const {formatKey} = useTabKeys();
 
   return (
-    <select
+    <StyledSelect
       onChange={pOnChange}
       value={pSelectedTag?.tag_id || ""}
       style={{
@@ -43,6 +45,6 @@ export default function FiltrationVerdictSelection(props: Props): ReactNode {
           </option>
         );
       })}
-    </select>
+    </StyledSelect>
   );
 }

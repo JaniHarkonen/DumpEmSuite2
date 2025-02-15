@@ -6,6 +6,7 @@ import { ASSETS } from "@renderer/assets/assets";
 import CompanyAddPanel, { OnAddCompany } from "../CompanyAddPanel/CompanyAddPanel";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
+import StyledInput from "../StyledInput/StyledInput";
 
 
 type DefaultCallback = () => void;
@@ -62,7 +63,7 @@ export default function CompanyControls(props: Props): ReactNode {
       {displayAddControls && <CompanyAddPanel onAdd={pOnAdd} />}
       <div className="company-controls-secondary-control-container">
         <div>
-          <input
+          <StyledInput
             type="checkbox"
             onChange={handleAllSelectionToggle}
           />
