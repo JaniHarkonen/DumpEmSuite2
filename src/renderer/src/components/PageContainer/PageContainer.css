@@ -16,7 +16,7 @@
   height: 100%;
 }
 
-@container page-container (width < 500px) {
+@container page-container (width < 600px) {
   .page-content-container {
     width: 100%;
   }

@@ -1,3 +1,27 @@
+.container-wrapper {
+  width: 100%;
+  height: 100%;
+
+  container-name: container-content;
+  container-type: inline-size;
+}
+
+.container-content {
+  width: calc(100% - var(--small-size));
+  height: 100%;
+
+  margin-left: var(--small-size);
+}
+
 .container-footer-pad {
   height: var(--ultra-strong-length);
+}
+
+@container container-content (width < 600px) {
+  .container-content {
+    width: 100%;
+    height: 100%;
+
+    margin-left: 0px;
+  }
 }

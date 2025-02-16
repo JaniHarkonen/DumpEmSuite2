@@ -10,12 +10,14 @@ export default function Container(props: HTMLProps<HTMLDivElement>): ReactNode {
   const {theme} = useTheme();
 
   return (
-    <div
-      {...props}
-      {...theme("script-c", "indent-small-size " + pClassName)}
-    >
-      {pChildren}
-      <div className="container-footer-pad" />
+    <div className="container-wrapper">
+      <div
+        {...props}
+        {...theme("script-c", "container-content", pClassName)}
+      >
+        {pChildren}
+        <div className="container-footer-pad" />
+      </div>
     </div>
   );
 }
