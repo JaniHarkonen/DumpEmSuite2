@@ -14,6 +14,7 @@ import { HotkeyConfig } from "./model/hotkey";
 import { HotkeyContext } from "./context/HotkeyContext";
 import { documentHotkeyApplier, hotkeyApplier } from "./hook/useHotkeys";
 import { SplitTreeForkBlueprint, SplitTreeNodeBlueprint, SplitTreeValueBlueprint } from "./model/splits";
+import { TabBlueprint } from "./model/tabs";
 
 
 type ConfigFileInfo = {
@@ -62,7 +63,8 @@ export default function App(): ReactNode {
       }
 
       const leftValue: SplitTreeValueBlueprint | null = left as (SplitTreeValueBlueprint | null);
-      activeWorkspaceIDRef.current = leftValue?.value.tabs[leftValue.value.activeTabIndex].id ?? null;
+      const tab: TabBlueprint | undefined = leftValue?.value.tabs[leftValue?.value.activeTabIndex ?? -1];
+      activeWorkspaceIDRef.current = tab?.id ?? null;
 
       setConfigFileInfo({
         appConfig: read.result,

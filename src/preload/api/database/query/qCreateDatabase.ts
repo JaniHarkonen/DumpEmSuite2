@@ -24,7 +24,7 @@ export default function qCreateDatabase(metadata: Metadata): string {
       /* Company listings available on the workspace */
     CREATE TABLE company (
       company_id INTEGER NOT NULL,
-      company_name TEXT,
+      company_name TEXT UNIQUE,
       stock_ticker TEXT,
       stock_price REAL,
       volume_price REAL,

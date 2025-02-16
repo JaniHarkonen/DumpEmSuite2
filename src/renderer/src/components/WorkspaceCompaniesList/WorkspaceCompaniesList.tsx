@@ -17,6 +17,8 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import { Tab } from "@renderer/model/tabs";
 import Panel from "../Panel/Panel";
 import CompanyListStatisticsPanel from "../CompanyListStatisticsPanel/CompanyListStatisticsPanel";
+import { ModalContext } from "@renderer/context/ModalContext";
+import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -81,15 +83,17 @@ export default function WorkspaceCompaniesList(): ReactNode {
   } = useWorkspaceCompanies();
 
   const {formatDialogKey} = useWorkspaceDialogKeys();
+  const {openModal} = useContext(ModalContext);
 
   const dialogKeyImportCompanies: string = formatDialogKey("import-companies");
 
   const {showOpenFileDialog} = useFileSystemDialog({
     onOpenDialogResult: (result: OpenDialogResult) => {
-      if( !result.cancelled && result.key === dialogKeyImportCompanies ) {
-        filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
+      if( !result.cancelled ) {
+          filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
 
-          if( result.wasSuccessful ) {
+            // Handle importing new companies
+          if( result.wasSuccessful && dialogKeyImportCompanies ) {
             databaseAPI.postImportedCompanies({
               company: result.result.symbols as Company[]
             }).then(() => fetchAllCompanies());
@@ -179,12 +183,20 @@ export default function WorkspaceCompaniesList(): ReactNode {
   };
 
   const handleImport = () => {
-    showOpenFileDialog({
-      key: dialogKeyImportCompanies,
-      options: {
-        title: "Select a JSON of scraped stocks"
-      }
-    });
+    openModal(
+      <YesNoModal
+        onYes={() => showOpenFileDialog({
+          key: dialogKeyImportCompanies,
+          options: {
+            title: "Select a JSON of scraped stocks"
+          }
+        })}
+      >
+        Are you sure you want to import companies?
+        <br/>
+        Companies with overlapping names will be overwritten!
+      </YesNoModal>
+    );
   };
 
   return (
@@ -199,9 +211,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
             onImport={handleImport}
           />
         </Panel>
-        <CompanyListStatisticsPanel
-          numberOfCompanies={companies.length}
-        />
+        <CompanyListStatisticsPanel numberOfCompanies={companies.length} />
         <TableList<CompanyWithCurrency>
           columns={stockDataColumns}
           cells={stockDataCells}

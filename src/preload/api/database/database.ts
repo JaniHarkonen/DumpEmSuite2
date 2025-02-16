@@ -177,7 +177,7 @@ export class DatabaseManager {
       connection.database.exec("begin transaction", (err: Error | null) => {
         if( err ) {
           callback(null, new Error(
-            "Unable to import companies into the database '" + databaseName + "'!"
+            "Unable to complete transaction to database '" + databaseName + "'!"
           ));
         } else {
           statements.forEach((statement: Statement, index: number) => statement.run(values[index]));
