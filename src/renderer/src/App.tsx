@@ -60,8 +60,6 @@ export default function App(): ReactNode {
           left = (left as SplitTreeForkBlueprint).left;
         }
       }
-      // const valueNode: SplitTreeValueBlueprint = rootLeft.left as SplitTreeValueBlueprint;
-      // activeWorkspaceIDRef.current = valueNode.value?.tabs[valueNode.value.activeTabIndex].id ?? valueNode.left.value?.tabs[valueNode.left.value.activeTabIndex].id ?? null;
 
       const leftValue: SplitTreeValueBlueprint | null = left as (SplitTreeValueBlueprint | null);
       activeWorkspaceIDRef.current = leftValue?.value.tabs[leftValue.value.activeTabIndex].id ?? null;

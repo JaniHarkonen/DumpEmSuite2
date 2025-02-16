@@ -145,7 +145,7 @@
           "isFork": true,
           "divider": {
             "direction": "horizontal",
-            "value": 55.36249251048532
+            "value": 47.87456445993031
           },
           "left": {
             "isFork": true,
@@ -675,7 +675,15 @@
                                                     "caption": "Scraper",
                                                     "contentTemplate": "view-scraper",
                                                     "tags": [],
-                                                    "order": 0
+                                                    "order": 0,
+                                                    "extra": {
+                                                      "scrapeTarget": "",
+                                                      "scrapeOutput": "",
+                                                      "page-container": {
+                                                        "scrollX": 0,
+                                                        "scrollY": 167
+                                                      }
+                                                    }
                                                   },
                                                   {
                                                     "id": "view-listings",
@@ -796,7 +804,7 @@
                                                     "order": 0
                                                   }
                                                 ],
-                                                "activeTabIndex": 2
+                                                "activeTabIndex": 0
                                               }
                                             }
                                           }
@@ -839,7 +847,7 @@
                                     "order": 0
                                   }
                                 ],
-                                "activeTabIndex": 0
+                                "activeTabIndex": 1
                               }
                             }
                           }
@@ -1092,7 +1100,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "horizontal",
-                                                              "value": 50
+                                                              "value": 47.32620320855615
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -1112,7 +1120,11 @@
                                                                       "tags": [],
                                                                       "order": 0,
                                                                       "extra": {
-                                                                        "sweepingVerdict": false
+                                                                        "sweepingVerdict": false,
+                                                                        "page-container": {
+                                                                          "scrollX": 0,
+                                                                          "scrollY": 349
+                                                                        }
                                                                       }
                                                                     }
                                                                   ],
@@ -1403,7 +1415,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "horizontal",
-                                                              "value": 48.53963838664812
+                                                              "value": 53.10381031541187
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -1504,7 +1516,7 @@
                                                     "order": 1
                                                   }
                                                 ],
-                                                "activeTabIndex": 3
+                                                "activeTabIndex": 0
                                               }
                                             }
                                           }
@@ -1547,7 +1559,7 @@
                                     "order": 0
                                   }
                                 ],
-                                "activeTabIndex": 0
+                                "activeTabIndex": 1
                               }
                             }
                           }

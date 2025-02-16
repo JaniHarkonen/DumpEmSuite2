@@ -6,8 +6,6 @@ export default function debounce(f: any, delayMS: number): any {
       clearTimeout(timeout);
     }
 
-    f.apply(null, args);
-
-    timeout = setTimeout(() => f(), delayMS);
+    timeout = setTimeout(() => f.apply(null, args), delayMS);
   };
 }
