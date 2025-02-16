@@ -15,6 +15,7 @@ import { ASSETS } from "@renderer/assets/assets";
 import Toolbar from "@renderer/components/Toolbar/Toolbar";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
+import { GlobalContext } from "@renderer/context/GlobalContext";
 
 
 const {databaseAPI} = window.api;
@@ -31,13 +32,14 @@ export default function WorkspacesView(): ReactNode {
   };
 
   const {openModal} = useContext(ModalContext);
+  const {config} = useContext(GlobalContext);
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
 
   const {
     splitTree, 
     tabSelection, 
     handleTabSelection,
-    handleTabOpen,
+    handleTabOpen: openTab,
     handleTabAdd,
     handleTabRelocation, 
     handleTabReorder,
@@ -49,6 +51,14 @@ export default function WorkspacesView(): ReactNode {
     contentProvider: tabsProvider,
     onUpdate: handleSplitTreeUpdate
   });
+
+  const handleTabOpen = (targetNode: SplitTreeValue, tabIndex: number) => {
+    openTab(targetNode, tabIndex);
+
+    if( config && config.activeWorkspaceIDRef ) {
+      config.activeWorkspaceIDRef.current = targetNode.value.tabs[tabIndex].workspace ?? null;
+    }
+  };
 
   const handleWorkspaceAdd = (
     workspaceTabBlueprint: TabBlueprint, targetNode: SplitTreeValue

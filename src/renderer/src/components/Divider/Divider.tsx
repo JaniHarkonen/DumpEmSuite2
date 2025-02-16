@@ -32,12 +32,13 @@ export default function Divider(props: Props): ReactNode {
     onDrag: (e: MouseEvent) => {
       const container: HTMLDivElement | null = 
         document.getElementById(idContainer.current) as HTMLDivElement;
+
       if( !container ) {
         return;
       }
 
       const {x, y, width, height} = container.getBoundingClientRect();
-      const snapSize: number = window.innerWidth / 16;
+      const snapSize: number = 1;
       const mouseSnapX: number = Math.floor(e.clientX / snapSize) * snapSize;
       const mouseSnapY: number = Math.floor(e.clientY / snapSize) * snapSize;
 

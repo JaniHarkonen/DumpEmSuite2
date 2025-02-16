@@ -3,7 +3,7 @@ import "../../TagPanel/CompanyTag/CompanyTag.css";
 
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
-import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, ReactNode, useContext, useEffect, useState } from "react";
 import TagPanel from "@renderer/components/TagPanel/TagPanel";
 import TableList, { TableListColumn, TableListDataCell } from "@renderer/components/TableList/TableList";
 import { FilterationStepStock } from "@renderer/hook/useWorkspaceCompanies";
@@ -13,7 +13,6 @@ import useSelection, { SelectionID } from "@renderer/hook/useSelection";
 import { FilterationStep, Tag } from "src/shared/schemaConfig";
 import useFiltertionTags from "@renderer/hook/useFiltertionTags";
 import FiltrationSubmitForm from "@renderer/components/FiltrationSubmitForm/FiltrationSubmitForm";
-import useTabKeys from "@renderer/hook/useTabKeys";
 import { TabsContext } from "@renderer/context/TabsContext";
 import { Tab } from "@renderer/model/tabs";
 import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
@@ -22,8 +21,9 @@ import { milleFormatter, priceFormatter } from "@renderer/utils/formatter";
 import Panel from "@renderer/components/Panel/Panel";
 import Container from "@renderer/components/Container/Container";
 import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
-import checkIfHexBelowThreshold from "@renderer/utils/checkIfHexBelowThreshold";
 import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisticsPanel/CompanyListStatisticsPanel";
+import FiltrationVerdictSelection from "@renderer/components/FiltrationVerdictSelection/FiltrationVerdictSelection";
+import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock) => void;
@@ -39,11 +39,11 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   const pAllowSubmit: boolean = props.allowSubmit ?? false;
   const pOnCompanySelect: OnCompanyListingSelect = props.onCompanySelect || function(){ };
 
-  const [tagFilters, setTagFilters] = useState<Tag[]>([]);
-
   const {
     selectionSet,
     handleSelection,
+    handleSelectionUntil,
+    handleSelectionAfter,
     getSelectedIDs,
     resetSelection
   } = useSelection<FilterationStepStock>({});
@@ -86,7 +86,9 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
 
   const {company} = useContext(ProfileContext);
 
-  const {formatKey} = useTabKeys();
+  const [tagFilters, setTagFilters] = useState<Tag[]>([]);
+  const [sweepingVerdict, setSweepingVerdict] = 
+    useState<boolean>(activeTab?.extra?.sweepingVerdict ?? false);
 
   const handleSortToggle = (column: TableListColumn<FilterationStepStock>) => {
     const settings: SortSettings = sortBy(column.accessor);
@@ -143,6 +145,11 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     );
   };
 
+  const handleSweepingVerdict = (isON: boolean) => {
+    setExtraInfo && setExtraInfo({ sweepingVerdict: isON });
+    setSweepingVerdict(isON);
+  };
+
   const COLUMNS: TableListColumn<FilterationStepStock>[] = [
     { accessor: "company_name", caption: "Name" },
     { accessor: "stock_ticker", caption: "Ticker" },
@@ -176,39 +183,34 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       caption: "Verdict",
       ElementConstructor: (dataCell: TableListDataCell<FilterationStepStock>) => {
         return (
-          <div className="d-flex d-align-items-center w-100 h-100 p-relative d-justify-end">
+          <div
+            className="d-flex d-align-items-center w-100 h-100 p-relative d-justify-end"
+            onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => e.stopPropagation()}
+          >
             <span
               className="company-tag-color mr-medium-length"
               style={{
                 backgroundColor: dataCell.data.tag_hex
               }}
             />
-            <select
+            <FiltrationVerdictSelection
+              tags={tags}
+              selectedTag={{
+                tag_id: dataCell.data.tag_id,
+                tag_label: dataCell.data.tag_label,
+                tag_hex: dataCell.data.tag_hex
+              }}
+              optionKeyPrefix={"datacell-tag-selection-" + dataCell.id + "-"}
               onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                postFilterationTagChange(e.target.value, dataCell.data.company_id.toString());
+                if( sweepingVerdict ) {
+                  const ids: string[] = 
+                    getSelectedIDs().map((selectionID: SelectionID) => "" + selectionID);
+                  postFilterationTagChange(e.target.value, [...ids, dataCell.data.company_id.toString()]);
+                } else {
+                  postFilterationTagChange(e.target.value, [dataCell.data.company_id.toString()]);
+                }
               }}
-              defaultValue={dataCell.data.tag_id}
-              style={{
-                color: checkIfHexBelowThreshold(dataCell.data.tag_hex, 100) ? "white" : "black",
-                backgroundColor: dataCell.data.tag_hex
-              }}
-            >
-              {tags.map((tag: Tag) => {
-                return (
-                  <option
-                    className="test"
-                    key={formatKey("datacell-tag-selection-" + dataCell.id + "-" + tag.tag_id)}
-                    style={{
-                      color: checkIfHexBelowThreshold(tag.tag_hex, 100) ? "white" : "black",
-                      backgroundColor: tag.tag_hex
-                    }}
-                    value={tag.tag_id}
-                  >
-                    {tag.tag_label}
-                  </option>
-                );
-              })}
-            </select>
+            />
           </div>
         );
       }
@@ -242,23 +244,35 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
-      <Panel className="d-flex mb-medium-length">
-        <div className="w-100">
-          <FilterationControls
-            onBringAll={bringAllStocksToFilterationStep}
-            onDelist={handleStockDelist}
-            onSelectAll={() => handleSelection(true, ...stockDataCells)}
-            onDeselectAll={resetSelection}
-          />
-        </div>
-        {pAllowSubmit && (
-          <div className="d-flex d-justify-end w-100">
-            <FiltrationSubmitForm
-              blackListedMap={{[pFilterationStepID]: true}}
-              onSubmit={handleStockSubmission}
+      <Panel >
+        <div className="d-flex mb-medium-length">
+          <div className="w-100">
+            <FilterationControls
+              onBringAll={bringAllStocksToFilterationStep}
+              onDelist={handleStockDelist}
+              onSelectAll={() => handleSelection(true, ...stockDataCells)}
+              onDeselectAll={resetSelection}
+              onSelectUntil={() => handleSelectionUntil(true, ...stockDataCells)}
+              onSelectAfter={() => handleSelectionAfter(true, ...stockDataCells)}
             />
           </div>
-        )}
+          {pAllowSubmit && (
+            <div className="d-flex d-justify-end w-100">
+              <FiltrationSubmitForm
+                blackListedMap={{[pFilterationStepID]: true}}
+                onSubmit={handleStockSubmission}
+              />
+            </div>
+          )}
+        </div>
+        <div className="d-flex d-justify-end w-100">
+          <span className="mr-medium-length">Apply verdict to selected</span>
+          <StyledInput
+            type="checkbox"
+            checked={sweepingVerdict}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleSweepingVerdict(e.target.checked)}
+          />
+        </div>
       </Panel>
       <div>
         <h3>Filters</h3>

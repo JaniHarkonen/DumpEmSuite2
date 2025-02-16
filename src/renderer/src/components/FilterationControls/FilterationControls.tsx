@@ -11,6 +11,8 @@ type Props = {
   onSelectAll?: () => void;
   onDeselectAll?: () => void;
   onDelist?: () => void;
+  onSelectUntil?: () => void;
+  onSelectAfter?: () => void;
 };
 
 export default function FilterationControls(props: Props): ReactNode {
@@ -18,6 +20,8 @@ export default function FilterationControls(props: Props): ReactNode {
   const pSelectAll: () => void = props.onSelectAll || function(){ };
   const pOnDeselectAll: () => void = props.onDeselectAll || function(){ };
   const pOnDelist: () => void = props.onDelist || function(){ };
+  const pOnSelectUntil: () => void = props.onSelectUntil || function(){ };
+  const pOnSelectAfter: () => void = props.onSelectAfter || function(){ };
 
   const {openModal} = useContext(ModalContext);
 
@@ -58,6 +62,8 @@ export default function FilterationControls(props: Props): ReactNode {
       }}>De-list</StyledButton>
       <StyledButton onClick={pSelectAll}>Select all</StyledButton>
       <StyledButton onClick={pOnDeselectAll}>De-select all</StyledButton>
+      <StyledButton onClick={pOnSelectUntil}>Select until selected</StyledButton>
+      <StyledButton onClick={pOnSelectAfter}>Select after selected</StyledButton>
     </div>
   );
 }

@@ -97,6 +97,11 @@ textarea {
   height: 100%;
 }
 
+.grid-opposites {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+
 .box-sizing-border {
   box-sizing: border-box;
 }
@@ -127,6 +132,10 @@ textarea {
 
 .overflow-x-auto {
   overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .p-absolute {
@@ -211,6 +220,41 @@ textarea {
 }
 
 
+/**************** MIN HEIGHT ****************/
+
+.min-height-dot-size-length {
+  max-width: var(--dot-size);
+}
+
+.min-height-extra-tiny-length {
+  max-width: var(--extra-tiny-size);
+}
+
+.min-height-tiny-length {
+  max-width: var(--tiny-size);
+}
+
+.min-height-small-size {
+  max-width: var(--small-size);
+}
+
+.min-height-medium-size {
+  max-width: var(--medium-size);
+}
+
+.min-height-big-size {
+  max-width: var(--big-size);
+}
+
+.max-width-large-size {
+  max-width: var(--ultra-large-size);
+}
+
+.min-height-card-size {
+  max-width: var(--card-size);
+}
+
+
 /**************** MAX WIDTH ****************/
 
 .max-width-dot-size-length {
@@ -242,7 +286,7 @@ textarea {
 }
 
 .max-width-card-size {
-  max-width: var(--ultra-card-size);
+  max-width: var(--card-size);
 }
 
 /**************** INDENTATIONS ****************/

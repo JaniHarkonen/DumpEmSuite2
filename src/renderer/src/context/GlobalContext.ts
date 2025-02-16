@@ -4,6 +4,7 @@ import { createContext, MutableRefObject } from "react";
 
 export type ConfigContextType = {
   appConfigRef: MutableRefObject<AppConfig | null> | null;
+  activeWorkspaceIDRef: MutableRefObject<string | null> | null;
   configFileUpdater: ConfigFileUpdater;
 };
 
@@ -14,6 +15,7 @@ export type GlobalContextType = {
 export function defaultConfigContext(): ConfigContextType {
   return {
     appConfigRef: null,
+    activeWorkspaceIDRef: null,
     configFileUpdater: () => {}
   };
 }

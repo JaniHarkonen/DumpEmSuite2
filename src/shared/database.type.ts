@@ -91,7 +91,7 @@ export type DatabaseAPI = {
   postFilterationTagChanges: (
     props: { 
       filterationStepID: string;
-      companyID: string; 
+      companyID: string[]; 
       tagID: string; 
     } & QueryProps
   ) => Promise<PostResult>;
@@ -187,7 +187,7 @@ export type BoundDatabaseAPI = {
   postFilterationTagChanges: (
     props: { 
       filterationStepID: string;
-      companyID: string;
+      companyID: string[];
       tagID: string;
     }
   ) => Promise<PostResult>;

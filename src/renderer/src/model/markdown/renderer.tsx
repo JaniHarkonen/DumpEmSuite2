@@ -80,7 +80,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
         );
       }
       case "chart": {
-        const split: string[] = culledChildren[0].value?.split(":") || [];
+        const split: string[] = culledChildren[0]?.value?.split(":") || [];
 
         if( split.length !== 2 ) {
           return [];

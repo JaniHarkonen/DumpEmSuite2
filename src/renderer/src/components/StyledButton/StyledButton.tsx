@@ -2,8 +2,9 @@ import "./StyledButton.css";
 
 import useTheme from "@renderer/hook/useTheme";
 import { Nullish } from "@renderer/utils/Nullish";
-import { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from "react";
+import { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode, useContext } from "react";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import { TabsContext } from "@renderer/context/TabsContext";
 
 
 type Props = {
@@ -15,12 +16,14 @@ export default function StyledButton(props: Props): ReactNode {
   const pChildren: ReactNode = props.children;
   const pIcon: string | Nullish = props.icon;
 
+  const {tabIndex} = useContext(TabsContext);
   const {theme} = useTheme();
 
   return (
     <button
       {...props}
       {...theme("button", "styled-button", pClassName)}
+      tabIndex={tabIndex()}
     >
       {pChildren}
       {pIcon && (

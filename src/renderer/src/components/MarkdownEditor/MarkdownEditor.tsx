@@ -110,11 +110,13 @@ export default function MarkdownEditor(props: Props) {
               Edit
             </StyledButton>
           </div>
-          {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
-            <div {...theme("script-c", "markdown-editor-start-suggestion")}>
-              Click "Edit" to start taking notes.
-            </div>
-          )}
+          <div>
+            {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
+              <div {...theme("script-c", "markdown-editor-start-suggestion")}>
+                Click "Edit" to start taking notes.
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </MarkdownContext.Provider>

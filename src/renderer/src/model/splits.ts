@@ -314,7 +314,14 @@ export class SplitTreeManager {
         trackedFork: null
       };
     }
+
     targetTabs.splice(tabIndex, 1);
+    resolvedTargetNode.value.activeTabIndex = tabIndex;
+
+      // Ensure the next tab in line is opened or active tab index is set to -1
+    if( !targetTabs[tabIndex] ) {
+      resolvedTargetNode.value.activeTabIndex--;
+    }
 
       // Rearrange the tree, if the tabs were depleted after removal
     if( targetTabs.length === 0 ) {
@@ -465,7 +472,7 @@ export class SplitTreeManager {
         parent: targetFork,
         value: {
           tabs: [tab],
-          activeTabIndex: -1
+          activeTabIndex: 0
         }
       };
 

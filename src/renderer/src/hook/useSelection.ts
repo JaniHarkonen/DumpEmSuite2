@@ -25,6 +25,8 @@ type Props<T> = {
 type Returns<T> = {
   selectionSet: SelectionSet<T>;
   handleSelection: HandleSelection<T>;
+  handleSelectionUntil: HandleSelection<T>;
+  handleSelectionAfter: HandleSelection<T>;
   getSelectedIDs: GetIDs;
   getUnselectedIDs: GetIDs;
   resetSelection: () => void;
@@ -47,6 +49,28 @@ export default function useSelection<T>(props: Props<T>): Returns<T> {
     });
   };
 
+  const handleSelectionUntil = (isSelected: boolean, ...selectableItems: SelectionItem<T>[]) => {
+    for( let i = 0; i < selectableItems.length; i++ ) {
+      if( selectionSet[selectableItems[i].id] ) {
+        handleSelection(isSelected, ...selectableItems.slice(0, i));
+        return;
+      }
+    }
+
+    handleSelection(isSelected, ...selectableItems);
+  };
+
+  const handleSelectionAfter = (isSelected: boolean, ...selectableItems: SelectionItem<T>[]) => {
+    for( let i = 0; i < selectableItems.length; i++ ) {
+      if( selectionSet[selectableItems[i].id] ) {
+        handleSelection(isSelected, ...selectableItems.slice(i, selectableItems.length));
+        return;
+      }
+    }
+
+    handleSelection(isSelected, ...selectableItems);
+  };
+
   const resetSelection = () => setSelectionSet({});
 
   const getSelectedIDs: GetIDs = () => {
@@ -60,6 +84,8 @@ export default function useSelection<T>(props: Props<T>): Returns<T> {
   return {
     selectionSet,
     handleSelection,
+    handleSelectionUntil,
+    handleSelectionAfter,
     getSelectedIDs,
     getUnselectedIDs,
     resetSelection

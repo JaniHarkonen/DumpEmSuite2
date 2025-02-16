@@ -1,6 +1,7 @@
+import { TabsContext } from "@renderer/context/TabsContext";
 import useExternalLinks from "@renderer/hook/useExternalLinks";
 import useTheme from "@renderer/hook/useTheme";
-import { HTMLProps, ReactNode } from "react";
+import { HTMLProps, ReactNode, useContext } from "react";
 
 
 type Props = {
@@ -14,6 +15,7 @@ export default function StyledLink(props: Props): ReactNode {
 
   const {theme} = useTheme();
   const {openLink} = useExternalLinks();
+  const {tabIndex} = useContext(TabsContext);
 
   return (
     <span
@@ -21,6 +23,7 @@ export default function StyledLink(props: Props): ReactNode {
       {...theme("action-c", "cursor-pointer", pClassName)}
       role="link"
       onClick={() => openLink(pHREF)}
+      tabIndex={tabIndex()}
     >
       {pChildren}
     </span>

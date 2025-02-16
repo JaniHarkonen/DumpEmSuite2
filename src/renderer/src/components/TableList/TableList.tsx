@@ -1,13 +1,19 @@
 import "./TableList.css";
 
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
-import { ChangeEvent, ReactNode } from "react";
+import { ChangeEvent, KeyboardEvent, ReactNode, useContext } from "react";
 import EditableText from "../editable/EditableText";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { ASSETS } from "@renderer/assets/assets";
 import { SortOrder } from "@renderer/hook/useSortedData";
 import useTheme from "@renderer/hook/useTheme";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import { HotkeyListenerReturns, mergeListeners } from "@renderer/hotkey/hotkeyListener";
+import useHotkeys from "@renderer/hook/useHotkeys";
+import fourDirectionalNavigation from "@renderer/hotkey/fourDirectionalNavigation";
+import keyboardActivation from "@renderer/hotkey/keyboardActivation";
+import { TabsContext } from "@renderer/context/TabsContext";
+import StyledInput from "../StyledInput/StyledInput";
 
 
 export type TableListColumn<T> = {
@@ -68,14 +74,17 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const pOnItemSelect: OnItemSelect<T> = props.onItemSelect || function(){ };
   const pOnItemFinalize: OnItemFinalize<T> = props.onItemFinalize || function(){ };
 
+  const {tabIndex} = useContext(TabsContext);
   const {theme} = useTheme();
   const {formatKey} = useTabKeys();
+  const {hotkey} = useHotkeys();
 
   const renderDataCell = (
     dataCell: TableListDataCell<T>, column: TableListColumn<T>, index: number
   ) => {
+    const relativePosition: number = index % pColumns.length;
     const classNameConstructor = () => {
-      const isFirstColumn: boolean = index % pColumns.length === 0;
+      const isFirstColumn: boolean = (relativePosition === 0);
       const isLastColumn: boolean = ((index + 1) % pColumns.length === 0 && index > 0);
       let className: string = "table-list-data-cell-container pl-medium-length";
 
@@ -123,7 +132,8 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       if( pAllowSelection && index === 0 ) {
         dataElement = (
           <div className="table-list-data-cell">
-            <input
+            <StyledInput
+              tabIndex={tabIndex()}
               className="mr-strong-length"
               type="checkbox"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -137,10 +147,51 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       }
     }
 
+    const key: string = 
+      formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id);
+
+    const hotkeyListener: HotkeyListenerReturns<HTMLDivElement> = mergeListeners(
+      fourDirectionalNavigation(
+        hotkey, 
+        (e: KeyboardEvent<HTMLElement>) => {
+          return e.currentTarget.previousElementSibling as HTMLElement;
+        },
+        (e: KeyboardEvent<HTMLElement>) => {
+          return e.currentTarget.nextElementSibling as HTMLElement
+        },
+        (e: KeyboardEvent<HTMLElement>) => {
+          return (
+            e.currentTarget.parentElement?.previousElementSibling?.children[index]
+          ) as HTMLElement
+        },
+        (e: KeyboardEvent<HTMLElement>) => {
+          return (
+            e.currentTarget.parentElement?.nextElementSibling?.children[index]
+          ) as HTMLElement;
+        },
+        { preventDefault: true }
+      ), keyboardActivation(hotkey)
+    );
+
+    if( index === 0 ) { 
+      return (
+        <div
+          {...theme(classNameConstructor())}
+          key={key}
+          tabIndex={tabIndex()}
+          {...hotkeyListener}
+        >
+          {dataElement}
+        </div>
+      );
+    }
+
     return (
       <div
         {...theme(classNameConstructor())}
-        key={formatKey("list-table-data-" + (column.accessor as string) + "-" + dataCell.id)}
+        key={key}
+        tabIndex={tabIndex()}
+        {...hotkeyListener}
       >
         {dataElement}
       </div>

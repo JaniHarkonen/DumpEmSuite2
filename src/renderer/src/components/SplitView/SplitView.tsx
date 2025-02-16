@@ -9,6 +9,7 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import TabPanel from "../Tabs/TabPanel/TabPanel";
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import useTheme from "@renderer/hook/useTheme";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 const dropAreas: DropAreaSettings[] = quadrantDropAreas(
@@ -44,6 +45,8 @@ export default function SplitView(props: Props): ReactNode {
   } = useContext(FlexibleSplitsContext);
 
   const {theme} = useTheme();
+  const {formatKey} = useTabKeys();
+  const {tabIndex} = useContext(TabsContext);
 
   const handleTabContentDrop = (dropArea: DropAreaSettings, toFork: SplitTreeFork) => {
       // Maps drop areas to DividerDirections and DividerDirections to SplitBranches
@@ -70,7 +73,7 @@ export default function SplitView(props: Props): ReactNode {
     return tabs.map((tab: Tab) => {
       return (
         <TabPanel
-          key={tab.workspace + "-tab-panel-" + tab.id}
+          key={formatKey(tab.workspace + "-tab-panel-" + tab.id)}
           tab={tab}
         >
           {tab.content}
@@ -106,11 +109,41 @@ export default function SplitView(props: Props): ReactNode {
             }),
             onOpen: (openedTab: Tab) => {
               handleTabOpen && handleTabOpen(valueNode, indexOfTab(nodeTabs, openedTab));
+              
+              const collection: HTMLCollectionOf<Element> = 
+                document.getElementsByClassName(openedTab.id);
+              
+              for( let i = 0; i < collection.length; i++ ) {
+                const element: Element | null = collection.item(i);
+
+                if( element ) {
+                  const htmlElement: HTMLElement = element as HTMLElement;
+
+                  if( !htmlElement.classList.contains(openedTab.workspace) ) {
+                    continue;
+                  }
+                  
+                  htmlElement.focus();
+
+                  for( let child of element.children ) {
+                    const htmlChild: HTMLElement | null = child as (HTMLElement | null);
+
+                    if( !htmlChild ) {
+                      continue;
+                    }
+
+                    if( htmlChild.tabIndex >= htmlElement.tabIndex ) {
+                      htmlChild.focus();
+                    }
+                  }
+                }
+              }
             },
             onDrop: decideRelocationOrReorder,
             setExtraInfo: (extraInfo: any) => {
               handleExtraInfo && handleExtraInfo(valueNode, nodeTabs[activeTabIndex], extraInfo);
-            }
+            },
+            tabIndex: () => tabIndex() + 2
           }}
         >
           <TabsWithDropArea

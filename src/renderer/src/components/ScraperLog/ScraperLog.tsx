@@ -4,6 +4,7 @@ import { ReactNode, useContext } from "react";
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
 import Panel from "../Panel/Panel";
 import StyledIcon from "../StyledIcon/StyledIcon";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 export type ScraperLogEventStatus= "successful" | "pending" | "failed" | "exceptions" | "none";
@@ -28,13 +29,14 @@ const BADGES: LogEventBadges = {
 
 export default function ScraperLog(): ReactNode {
   const {loggedEvents, scrapeResult} = useContext(ScraperLogContext);
+  const {formatKey} = useTabKeys();
 
   return (
     <div>
       <Panel>
         {loggedEvents.map((event: ScraperLogEvent) => {
           return (
-            <div key={"scraper-log-event-" + event.key}>
+            <div key={formatKey("scraper-log-event-" + event.key)}>
               <span className="mr-medium-length">{BADGES[event.status] || <></>}</span>
               <span>{event.message}</span>
             </div>

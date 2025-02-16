@@ -1,16 +1,27 @@
+import { TabsContext } from "@renderer/context/TabsContext";
 import "./StyledInput.css";
 import useTheme from "@renderer/hook/useTheme";
-import { HTMLProps, ReactNode } from "react";
+import copyJSON from "@renderer/utils/copyJSON";
+import { HTMLProps, MutableRefObject, ReactNode, useContext } from "react";
 
 
-export default function StyledInput(props: HTMLProps<HTMLInputElement>): ReactNode {
+type Props = {
+  reactRef?: MutableRefObject<HTMLInputElement | null>;
+} & HTMLProps<HTMLInputElement>
+
+export default function StyledInput(props: Props): ReactNode {
   const pClassName: string = props.className || "";
+  const pRef: MutableRefObject<HTMLInputElement | null> | undefined = props.reactRef ?? undefined;
+
   const {theme} = useTheme();
+  const {tabIndex} = useContext(TabsContext);
 
   return (
     <input
-      {...props}
+      {...copyJSON(props, ["reactRef"])}
       {...theme("baseline-bgc", "glyph-c", "line-height-standard",  pClassName)}
+      {...pRef && {ref: pRef}}
+      tabIndex={Math.max(0, tabIndex())}
     />
   );
 }
