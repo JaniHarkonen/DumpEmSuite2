@@ -338,7 +338,7 @@
                                                   "order": 0
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 2
                                             }
                                           }
                                         }
@@ -389,7 +389,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 47.79507133592737
+                                                            "value": 41.28187456926258
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -805,7 +805,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 1
+                                              "activeTabIndex": 0
                                             }
                                           }
                                         }

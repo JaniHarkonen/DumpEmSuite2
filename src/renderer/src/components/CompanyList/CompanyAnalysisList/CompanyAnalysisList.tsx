@@ -26,7 +26,7 @@ import FiltrationVerdictSelection from "@renderer/components/FiltrationVerdictSe
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
 
 
-type OnCompanyListingSelect = (company: FilterationStepStock) => void;
+type OnCompanyListingSelect = (company: FilterationStepStock | null) => void;
 
 type Props = {
   filterationStepID: string;
@@ -118,6 +118,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       return selectionSet[id].item.data.company_id.toString();
     }));
     resetSelection();
+    pOnCompanySelect(null);
   };
 
   const handleToggleTag = (tag: Tag) => {

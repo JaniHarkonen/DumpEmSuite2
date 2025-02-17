@@ -9,7 +9,7 @@ type Returns = {
   profileSelection: ProfileContextType;
   fetchCompanyProfile: (company: Company) => void;
   handleProfileEdit: (changes: ProfileEditChanges) => void;
-  handleProfileSelection: (company: Company) => void;
+  handleProfileSelection: (company: Company | null) => void;
 };
 
 export default function useProfileSelection(): Returns {
@@ -44,8 +44,15 @@ export default function useProfileSelection(): Returns {
     });
   };
 
-  const handleProfileSelection = (company: Company) => {
-    fetchCompanyProfile(company);
+  const handleProfileSelection = (company: Company | null) => {
+    if( company ) {
+      fetchCompanyProfile(company);
+    } else {
+      setProfileSelection({
+        profile: null,
+        company: null
+      });
+    }
   };
 
   return {
