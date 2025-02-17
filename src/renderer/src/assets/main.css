@@ -291,6 +291,18 @@ textarea {
 
 /**************** INDENTATIONS ****************/
 
+.indent-tiny-portion {
+  margin-left: var(--tiny-portion);
+}
+
+.indent-small-portion {
+  margin-left: var(--small-portion);
+}
+
+/* .indent-small {
+  margin-left: 5%;
+}
+
 .indent-dot-size {
   margin-left: var(--dot-size);
 }
@@ -313,7 +325,7 @@ textarea {
 
 .indent-big-size {
   margin-left: var(--big-size);
-}
+} */
 
 
 /**************** GAPS ****************/

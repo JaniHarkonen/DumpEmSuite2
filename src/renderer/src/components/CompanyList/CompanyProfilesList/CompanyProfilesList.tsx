@@ -87,14 +87,16 @@ export default function CompanyProfilesList(props: Props): ReactNode {
   return (
     <PageContainer>
       <PageHeader>Profiles</PageHeader>
-      <Container>
-        <TableList<Company>
-          onItemFocus={handleCompanySelection}
-          columns={stockDataColumns}
-          cells={stockDataCells}
-          onColumnSelect={handleSortToggle}
-        />
-      </Container>
+      <div className="w-100">
+        <Container>
+          <TableList<Company>
+            onItemFocus={handleCompanySelection}
+            columns={stockDataColumns}
+            cells={stockDataCells}
+            onColumnSelect={handleSortToggle}
+          />
+        </Container>
+      </div>
     </PageContainer>
   );
 }

@@ -253,61 +253,65 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
-      <Panel >
-        <div className="d-flex mb-medium-length">
-          <div className="w-100">
-            <FilterationControls
-              onBringAll={bringAllStocksToFilterationStep}
-              onDelist={handleStockDelist}
-              onSelectAll={() => handleSelection(true, ...stockDataCells)}
-              onDeselectAll={resetSelection}
-              onSelectUntil={() => handleSelectionUntil(true, ...stockDataCells)}
-              onSelectAfter={() => handleSelectionAfter(true, ...stockDataCells)}
-            />
-          </div>
-          {pAllowSubmit && (
-            <div className="d-flex d-justify-end w-100">
-              <FiltrationSubmitForm
-                blackListedMap={{[pFilterationStepID]: true}}
-                onSubmit={handleStockSubmission}
+      <Container>
+        <Panel >
+          <div className="d-flex mb-medium-length">
+            <div className="w-100">
+              <FilterationControls
+                onBringAll={bringAllStocksToFilterationStep}
+                onDelist={handleStockDelist}
+                onSelectAll={() => handleSelection(true, ...stockDataCells)}
+                onDeselectAll={resetSelection}
+                onSelectUntil={() => handleSelectionUntil(true, ...stockDataCells)}
+                onSelectAfter={() => handleSelectionAfter(true, ...stockDataCells)}
               />
             </div>
-          )}
+            {pAllowSubmit && (
+              <div className="d-flex d-justify-end w-100">
+                <FiltrationSubmitForm
+                  blackListedMap={{[pFilterationStepID]: true}}
+                  onSubmit={handleStockSubmission}
+                />
+              </div>
+            )}
+          </div>
+          <div className="d-flex d-justify-end w-100">
+            <span className="mr-medium-length">Apply verdict to selected</span>
+            <StyledInput
+              type="checkbox"
+              checked={sweepingVerdict}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleSweepingVerdict(e.target.checked)}
+            />
+          </div>
+        </Panel>
+        <div>
+          <h3>Filters</h3>
+          <Container>
+            <TagPanel
+              onTagSelect={handleToggleTag}
+              selectedTagMap={
+                arrayToOccurrenceMap<Tag>(tagFilters, (tag: Tag) => tag.tag_id.toString())
+              }
+            />
+          </Container>
         </div>
-        <div className="d-flex d-justify-end w-100">
-          <span className="mr-medium-length">Apply verdict to selected</span>
-          <StyledInput
-            type="checkbox"
-            checked={sweepingVerdict}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleSweepingVerdict(e.target.checked)}
-          />
+        <div className="w-100">
+          <Container>
+            <CompanyListStatisticsPanel
+              shownNumberOfCompanies={stockDataCells.length}
+              numberOfCompanies={stocks.length}
+            />
+            <TableList<FilterationStepStock>
+              onItemFocus={handleStockFocus}
+              columns={stockDataColumns}
+              cells={stockDataCells}
+              allowSelection={true}
+              selectionSet={selectionSet}
+              onItemSelect={handleStockSelect}
+              onColumnSelect={handleSortToggle}
+            />
+          </Container>
         </div>
-      </Panel>
-      <div>
-        <h3>Filters</h3>
-        <Container>
-          <TagPanel
-            onTagSelect={handleToggleTag}
-            selectedTagMap={
-              arrayToOccurrenceMap<Tag>(tagFilters, (tag: Tag) => tag.tag_id.toString())
-            }
-          />
-        </Container>
-      </div>
-      <Container>
-        <CompanyListStatisticsPanel
-          shownNumberOfCompanies={stockDataCells.length}
-          numberOfCompanies={stocks.length}
-        />
-        <TableList<FilterationStepStock>
-          onItemFocus={handleStockFocus}
-          columns={stockDataColumns}
-          cells={stockDataCells}
-          allowSelection={true}
-          selectionSet={selectionSet}
-          onItemSelect={handleStockSelect}
-          onColumnSelect={handleSortToggle}
-        />
       </Container>
     </PageContainer>
   );

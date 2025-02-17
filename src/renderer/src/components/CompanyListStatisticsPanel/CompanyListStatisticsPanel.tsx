@@ -13,7 +13,7 @@ export default function CompanyListStatisticsPanel(props: Props): ReactNode {
   const count: number = (pShownNumberOfCompanies >= 0) ? pShownNumberOfCompanies : pNumberOfCompanies;
 
   return (
-    <div className="user-select-text mt-medium-length indent-tiny-size">
+    <div className="user-select-text mt-medium-length indent-tiny-portion">
       Showing {count} companies {pShownNumberOfCompanies >= 0 ? "out of " + pNumberOfCompanies : ""}
     </div>
   );
