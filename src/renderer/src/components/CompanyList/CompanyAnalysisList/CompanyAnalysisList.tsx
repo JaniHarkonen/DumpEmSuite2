@@ -86,7 +86,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
 
   const {company} = useContext(ProfileContext);
 
-  const [tagFilters, setTagFilters] = useState<Tag[]>([]);
+  const [tagFilters, setTagFilters] = useState<Tag[]>(activeTab?.extra?.tagFilters || []);
   const [sweepingVerdict, setSweepingVerdict] = 
     useState<boolean>(activeTab?.extra?.sweepingVerdict ?? false);
 
@@ -125,16 +125,24 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       return( filterTag.tag_id === tag.tag_id );
     });
 
+    let newFilters: Tag[];
+
       // Turn filter ON
     if( tagIndex < 0 ) {
-      setTagFilters(tagFilters.concat(tag));
+      newFilters = tagFilters.concat(tag);
+      setTagFilters(newFilters);
     } else {
         // Turn filter OFF
-      setTagFilters([
+      newFilters = [
         ...tagFilters.slice(0, tagIndex),
         ...tagFilters.slice(tagIndex + 1)
-      ]);
+      ];
+      setTagFilters(newFilters);
     }
+
+    setExtraInfo({
+      tagFilters: newFilters
+    });
   };
 
   const handleStockSubmission = (targetStep: FilterationStep, preserveTags: boolean) => {

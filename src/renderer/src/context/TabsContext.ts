@@ -11,14 +11,15 @@ export type TabsContextType = {
   tabs: Tab[];
   activeTabIndex: number;
   tabIndex: () => number;
+  setExtraInfo: SetExtraInfo;
   onSelect?: OnSelect;
   onOpen?: OnOpen;
   onDrop?: OnDrop;
-  setExtraInfo?: SetExtraInfo;
 };
 
 export const TabsContext = createContext<TabsContextType>({
   tabs: [],
   activeTabIndex: -1,
-  tabIndex: () => -1
+  tabIndex: () => -1,
+  setExtraInfo: () => {}
 });

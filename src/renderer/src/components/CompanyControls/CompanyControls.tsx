@@ -17,7 +17,6 @@ type Props = {
   onSelectAll?: DefaultCallback;
   onDeselectAll?: DefaultCallback;
   onImport?: DefaultCallback;
-  onUpdate?: DefaultCallback;
 };
 
 export default function CompanyControls(props: Props): ReactNode {
@@ -26,7 +25,6 @@ export default function CompanyControls(props: Props): ReactNode {
   const pOnSelectAll: DefaultCallback = props.onSelectAll || function(){ };
   const pOnDeselectAll: DefaultCallback = props.onDeselectAll || function(){ };
   const pOnImport: DefaultCallback = props.onImport || function(){ };
-  const pOnUpdate: DefaultCallback = props.onImport || function(){ };
 
   const [displayAddControls, setDisplayAddControls] = useState<boolean>(false);
 
@@ -77,16 +75,6 @@ export default function CompanyControls(props: Props): ReactNode {
           icon={ASSETS.icons.action.import.black}
         >
           Import
-        </StyledButton>
-      </div>
-      <div className="company-controls-secondary-control-container">
-        <div />
-        <div />
-        <StyledButton
-          onClick={() => pOnUpdate()}
-          icon={ASSETS.icons.action.import.black}
-        >
-          Update
         </StyledButton>
       </div>
     </div>
