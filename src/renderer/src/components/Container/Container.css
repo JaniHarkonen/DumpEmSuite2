@@ -1,4 +1,4 @@
 .container-content {
-  min-width: max-content;
+  min-width: min-content;
   margin-left: var(--tiny-portion);
 }

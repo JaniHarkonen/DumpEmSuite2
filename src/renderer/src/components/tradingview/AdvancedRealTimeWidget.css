@@ -1,0 +1,12 @@
+.advanced-real-time-widget-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.advanced-real-time-widget-fullscreen {
+  height: 100%;
+  
+  aspect-ratio: 1 / 1;
+
+  cursor: pointer;
+}

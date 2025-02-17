@@ -10,10 +10,12 @@ export default function MarkdownChart(props: AdvancedRealTimeWidgetProps): React
 
   return (
     <div className="markdown-chart">
-      <AdvancedRealTimeWidget
-        exchange={pExchange}
-        ticker={pTicker}
-      />
+      <div className="markdown-chart-container">
+        <AdvancedRealTimeWidget
+          exchange={pExchange}
+          ticker={pTicker}
+        />
+      </div>
     </div>
   );
 }
