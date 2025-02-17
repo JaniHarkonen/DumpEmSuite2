@@ -114,7 +114,7 @@ export function buildWorkspaceBlueprint(
 
   const buildFundamentalFilterationStep = (): TabBlueprint => {
     return {
-      id: "view-fundamental-filtration",
+      id: "view-fundamental",
       workspace: workspaceID,
       caption: "Fundamental",
       contentTemplate: "view-fundamental",

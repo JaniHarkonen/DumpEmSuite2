@@ -6,7 +6,7 @@ import PageHeader from "../PageHeader/PageHeader";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import { Profile } from "src/shared/schemaConfig";
 import Container from "../Container/Container";
-
+import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 
 
 type Props = {
@@ -18,7 +18,7 @@ export default function CompanyProfile(props: Props): ReactNode {
   const {profile, company, onEditProfile} = useContext(ProfileContext);
 
   if( !company ) {
-    return <></>;
+    return <CompanyNotSelected />;
   }
 
   const sector: string = profile?.sector || "none";

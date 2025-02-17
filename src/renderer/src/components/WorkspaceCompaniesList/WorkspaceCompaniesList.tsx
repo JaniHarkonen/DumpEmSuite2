@@ -19,6 +19,7 @@ import Panel from "../Panel/Panel";
 import CompanyListStatisticsPanel from "../CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
+import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -81,6 +82,12 @@ export default function WorkspaceCompaniesList(): ReactNode {
     fetchAllCompanies,
     databaseAPI
   } = useWorkspaceCompanies();
+
+  const {
+    delistStocks
+  } = useFilterationStepStocks({
+    filterationStepID: "view-fundamental"
+  });
 
   const {formatDialogKey} = useWorkspaceDialogKeys();
   const {openModal} = useContext(ModalContext);
@@ -160,9 +167,14 @@ export default function WorkspaceCompaniesList(): ReactNode {
   };
 
   const handleCompanyRemove = () => {
+    const companies: CompanyWithCurrency[] = 
+      getSelectedIDs().map((id: SelectionID) => selectionSet[id].item.data);
     ifQuerySuccessful(databaseAPI.deleteCompanies({
-      companies: getSelectedIDs().map((id: SelectionID) => selectionSet[id].item.data)
-    }), fetchAllCompanies);
+      companies
+    }), () => {
+      fetchAllCompanies();
+      delistStocks(...companies.map((company: CompanyWithCurrency) => company.company_id.toString()));
+    });
   };
 
   const handleCompanySelection = (

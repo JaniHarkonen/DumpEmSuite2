@@ -22,12 +22,12 @@ export type Returns = {
 
 type Props = {
   filterationStepID: string;
-  defaultTagID: number;
+  defaultTagID?: number;
 };
 
 export default function useFilterationStepStocks(props: Props): Returns {
   const pFilterationStepID: string = props.filterationStepID;
-  const pDefaultTagID: number = props.defaultTagID;
+  const pDefaultTagID: number = props.defaultTagID ?? 1;
 
   const [stocks, setStocks] = useState<FilterationStepStock[]>([]);
 
