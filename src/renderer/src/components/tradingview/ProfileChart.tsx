@@ -1,5 +1,5 @@
 import { ReactNode, useContext } from "react";
-import AdvancedRealTimeWidget from "./AdvancedRealTimeWidget";
+import AdvancedRealTimeWidget from "./AdvancedRealTimeWidget/AdvancedRealTimeWidget";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 

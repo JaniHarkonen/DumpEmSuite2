@@ -1,6 +1,6 @@
 import "./MarkdownChart.css";
 
-import AdvancedRealTimeWidget, { AdvancedRealTimeWidgetProps } from "@renderer/components/tradingview/AdvancedRealTimeWidget";
+import AdvancedRealTimeWidget, { AdvancedRealTimeWidgetProps } from "@renderer/components/tradingview/AdvancedRealTimeWidget/AdvancedRealTimeWidget";
 import { ReactNode } from "react";
 
 
