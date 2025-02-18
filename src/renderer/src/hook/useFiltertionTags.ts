@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tag } from "src/shared/schemaConfig";
 import useDatabase from "./useDatabase";
 import { BoundDatabaseAPI, DeleteResult, FetchResult, PostResult } from "src/shared/database.type";
 import { CompanyTagEditChanges } from "@renderer/components/TagPanel/TagPanel";
 import { AsString } from "src/shared/utils";
+import useViewEvents from "./useViewEvents";
 
 
 type Returns = {
@@ -19,16 +20,26 @@ export default function useFiltertionTags(): Returns {
   const databaseAPI = useDatabase().databaseAPI!;
   const [tags, setTags] = useState<Tag[]>([]);
 
+  const {subscribe, unsubscribe, emit} = useViewEvents();
+
   const fetchAllTags = () => {
-    databaseAPI.fetchAllTags().then((result: FetchResult<Tag>) => setTags(result.rows));
+    databaseAPI.fetchAllTags().then((result: FetchResult<Tag>) => setTags([...result.rows]));
   };
 
+  useEffect(() => {
+    const tagsChanged = () => {
+      fetchAllTags();
+    };
+    subscribe("tags-changed", tagsChanged);
+    fetchAllTags();
+    return () => unsubscribe("tags-changed", tagsChanged);
+  }, []);
 
   const addTag = (tag: AsString<Tag>) => {
     databaseAPI.postNewTag({ tag })
     .then((result: PostResult) => {
       if( result.wasSuccessful ) {
-        fetchAllTags();
+        emit(null, "tags-changed");
       }
     });
   };
@@ -38,7 +49,7 @@ export default function useFiltertionTags(): Returns {
       updatedTag: changes.updatedTag,
     }).then((result: PostResult) => {
       if( result.wasSuccessful ) {
-        fetchAllTags();
+        emit(null, "tags-changed");
       }
     });
   };
@@ -47,7 +58,7 @@ export default function useFiltertionTags(): Returns {
     databaseAPI.deleteTag({ tag })
     .then((result: DeleteResult) => {
       if( result.wasSuccessful ) {
-        fetchAllTags();
+        emit(null, "tags-changed");
       }
     });
   };

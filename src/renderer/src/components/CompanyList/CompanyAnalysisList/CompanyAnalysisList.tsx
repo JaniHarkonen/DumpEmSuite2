@@ -24,6 +24,7 @@ import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
 import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 import FiltrationVerdictSelection from "@renderer/components/FiltrationVerdictSelection/FiltrationVerdictSelection";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
+import useViewEvents from "@renderer/hook/useViewEvents";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock | null) => void;
@@ -85,6 +86,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   });
 
   const {company} = useContext(ProfileContext);
+  const {subscribe, unsubscribe} = useViewEvents();
 
   const [tagFilters, setTagFilters] = useState<Tag[]>(activeTab?.extra?.tagFilters || []);
   const [sweepingVerdict, setSweepingVerdict] = 
@@ -101,6 +103,15 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   useEffect(() => {
     fetchFilterationStepStocks();
     fetchAllTags();
+
+    const refresh = () => {
+      fetchFilterationStepStocks();
+      resetSelection();
+    };
+
+    subscribe("company-removed", refresh);
+    subscribe("tags-changed", refresh);
+    return () => unsubscribe("company-removed", refresh);
   }, []);
 
   const handleStockFocus = (dataCell: TableListDataCell<FilterationStepStock>) => {

@@ -15,6 +15,8 @@ import { HotkeyContext } from "./context/HotkeyContext";
 import { documentHotkeyApplier, hotkeyApplier } from "./hook/useHotkeys";
 import { SplitTreeForkBlueprint, SplitTreeNodeBlueprint, SplitTreeValueBlueprint } from "./model/splits";
 import { TabBlueprint } from "./model/tabs";
+import { ViewEventListenerWorkspaceMap } from "./hook/useViewEvents";
+import { ViewEventListenerContext } from "./context/ViewEventListenerContext";
 
 
 type ConfigFileInfo = {
@@ -39,6 +41,9 @@ export default function App(): ReactNode {
   const activeWorkspaceIDRef: MutableRefObject<string | null> =
     useRef(null);
 
+  const eventListenersRef: MutableRefObject<ViewEventListenerWorkspaceMap> = 
+    useRef<ViewEventListenerWorkspaceMap>({});
+
   useEffect(() => {
     const configPath: string = 
       RELATIVE_APP_PATHS.make.config(filesAPI.getWorkingDirectory());
@@ -50,6 +55,8 @@ export default function App(): ReactNode {
     .then((read: ReadResult<AppConfig>) => {
       appConfigRef.current = read.result;
 
+        // Determine the first open workspace by finding the left-most value node in the
+        // split tree of the scene configuration
       let left: SplitTreeNodeBlueprint | null = (
         appConfigRef.current.sceneConfigBlueprint.splitTree.root as SplitTreeNodeBlueprint ?? null
       );
@@ -94,40 +101,44 @@ export default function App(): ReactNode {
   }
 
   return (
-    <HotkeyContext.Provider value={{
-      hotkeyConfig,
-      setHotkeys
+    <ViewEventListenerContext.Provider value={{
+      eventListenersRef
     }}>
-      <ThemeContext.Provider value={{
-        activeTheme,
-        setTheme
+      <HotkeyContext.Provider value={{
+        hotkeyConfig,
+        setHotkeys
       }}>
-        <ModalContext.Provider value={{
-          openModal: setModalElement,
-          closeModal: () => setModalElement(undefined)
+        <ThemeContext.Provider value={{
+          activeTheme,
+          setTheme
         }}>
-          <GlobalContext.Provider value={{
-            config: {
-              appConfigRef,
-              activeWorkspaceIDRef,
-              configFileUpdater: configFileInfo.configFileUpdater
-            }
+          <ModalContext.Provider value={{
+            openModal: setModalElement,
+            closeModal: () => setModalElement(undefined)
           }}>
-            <div className="app-container">
-              {modalElement && (
-                <AppModal>
-                  {modalElement}
-                </AppModal>
-              )}
-              <SceneContext.Provider value={{
-                sceneConfig: appConfigRef.current.sceneConfigBlueprint
-              }}>
-                <WorkspacesView />
-              </SceneContext.Provider>
-            </div>
-          </GlobalContext.Provider>
-        </ModalContext.Provider>
-      </ThemeContext.Provider>
-    </HotkeyContext.Provider>
+            <GlobalContext.Provider value={{
+              config: {
+                appConfigRef,
+                activeWorkspaceIDRef,
+                configFileUpdater: configFileInfo.configFileUpdater
+              }
+            }}>
+              <div className="app-container">
+                {modalElement && (
+                  <AppModal>
+                    {modalElement}
+                  </AppModal>
+                )}
+                <SceneContext.Provider value={{
+                  sceneConfig: appConfigRef.current.sceneConfigBlueprint
+                }}>
+                  <WorkspacesView />
+                </SceneContext.Provider>
+              </div>
+            </GlobalContext.Provider>
+          </ModalContext.Provider>
+        </ThemeContext.Provider>
+      </HotkeyContext.Provider>
+    </ViewEventListenerContext.Provider>
   );
 }

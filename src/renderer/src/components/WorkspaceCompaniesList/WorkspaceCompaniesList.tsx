@@ -20,6 +20,7 @@ import CompanyListStatisticsPanel from "../CompanyListStatisticsPanel/CompanyLis
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
+import useViewEvents from "@renderer/hook/useViewEvents";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -97,7 +98,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
   const {showOpenFileDialog} = useFileSystemDialog({
     onOpenDialogResult: (result: OpenDialogResult) => {
       if( !result.cancelled ) {
-          filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
+        filesAPI.readJSON<ScrapedData>(result.path[0]).then((result: ReadResult<ScrapedData>) => {
 
             // Handle importing new companies
           if( result.wasSuccessful && dialogKeyImportCompanies ) {
@@ -113,6 +114,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
   useEffect(() => fetchAllCompanies(), []);
 
   const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+  const {emit} = useViewEvents();
 
   const activeTab: Tab = tabs[activeTabIndex];
 
@@ -174,6 +176,8 @@ export default function WorkspaceCompaniesList(): ReactNode {
     }), () => {
       fetchAllCompanies();
       delistStocks(...companies.map((company: CompanyWithCurrency) => company.company_id.toString()));
+      resetSelection();
+      emit(companies, "company-removed");
     });
   };
 

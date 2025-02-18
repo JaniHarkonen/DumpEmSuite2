@@ -2,7 +2,9 @@ import { BoundDatabaseAPI, FetchResult, PostResult } from "src/shared/database.t
 import useDatabase from "./useDatabase";
 import { Company, Profile } from "src/shared/schemaConfig";
 import { ProfileContextType, ProfileEditChanges } from "@renderer/context/ProfileContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useViewEvents from "./useViewEvents";
+import { CompanyWithCurrency } from "./useWorkspaceCompanies";
 
 
 type Returns = {
@@ -13,10 +15,30 @@ type Returns = {
 };
 
 export default function useProfileSelection(): Returns {
+  const {subscribe, unsubscribe} = useViewEvents();
   const [profileSelection, setProfileSelection] = useState<ProfileContextType>({
     profile: null,
     company: null
   });
+
+  useEffect(() => {
+    const companyRemoved = (result: CompanyWithCurrency[]) => {
+      for( let company of result ) {
+        if( company.company_id === profileSelection.company?.company_id ) {
+          setProfileSelection({
+            profile: null,
+            company: null
+          });
+
+          break;
+        }
+      }
+    };
+
+    subscribe("company-removed", companyRemoved);
+    return () => unsubscribe("company-removed", companyRemoved);
+  }, [profileSelection]);
+
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
   const fetchCompanyProfile = (company: Company) => {
