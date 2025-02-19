@@ -18,11 +18,13 @@ type OnSaveNoteChanges = (value: string) => void;
 type Props = {
   initialValue?: string;
   onSaveChange?: OnSaveNoteChanges;
+  allowEdit?: boolean;
 };
 
 export default function MarkdownEditor(props: Props) {
   const pInitialValue: string = props.initialValue || "";
   const pOnSaveChanges: OnSaveNoteChanges = props.onSaveChange || function(){ };
+  const pAllowEdit: boolean = props.allowEdit ?? true;
 
   const [markdown, setMarkdown] = useState<string>("");
   const [wasEdited, setWasEdited] = useState<boolean>(false);
@@ -93,18 +95,18 @@ export default function MarkdownEditor(props: Props) {
           className="markdown-editor-renderer-container"
           style={{display: isEditing ? "none" : "grid"}}
         >
-          <div className="d-flex d-justify-end">
+          {pAllowEdit && (<div className="d-flex d-justify-end">
             <StyledButton
               icon={ASSETS.icons.action.edit.black}
               onClick={handleEditStart}
             >
               Edit
             </StyledButton>
-          </div>
+          </div>)}
           <div>
             {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
               <div {...theme("script-c", "markdown-editor-start-suggestion")}>
-                Click "Edit" to start taking notes.
+                {pAllowEdit && (<>Click "Edit" to start taking notes.</>)}
               </div>
             )}
           </div>
