@@ -8,6 +8,7 @@ import useTabKeys from "@renderer/hook/useTabKeys";
 import { fixMarkdown } from "@renderer/model/markdown/utils";
 import InputPanel from "@renderer/components/InputPanel/InputPanel";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
+import trimSpaces from "@renderer/utils/trimSpaces";
 
 
 type Props = {
@@ -100,7 +101,7 @@ export default function QuarterlyEarningsProjector(props: Props): ReactNode {
           type="text"
           value={componentState.quarters[quarterIndex] || ""}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            handleComponentChange(quarterIndex, e.target.value);
+            handleComponentChange(quarterIndex, trimSpaces(e.target.value));
           }}
         />
         <span className="font-size-subscript">

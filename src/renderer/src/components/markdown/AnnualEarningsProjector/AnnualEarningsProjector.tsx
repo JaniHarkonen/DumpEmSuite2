@@ -11,6 +11,7 @@ import approximateCompoundRate from "@renderer/utils/approximateCompoundRate";
 import roundDecimals from "@renderer/utils/roundDecimals";
 import InputPanel from "@renderer/components/InputPanel/InputPanel";
 import { decimalFormatter } from "@renderer/utils/formatter";
+import trimSpaces from "@renderer/utils/trimSpaces";
 
 
 type StartingConditions = {
@@ -134,12 +135,16 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
           <InputPanel 
             label="Market cap"
             value={startConditions.marketCap}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, "marketCap")}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              handleChange(trimSpaces(e.target.value), "marketCap");
+            }}
           />
           <InputPanel
             label="Cash flow start"
             value={startConditions.cashflow}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, "cashflow")}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              handleChange(trimSpaces(e.target.value), "cashflow");
+            }}
           />
           <InputPanel
             label="Annual earnings growth rate"

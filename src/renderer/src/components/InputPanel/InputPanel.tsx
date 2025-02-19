@@ -7,6 +7,7 @@ type Props = {
   label: string;
   enableMaxWidth?: boolean;
   copyAllOnFocus?: boolean;
+  disallowedCharacters?: string[];
 } & HTMLProps<HTMLInputElement>;
 
 export default function InputPanel(props: Props): ReactNode {
