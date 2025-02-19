@@ -56,6 +56,11 @@
         "N"
       ]
     },
+    "save": {
+      "key": [
+        "CONTROL S"
+      ]
+    },
     "module-companies": {
       "key": [
         "ALT Q"
@@ -395,7 +400,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 26.672038678485094
+                                                            "value": 47.383720930232556
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -933,7 +938,7 @@
                                                                     "order": 0
                                                                   }
                                                                 ],
-                                                                "activeTabIndex": 1
+                                                                "activeTabIndex": 0
                                                               }
                                                             }
                                                           }
@@ -954,7 +959,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 1
+                              "activeTabIndex": 2
                             }
                           }
                         }

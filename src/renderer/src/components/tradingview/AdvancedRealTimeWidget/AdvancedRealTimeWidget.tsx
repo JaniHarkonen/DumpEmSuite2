@@ -9,6 +9,7 @@ import useTradingViewWidgets, { TradingViewWidgetContext } from "@renderer/hook/
 import MACD from "./study/MACD";
 import RSI from "./study/RSI";
 import MAExponential from "./study/MAExponential";
+import useDocumentHotkeys from "@renderer/hook/useDocumentHotkeys";
 
 
 type Props = {
@@ -34,15 +35,15 @@ function AdvancedRealTimeWidget(props: Props) {
   const pAllowFullscreen: boolean = props.allowFullscreen ?? true;
   const pContainerID: string | undefined = props.containerID;
 
-  const {activeTheme} = useTheme();
+  const {activeTheme, theme} = useTheme();
   const {formatKey} = useTabKeys();
-  const {theme} = useTheme();
   const {createWidget} = useTradingViewWidgets();
 
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
   const containerID: string = (
-    pContainerID || formatKey("trading-view-advanced-real-time-widget-" + pExchange + "_" + pTicker)
+    pContainerID || 
+    formatKey("trading-view-advanced-real-time-widget-" + pExchange + "_" + pTicker)
   );
 
   useEffect(() => {
@@ -65,6 +66,10 @@ function AdvancedRealTimeWidget(props: Props) {
       });
     });
   }, [pExchange, pTicker, activeTheme]);
+
+  useDocumentHotkeys({ actionMap: {
+    "blur": () => setFullscreen(false),
+  }});
   
   return (
     <div

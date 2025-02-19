@@ -1,5 +1,6 @@
 import "./AnnualEarningsProjector.css";
 
+
 import { ChangeEvent, ReactNode, useContext, useEffect, useState } from "react";
 import { ASTNode } from "@renderer/model/markdown/parser";
 import useTabKeys from "@renderer/hook/useTabKeys";
@@ -50,8 +51,8 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
 
   const {formatKey} = useTabKeys();
 
-  const years: number = parseInt("" + (pYearsNode?.children[0].value));
-  const startYear: number = parseInt("" + (pStartYearNode?.children[0].value));
+  const years: number = parseInt("" + (pYearsNode?.children[0]?.value));
+  const startYear: number = parseInt("" + (pStartYearNode?.children[0]?.value));
   const compoundRate: number = approximateCompoundRate(
     parseFloat(startConditions.cashflow), parseFloat(startConditions.marketCap), years, 0.0005
   );

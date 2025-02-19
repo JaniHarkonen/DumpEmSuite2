@@ -78,6 +78,7 @@ export default function HotkeysModal(): ReactNode {
         {renderHotkey("Navigate right", "navigate-right")}
         {renderHotkey("Confirm dialog", "confirm")}
         {renderHotkey("Deny dialog", "deny")}
+        {renderHotkey("Save", "save")}
 
         <h3>Companies-module</h3>
         {renderHotkey("Companies", "module-companies")}
