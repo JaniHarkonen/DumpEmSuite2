@@ -1,10 +1,18 @@
+.advanced-real-time-widget {
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  width: 100%;
+  height: 100%;
+}
+
 .advanced-real-time-widget-bottom {
   display: grid;
   grid-template-columns: 1fr auto;
 }
 
 .advanced-real-time-widget-fullscreen {
-  height: 100%;
+  height: calc(100% - var(--small-length));
   
   aspect-ratio: 1 / 1;
 

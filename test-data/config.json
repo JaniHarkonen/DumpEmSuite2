@@ -247,7 +247,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 57.03125
+                                                            "value": 52.828802351212346
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -265,7 +265,13 @@
                                                                     "caption": "Companies",
                                                                     "contentTemplate": "view-company-list",
                                                                     "tags": [],
-                                                                    "order": 0
+                                                                    "order": 0,
+                                                                    "extra": {
+                                                                      "page-container": {
+                                                                        "scrollX": 0,
+                                                                        "scrollY": 200
+                                                                      }
+                                                                    }
                                                                   }
                                                                 ],
                                                                 "activeTabIndex": 0
@@ -276,7 +282,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 50
+                                                              "value": 55.62913907284768
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -317,7 +323,13 @@
                                                                       "caption": "Profile",
                                                                       "contentTemplate": "view-company-profile",
                                                                       "tags": [],
-                                                                      "order": 0
+                                                                      "order": 0,
+                                                                      "extra": {
+                                                                        "page-container": {
+                                                                          "scrollX": 0,
+                                                                          "scrollY": 0
+                                                                        }
+                                                                      }
                                                                     }
                                                                   ],
                                                                   "activeTabIndex": 0
@@ -383,7 +395,7 @@
                                                           "isFork": true,
                                                           "divider": {
                                                             "direction": "horizontal",
-                                                            "value": 55.73874445149018
+                                                            "value": 26.672038678485094
                                                           },
                                                           "left": {
                                                             "isFork": true,
@@ -422,7 +434,7 @@
                                                             "isFork": true,
                                                             "divider": {
                                                               "direction": "vertical",
-                                                              "value": 49.77924944812362
+                                                              "value": 38.63134657836645
                                                             },
                                                             "left": {
                                                               "isFork": true,
@@ -835,7 +847,7 @@
                                                   "order": 1
                                                 }
                                               ],
-                                              "activeTabIndex": 3
+                                              "activeTabIndex": 0
                                             }
                                           }
                                         }
@@ -942,7 +954,7 @@
                                   "order": 0
                                 }
                               ],
-                              "activeTabIndex": 0
+                              "activeTabIndex": 1
                             }
                           }
                         }

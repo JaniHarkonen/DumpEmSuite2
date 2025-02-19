@@ -4,9 +4,14 @@ import AdvancedRealTimeWidget, { AdvancedRealTimeWidgetProps } from "@renderer/c
 import { ReactNode } from "react";
 
 
-export default function MarkdownChart(props: AdvancedRealTimeWidgetProps): ReactNode {
+type Props = {
+  id: string;
+} & AdvancedRealTimeWidgetProps;
+
+export default function MarkdownChart(props: Props): ReactNode {
   const pExchange: string = props.exchange;
   const pTicker: string = props.ticker;
+  const pID: string = props.id;
 
   return (
     <div className="markdown-chart">
@@ -14,6 +19,8 @@ export default function MarkdownChart(props: AdvancedRealTimeWidgetProps): React
         <AdvancedRealTimeWidget
           exchange={pExchange}
           ticker={pTicker}
+          containerID={pID}
+          allowFullscreen={false}
         />
       </div>
     </div>

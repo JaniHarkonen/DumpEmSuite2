@@ -86,9 +86,11 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
           return [];
         }
 
+        key = `${key}-${split[0]}-${split[1]}`;
         return (
           <MarkdownChart
-            key={`${key}-${astNode.value}`}
+            key={key}
+            id={key}
             exchange={split[0]}
             ticker={split[1]}
           />

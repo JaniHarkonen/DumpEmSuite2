@@ -13,8 +13,8 @@ export default function ProfileChart(): ReactNode {
 
   return (
     <AdvancedRealTimeWidget
-      ticker={company.stock_ticker}
       exchange={company.exchange}
+      ticker={company.stock_ticker}
     />
   );
 }
