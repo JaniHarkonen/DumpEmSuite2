@@ -3,7 +3,7 @@ export const CURRENT_APP_VERSION: string = "v2.0.0";
 const materialsPath: string = "\\materials";
 const sectorsPath: string = materialsPath + "\\sector";
 const fundamentalsPath: string = materialsPath + "\\fundamental";
-const configPath: string = "\\test-data\\config.json";
+const configPath: string = "\\dump-em-config.json";
 
 export const RELATIVE_APP_PATHS = {
   configPath,

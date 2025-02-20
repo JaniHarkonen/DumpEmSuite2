@@ -47,7 +47,7 @@ app.whenReady().then(() => {
 
     // Debug console log
   const mainWindow: BrowserWindow = createWindow();
-  ipcMain.on("debug", (event, ...args) => console.log(args));
+  ipcMain.on("debug", (_event, ...args) => console.log(args));
   registerDialogHandles(ipcMain, mainWindow);
 
   app.on("activate", function () {

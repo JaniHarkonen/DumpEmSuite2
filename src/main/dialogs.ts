@@ -4,7 +4,7 @@ import { BrowserWindow, dialog } from "electron";
 export function registerDialogHandles(main: Electron.IpcMain, mainWindow: BrowserWindow) {
 
     // Show a dialog window for opening files or directories
-  main.on("show-open-dialog", (event, ...args) => {
+  main.on("show-open-dialog", (_event, ...args) => {
     const {key, options} = args[0];
     dialog.showOpenDialog(options).then((result: Electron.OpenDialogReturnValue) => {
       mainWindow.webContents.send("open-dialog-result", {
@@ -21,7 +21,7 @@ export function registerDialogHandles(main: Electron.IpcMain, mainWindow: Browse
   });
 
     // Show a dialog window for saving files
-  main.on("show-save-dialog", (event, ...args) => {
+  main.on("show-save-dialog", (_event, ...args) => {
     const {key, options} = args[0];
     dialog.showSaveDialog(options).then((result: Electron.SaveDialogReturnValue) => {
       mainWindow.webContents.send("save-dialog-result", {

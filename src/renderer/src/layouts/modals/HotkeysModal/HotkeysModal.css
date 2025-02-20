@@ -1,3 +1,9 @@
+.hotkeys-modal {
+  height: 50%;
+  min-width: var(--card-size);
+  min-height: var(--card-size);
+}
+
 .hotkeys-modal-special-key-row {
   display: grid;
   grid-template-columns: auto auto auto;

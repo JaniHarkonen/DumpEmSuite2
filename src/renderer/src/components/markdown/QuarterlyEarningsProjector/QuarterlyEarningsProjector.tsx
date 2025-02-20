@@ -122,7 +122,7 @@ export default function QuarterlyEarningsProjector(props: Props): ReactNode {
   return (
     <div className="w-100">
       <div className="quarterly-earnigns-projector-container">
-        {pDataNode.map((data: ASTNode, index: number) => {
+        {pDataNode.map((_data: ASTNode, index: number) => {
           return renderQuarterInput("Q1" + (index > 0 ? "–Q" + (index + 1) : ""), index);
         })}
       </div>

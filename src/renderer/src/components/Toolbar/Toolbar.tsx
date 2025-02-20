@@ -12,12 +12,12 @@ import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
 import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/database.type";
 import { Metadata } from "src/shared/schemaConfig";
-import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 import useTheme from "@renderer/hook/useTheme";
 import { ModalContext } from "@renderer/context/ModalContext";
 import ThemeModal from "@renderer/layouts/modals/ThemeModal/ThemeModal";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import HotkeysModal from "@renderer/layouts/modals/HotkeysModal/HotkeysModal";
+import { CURRENT_APP_VERSION, RELATIVE_APP_PATHS } from "../../../../shared/appConfig";
 
 
 type DropMenuOption = "workspace" | "theme" | "shortcuts";
@@ -102,6 +102,7 @@ export default function Toolbar(props: Props): ReactNode {
     const databaseName: string = path.substring(path.lastIndexOf("\\") + 1, path.length);
     const valueNode: SplitTreeValue = 
       (splitTreeRef.current.root.left as SplitTreeFork).left as SplitTreeValue;
+    const databasePath: string = RELATIVE_APP_PATHS.make.database(path);
 
     switch( result.key ) {
       case "new-workspace": {
@@ -109,7 +110,7 @@ export default function Toolbar(props: Props): ReactNode {
         databaseAPI.createDatabase({
           databaseID: id,
           databaseName,
-          databasePath: RELATIVE_APP_PATHS.make.database(path)
+          databasePath: databasePath
         }).then((result: QueryResult) => {
           if( !result.wasSuccessful ) {
             return;
@@ -125,7 +126,7 @@ export default function Toolbar(props: Props): ReactNode {
             sceneConfigBlueprint,
             order: 0,
             extra: {
-              path: path
+              path
             }
           };
 
@@ -135,7 +136,7 @@ export default function Toolbar(props: Props): ReactNode {
       case "open-workspace": {
         databaseAPI.fetchWorkspaceStructure({
           databaseName,
-          databasePath: RELATIVE_APP_PATHS.make.database(path)
+          databasePath: databasePath
         }).then((result: FetchResult<WorkspaceStructure>) => {
           if( !result.wasSuccessful ) {
             return;
@@ -156,7 +157,7 @@ export default function Toolbar(props: Props): ReactNode {
             sceneConfigBlueprint,
             order: 0,
             extra: {
-              path: path
+              path
             }
           };
 
@@ -253,24 +254,31 @@ export default function Toolbar(props: Props): ReactNode {
   };
 
   return (
-    <div
-      {...theme("shadow-bgc", "outline-bdc-bottom", "toolbar-controls-container")}
-      onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.stopPropagation()}
-    >
-      {MENU_OPTIONS.map((option: MenuOption) => {
-        return (
-          <ToolbarDropdown
-            key={formatKey("toolbar-option-" + option.key)}
-            option={option}
-            caption={option.label}
-            options={option.menu}
-            isOpen={openDropMenu === option.key}
-            onOptionSelect={handleMenuOptionSelection}
-            onOpen={() => {handleMainOptionSelection(option.key)}}
-            onHover={() => handleMainOptionHover(option.key)}
-          />
-        );
-      })}
+    <div {...theme("shadow-bgc", "outline-bdc-bottom", "toolbar-container")}>
+      <div
+        className="toolbar-controls-container"
+        onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => e.stopPropagation()}
+      >
+        {MENU_OPTIONS.map((option: MenuOption) => {
+          return (
+            <ToolbarDropdown
+              key={formatKey("toolbar-option-" + option.key)}
+              option={option}
+              caption={option.label}
+              options={option.menu}
+              isOpen={openDropMenu === option.key}
+              onOptionSelect={handleMenuOptionSelection}
+              onOpen={() => {handleMainOptionSelection(option.key)}}
+              onHover={() => handleMainOptionHover(option.key)}
+            />
+          );
+        })}
+      </div>
+      <div />
+      <div {...theme("glyph-c", "toolbar-app-logo")}>
+        <span className="toolbar-app-logo-app-name">DumpEm Suite</span>
+        <span className="toolbar-app-logo-app-version">{CURRENT_APP_VERSION}</span>
+      </div>
     </div>
   );
 }

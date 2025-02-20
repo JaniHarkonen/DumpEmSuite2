@@ -23,5 +23,6 @@
     /* Text */
   --line-height-standard: 1.6;
   --font-size-backdrop: 36px;
+  --font-size-major: 24px;
   --font-size-subscript: 14px;
 }

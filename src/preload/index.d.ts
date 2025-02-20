@@ -4,7 +4,7 @@ import { APIs } from "./index";
 
 declare global {
   interface Window {
-    electron: ElectronAPI
-    api: APIs
+    electron: ElectronAPI;
+    api: APIs;
   }
 }
