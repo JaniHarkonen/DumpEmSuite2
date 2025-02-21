@@ -308,6 +308,7 @@ export class SplitTreeManager {
     const resolvedTargetNode: SplitTreeValue = targetNode;
     const targetTabs: Tab[] = resolvedTargetNode.value.tabs;
     const tabIndex: number = indexOfTab(targetTabs, remove);
+    
     if( tabIndex < 0 ) {
       return {
         wasSuccessful: false,
@@ -331,8 +332,7 @@ export class SplitTreeManager {
         (targetParent.left === targetFork) ? "left" : "right";
 
       if( 
-        trackedFork && 
-        (targetParent.left === trackedFork || targetParent.right === trackedFork) 
+        trackedFork && (targetParent.left === trackedFork || targetParent.right === trackedFork) 
       ) {
         trackedFork = targetParent;
       }

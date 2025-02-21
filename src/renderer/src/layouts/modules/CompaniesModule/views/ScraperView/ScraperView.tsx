@@ -6,7 +6,6 @@ import { ReactNode, useContext, useEffect, useState } from "react";
 import { Scraper } from "src/shared/schemaConfig";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
 import { FetchResult, PostResult } from "src/shared/database.type";
-import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
 import PathBrowser from "@renderer/components/PathBrowser/PathBrowser";
 import { TabsContext } from "@renderer/context/TabsContext";
 import ScraperLog from "@renderer/components/ScraperLog/ScraperLog";
@@ -18,6 +17,7 @@ import { FilePathParse, ReadResult } from "src/shared/files.type";
 import ScraperMetadataDisplay from "@renderer/components/ScraperMetadataDisplay/ScraperMetadataDisplay";
 import Container from "@renderer/components/Container/Container";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 export type ScraperMetadata = {
@@ -35,8 +35,8 @@ const {scraperAPI, filesAPI} = window.api;
 
 export default function ScraperView(): ReactNode {
   const {databaseAPI} = useDatabase();
-  const {workspaceConfig} = useContext(WorkspaceContext);
   const {tabs, activeTabIndex, setExtraInfo} = useContext(TabsContext);
+  const {formatKey} = useTabKeys();
 
   const scraperLogProps: ScraperLogContextType = useScraperLog();
 
@@ -82,9 +82,12 @@ export default function ScraperView(): ReactNode {
     });
   }, []);
 
-  const dialogKeySelectScraper: string = workspaceConfig.id + "-select-scraper";
-  const dialogKeySelectTarget: string = workspaceConfig.id + "-select-target";
-  const dialogKeySelectOutput: string = workspaceConfig.id + "-select-output";
+  // const dialogKeySelectScraper: string = workspaceConfig.id + "-select-scraper";
+  // const dialogKeySelectTarget: string = workspaceConfig.id + "-select-target";
+  // const dialogKeySelectOutput: string = workspaceConfig.id + "-select-output";
+  const dialogKeySelectScraper: string = formatKey("select-scraper");
+  const dialogKeySelectTarget: string = formatKey("select-target");
+  const dialogKeySelectOutput: string = formatKey("select-output");
 
   const warningFilePathInvalid: string = "Warning: File path is invalid!";
 

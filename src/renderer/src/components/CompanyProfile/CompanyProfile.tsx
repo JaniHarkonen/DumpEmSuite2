@@ -1,30 +1,30 @@
 import { ReactNode, useContext } from "react";
 import EditableText from "../editable/EditableText";
-import EditableTextArea from "../editable/EditableTextArea";
 import PageContainer from "../PageContainer/PageContainer";
 import PageHeader from "../PageHeader/PageHeader";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import { Profile } from "src/shared/schemaConfig";
 import Container from "../Container/Container";
-
+import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
+import MarkdownEditor from "../MarkdownEditor/MarkdownEditor";
 
 
 type Props = {
   allowEdit?: boolean;
-}
+};
 
 export default function CompanyProfile(props: Props): ReactNode {
   const pAllowEdit: boolean = props.allowEdit ?? false;
   const {profile, company, onEditProfile} = useContext(ProfileContext);
 
   if( !company ) {
-    return <></>;
+    return <CompanyNotSelected />;
   }
 
   const sector: string = profile?.sector || "none";
   const investorsURL: string = profile?.investors_url || "none";
   const presence: string = profile?.presence || "none";
-  const description: string = profile?.profile_description || "none";
+  const description: string = profile?.profile_description || "";
 
   const handleEditProfile = (attribute: keyof Profile, value: string) => {
     onEditProfile && onEditProfile({
@@ -64,13 +64,11 @@ export default function CompanyProfile(props: Props): ReactNode {
         </EditableText>
         <h3>Description</h3>
         <div className="aspect-ratio-16-9 w-100">
-          <EditableTextArea
-            value={description}
-            onFinalize={(value: string) => handleEditProfile("profile_description", value)}
-            editDisabled={!pAllowEdit}
-          >
-            {description}
-          </EditableTextArea>
+          <MarkdownEditor
+            initialValue={description}
+            onSaveChange={(value: string) => handleEditProfile("profile_description", value)}
+            allowEdit={pAllowEdit}
+          />
         </div>
       </Container>
     </PageContainer>

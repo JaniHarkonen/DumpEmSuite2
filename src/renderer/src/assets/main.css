@@ -75,6 +75,10 @@ textarea {
   aspect-ratio: 16 / 9;
 }
 
+.aspect-ratio-1-1 {
+  aspect-ratio: 1 / 1;
+}
+
 .size-tiny-icon {
   width: var(--tiny-size);
   height: var(--tiny-size);
@@ -175,7 +179,7 @@ textarea {
 }
 
 .d-align-items-end {
-  align-items: center;
+  align-items: end;
 }
 
 .d-grid {
@@ -291,28 +295,12 @@ textarea {
 
 /**************** INDENTATIONS ****************/
 
-.indent-dot-size {
-  margin-left: var(--dot-size);
+.indent-tiny-portion {
+  margin-left: var(--tiny-portion);
 }
 
-.indent-extra-tiny-size {
-  margin-left: var(--extra-tiny-size);
-}
-
-.indent-tiny-size {
-  margin-left: var(--tiny-size);
-}
-
-.indent-small-size {
-  margin-left: var(--small-size);
-}
-
-.indent-medium-size {
-  margin-left: var(--medium-size);
-}
-
-.indent-big-size {
-  margin-left: var(--big-size);
+.indent-small-portion {
+  margin-left: var(--small-portion);
 }
 
 

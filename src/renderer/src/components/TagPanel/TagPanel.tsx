@@ -1,6 +1,6 @@
 import "./TagPanel.css";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import CompanyTag, { OnTagSelect } from "./CompanyTag/CompanyTag";
 import { Tag } from "src/shared/schemaConfig";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
@@ -34,13 +34,10 @@ export default function TagPanel(props: Props): ReactNode {
 
   const {
     tags,
-    fetchAllTags,
     addTag,
     updateTag,
     removeTag
   } = useFiltertionTags();
-
-  useEffect(() => fetchAllTags(), []);
 
   const handleNewTag = () => {
     addTag({
@@ -55,7 +52,7 @@ export default function TagPanel(props: Props): ReactNode {
       {tags.map((tag: Tag, index: number) => {
         return (
           <div
-            key={formatKey("tag-panel-tag-" + tag.tag_id)}
+            key={formatKey("tag-panel-tag-" + tag.tag_id + "-" + tag.tag_hex)}
             className="mr-strong-length"
           >
             <CompanyTag

@@ -7,13 +7,17 @@ import { CONFIG_SAVE_DEBOUNCE_DELAY, RELATIVE_APP_PATHS } from "../../shared/app
 import { SceneContext } from "./context/SceneContext";
 import AppModal from "./components/AppModal/AppModal";
 import { ModalContext } from "./context/ModalContext";
-import { ReadResult } from "src/shared/files.type";
+import { ReadResult, WriteResult } from "src/shared/files.type";
 import WorkspacesView from "./layouts/Workspace/WorkspacesView/WorkspacesView";
 import { AppTheme, ThemeContext } from "./context/ThemeContext";
 import { HotkeyConfig } from "./model/hotkey";
 import { HotkeyContext } from "./context/HotkeyContext";
 import { documentHotkeyApplier, hotkeyApplier } from "./hook/useHotkeys";
 import { SplitTreeForkBlueprint, SplitTreeNodeBlueprint, SplitTreeValueBlueprint } from "./model/splits";
+import { TabBlueprint } from "./model/tabs";
+import { ViewEventListenerWorkspaceMap } from "./hook/useViewEvents";
+import { ViewEventListenerContext } from "./context/ViewEventListenerContext";
+import buildAppConfig from "./json/buildAppConfig";
 
 
 type ConfigFileInfo = {
@@ -38,43 +42,63 @@ export default function App(): ReactNode {
   const activeWorkspaceIDRef: MutableRefObject<string | null> =
     useRef(null);
 
+  const eventListenersRef: MutableRefObject<ViewEventListenerWorkspaceMap> = 
+    useRef<ViewEventListenerWorkspaceMap>({});
+
   useEffect(() => {
     const configPath: string = 
-      RELATIVE_APP_PATHS.make.config(filesAPI.getWorkingDirectory());
+      RELATIVE_APP_PATHS.make.config(filesAPI.getWorkingDirectory())
     const updater: ConfigFileUpdater = 
       createConfigFileUpdater(configPath, CONFIG_SAVE_DEBOUNCE_DELAY);
 
-      // Read app configuration file
-    filesAPI.readJSON<AppConfig>(configPath)
-    .then((read: ReadResult<AppConfig>) => {
-      appConfigRef.current = read.result;
+    const readAppConfig = () => {
+      filesAPI.readJSON<AppConfig>(configPath)
+      .then((read: ReadResult<AppConfig>) => {
+        appConfigRef.current = read.result;
 
-      let left: SplitTreeNodeBlueprint | null = (
-        appConfigRef.current.sceneConfigBlueprint.splitTree.root as SplitTreeNodeBlueprint ?? null
-      );
+          // Determine the first open workspace by finding the left-most value node in the
+          // split tree of the scene configuration
+        let left: SplitTreeNodeBlueprint | null = (
+          appConfigRef.current.sceneConfigBlueprint.splitTree.root as SplitTreeNodeBlueprint ?? null
+        );
 
-      while( left ) {
-        if( (left as SplitTreeValueBlueprint).value ) {
-          break;
-        } else {
-          left = (left as SplitTreeForkBlueprint).left;
+        while( left ) {
+          if( (left as SplitTreeValueBlueprint).value ) {
+            break;
+          } else {
+            left = (left as SplitTreeForkBlueprint).left;
+          }
         }
+
+        const leftValue: SplitTreeValueBlueprint | null = left as (SplitTreeValueBlueprint | null);
+        const tab: TabBlueprint | undefined = leftValue?.value.tabs[leftValue?.value.activeTabIndex ?? -1];
+        activeWorkspaceIDRef.current = tab?.id ?? null;
+
+        setConfigFileInfo({
+          appConfig: read.result,
+          configFileUpdater: updater
+        });
+
+        setTheme(read.result.activeTheme);
+        setHotkeys(read.result.hotkeyConfig);
+      })
+      .catch((err: Error) => console.log(err));
+    };
+
+      // Read app configuration file
+    filesAPI.fileExists({ path: configPath })
+    .then((exists: boolean) => {
+      if( !exists ) {
+        filesAPI.writeJSON<AppConfig>(configPath, buildAppConfig())
+        .then((writeResult: WriteResult) => {
+          if( writeResult.wasSuccessful ) {
+            readAppConfig();
+          }
+        });
+      } else {
+        readAppConfig();
       }
-      // const valueNode: SplitTreeValueBlueprint = rootLeft.left as SplitTreeValueBlueprint;
-      // activeWorkspaceIDRef.current = valueNode.value?.tabs[valueNode.value.activeTabIndex].id ?? valueNode.left.value?.tabs[valueNode.left.value.activeTabIndex].id ?? null;
-
-      const leftValue: SplitTreeValueBlueprint | null = left as (SplitTreeValueBlueprint | null);
-      activeWorkspaceIDRef.current = leftValue?.value.tabs[leftValue.value.activeTabIndex].id ?? null;
-
-      setConfigFileInfo({
-        appConfig: read.result,
-        configFileUpdater: updater
-      });
-
-      setTheme(read.result.activeTheme);
-      setHotkeys(read.result.hotkeyConfig);
-    })
-    .catch((err: Error) => console.log(err));
+    });
   }, []);
 
   useEffect(() => {
@@ -94,40 +118,44 @@ export default function App(): ReactNode {
   }
 
   return (
-    <HotkeyContext.Provider value={{
-      hotkeyConfig,
-      setHotkeys
+    <ViewEventListenerContext.Provider value={{
+      eventListenersRef
     }}>
-      <ThemeContext.Provider value={{
-        activeTheme,
-        setTheme
+      <HotkeyContext.Provider value={{
+        hotkeyConfig,
+        setHotkeys
       }}>
-        <ModalContext.Provider value={{
-          openModal: setModalElement,
-          closeModal: () => setModalElement(undefined)
+        <ThemeContext.Provider value={{
+          activeTheme,
+          setTheme
         }}>
-          <GlobalContext.Provider value={{
-            config: {
-              appConfigRef,
-              activeWorkspaceIDRef,
-              configFileUpdater: configFileInfo.configFileUpdater
-            }
+          <ModalContext.Provider value={{
+            openModal: setModalElement,
+            closeModal: () => setModalElement(undefined)
           }}>
-            <div className="app-container">
-              {modalElement && (
-                <AppModal>
-                  {modalElement}
-                </AppModal>
-              )}
-              <SceneContext.Provider value={{
-                sceneConfig: appConfigRef.current.sceneConfigBlueprint
-              }}>
-                <WorkspacesView />
-              </SceneContext.Provider>
-            </div>
-          </GlobalContext.Provider>
-        </ModalContext.Provider>
-      </ThemeContext.Provider>
-    </HotkeyContext.Provider>
+            <GlobalContext.Provider value={{
+              config: {
+                appConfigRef,
+                activeWorkspaceIDRef,
+                configFileUpdater: configFileInfo.configFileUpdater
+              }
+            }}>
+              <div className="app-container">
+                {modalElement && (
+                  <AppModal>
+                    {modalElement}
+                  </AppModal>
+                )}
+                <SceneContext.Provider value={{
+                  sceneConfig: appConfigRef.current.sceneConfigBlueprint
+                }}>
+                  <WorkspacesView />
+                </SceneContext.Provider>
+              </div>
+            </GlobalContext.Provider>
+          </ModalContext.Provider>
+        </ThemeContext.Provider>
+      </HotkeyContext.Provider>
+    </ViewEventListenerContext.Provider>
   );
 }

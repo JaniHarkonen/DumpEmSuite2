@@ -60,7 +60,7 @@ export default function HotkeysModal(): ReactNode {
   return (
     <StandardModal
       title="Hotkeys"
-      className="h-50"
+      className="hotkeys-modal"
     >
       <div {...theme("script-c overflow-auto h-100")}>
       <fieldset className="d-flex d-direction-column gap-strong-length">
@@ -78,6 +78,7 @@ export default function HotkeysModal(): ReactNode {
         {renderHotkey("Navigate right", "navigate-right")}
         {renderHotkey("Confirm dialog", "confirm")}
         {renderHotkey("Deny dialog", "deny")}
+        {renderHotkey("Save", "save")}
 
         <h3>Companies-module</h3>
         {renderHotkey("Companies", "module-companies")}

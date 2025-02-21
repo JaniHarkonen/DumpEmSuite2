@@ -64,12 +64,12 @@ export const filesAPI: FilesAPI = {
     });
   },
   onOpenDialogResult: ({ callback }) => {
-    const eventCallback = (event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
+    const eventCallback = (_event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
     ipcRenderer.on("open-dialog-result", eventCallback);
     return () => ipcRenderer.removeListener("open-dialog-result", eventCallback);
   },
   onSaveDialogResult: ({ callback }) => {
-    const eventCallback = (event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
+    const eventCallback = (_event: Electron.IpcRendererEvent, ...args: any[]) => callback(args[0]);
     ipcRenderer.on("save-dialog-result", eventCallback);
     return () => ipcRenderer.removeListener("save-dialog-result", eventCallback);
   },

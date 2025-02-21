@@ -12,16 +12,16 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import { RELATIVE_APP_PATHS } from "../../../../../src/shared/appConfig";
 
 
-const {databaseAPI, filesAPI} = window.api;
+const {databaseAPI} = window.api;
 
 export default function Workspace(): ReactNode {
-  const [workspaceContext, setWorkspaceContext] = useState<WorkspaceContextType | null>(null);
+  const [workspaceContext, setWorkspaceContext] = useState<WorkspaceContextType | null | undefined>(undefined);
   
   const {sceneConfig, handleSplitTreeUpdate} = useSceneConfig();
   const {tabs, activeTabIndex} = useContext(TabsContext);
 
   const activeTab: Tab = tabs[activeTabIndex];
-  const workspacePath: string = filesAPI.getWorkingDirectory() + activeTab.extra.path; // getWorkingDirectory-PART IS ONLY TO BE USED IN DEV
+  const workspacePath: string = activeTab.extra.path;
 
   useEffect(() => {
     if( !activeTab.extra ) {
@@ -54,6 +54,8 @@ export default function Workspace(): ReactNode {
         // Otherwise, the context wont be set.
       if( result.error?.name === "already-open" ) {
         setContext();
+      } else {
+        setWorkspaceContext(null);
       }
     });
   }, []);
@@ -66,8 +68,15 @@ export default function Workspace(): ReactNode {
     }
   );
 
-  if( !workspaceContext ) {
+  if( workspaceContext === undefined ) {
     return <>Opening database connection...</>;
+  } else if( workspaceContext === null ) {
+    return (
+      <>
+        <p>Failed to open database! Close the database and try to re-open.</p>
+        <p>Path: {workspacePath}</p>
+      </>
+    );
   }
 
   return (

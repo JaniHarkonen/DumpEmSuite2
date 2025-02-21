@@ -1,6 +1,18 @@
 .markdown-chart {
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
+
+  container-name: markdown-chart-container;
+  container-type: inline-size;
+}
+
+.markdown-chart-container {
+  aspect-ratio: 16 / 9;
+}
+
+@container markdown-chart-container (width < 500px) {
+  .markdown-chart-container {
+    aspect-ratio: 1 / 1;
+  }
 }

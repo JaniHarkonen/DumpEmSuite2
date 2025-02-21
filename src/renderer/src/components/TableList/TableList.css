@@ -1,7 +1,9 @@
 .table-list-container {
   display: grid;
-
+  
   width: 100%;
+  min-width: min-content;
+
   line-height: var(--line-height-standard);
 
   user-select: text;

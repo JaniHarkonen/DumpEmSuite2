@@ -10,6 +10,7 @@ import useTabKeys from "@renderer/hook/useTabKeys";
 import { MarkdownContext } from "@renderer/context/MarkdownContext";
 import StyledButton from "../StyledButton/StyledButton";
 import useTheme from "@renderer/hook/useTheme";
+import useHotkeys from "@renderer/hook/useHotkeys";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -17,16 +18,19 @@ type OnSaveNoteChanges = (value: string) => void;
 type Props = {
   initialValue?: string;
   onSaveChange?: OnSaveNoteChanges;
+  allowEdit?: boolean;
 };
 
 export default function MarkdownEditor(props: Props) {
   const pInitialValue: string = props.initialValue || "";
   const pOnSaveChanges: OnSaveNoteChanges = props.onSaveChange || function(){ };
+  const pAllowEdit: boolean = props.allowEdit ?? true;
 
   const [markdown, setMarkdown] = useState<string>("");
   const [wasEdited, setWasEdited] = useState<boolean>(false);
 
   const {theme} = useTheme();
+  const {hotkey} = useHotkeys();
   
   const handleSave = (value: string) => {
     pOnSaveChanges(value);
@@ -45,23 +49,6 @@ export default function MarkdownEditor(props: Props) {
   const {formatKey} = useTabKeys();
 
   useEffect(() => setMarkdown(pInitialValue), [pInitialValue]);
-
-  const handleHotkeys = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    const target: HTMLTextAreaElement = e.currentTarget;
-
-    if( e.ctrlKey ) {
-      const secondaryKey: string = e.key.toLowerCase();
-
-      if( secondaryKey === "s" ) {
-          // Save without finalizing
-        e.preventDefault();
-        handleSave(target.value);
-      } else if( e.key === "Enter" ) {
-          // Finalize and save
-        handleFinalize(target.value);
-      }
-    }
-  };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setWasEdited(e.target.value !== markdown);
@@ -93,7 +80,13 @@ export default function MarkdownEditor(props: Props) {
               onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
               autoFocus={true}
               defaultValue={markdown}
-              onKeyDown={handleHotkeys}
+              {...hotkey({
+                "blur": (e: KeyboardEvent<HTMLTextAreaElement>) => e.currentTarget.blur(),
+                "save": (e: KeyboardEvent<HTMLTextAreaElement>) => {
+                  e.preventDefault();
+                  handleSave(e.currentTarget.value);
+                }
+              })}
               onChange={handleChange}
             />
           </div>
@@ -102,18 +95,18 @@ export default function MarkdownEditor(props: Props) {
           className="markdown-editor-renderer-container"
           style={{display: isEditing ? "none" : "grid"}}
         >
-          <div className="d-flex d-justify-end">
+          {pAllowEdit && (<div className="d-flex d-justify-end">
             <StyledButton
               icon={ASSETS.icons.action.edit.black}
               onClick={handleEditStart}
             >
               Edit
             </StyledButton>
-          </div>
+          </div>)}
           <div>
             {(markdown.trimStart().length > 0 ) ? renderMarkdown(markdown, formatKey("")) : (
               <div {...theme("script-c", "markdown-editor-start-suggestion")}>
-                Click "Edit" to start taking notes.
+                {pAllowEdit && (<>Click "Edit" to start taking notes.</>)}
               </div>
             )}
           </div>

@@ -24,9 +24,10 @@ import arrayToOccurrenceMap from "@renderer/utils/arrayToOccurrenceMap";
 import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisticsPanel/CompanyListStatisticsPanel";
 import FiltrationVerdictSelection from "@renderer/components/FiltrationVerdictSelection/FiltrationVerdictSelection";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
+import useViewEvents from "@renderer/hook/useViewEvents";
 
 
-type OnCompanyListingSelect = (company: FilterationStepStock) => void;
+type OnCompanyListingSelect = (company: FilterationStepStock | null) => void;
 
 type Props = {
   filterationStepID: string;
@@ -85,8 +86,9 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   });
 
   const {company} = useContext(ProfileContext);
+  const {subscribe, unsubscribe} = useViewEvents();
 
-  const [tagFilters, setTagFilters] = useState<Tag[]>([]);
+  const [tagFilters, setTagFilters] = useState<Tag[]>(activeTab?.extra?.tagFilters || []);
   const [sweepingVerdict, setSweepingVerdict] = 
     useState<boolean>(activeTab?.extra?.sweepingVerdict ?? false);
 
@@ -101,6 +103,15 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   useEffect(() => {
     fetchFilterationStepStocks();
     fetchAllTags();
+
+    const refresh = () => {
+      fetchFilterationStepStocks();
+      resetSelection();
+    };
+
+    subscribe("company-removed", refresh);
+    subscribe("tags-changed", refresh);
+    return () => unsubscribe("company-removed", refresh);
   }, []);
 
   const handleStockFocus = (dataCell: TableListDataCell<FilterationStepStock>) => {
@@ -118,6 +129,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       return selectionSet[id].item.data.company_id.toString();
     }));
     resetSelection();
+    pOnCompanySelect(null);
   };
 
   const handleToggleTag = (tag: Tag) => {
@@ -125,16 +137,24 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       return( filterTag.tag_id === tag.tag_id );
     });
 
+    let newFilters: Tag[];
+
       // Turn filter ON
     if( tagIndex < 0 ) {
-      setTagFilters(tagFilters.concat(tag));
+      newFilters = tagFilters.concat(tag);
+      setTagFilters(newFilters);
     } else {
         // Turn filter OFF
-      setTagFilters([
+      newFilters = [
         ...tagFilters.slice(0, tagIndex),
         ...tagFilters.slice(tagIndex + 1)
-      ]);
+      ];
+      setTagFilters(newFilters);
     }
+
+    setExtraInfo({
+      tagFilters: newFilters
+    });
   };
 
   const handleStockSubmission = (targetStep: FilterationStep, preserveTags: boolean) => {
@@ -244,61 +264,65 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
   return (
     <PageContainer>
       <PageHeader>Stocks</PageHeader>
-      <Panel >
-        <div className="d-flex mb-medium-length">
-          <div className="w-100">
-            <FilterationControls
-              onBringAll={bringAllStocksToFilterationStep}
-              onDelist={handleStockDelist}
-              onSelectAll={() => handleSelection(true, ...stockDataCells)}
-              onDeselectAll={resetSelection}
-              onSelectUntil={() => handleSelectionUntil(true, ...stockDataCells)}
-              onSelectAfter={() => handleSelectionAfter(true, ...stockDataCells)}
-            />
-          </div>
-          {pAllowSubmit && (
-            <div className="d-flex d-justify-end w-100">
-              <FiltrationSubmitForm
-                blackListedMap={{[pFilterationStepID]: true}}
-                onSubmit={handleStockSubmission}
+      <Container>
+        <Panel >
+          <div className="d-flex mb-medium-length">
+            <div className="w-100">
+              <FilterationControls
+                onBringAll={bringAllStocksToFilterationStep}
+                onDelist={handleStockDelist}
+                onSelectAll={() => handleSelection(true, ...stockDataCells)}
+                onDeselectAll={resetSelection}
+                onSelectUntil={() => handleSelectionUntil(true, ...stockDataCells)}
+                onSelectAfter={() => handleSelectionAfter(true, ...stockDataCells)}
               />
             </div>
-          )}
+            {pAllowSubmit && (
+              <div className="d-flex d-justify-end w-100">
+                <FiltrationSubmitForm
+                  blackListedMap={{[pFilterationStepID]: true}}
+                  onSubmit={handleStockSubmission}
+                />
+              </div>
+            )}
+          </div>
+          <div className="d-flex d-justify-end w-100">
+            <span className="mr-medium-length">Apply verdict to selected</span>
+            <StyledInput
+              type="checkbox"
+              checked={sweepingVerdict}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleSweepingVerdict(e.target.checked)}
+            />
+          </div>
+        </Panel>
+        <div>
+          <h3>Filters</h3>
+          <Container>
+            <TagPanel
+              onTagSelect={handleToggleTag}
+              selectedTagMap={
+                arrayToOccurrenceMap<Tag>(tagFilters, (tag: Tag) => tag.tag_id.toString())
+              }
+            />
+          </Container>
         </div>
-        <div className="d-flex d-justify-end w-100">
-          <span className="mr-medium-length">Apply verdict to selected</span>
-          <StyledInput
-            type="checkbox"
-            checked={sweepingVerdict}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleSweepingVerdict(e.target.checked)}
-          />
+        <div className="w-100">
+          <Container>
+            <CompanyListStatisticsPanel
+              shownNumberOfCompanies={stockDataCells.length}
+              numberOfCompanies={stocks.length}
+            />
+            <TableList<FilterationStepStock>
+              onItemFocus={handleStockFocus}
+              columns={stockDataColumns}
+              cells={stockDataCells}
+              allowSelection={true}
+              selectionSet={selectionSet}
+              onItemSelect={handleStockSelect}
+              onColumnSelect={handleSortToggle}
+            />
+          </Container>
         </div>
-      </Panel>
-      <div>
-        <h3>Filters</h3>
-        <Container>
-          <TagPanel
-            onTagSelect={handleToggleTag}
-            selectedTagMap={
-              arrayToOccurrenceMap<Tag>(tagFilters, (tag: Tag) => tag.tag_id.toString())
-            }
-          />
-        </Container>
-      </div>
-      <Container>
-        <CompanyListStatisticsPanel
-          shownNumberOfCompanies={stockDataCells.length}
-          numberOfCompanies={stocks.length}
-        />
-        <TableList<FilterationStepStock>
-          onItemFocus={handleStockFocus}
-          columns={stockDataColumns}
-          cells={stockDataCells}
-          allowSelection={true}
-          selectionSet={selectionSet}
-          onItemSelect={handleStockSelect}
-          onColumnSelect={handleSortToggle}
-        />
       </Container>
     </PageContainer>
   );

@@ -3,7 +3,7 @@ import "./CompanyTag.css";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ASSETS } from "@renderer/assets/assets";
 import useEditable from "@renderer/hook/useEditable";
-import { ChangeEvent, FocusEvent, KeyboardEvent, ReactNode, useContext, useState } from "react";
+import { ChangeEvent, FocusEvent, KeyboardEvent, MutableRefObject, ReactNode, useContext, useRef, useState } from "react";
 import { Tag } from "src/shared/schemaConfig";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
 import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
@@ -46,6 +46,9 @@ export default function CompanyTag(props: Props): ReactNode {
   const {tabIndex} = useContext(TabsContext);
   const {hotkey} = useHotkeys();
 
+  const colorInputRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+  const labelInputRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
+
   const handleChangeColor = (e: ChangeEvent<HTMLInputElement>) => {
     setTag({
       ...tag,
@@ -61,7 +64,7 @@ export default function CompanyTag(props: Props): ReactNode {
   };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    if( !e.relatedTarget ) {
+    if( !e.currentTarget.contains(e.relatedTarget) ) {
       handleFinalize(tag);
     }
   };
@@ -88,10 +91,12 @@ export default function CompanyTag(props: Props): ReactNode {
       {isEditing ? (
         <>
           <StyledInput
+            className="mr-medium-length"
             type="color"
             value={tag.tag_hex}
             onChange={handleChangeColor}
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
+            reactRef={colorInputRef}
           />
           <StyledInput
             type="text"
@@ -99,8 +104,12 @@ export default function CompanyTag(props: Props): ReactNode {
             onChange={handleChangeLabel}
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => handleEnter(e.code, tag)}
             autoFocus={true}
+            reactRef={labelInputRef}
           />
-          <StyledButton onClick={handleRemove}>
+          <StyledButton
+            className="ml-medium-length"
+            onClick={handleRemove}
+          >
             <span>
               <StyledIcon
                 className="company-tag-control-remove"
@@ -113,7 +122,7 @@ export default function CompanyTag(props: Props): ReactNode {
         <>
           <span
             className={"company-tag-color mr-medium-length" + (pIsSelected ? " active" : "")}
-            style={{ backgroundColor: tag.tag_hex }}
+            style={{ backgroundColor: tag.tag_hex}}
             role="button"
             onClick={() => pOnSelect(tag)}
             tabIndex={tabIndex()}

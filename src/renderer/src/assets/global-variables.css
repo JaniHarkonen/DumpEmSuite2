@@ -1,10 +1,12 @@
 :root {
+    /* Distances */
   --tiny-length: 1px;
   --small-length: 2px;
   --medium-length: 5px;
   --strong-length: 12px;
   --ultra-strong-length: 20px;
 
+    /* Sizings */
   --dot-size: 4px;
   --extra-tiny-size: 8px;
   --tiny-size: 14px;
@@ -14,7 +16,13 @@
   --large-size: 256px;
   --card-size: 512px;
 
+    /* Relative sizings */
+  --tiny-portion: 2%;
+  --small-portion: 5%;
+
+    /* Text */
   --line-height-standard: 1.6;
   --font-size-backdrop: 36px;
+  --font-size-major: 24px;
   --font-size-subscript: 14px;
 }

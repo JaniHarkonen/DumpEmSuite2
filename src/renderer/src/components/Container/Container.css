@@ -1,3 +1,4 @@
-.container-footer-pad {
-  height: var(--ultra-strong-length);
+.container-content {
+  min-width: min-content;
+  margin-left: var(--tiny-portion);
 }
