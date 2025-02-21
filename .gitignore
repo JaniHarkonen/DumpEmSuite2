@@ -4,4 +4,4 @@ out
 .DS_Store
 *.log*
 dump-em-config.json
-test-data
+test-data/snapshot.htm
