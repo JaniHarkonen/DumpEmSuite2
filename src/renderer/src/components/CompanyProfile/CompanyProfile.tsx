@@ -7,6 +7,7 @@ import { Profile } from "src/shared/schemaConfig";
 import Container from "../Container/Container";
 import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 import MarkdownEditor from "../MarkdownEditor/MarkdownEditor";
+import StyledLink from "../StyledLink/StyledLink";
 
 
 type Props = {
@@ -52,7 +53,7 @@ export default function CompanyProfile(props: Props): ReactNode {
           onFinalize={(value: string) => handleEditProfile("investors_url", value)}
           editDisabled={!pAllowEdit}
         >
-          {investorsURL}
+          <StyledLink>{investorsURL}</StyledLink>
         </EditableText>
         <h4>Presence</h4>
         <EditableText

@@ -71,7 +71,7 @@ export default function useSelection<T>(props: Props<T>): Returns<T> {
     handleSelection(isSelected, ...selectableItems);
   };
 
-  const resetSelection = () => setSelectionSet({});
+  const resetSelection = () => {console.warn("rest"); setSelectionSet({})};
 
   const getSelectedIDs: GetIDs = () => {
     return Object.keys(selectionSet).filter((key: string) => selectionSet[key].isSelected);

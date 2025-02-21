@@ -68,7 +68,7 @@ export default function TabButton(props: Props): ReactNode {
     <button
       {...theme("glyph-c", variableStyle, "outline-bdc", "highlight-hl", "tab-controls-button")}
       onMouseDown={() => onSelect && onSelect(pTab)}
-      onClick={() => onOpen && onOpen(pTab)}
+      onClick={() => !isEditing && onOpen && onOpen(pTab)}
       onMouseUp={handleTabDrop}
       onDoubleClick={() => pIsEditable && handleEditStart()}
       {...mergeListeners(pHotkeyListener, hotkey({
@@ -93,6 +93,7 @@ export default function TabButton(props: Props): ReactNode {
             }}
             autoFocus={true}
             onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+              e.stopPropagation();
               handleEnter(e.code, e.currentTarget.value);
             }}
           />

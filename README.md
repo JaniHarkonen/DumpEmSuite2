@@ -20,7 +20,7 @@ DumpEm Suite 2 has the following features:
 - Macro module that helps you write higher-level analyses via a markdown-based text editor as well as compile research materials
 - Flexible Splits -based UI that lets you drag and drop tabs so that they can be viewed side-by-side or collapsed into a single view
 - hotkeys that can be configured and enable you to quickly navigate the app
-- light and dark themes that can be swapped between depending on the amount of eye-strain you wish to endure
+- light and dark themes that can be swapped between depending on the amount of eye strain you wish to endure
 
 ## Motivation and DumpEm Suite v1
 

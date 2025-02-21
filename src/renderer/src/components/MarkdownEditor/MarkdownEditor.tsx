@@ -2,7 +2,7 @@ import "./MarkdownEditor.css";
 
 import useEditable from "@renderer/hook/useEditable";
 import { renderMarkdown } from "@renderer/model/markdown/markdown";
-import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
 import { ASSETS } from "@renderer/assets/assets";
 import StyledIcon from "../StyledIcon/StyledIcon";
@@ -30,7 +30,7 @@ export default function MarkdownEditor(props: Props) {
   const [wasEdited, setWasEdited] = useState<boolean>(false);
 
   const {theme} = useTheme();
-  const {hotkey} = useHotkeys();
+  const {hotkey, hotkeyConfig} = useHotkeys();
   
   const handleSave = (value: string) => {
     pOnSaveChanges(value);
@@ -62,26 +62,28 @@ export default function MarkdownEditor(props: Props) {
       <div className="w-100 h-100">
         {isEditing && (
           <div className="markdown-editor-textarea-container">
-            {wasEdited ? (
-              <div className="m-strong-length">
-                <StyledIcon
-                  src={ASSETS.icons.alerts.missing.color}
-                  enableFilter={false}
-                />
-                <span className="ml-medium-length">* Unsaved changes detected! Press CTRL + S to save...</span>
-              </div>
-            ) : <div />}
+            <div className="m-strong-length">
+              {wasEdited && (<StyledIcon
+                src={ASSETS.icons.alerts.missing.color}
+                enableFilter={false}
+              />)}
+              <span className="ml-medium-length">
+                {
+                  wasEdited ? <>* Unsaved changes detected! Press CTRL + S to save..."</> : 
+                  <>Press {hotkeyConfig!["blur"].key ?? ""} to stop editing.</>
+                }
+              </span>
+            </div>
             <StyledTextarea
               className="w-100 h-100"
               style={{
                 opacity: wasEdited ? "70%" : "100%",
                 tabSize: "2"
               }}
-              onBlur={(e: FocusEvent<HTMLTextAreaElement>) => handleFinalize(e.target.value)}
               autoFocus={true}
               defaultValue={markdown}
               {...hotkey({
-                "blur": (e: KeyboardEvent<HTMLTextAreaElement>) => e.currentTarget.blur(),
+                "blur": (e: KeyboardEvent<HTMLTextAreaElement>) => handleFinalize((e.target as HTMLTextAreaElement).value),
                 "save": (e: KeyboardEvent<HTMLTextAreaElement>) => {
                   e.preventDefault();
                   handleSave(e.currentTarget.value);

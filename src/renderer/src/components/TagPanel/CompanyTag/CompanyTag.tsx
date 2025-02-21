@@ -64,7 +64,7 @@ export default function CompanyTag(props: Props): ReactNode {
   };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    if( !e.currentTarget.contains(e.relatedTarget) ) {
+    if( isEditing && !e.currentTarget.contains(e.relatedTarget) ) {
       handleFinalize(tag);
     }
   };

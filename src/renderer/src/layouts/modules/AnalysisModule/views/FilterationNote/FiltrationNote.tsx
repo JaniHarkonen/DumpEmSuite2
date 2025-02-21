@@ -1,6 +1,7 @@
 import "./FilterationNote.css";
 
 import CompanyNotSelected from "@renderer/components/CompanyNotSelected/CompanyNotSelected";
+import Container from "@renderer/components/Container/Container";
 import MarkdownEditor from "@renderer/components/MarkdownEditor/MarkdownEditor";
 import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
@@ -43,12 +44,12 @@ export default function FiltrationNote(props: Props): ReactNode {
       {company ? (
         <div className="grid-auto-top">
           <PageHeader>{company.company_name}</PageHeader>
-          <div className="filteration-note-markdown-editor-container">
+          <Container className="filteration-note-markdown-editor-container">
             <MarkdownEditor
               initialValue={filterationNote || ""}
               onSaveChange={handleFiltrationStepNoteChange}
             />
-          </div>
+          </Container>
         </div>
       ) : (
         <CompanyNotSelected />
