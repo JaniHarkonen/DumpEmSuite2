@@ -7,6 +7,7 @@ import PageContainer from "@renderer/components/PageContainer/PageContainer";
 import PageHeader from "@renderer/components/PageHeader/PageHeader";
 import { ProfileContext } from "@renderer/context/ProfileContext";
 import useFilterationStepNote from "@renderer/hook/useFilterationStepNote";
+import useTabKeys from "@renderer/hook/useTabKeys";
 import { ReactNode, useContext, useEffect } from "react";
 
 
@@ -18,6 +19,7 @@ export default function FiltrationNote(props: Props): ReactNode {
   const pFiltrationStepID: string = props.filtrationStepID;
 
   const {company} = useContext(ProfileContext);
+  const {formatKey} = useTabKeys();
 
   const {
     filterationNote,
@@ -46,6 +48,7 @@ export default function FiltrationNote(props: Props): ReactNode {
           <PageHeader>{company.company_name}</PageHeader>
           <Container className="filteration-note-markdown-editor-container">
             <MarkdownEditor
+              key={formatKey("filtration-note-markdown-editor-" + company.company_id)}
               initialValue={filterationNote || ""}
               onSaveChange={handleFiltrationStepNoteChange}
             />
