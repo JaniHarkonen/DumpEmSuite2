@@ -6,11 +6,15 @@
 
   border-bottom-style: solid;
   border-bottom-width: var(--tiny-length);
+
+  padding: var(--medium-length);
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .toolbar-app-logo {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: var(--medium-length);
 
   height: 100%;

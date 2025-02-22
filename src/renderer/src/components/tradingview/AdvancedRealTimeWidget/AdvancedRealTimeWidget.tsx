@@ -29,6 +29,7 @@ const STUDIES = [
   MAExponential(200),
 ];
 
+  // This will be dynamically imported from the TradingView CDN
 declare const TradingView: any;
 
 function AdvancedRealTimeWidget(props: Props) {
