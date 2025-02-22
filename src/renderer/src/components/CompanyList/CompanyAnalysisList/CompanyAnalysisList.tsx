@@ -99,8 +99,6 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       sortOrder: settings.sortOrder
     });
   };
-
-  console.log(getSelectedIDs());
   
   useEffect(() => {
     fetchFilterationStepStocks();
@@ -109,7 +107,6 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     const refresh = () => {
       fetchFilterationStepStocks();
       resetSelection();
-      console.log("re");
     };
 
     subscribe("company-removed", refresh);
@@ -163,10 +160,7 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
     });
   };
 
-  console.log([...getSelectedIDs().map((id: SelectionID) => id.toString())])
-
   const handleStockSubmission = (targetStep: FilterationStep, preserveTags: boolean) => {
-    console.log([...getSelectedIDs().map((id: SelectionID) => id.toString())])
     postStocksToFilterationStep(
       targetStep.step_id,
       [...getSelectedIDs().map((id: SelectionID) => id.toString())],

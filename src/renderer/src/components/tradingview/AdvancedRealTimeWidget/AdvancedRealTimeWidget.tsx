@@ -1,3 +1,4 @@
+
 import "./AdvancedRealTimeWidget.css";
 
 import useTabKeys from '@renderer/hook/useTabKeys';
@@ -5,7 +6,6 @@ import useTheme from '@renderer/hook/useTheme';
 import { useEffect, memo, useState } from 'react';
 import { ASSETS } from "@renderer/assets/assets";
 import StyledIcon from "@renderer/components/StyledIcon/StyledIcon";
-import useTradingViewWidgets, { TradingViewWidgetContext } from "@renderer/hook/useTradingViewWidgets";
 import MACD from "./study/MACD";
 import RSI from "./study/RSI";
 import MAExponential from "./study/MAExponential";
@@ -29,6 +29,8 @@ const STUDIES = [
   MAExponential(200),
 ];
 
+declare const TradingView: any;
+
 function AdvancedRealTimeWidget(props: Props) {
   const pExchange: string = props.exchange;
   const pTicker: string = props.ticker;
@@ -37,7 +39,6 @@ function AdvancedRealTimeWidget(props: Props) {
 
   const {activeTheme, theme} = useTheme();
   const {formatKey} = useTabKeys();
-  const {createWidget} = useTradingViewWidgets();
 
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
@@ -47,8 +48,16 @@ function AdvancedRealTimeWidget(props: Props) {
   );
 
   useEffect(() => {
-    createWidget(containerID, (context: TradingViewWidgetContext) => {
-      new context.TradingView.widget({
+    // @ts-ignore: Ignoring because the external module doesn't exist in the project
+    import("https://s3.tradingview.com/tv.js").then(() => {
+      for( let element of document.getElementsByTagName("style") ) {
+        if( element.innerHTML.startsWith(".tradingview-widget-copyright") ) {
+          element.remove();
+          break;
+        }
+      }
+
+      new TradingView.widget({
         autosize: true,
         symbol: pExchange + ":" + pTicker,
         interval: "D",
@@ -64,6 +73,7 @@ function AdvancedRealTimeWidget(props: Props) {
         container_id: containerID,
         studies: STUDIES
       });
+
     });
   }, [pExchange, pTicker, activeTheme]);
 
