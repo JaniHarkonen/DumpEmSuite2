@@ -35,7 +35,7 @@ and visualization.
 
 ## Project Setup
 
-**WARNING!** This project was developed on Windows and will most likely work not other operating systems due to the heavy reliance on direct calls to OS-specific features, such as reading/writing files and executing Windows shell commands. Also, this electron app is **NOT** sandboxed and has no set **Content Security Policy**, so it has access to the file system and can contact CDNs. However, the app CAN be ran offline, and only connects to the TradingView's widget CDN when charts are loaded in.
+**WARNING!** This project was developed on Windows and will most likely not work on other operating systems due to the heavy reliance on direct calls to OS-specific features, such as reading/writing files and executing Windows shell commands. Also, this electron app is **NOT** sandboxed and has no set **Content Security Policy**, so it has access to the file system and can contact CDNs. However, the app CAN be ran offline, and only connects to the TradingView's widget CDN when charts are loaded in.
 
 ### Install
 
