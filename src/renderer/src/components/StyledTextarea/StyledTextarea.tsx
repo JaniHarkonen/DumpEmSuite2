@@ -26,13 +26,13 @@ export default function StyledTextarea(props: Props): ReactNode {
     e.stopPropagation();
 
     const target: HTMLTextAreaElement = e.currentTarget;
+    const isShiftDown: boolean = e.shiftKey;
+    const key: string = e.key;
+    let selectionStart: number = target.selectionStart;
+    let selectionEnd: number = target.selectionEnd;
 
-    if( e.key === "Tab" ) {
+    if( key === "Tab" ) {
       e.preventDefault();
-        
-      const isShiftDown: boolean = e.shiftKey;
-      let selectionStart: number = target.selectionStart;
-      let selectionEnd: number = target.selectionEnd;
 
         // If a section is selected, append tabs in front of each new line character
         // (unless the new line is followed by another new line)
@@ -93,12 +93,44 @@ export default function StyledTextarea(props: Props): ReactNode {
           target.selectionEnd = selectionEnd + addCount;
         }
       } else {
-        // Apply tab to the textarea and fix the cursor position
+          // Apply tab to the textarea and fix the cursor position
         target.value = 
           target.value.substring(0, selectionStart) + "\t" + 
           target.value.substring(selectionStart);
         target.selectionStart = selectionStart + 1;
         target.selectionEnd = selectionStart + 1;
+      }
+    } else if(
+      key === '"' || 
+      key === "'" ||
+      key === "<" || 
+      key === "{" ||
+      key === "[" || 
+      key === "("
+    ) {
+      if( selectionEnd > selectionStart ) {
+        let end: string = key;
+
+        if( key === "<" ) {
+          end = ">";
+        } else if( key === "{" ) {
+          end = "}";
+        } else if( key === "[" ) {
+          end = "]";
+        } else if( key === "(" ) {
+          end = ")";
+        }
+        
+        target.value = (
+          target.value.substring(0, selectionStart) + key + 
+          target.value.substring(selectionStart, selectionEnd) + end +
+          target.value.substring(selectionEnd)
+        );
+
+        target.selectionStart = selectionStart + 1;
+        target.selectionEnd = selectionEnd + 1;
+
+        e.preventDefault();
       }
     }
 

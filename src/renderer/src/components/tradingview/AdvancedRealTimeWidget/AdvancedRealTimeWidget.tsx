@@ -51,6 +51,8 @@ function AdvancedRealTimeWidget(props: Props) {
   useEffect(() => {
     // @ts-ignore: Ignoring because the external module doesn't exist in the project
     import("https://s3.tradingview.com/tv.js").then(() => {
+        // Because the TradingView script will always create a new style on load, we have to 
+        // remove the previous style, if it exists
       for( let element of document.getElementsByTagName("style") ) {
         if( element.innerHTML.startsWith(".tradingview-widget-copyright") ) {
           element.remove();

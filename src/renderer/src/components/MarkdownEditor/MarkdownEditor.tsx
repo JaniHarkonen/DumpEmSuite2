@@ -41,11 +41,6 @@ export default function MarkdownEditor(props: Props) {
     scrollBarID: pEditorID,
     scrolledElementRef: editorRef
   });
-
-  // const [handleScrollRender] = useSavedScrollBar({
-  //   scrollBarID: noteIDRender,
-  //   scrolledElementRef: rendererRef
-  // });
   
   const handleSave = (value: string) => {
     pOnSaveChanges(value);
