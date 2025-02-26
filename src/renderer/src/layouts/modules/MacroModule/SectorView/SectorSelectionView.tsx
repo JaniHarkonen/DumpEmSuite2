@@ -11,7 +11,7 @@ import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
-import buildSectorBlueprint from "./buildSectorBlueprint";
+import buildSectorBlueprint from "../../../../json/buildSectorBlueprint";
 import { MacroSector } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";
@@ -134,7 +134,6 @@ export default function SectorSelectionView(props: UseFlexibleSplitsProps): Reac
       </div>
     );
   };
-  
 
   return (
     <FlexibleSplitsContext.Provider

@@ -22,11 +22,10 @@ export default function qFetchWorkspaceStructure(
             ["filteration_step", "macro_sector", "metadata"],
             (error: Error | null, results: WorkspaceStructure) => {
               if( !error ) {
-                databaseManager.close(databaseName, () => {
-                  resolve({
-                    wasSuccessful: true,
-                    rows: [results]
-                  });
+                databaseManager.renameConnection(databaseName, results.metadata[0].workspace_id);
+                resolve({
+                  wasSuccessful: true,
+                  rows: [results]
                 });
               } else {
                 reject(error);

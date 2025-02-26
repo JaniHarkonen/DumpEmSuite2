@@ -11,7 +11,7 @@ import { buildTab, Tab, TabContentProvider } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
 import { MouseEvent, ReactNode, useContext } from "react";
 import { BoundDatabaseAPI } from "src/shared/database.type";
-import { buildFilterationBlueprint } from "./buildFilterationBlueprint";
+import { buildFilterationBlueprint } from "../../../../json/buildFilterationBlueprint";
 import { FilterationStep } from "src/shared/schemaConfig";
 import EditableTabButton from "@renderer/components/EditableTabButton/EditableTabButton";
 import StyledButton from "@renderer/components/StyledButton/StyledButton";

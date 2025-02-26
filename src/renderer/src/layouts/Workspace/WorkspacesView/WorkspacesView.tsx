@@ -16,6 +16,7 @@ import Toolbar from "@renderer/components/Toolbar/Toolbar";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 import { GlobalContext } from "@renderer/context/GlobalContext";
+import { QueryResult } from "src/shared/database.type";
 
 
 const {databaseAPI} = window.api;
@@ -74,8 +75,11 @@ export default function WorkspacesView(): ReactNode {
 
     openModal(
       <YesNoModal onYes={() => {
-        removeTab(targetNode, tab);
-        databaseAPI.close({ databaseName: tab.id });
+        databaseAPI.close({ databaseName: tab.id }).then((result: QueryResult) => {
+          if( result.wasSuccessful ) {
+            removeTab(targetNode, tab);
+          }
+        });
       }}>
         Are you sure you want to close <strong>'{tab.caption}'</strong>?
       </YesNoModal>

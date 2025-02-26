@@ -9,7 +9,7 @@ import { SplitTree, SplitTreeFork, SplitTreeValue } from "@renderer/model/splits
 import { FlexibleSplitsContext } from "@renderer/context/FlexibleSplitsContext";
 import { SceneConfigBlueprint, TabBlueprint } from "@renderer/model/tabs";
 import generateRandomUniqueID from "@renderer/utils/generateRandomUniqueID";
-import { buildWorkspaceBlueprint } from "./buildWorkspaceBlueprint";
+import { buildWorkspaceBlueprint } from "../../json/buildWorkspaceBlueprint";
 import { FetchResult, QueryResult, WorkspaceStructure } from "src/shared/database.type";
 import { Metadata } from "src/shared/schemaConfig";
 import useTheme from "@renderer/hook/useTheme";
@@ -146,7 +146,7 @@ export default function Toolbar(props: Props): ReactNode {
           const metadata: Metadata = structure.metadata[0];
           const id: string = metadata.workspace_id;
           const sceneConfigBlueprint: SceneConfigBlueprint = buildWorkspaceBlueprint(
-            id, structure.filterationSteps, structure.macroSectors
+            id, structure.filteration_step, structure.macro_sector
           );
           const workspaceTabBlueprint: TabBlueprint = {
             id,

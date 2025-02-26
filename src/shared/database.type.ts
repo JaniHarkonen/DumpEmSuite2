@@ -23,8 +23,8 @@ export type QueryProps = {
 };
 
 export type WorkspaceStructure = {
-  filterationSteps: FilterationStep[];
-  macroSectors: MacroSector[];
+  filteration_step: FilterationStep[];
+  macro_sector: MacroSector[];
   metadata: Metadata;
 };
 

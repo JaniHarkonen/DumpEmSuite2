@@ -127,7 +127,7 @@ export default function qCreateDatabase(metadata: Metadata): string {
     VALUES
     ("view-volume", "Volume"),
     ("view-price-action", "Price action"),
-    ("view-technical", "Technical"),
+    ("view-technical", "TA 1"),
     ("view-fundamental", "Fundamental");
   `;
 }
