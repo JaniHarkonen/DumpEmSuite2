@@ -2,15 +2,18 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import "./StyledTextarea.css";
 
 import useTheme from "@renderer/hook/useTheme";
-import { HTMLProps, KeyboardEvent, KeyboardEventHandler, ReactNode, useContext } from "react";
+import { HTMLProps, KeyboardEvent, KeyboardEventHandler, MutableRefObject, ReactNode, useContext } from "react";
+import copyJSON from "@renderer/utils/copyJSON";
 
 
 type Props = {
+  reactRef?: MutableRefObject<HTMLTextAreaElement | null>;
 } & HTMLProps<HTMLTextAreaElement>;
 
 export default function StyledTextarea(props: Props): ReactNode {
   const pClassName = props.className || "";
   const pOnKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = props.onKeyDown || function(){ };
+  const pReactRef: MutableRefObject<HTMLTextAreaElement | null> | undefined = props.reactRef;
 
   const {theme} = useTheme();
   const {tabIndex} = useContext(TabsContext);
@@ -104,10 +107,11 @@ export default function StyledTextarea(props: Props): ReactNode {
 
   return (
     <textarea
-      {...props}
+      {...copyJSON(props, ["reactRef"])}
       {...theme("baseline-bgc", "glyph-c", pClassName)}
       onKeyDown={handleKeyDown}
       tabIndex={tabIndex()}
+      ref={pReactRef}
     />
   );
 }

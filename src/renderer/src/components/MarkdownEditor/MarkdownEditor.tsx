@@ -2,7 +2,7 @@ import "./MarkdownEditor.css";
 
 import useEditable from "@renderer/hook/useEditable";
 import { renderMarkdown } from "@renderer/model/markdown/markdown";
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, MutableRefObject, useEffect, useRef, useState } from "react";
 import StyledTextarea from "../StyledTextarea/StyledTextarea";
 import { ASSETS } from "@renderer/assets/assets";
 import StyledIcon from "../StyledIcon/StyledIcon";
@@ -11,6 +11,7 @@ import { MarkdownContext } from "@renderer/context/MarkdownContext";
 import StyledButton from "../StyledButton/StyledButton";
 import useTheme from "@renderer/hook/useTheme";
 import useHotkeys from "@renderer/hook/useHotkeys";
+import useSavedScrollBar from "@renderer/hook/useSavedScrollBar";
 
 
 type OnSaveNoteChanges = (value: string) => void;
@@ -19,18 +20,32 @@ type Props = {
   initialValue?: string;
   onSaveChange?: OnSaveNoteChanges;
   allowEdit?: boolean;
+  editorID?: string;
 };
 
 export default function MarkdownEditor(props: Props) {
   const pInitialValue: string = props.initialValue || "";
   const pOnSaveChanges: OnSaveNoteChanges = props.onSaveChange || function(){ };
   const pAllowEdit: boolean = props.allowEdit ?? true;
+  const pEditorID: string = props.editorID || "markdown-editor";
 
   const [markdown, setMarkdown] = useState<string>("");
   const [wasEdited, setWasEdited] = useState<boolean>(false);
 
   const {theme} = useTheme();
   const {hotkey, hotkeyConfig} = useHotkeys();
+
+  const editorRef: MutableRefObject<HTMLTextAreaElement | null> = useRef<HTMLTextAreaElement | null>(null);
+
+  const [handleScroll] = useSavedScrollBar({
+    scrollBarID: pEditorID,
+    scrolledElementRef: editorRef
+  });
+
+  // const [handleScrollRender] = useSavedScrollBar({
+  //   scrollBarID: noteIDRender,
+  //   scrolledElementRef: rendererRef
+  // });
   
   const handleSave = (value: string) => {
     pOnSaveChanges(value);
@@ -90,6 +105,8 @@ export default function MarkdownEditor(props: Props) {
                 }
               })}
               onChange={handleChange}
+              reactRef={editorRef}
+              onScroll={handleScroll}
             />
           </div>
         )}
