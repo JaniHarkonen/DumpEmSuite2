@@ -55,17 +55,18 @@ export class DatabaseManager {
   public open(
     databaseName: string, databasePath: string, callback?: ErrorCallback
   ): void {
+      // Abort if database is already open
+    if( this.openDatabases.has(databaseName) ) {
+      // callback && callback({
+      //   name: "already-open", 
+      //   message: "Database '" + databaseName + "' is already open!"
+      // });
+      callback && callback(null);
+      return;
+    }
+
     const database: Database = 
       new Database(databasePath, OPEN_READWRITE, (err: Error | null) => {
-          // Abort if database is already open
-        if( this.openDatabases.has(databaseName) ) {
-          callback && callback({
-            name: "already-open", 
-            message: "Database '" + databaseName + "' is already open!"
-          });
-          return;
-        }
-
         if( !err ) {
           this.openDatabases.set(databaseName, {
             name: databaseName,
@@ -80,6 +81,16 @@ export class DatabaseManager {
       // Enforces foreign key constraints (ensures that cascading updates, such as 
       // "ON DELETE CASCADE" are carried out)
     database.exec("PRAGMA foreign_keys = ON;");
+  }
+
+  public renameConnection(databaseName: string, newDatabaseName: string) {
+    const connection: DatabaseConnection | undefined = this.openDatabases.get(databaseName);
+
+    if( connection ) {
+      this.openDatabases.set(newDatabaseName, connection);
+      connection.name = databaseName;
+      this.openDatabases.delete(databaseName);
+    }
   }
 
   public fetch<T>(

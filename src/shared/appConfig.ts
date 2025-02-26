@@ -1,4 +1,4 @@
-export const CURRENT_APP_VERSION: string = "v2.0.0";
+export const CURRENT_APP_VERSION: string = "v2.0.1";
 
 const materialsPath: string = "\\materials";
 const sectorsPath: string = materialsPath + "\\sector";
@@ -24,4 +24,4 @@ export const RELATIVE_APP_PATHS = {
  * happens. This will be used by the debounced app config file updater function to delay the 
  * saving process in order to avoid excessive file system calls.
  */
-export const CONFIG_SAVE_DEBOUNCE_DELAY: number = 1000;
+export const CONFIG_SAVE_DEBOUNCE_DELAY: number = 250;

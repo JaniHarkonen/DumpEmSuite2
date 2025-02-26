@@ -278,10 +278,10 @@ export function buildWorkspaceBlueprint(
     };
   };
 
-  let filterationStepTabs: TabBlueprint[];
+  let filtrationStepTabs: TabBlueprint[];
 
   if( !filterationSteps ) {
-    filterationStepTabs = [
+    filtrationStepTabs = [
       buildFilterationStep({
         step_id: "view-volume",
         caption: "Volume"
@@ -297,13 +297,15 @@ export function buildWorkspaceBlueprint(
       buildFundamentalFilterationStep()
     ];
   } else {
-    filterationStepTabs = filterationSteps.map((step: FilterationStep) => {
-      if( step.step_id === "view-fundamental" ) {
-        return buildFundamentalFilterationStep();
+    filtrationStepTabs = [];
+    
+    for( let step of filterationSteps ) {
+      if( step.step_id !== "view-fundamental" ) {
+        filtrationStepTabs.push(buildFilterationStep(step, "view-filteration"));
       }
+    }
 
-      return buildFilterationStep(step, "view-filteration");
-    });
+    filtrationStepTabs.push(buildFundamentalFilterationStep());
   }
 
   let macroSectorTabs: TabBlueprint[];
@@ -508,7 +510,7 @@ export function buildWorkspaceBlueprint(
                           left: {
                             isFork: false,
                             value: {
-                              tabs: filterationStepTabs,
+                              tabs: filtrationStepTabs,
                               activeTabIndex: 0
                             }
                           }

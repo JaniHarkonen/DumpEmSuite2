@@ -19,6 +19,7 @@ export default function useTheme(): Returns {
 
   const handleThemeChange = (t: AppTheme) => {
     if( setTheme && config.appConfigRef?.current ) {
+      config.appConfigRef.current.activeTheme = t;
       setTheme(t);
       config.configFileUpdater({
         ...config.appConfigRef.current,
