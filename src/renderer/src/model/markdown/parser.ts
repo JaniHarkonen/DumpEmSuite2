@@ -58,29 +58,6 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
     return check(peekAt(position), "new-line") && check(peekAt(position + 1), "new-line");
   };
 
-  // const resolveClosingFormattingToken = (
-  //   token: MarkdownToken | undefined
-  // ): FormattingTokenInfo => {
-  //   if( !token ) {
-  //     return null;
-  //   }
-
-  //   if(
-  //     !check(token, "row-open") && 
-  //     !check(token, "underline-open") && 
-  //     !check(token, "col-open")
-  //   ) {
-  //     return null;
-  //   }
-
-  //   const type: string = token.type.substring(0, token.type.lastIndexOf("-"));
-  //   return {
-  //     opener: token.type,
-  //     closer: (type + "-close") as TokenType,
-  //     type: type as TokenType
-  //   };
-  // };
-
   const header = (): ASTNode | null => {
     if( peek(0) && !check(peek(0), "new-line") ) {
       return null;
@@ -346,7 +323,7 @@ export function parse(input: MarkdownToken[]): ASTNode[] {
       // into a single AST-node
     let next: MarkdownToken | undefined;
     while( (next = peek()) && (next.type === "plain-text" || next.type === "white-space") ) {
-      node.value += " " + next.value;
+      node.value += next.value;
       advance();
     }
 
