@@ -53,7 +53,7 @@ export default function CompanyProfile(props: Props): ReactNode {
           onFinalize={(value: string) => handleEditProfile("investors_url", value)}
           editDisabled={!pAllowEdit}
         >
-          <StyledLink>{investorsURL}</StyledLink>
+          <StyledLink href={investorsURL}>{investorsURL}</StyledLink>
         </EditableText>
         <h4>Presence</h4>
         <EditableText
