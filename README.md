@@ -1,9 +1,23 @@
-# DumpEm Suite 2 (v2.0.0)
+# DumpEm Suite 2 (v2.0.1)
 
 DumpEm Suite 2 is an investment analysis application I built mainly for my personal use to aid me with the research process. DumpEm Suite 2 lets you carry out a filtration process on a set of candidate companies as well as write analyses via its markdown-based notes complete with custom widgets such as charts and quarterly earnings tables. DumpEm Suite 2 is also highly 
 customizable giving you full control over how much data you have at your disposal at any given time. The Flexible Splits -system lets you view tabs side-by-side or collapse them and simply focus on one view at a time. Hotkeys, that can be used to quickly navigate the program, are also customizable alongside the app theme.
 
-This is the first version of DumpEm Suite 2, so bug fixes and additional features will most likely be implemented shortly.
+## Change log
+
+### Version v.2.0.1 (26.02.2025)
+
+As expected, the first release of DumpEm Suite 2 contained a few bugs and annoyances. Version 2.0.1 fixes the following bugs and introduces some small features:
+
+**New features**
+- Markdown editor now stores the scrollbar position
+- Highlighted text can now be enclosed with certain symbols ( ", ', (, [, { ) in text areas
+
+**Bug fixes**
+- IR-links on company profiles didn't work when clicked. A browser window was opened but no link was entered.
+- Workspace structure was loaded improperly, so that loading a workspace would always result in the default layout.
+- Changing app config (opening/sliding/splitting tabs) would override the active theme with a stale version.
+- Opening parenthesis would have a mysterious extra space in front of them.
 
 ## Features
 
