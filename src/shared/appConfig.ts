@@ -1,4 +1,4 @@
-export const CURRENT_APP_VERSION: string = "v2.0.0";
+export const CURRENT_APP_VERSION: string = "v2.0.1";
 
 const materialsPath: string = "\\materials";
 const sectorsPath: string = materialsPath + "\\sector";
