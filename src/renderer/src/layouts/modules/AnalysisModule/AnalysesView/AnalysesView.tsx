@@ -44,7 +44,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     handleTabSplit,
     handleDividerMove,
     handleTabAdd: addTab,
-    handleTabRemove: removeTab
+    handleTabRemove: removeTab,
+    handleExtraInfo
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
     contentProvider: pContentProvider,
@@ -165,7 +166,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
         handleTabRelocation, 
         handleTabReorder,
         handleTabSplit,
-        handleDividerMove
+        handleDividerMove,
+        handleExtraInfo
       }}
     >
       {splitTree && <SplitView renderControls={renderTabControls} />}

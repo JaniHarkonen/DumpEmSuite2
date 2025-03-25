@@ -5,6 +5,7 @@ import { ProfileContextType, ProfileEditChanges } from "@renderer/context/Profil
 import { useEffect, useState } from "react";
 import useViewEvents from "./useViewEvents";
 import { CompanyWithCurrency } from "./useWorkspaceCompanies";
+import useExtraInfo from "./useExtraInfo";
 
 
 type Returns = {
@@ -16,28 +17,11 @@ type Returns = {
 
 export default function useProfileSelection(): Returns {
   const {subscribe, unsubscribe} = useViewEvents();
+  const {extraInfo, setExtraInfo} = useExtraInfo();
   const [profileSelection, setProfileSelection] = useState<ProfileContextType>({
     profile: null,
     company: null
   });
-
-  useEffect(() => {
-    const companyRemoved = (result: CompanyWithCurrency[]) => {
-      for( let company of result ) {
-        if( company.company_id === profileSelection.company?.company_id ) {
-          setProfileSelection({
-            profile: null,
-            company: null
-          });
-
-          break;
-        }
-      }
-    };
-
-    subscribe("company-removed", companyRemoved);
-    return () => unsubscribe("company-removed", companyRemoved);
-  }, [profileSelection]);
 
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
@@ -54,6 +38,39 @@ export default function useProfileSelection(): Returns {
     });
   };
 
+  const handleProfileSelection = (company: Company | null) => {
+    if( company ) {
+      fetchCompanyProfile(company);
+    } else {
+      setProfileSelection({
+        profile: null,
+        company: null
+      });
+    }
+
+    setExtraInfo && setExtraInfo({selectedCompany: company ? company : null});
+  };
+
+  useEffect(() => {
+    const companyRemoved = (result: CompanyWithCurrency[]) => {
+      for( let company of result ) {
+        if( company.company_id === profileSelection.company?.company_id ) {
+          handleProfileSelection(null);
+          break;
+        }
+      }
+    };
+
+    if( extraInfo ) {
+      if( extraInfo.selectedCompany?.company_id !== profileSelection.company?.company_id ) {
+        fetchCompanyProfile(extraInfo.selectedCompany);
+      }
+    }
+
+    subscribe("company-removed", companyRemoved);
+    return () => unsubscribe("company-removed", companyRemoved);
+  }, [profileSelection, extraInfo]);
+
   const handleProfileEdit = (changes: ProfileEditChanges) => {
     databaseAPI.postCompanyProfileChanges({
       company: changes.company,
@@ -64,17 +81,6 @@ export default function useProfileSelection(): Returns {
         fetchCompanyProfile(changes.company);
       }
     });
-  };
-
-  const handleProfileSelection = (company: Company | null) => {
-    if( company ) {
-      fetchCompanyProfile(company);
-    } else {
-      setProfileSelection({
-        profile: null,
-        company: null
-      });
-    }
   };
 
   return {
