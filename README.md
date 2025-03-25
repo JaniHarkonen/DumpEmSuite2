@@ -5,6 +5,14 @@ customizable giving you full control over how much data you have at your disposa
 
 ## Change log
 
+### Version v.2.0.2 ()
+
+**New features**
+- Search fields can now be used to look for items in lists
+
+**Bug fixes**
+- When opening an existing workspace, the macro sectors didn't get loaded in properly.
+
 ### Version v.2.0.1 (26.02.2025)
 
 As expected, the first release of DumpEm Suite 2 contained a few bugs and annoyances. Version 2.0.1 fixes the following bugs and introduces some small features:

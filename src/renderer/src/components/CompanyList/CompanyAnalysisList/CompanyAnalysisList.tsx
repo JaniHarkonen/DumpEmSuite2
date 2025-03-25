@@ -25,6 +25,7 @@ import CompanyListStatisticsPanel from "@renderer/components/CompanyListStatisti
 import FiltrationVerdictSelection from "@renderer/components/FiltrationVerdictSelection/FiltrationVerdictSelection";
 import StyledInput from "@renderer/components/StyledInput/StyledInput";
 import useViewEvents from "@renderer/hook/useViewEvents";
+import useSearch from "@renderer/hook/useSearch";
 
 
 type OnCompanyListingSelect = (company: FilterationStepStock | null) => void;
@@ -116,6 +117,12 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       unsubscribe("tags-changed", refresh); 
     };
   }, []);
+
+  const {
+    searchCriteria,
+    handleCriteriaChange,
+    search
+  } = useSearch();
 
   const handleStockFocus = (dataCell: TableListDataCell<FilterationStepStock>) => {
     pOnCompanySelect(dataCell.data);
@@ -318,11 +325,13 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
             <TableList<FilterationStepStock>
               onItemFocus={handleStockFocus}
               columns={stockDataColumns}
-              cells={stockDataCells}
+              cells={search(stockDataCells)}
               allowSelection={true}
               selectionSet={selectionSet}
+              searchInputs={searchCriteria}
               onItemSelect={handleStockSelect}
               onColumnSelect={handleSortToggle}
+              onSearch={handleCriteriaChange}
             />
           </Container>
         </div>

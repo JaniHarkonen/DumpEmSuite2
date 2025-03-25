@@ -82,9 +82,6 @@ export default function ScraperView(): ReactNode {
     });
   }, []);
 
-  // const dialogKeySelectScraper: string = workspaceConfig.id + "-select-scraper";
-  // const dialogKeySelectTarget: string = workspaceConfig.id + "-select-target";
-  // const dialogKeySelectOutput: string = workspaceConfig.id + "-select-output";
   const dialogKeySelectScraper: string = formatKey("select-scraper");
   const dialogKeySelectTarget: string = formatKey("select-target");
   const dialogKeySelectOutput: string = formatKey("select-output");

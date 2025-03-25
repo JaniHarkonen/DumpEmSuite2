@@ -9,6 +9,7 @@ import { TabsContext } from "@renderer/context/TabsContext";
 import { Tab } from "@renderer/model/tabs";
 import useSortedData, { SortSettings } from "@renderer/hook/useSortedData";
 import { ProfileContext } from "@renderer/context/ProfileContext";
+import useSearch from "@renderer/hook/useSearch";
 
 
 const COLUMNS: TableListColumn<Company>[] = [
@@ -53,6 +54,11 @@ export default function CompanyProfilesList(props: Props): ReactNode {
     sortOrder: activeTab?.extra?.sortOrder
   });
 
+  const {
+    handleCriteriaChange,
+    search
+  } = useSearch();
+
   const handleSortToggle = (column: TableListColumn<Company>) => {
     const settings: SortSettings = sortBy(column.accessor);
     setExtraInfo && setExtraInfo({
@@ -92,8 +98,9 @@ export default function CompanyProfilesList(props: Props): ReactNode {
           <TableList<Company>
             onItemFocus={handleCompanySelection}
             columns={stockDataColumns}
-            cells={stockDataCells}
+            cells={search(stockDataCells)}
             onColumnSelect={handleSortToggle}
+            onSearch={handleCriteriaChange}
           />
         </Container>
       </div>

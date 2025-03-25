@@ -21,6 +21,7 @@ import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 import useViewEvents from "@renderer/hook/useViewEvents";
+import useSearch from "@renderer/hook/useSearch";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -138,14 +139,6 @@ export default function WorkspaceCompaniesList(): ReactNode {
     sortOrder: activeTab?.extra?.sortOrder
   });
 
-  const handleSortToggle = (column: TableListColumn<CompanyWithCurrency>) => {
-    const settings: SortSettings = sortBy(column.accessor);
-    setExtraInfo && setExtraInfo({
-      sortField: settings.sortField,
-      sortOrder: settings.sortOrder
-    });
-  };
-
     // Fix the stock data to be compatible with the table component
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
     sortedData.map((stock: CompanyWithCurrency) => {
@@ -163,6 +156,19 @@ export default function WorkspaceCompaniesList(): ReactNode {
         ...(sortField === column.accessor ? { sortOrder } : {})
       };
     });
+
+  const {
+    handleCriteriaChange,
+    search
+  } = useSearch();
+
+  const handleSortToggle = (column: TableListColumn<CompanyWithCurrency>) => {
+    const settings: SortSettings = sortBy(column.accessor);
+    setExtraInfo && setExtraInfo({
+      sortField: settings.sortField,
+      sortOrder: settings.sortOrder
+    });
+  };
 
   const handleAddCompany = (company: AsString<Company>) => {
     ifQuerySuccessful(databaseAPI.postNewCompany({ company }), fetchAllCompanies);
@@ -230,13 +236,15 @@ export default function WorkspaceCompaniesList(): ReactNode {
         <CompanyListStatisticsPanel numberOfCompanies={companies.length} />
         <TableList<CompanyWithCurrency>
           columns={stockDataColumns}
-          cells={stockDataCells}
+          cells={search(stockDataCells)}
           allowSelection
           allowEdit
+          allowSearch
           selectionSet={selectionSet}
           onItemSelect={handleCompanySelection}
           onItemFinalize={handleCompanyChange}
           onColumnSelect={handleSortToggle}
+          onSearch={handleCriteriaChange}
         />
       </Container>
     </div>
