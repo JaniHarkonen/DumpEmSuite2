@@ -12,6 +12,7 @@ import MarkdownChart from "@renderer/components/markdown/MarkdownChart/MarkdownC
 
 
 const INDENT1: ReactNode = <>&emsp;</>;
+const INDENTH: ReactNode = <>&ensp;</>;
 
 export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNode[] {
   return astNodes.map((astNode: ASTNode, index: number) => {
@@ -42,7 +43,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
       return (
         <span key={key}>
           <strong>{pointCharacter}</strong>
-          {INDENT1}
+          {INDENTH}
           {childNodes}
           <br />
         </span>
@@ -57,7 +58,7 @@ export function renderAST(astNodes: ASTNode[], keyPrefix: string = ""): ReactNod
       case "list-con": return buildListPoint("-");
       case "list-conclusion": return buildListPoint("⇛");
       case "list-important": return buildListPoint("!");
-      case "list-info": return buildListPoint("––");
+      case "list-info": return buildListPoint("•");
       case "list-main": return buildListPoint("–");
       case "list-pro": return buildListPoint("+");
       case "list-question": return buildListPoint("?");

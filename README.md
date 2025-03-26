@@ -10,6 +10,7 @@ customizable giving you full control over how much data you have at your disposa
 **New features**
 - Search fields can now be used to look for items in lists.
 - Company profile selection is now maintained in the extra info of a tab.
+- Changed list sub-bulletpoint to a • from the previous --
 
 **Bug fixes**
 - When opening an existing workspace, the macro sectors didn't get loaded in properly.
