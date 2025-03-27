@@ -10,10 +10,11 @@ customizable giving you full control over how much data you have at your disposa
 **New features**
 - Search fields can now be used to look for items in lists.
 - Company profile selection is now maintained in the extra info of a tab.
-- Changed list sub-bulletpoint to a • from the previous --
+- Changed list sub-bulletpoint to a • from the previous
 
 **Bug fixes**
 - When opening an existing workspace, the macro sectors didn't get loaded in properly.
+- When selecting another company on the "Profiles"-tab, the company profile note didn't change while being edited leading to the previous profile potentially replacing the profile of the selected company.
 
 ### Version v.2.0.1 (26.02.2025)
 

@@ -24,7 +24,7 @@ type Props = {
 };
 
 export default function MarkdownEditor(props: Props) {
-  const pInitialValue: string = props.initialValue || "";
+  const pInitialValue: string | null = props.initialValue ?? null;
   const pOnSaveChanges: OnSaveNoteChanges = props.onSaveChange || function(){ };
   const pAllowEdit: boolean = props.allowEdit ?? true;
   const pEditorID: string = props.editorID || "markdown-editor";
@@ -58,7 +58,9 @@ export default function MarkdownEditor(props: Props) {
 
   const {formatKey} = useTabKeys();
 
-  useEffect(() => setMarkdown(pInitialValue), [pInitialValue]);
+  useEffect(() => {
+    setMarkdown(pInitialValue || "");
+  }, [pInitialValue]);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setWasEdited(e.target.value !== markdown);
@@ -93,7 +95,9 @@ export default function MarkdownEditor(props: Props) {
               autoFocus={true}
               defaultValue={markdown}
               {...hotkey({
-                "blur": (e: KeyboardEvent<HTMLTextAreaElement>) => handleFinalize((e.target as HTMLTextAreaElement).value),
+                "blur": (e: KeyboardEvent<HTMLTextAreaElement>) => {
+                  handleFinalize((e.target as HTMLTextAreaElement).value)
+                },
                 "save": (e: KeyboardEvent<HTMLTextAreaElement>) => {
                   e.preventDefault();
                   handleSave(e.currentTarget.value);

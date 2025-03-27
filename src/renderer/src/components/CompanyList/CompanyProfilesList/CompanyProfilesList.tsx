@@ -55,6 +55,7 @@ export default function CompanyProfilesList(props: Props): ReactNode {
   });
 
   const {
+    searchCriteria,
     handleCriteriaChange,
     search
   } = useSearch();
@@ -99,6 +100,7 @@ export default function CompanyProfilesList(props: Props): ReactNode {
             onItemFocus={handleCompanySelection}
             columns={stockDataColumns}
             cells={search(stockDataCells)}
+            searchInputs={searchCriteria}
             onColumnSelect={handleSortToggle}
             onSearch={handleCriteriaChange}
           />
