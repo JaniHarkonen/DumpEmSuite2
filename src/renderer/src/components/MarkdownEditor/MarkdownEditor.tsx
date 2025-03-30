@@ -80,10 +80,11 @@ export default function MarkdownEditor(props: Props) {
                 enableFilter={false}
               />)}
               <span className="ml-medium-length">
-                {
-                  wasEdited ? <>* Unsaved changes detected! Press CTRL + S to save..."</> : 
+                {wasEdited ? (
+                  <>* Unsaved changes detected! Press CTRL + S to save..."</>
+                ) : (
                   <>Press {hotkeyConfig!["blur"].key ?? ""} to stop editing.</>
-                }
+                )}
               </span>
             </div>
             <StyledTextarea
