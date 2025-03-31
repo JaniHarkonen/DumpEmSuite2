@@ -1,7 +1,7 @@
 import "./TableList.css";
 
 import { SelectionSet, SelectionItem } from "@renderer/hook/useSelection";
-import { ChangeEvent, KeyboardEvent, ReactNode, useContext } from "react";
+import { ChangeEvent, FormEvent, KeyboardEvent, ReactNode, useContext } from "react";
 import EditableText from "../editable/EditableText";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import { ASSETS } from "@renderer/assets/assets";
@@ -14,6 +14,8 @@ import fourDirectionalNavigation from "@renderer/hotkey/fourDirectionalNavigatio
 import keyboardActivation from "@renderer/hotkey/keyboardActivation";
 import { TabsContext } from "@renderer/context/TabsContext";
 import StyledInput from "../StyledInput/StyledInput";
+import SearchInput from "../SearchInput/SearchInput";
+import { SearchCriteria } from "@renderer/hook/useSearch";
 
 
 export type TableListColumn<T> = {
@@ -49,16 +51,21 @@ export type OnItemSelect<T> =
 export type OnItemFinalize<T> = 
   (dataCell: TableListDataCell<T>, changes: EditChanges<T>) => void;
 
+export type OnSearch = (accessor: string, filterValue: string) => void;
+
 type Props<T> = {
   columns: TableListColumn<T>[];
   cells: TableListDataCell<T>[];
   allowSelection?: boolean;
   allowEdit?: boolean;
   selectionSet?: SelectionSet<T>;
+  allowSearch?: boolean;
+  searchInputs?: SearchCriteria;
   onColumnSelect?: OnColumnSelect<T>;
   onItemFocus?: OnItemFocus<T>;
   onItemSelect?: OnItemSelect<T>;
   onItemFinalize?: OnItemFinalize<T>;
+  onSearch?: OnSearch;
 };
 
 export type TableListProps<T> = Props<T>;
@@ -69,10 +76,13 @@ export default function TableList<T>(props: Props<T>): ReactNode {
   const pAllowSelection: boolean = props.allowSelection ?? false;
   const pAllowEdit: boolean = props.allowEdit ?? false;
   const pSelectionSet: SelectionSet<T> = props.selectionSet || {};
+  const pAllowSearch: boolean = props.allowSearch ?? true;
+  const pSearchInputs: SearchCriteria = props.searchInputs || {};
   const pOnColumnSelect: OnColumnSelect<T> = props.onColumnSelect || function(){ };
   const pOnItemFocus: OnItemFocus<T> = props.onItemFocus || function(){ };
   const pOnItemSelect: OnItemSelect<T> = props.onItemSelect || function(){ };
   const pOnItemFinalize: OnItemFinalize<T> = props.onItemFinalize || function(){ };
+  const pOnSearch: OnSearch = props.onSearch || function(){ };
 
   const {tabIndex} = useContext(TabsContext);
   const {theme} = useTheme();
@@ -173,19 +183,6 @@ export default function TableList<T>(props: Props<T>): ReactNode {
       ), keyboardActivation(hotkey)
     );
 
-    if( index === 0 ) { 
-      return (
-        <div
-          {...theme(classNameConstructor())}
-          key={key}
-          tabIndex={tabIndex()}
-          {...hotkeyListener}
-        >
-          {dataElement}
-        </div>
-      );
-    }
-
     return (
       <div
         {...theme(classNameConstructor())}
@@ -227,6 +224,16 @@ export default function TableList<T>(props: Props<T>): ReactNode {
               <strong>{column.caption}</strong>
             </span>
           </div>
+        );
+      })}
+      {pAllowSearch && pColumns.map((column: TableListColumn<T>) => {
+        return (
+          <SearchInput
+            key={formatKey("list-table-filter" + (column.accessor as string))}
+            className="mr-small-length ml-small-length w-100"
+            onChange={(e: FormEvent<HTMLInputElement>) => pOnSearch(column.accessor as string, e.currentTarget.value)}
+            value={pSearchInputs[column.accessor as string] ?? ""}
+          />
         );
       })}
       {pData.map((dataCell: TableListDataCell<T>) => {

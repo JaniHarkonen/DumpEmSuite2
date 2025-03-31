@@ -18,6 +18,7 @@ import StyledButton from "@renderer/components/StyledButton/StyledButton";
 import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 import useTabKeys from "@renderer/hook/useTabKeys";
+import useViewEvents from "@renderer/hook/useViewEvents";
 
 
 const TAGS = {
@@ -30,6 +31,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
   const pOnUpdate: OnSplitsUpdate | undefined = props.onUpdate;
 
   const {formatKey} = useTabKeys();
+  const {emit} = useViewEvents();
   const {openModal} = useContext(ModalContext);
   const {workspaceConfig} = useContext(WorkspaceContext);
   const {
@@ -44,7 +46,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     handleTabSplit,
     handleDividerMove,
     handleTabAdd: addTab,
-    handleTabRemove: removeTab
+    handleTabRemove: removeTab,
+    handleExtraInfo
   } = useFlexibleSplits({
     splitTreeBlueprint: pSceneBlueprint,
     contentProvider: pContentProvider,
@@ -72,6 +75,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
         caption: tab.caption
       }
     });
+    emit(null, "filtration-steps-changed");
   };
 
   const handleTabRemove = (
@@ -83,6 +87,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
       <YesNoModal onYes={() => {
         removeTab(targetNode, tab);
         databaseAPI.deleteFilterationStep({ step_id: tab.id });
+        emit(null, "filtration-steps-changed");
       }}>
         <div>
           <div>
@@ -115,6 +120,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
     };
     changeTabCaption(targetNode, targetTab, caption);
     databaseAPI.postFilterationStepCaption({ filterationStep: changedStep });
+    emit(null, "filtration-steps-changed");
   };
   
   const renderTabControls = (targetNode: SplitTreeValue): ReactNode => {
@@ -126,7 +132,7 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
           {tabs.map((tab: Tab) => {
             const isFundamental: boolean = tab.tags.includes(TAGS.permanent);
 
-            return(
+            return (
               <EditableTabButton
                 key={formatKey(tab.workspace + "-tab-control-button-" + tab.id)}
                 tab={tab}
@@ -165,7 +171,8 @@ export default function AnalysesView(props: UseFlexibleSplitsProps): ReactNode {
         handleTabRelocation, 
         handleTabReorder,
         handleTabSplit,
-        handleDividerMove
+        handleDividerMove,
+        handleExtraInfo
       }}
     >
       {splitTree && <SplitView renderControls={renderTabControls} />}

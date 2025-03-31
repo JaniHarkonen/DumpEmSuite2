@@ -21,6 +21,7 @@ import { ModalContext } from "@renderer/context/ModalContext";
 import YesNoModal from "@renderer/layouts/modals/YesNoModal/YesNoModal";
 import useFilterationStepStocks from "@renderer/hook/useFilterationStepStocks";
 import useViewEvents from "@renderer/hook/useViewEvents";
+import useSearch from "@renderer/hook/useSearch";
 
 
 export const COMPANIES_LIST_COLUMNS: TableListColumn<CompanyWithCurrency>[] = [
@@ -138,14 +139,6 @@ export default function WorkspaceCompaniesList(): ReactNode {
     sortOrder: activeTab?.extra?.sortOrder
   });
 
-  const handleSortToggle = (column: TableListColumn<CompanyWithCurrency>) => {
-    const settings: SortSettings = sortBy(column.accessor);
-    setExtraInfo && setExtraInfo({
-      sortField: settings.sortField,
-      sortOrder: settings.sortOrder
-    });
-  };
-
     // Fix the stock data to be compatible with the table component
   const stockDataCells: TableListDataCell<CompanyWithCurrency>[] = 
     sortedData.map((stock: CompanyWithCurrency) => {
@@ -164,8 +157,25 @@ export default function WorkspaceCompaniesList(): ReactNode {
       };
     });
 
+  const {
+    searchCriteria,
+    handleCriteriaChange,
+    search
+  } = useSearch();
+
+  const handleSortToggle = (column: TableListColumn<CompanyWithCurrency>) => {
+    const settings: SortSettings = sortBy(column.accessor);
+    setExtraInfo && setExtraInfo({
+      sortField: settings.sortField,
+      sortOrder: settings.sortOrder
+    });
+  };
+
   const handleAddCompany = (company: AsString<Company>) => {
-    ifQuerySuccessful(databaseAPI.postNewCompany({ company }), fetchAllCompanies);
+    ifQuerySuccessful(databaseAPI.postNewCompany({ company }), () => {
+      fetchAllCompanies();
+      emit(null, "companies-changed");
+    });
   };
 
   const handleCompanyRemove = () => {
@@ -177,7 +187,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
       fetchAllCompanies();
       delistStocks(...companies.map((company: CompanyWithCurrency) => company.company_id.toString()));
       resetSelection();
-      emit(companies, "company-removed");
+      emit(companies, "companies-changed");
     });
   };
 
@@ -195,7 +205,10 @@ export default function WorkspaceCompaniesList(): ReactNode {
       company: dataCell.data, 
       attributes: changes.columns as (keyof Company)[], 
       values: changes.values
-    }), fetchAllCompanies);
+    }), () => {
+      fetchAllCompanies();
+      emit(null, "companies-changed");
+    });
   };
 
   const handleImport = () => {
@@ -230,13 +243,16 @@ export default function WorkspaceCompaniesList(): ReactNode {
         <CompanyListStatisticsPanel numberOfCompanies={companies.length} />
         <TableList<CompanyWithCurrency>
           columns={stockDataColumns}
-          cells={stockDataCells}
+          cells={search(stockDataCells)}
           allowSelection
           allowEdit
+          allowSearch
           selectionSet={selectionSet}
+          searchInputs={searchCriteria}
           onItemSelect={handleCompanySelection}
           onItemFinalize={handleCompanyChange}
           onColumnSelect={handleSortToggle}
+          onSearch={handleCriteriaChange}
         />
       </Container>
     </div>

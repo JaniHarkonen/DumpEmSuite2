@@ -57,10 +57,6 @@ export class DatabaseManager {
   ): void {
       // Abort if database is already open
     if( this.openDatabases.has(databaseName) ) {
-      // callback && callback({
-      //   name: "already-open", 
-      //   message: "Database '" + databaseName + "' is already open!"
-      // });
       callback && callback(null);
       return;
     }

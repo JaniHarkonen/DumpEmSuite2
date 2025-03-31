@@ -1,4 +1,4 @@
-# DumpEm Suite 2 (v2.0.1)
+# DumpEm Suite 2 (v2.0.2)
 
 DumpEm Suite 2 is an investment analysis application I built mainly for my personal use to aid me with the research process. DumpEm Suite 2 lets you carry out a filtration process on a set of candidate companies as well as write analyses via its markdown-based notes complete with custom widgets such as charts and quarterly earnings tables. DumpEm Suite 2 is also highly 
 customizable giving you full control over how much data you have at your disposal at any given time. The Flexible Splits -system lets you view tabs side-by-side or collapse them and simply focus on one view at a time. Hotkeys, that can be used to quickly navigate the program, are also customizable alongside the app theme.
@@ -6,6 +6,21 @@ customizable giving you full control over how much data you have at your disposa
 ![DumpEm Suite v.2.0.1](https://github.com/JaniHarkonen/DumpEmSuite2/blob/main/screenshot.png)
 
 ## Change log
+
+### Version v.2.0.2 (31.3.2025)
+
+**New features**
+- Search fields can now be used to look for items in lists, such as companies.
+- Company profile selection is now maintained in the extra info of a tab.
+- Changed list sub-bulletpoint to a • from the previous
+
+**Bug fixes**
+- When opening an existing workspace, the macro sectors didn't get loaded in properly.
+- When selecting another company on the "Profiles"-tab, the company profile note didn't change while being edited leading to the previous profile potentially replacing the profile of the selected company.
+- The annual earnings projector markdown widget was sensitive to the order of its configuration tags (`<cashflow>` and `<market-cap>`). Entering the tags in the wrong order caused the markdown to become corrupt when the values of the widget were changed.
+- Changing the caption of a filtration step was not reflected in the filtration step drop menu of submission forms without refresh.
+- Changing the information of a company was not reflected in the stock lists of filtration steps.
+- Changing the profile information of a company was not reflected in the profile found in the fundamental filtration step.
 
 ### Version v.2.0.1 (26.02.2025)
 

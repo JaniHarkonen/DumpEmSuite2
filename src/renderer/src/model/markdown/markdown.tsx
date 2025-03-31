@@ -5,6 +5,5 @@ import { parse } from "./parser";
 
 
 export function renderMarkdown(markdownString: string, keyPrefix: string): ReactNode[] {
-  console.log(tokenize(markdownString))
   return renderAST(parse(tokenize(markdownString)), keyPrefix);
 }

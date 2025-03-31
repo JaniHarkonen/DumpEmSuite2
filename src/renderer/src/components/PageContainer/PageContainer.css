@@ -17,6 +17,6 @@
 
 @container page-container (width < 1000px) {
   .page-content-container {
-    width: 100%;
+    width: calc(100% - var(--strong-length));
   }
 }

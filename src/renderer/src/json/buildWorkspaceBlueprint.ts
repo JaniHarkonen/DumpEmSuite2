@@ -1,5 +1,6 @@
 import { SceneConfigBlueprint, TabBlueprint } from "@renderer/model/tabs";
 import { FilterationStep, MacroSector } from "src/shared/schemaConfig";
+import buildSectorBlueprint from "./buildSectorBlueprint";
 
 
 export function buildWorkspaceBlueprint(
@@ -242,38 +243,7 @@ export function buildWorkspaceBlueprint(
       caption: macroSector.sector_name || "",
       contentTemplate: "view-sector-analysis",
       tags: [],
-      sceneConfigBlueprint: {
-        splitTree: {
-          root: {
-            isFork: true,
-            divider: {
-              direction: "horizontal",
-              value: 50
-            },
-            left: {
-              isFork: true,
-              divider: {
-                direction: "horizontal",
-                value: 50
-              },
-              left: {
-                isFork: true,
-                divider: {
-                  direction: "horizontal",
-                  value: 50
-                },
-                left: {
-                  isFork: false,
-                  value: {
-                    tabs: [],
-                    activeTabIndex: 0
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+      sceneConfigBlueprint: buildSectorBlueprint(macroSector.sector_id, workspaceID),
       order: 0
     };
   };

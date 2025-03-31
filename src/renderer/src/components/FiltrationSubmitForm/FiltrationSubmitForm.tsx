@@ -6,6 +6,7 @@ import StyledButton from "../StyledButton/StyledButton";
 import useTabKeys from "@renderer/hook/useTabKeys";
 import StyledInput from "../StyledInput/StyledInput";
 import StyledSelect from "../StyledSelect/StyledSelect";
+import useViewEvents from "@renderer/hook/useViewEvents";
 
 
 type OnFiltrationSubmit = (filtrationStep: FilterationStep, preserveTags: boolean) => void;
@@ -32,10 +33,11 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
   const [preserveTags, setPreserveTags] = useState<boolean>(false);
 
   const {formatKey} = useTabKeys();
+  const {subscribe, unsubscribe} = useViewEvents();
 
   const databaseAPI: BoundDatabaseAPI = useDatabase().databaseAPI!;
 
-  useEffect(() => {
+  const fetchAllFiltrationSteps = () => {
     databaseAPI.fetchAllFiltrationSteps().then((result: FetchResult<FilterationStep>) => {
       const stepTable: FiltrationStepTable = {};
       result.rows
@@ -44,6 +46,13 @@ export default function FiltrationSubmitForm(props: Props): ReactNode {
       setFiltrationSteps(stepTable);
       setSubmitTarget(stepTable[Object.keys(stepTable)[0]] ?? null);
     });
+  };
+
+  useEffect(() => {
+    fetchAllFiltrationSteps();
+    subscribe("filtration-steps-changed", fetchAllFiltrationSteps);
+    
+    return () => unsubscribe("filtration-steps-changed", fetchAllFiltrationSteps);
   }, []);
 
   const handleSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {

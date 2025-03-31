@@ -126,6 +126,14 @@ textarea {
   height: max-content;
 }
 
+.w-min-content {
+  width: min-content;
+}
+
+.h-min-content {
+  height: min-content;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -489,6 +497,10 @@ textarea {
 
 .pl-ultra-strong-length {
   padding-left: var(--ultra-strong-length);
+}
+
+.pl-small-size {
+  padding-left: var(--small-size);
 }
 
 

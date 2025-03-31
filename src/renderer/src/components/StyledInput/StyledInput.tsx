@@ -9,6 +9,8 @@ type Props = {
   reactRef?: MutableRefObject<HTMLInputElement | null>;
 } & HTMLProps<HTMLInputElement>
 
+export type StyledInputProps = Props;
+
 export default function StyledInput(props: Props): ReactNode {
   const pClassName: string = props.className || "";
   const pRef: MutableRefObject<HTMLInputElement | null> | undefined = props.reactRef ?? undefined;

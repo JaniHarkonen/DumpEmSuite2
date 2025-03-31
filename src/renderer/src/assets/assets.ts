@@ -3,6 +3,7 @@ import iconButtonTrashCanBlack from "./icons/action/trash-can-black-icon.svg";
 import iconButtonEditBlack from "./icons/action/edit-black-icon.svg";
 import iconButtonRevertBlack from "./icons/action/revert-black-icon.svg";
 import iconButtonFullscreenBlack from "./icons/action/fullscreen-black-icon.svg";
+import iconButtonMagnifyingGlassBlack from "./icons/action/magnifying-glass-black-icon.svg";
 import iconFilePDFBlack from "./icons/file/file-pdf-black-icon.svg";
 import iconFileCSVBlack from "./icons/file/file-csv-black-icon.svg";
 import iconFileHTMLBlack from "./icons/file/file-html-black-icon.svg";
@@ -43,6 +44,9 @@ export const ASSETS = {
       },
       fullscreen: {
         black: iconButtonFullscreenBlack
+      },
+      magnifyingGlass: {
+        black: iconButtonMagnifyingGlassBlack
       }
     },
     files: {

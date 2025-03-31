@@ -8,6 +8,7 @@ import Container from "../Container/Container";
 import CompanyNotSelected from "../CompanyNotSelected/CompanyNotSelected";
 import MarkdownEditor from "../MarkdownEditor/MarkdownEditor";
 import StyledLink from "../StyledLink/StyledLink";
+import useTabKeys from "@renderer/hook/useTabKeys";
 
 
 type Props = {
@@ -16,11 +17,9 @@ type Props = {
 
 export default function CompanyProfile(props: Props): ReactNode {
   const pAllowEdit: boolean = props.allowEdit ?? false;
+  
+  const {formatKey} = useTabKeys();
   const {profile, company, onEditProfile} = useContext(ProfileContext);
-
-  if( !company ) {
-    return <CompanyNotSelected />;
-  }
 
   const sector: string = profile?.sector || "none";
   const investorsURL: string = profile?.investors_url || "none";
@@ -28,6 +27,10 @@ export default function CompanyProfile(props: Props): ReactNode {
   const description: string = profile?.profile_description || "";
 
   const handleEditProfile = (attribute: keyof Profile, value: string) => {
+    if( !company ) {
+      return;
+    }
+
     onEditProfile && onEditProfile({
       company,
       attributes: [attribute],
@@ -37,41 +40,48 @@ export default function CompanyProfile(props: Props): ReactNode {
   
   return (
     <PageContainer>
-      <PageHeader>{company.company_name as string}</PageHeader>
-      <Container className="user-select-text">
-        <h4>Sector</h4>
-        <EditableText
-          value={sector}
-          onFinalize={(value: string) => handleEditProfile("sector", value)}
-          editDisabled={!pAllowEdit}
-        >
-          {sector}
-        </EditableText>
-        <h4>Investors page</h4>
-        <EditableText
-          value={investorsURL}
-          onFinalize={(value: string) => handleEditProfile("investors_url", value)}
-          editDisabled={!pAllowEdit}
-        >
-          <StyledLink href={investorsURL}>{investorsURL}</StyledLink>
-        </EditableText>
-        <h4>Presence</h4>
-        <EditableText
-          value={presence}
-          onFinalize={(value: string) => handleEditProfile("presence", value)}
-          editDisabled={!pAllowEdit}
-        >
-          {presence}
-        </EditableText>
-        <h3>Description</h3>
-        <div className="aspect-ratio-16-9 w-100">
-          <MarkdownEditor
-            initialValue={description}
-            onSaveChange={(value: string) => handleEditProfile("profile_description", value)}
-            allowEdit={pAllowEdit}
-          />
-        </div>
-      </Container>
+      {company ? (
+        <>
+          <PageHeader>{company.company_name as string}</PageHeader>
+          <Container className="user-select-text">
+            <h4>Sector</h4>
+            <EditableText
+              value={sector}
+              onFinalize={(value: string) => handleEditProfile("sector", value)}
+              editDisabled={!pAllowEdit}
+            >
+              {sector}
+            </EditableText>
+            <h4>Investors page</h4>
+            <EditableText
+              value={investorsURL}
+              onFinalize={(value: string) => handleEditProfile("investors_url", value)}
+              editDisabled={!pAllowEdit}
+            >
+              <StyledLink href={investorsURL}>{investorsURL}</StyledLink>
+            </EditableText>
+            <h4>Presence</h4>
+            <EditableText
+              value={presence}
+              onFinalize={(value: string) => handleEditProfile("presence", value)}
+              editDisabled={!pAllowEdit}
+            >
+              {presence}
+            </EditableText>
+            <h3>Description</h3>
+            <div className="aspect-ratio-16-9 w-100">
+              <MarkdownEditor
+                key={formatKey("company-profile-editor-" + company.company_id)}
+                initialValue={description}
+                onSaveChange={(value: string) => handleEditProfile("profile_description", value)}
+                allowEdit={pAllowEdit}
+              />
+            </div>
+          </Container>
+        </>
+      ) : (
+        <CompanyNotSelected />
+      )}
     </PageContainer>
   );
 }

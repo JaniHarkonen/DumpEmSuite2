@@ -70,10 +70,10 @@ export default function AnnualEarningsProjector(props: Props): ReactNode {
 
     data[field] = value;
 
-    const updaterMarkdown: string = fixMarkdown(
+    const updatedMarkdown: string = fixMarkdown(
       markdown, [data.marketCap, data.cashflow], [pMarketCapNode!, pCashflowNode!]
     );
-    onComponentChange(updaterMarkdown);
+    onComponentChange(updatedMarkdown);
     setStartConditions(data);
   };
 
