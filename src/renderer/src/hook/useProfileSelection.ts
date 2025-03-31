@@ -16,7 +16,7 @@ type Returns = {
 };
 
 export default function useProfileSelection(): Returns {
-  const {subscribe, unsubscribe} = useViewEvents();
+  const {subscribe, unsubscribe, emit} = useViewEvents();
   const {extraInfo, setExtraInfo} = useExtraInfo();
   const [profileSelection, setProfileSelection] = useState<ProfileContextType>({
     profile: null,
@@ -52,12 +52,24 @@ export default function useProfileSelection(): Returns {
   };
 
   useEffect(() => {
-    const companyRemoved = (result: CompanyWithCurrency[]) => {
+      // Resets the selection when company info is changed
+    const companiesChanged = (result: CompanyWithCurrency[]) => {
       for( let company of result ) {
         if( company.company_id === profileSelection.company?.company_id ) {
           handleProfileSelection(null);
           break;
         }
+      }
+    };
+
+      // Re-fetches the company profile if the profile is changed somewhere
+    const profileChanged = (result: Company) => {
+      if( !profileSelection.company ) {
+        return;
+      }
+
+      if( profileSelection.company.company_id === result.company_id ) {
+        fetchCompanyProfile(result);
       }
     };
 
@@ -67,8 +79,13 @@ export default function useProfileSelection(): Returns {
       }
     }
 
-    subscribe("company-removed", companyRemoved);
-    return () => unsubscribe("company-removed", companyRemoved);
+    subscribe("companies-changed", companiesChanged);
+    subscribe("company-profile-changed", profileChanged);
+
+    return () => {
+      unsubscribe("companies-changed", companiesChanged);
+      unsubscribe("company-profile-changed", profileChanged);
+    };
   }, [profileSelection, extraInfo]);
 
   const handleProfileEdit = (changes: ProfileEditChanges) => {
@@ -79,6 +96,7 @@ export default function useProfileSelection(): Returns {
     }).then((result: PostResult) => {
       if( result.wasSuccessful ) {
         fetchCompanyProfile(changes.company);
+        emit(changes.company, "company-profile-changed");
       }
     });
   };

@@ -110,10 +110,11 @@ export default function CompanyAnalysisList(props: Props): ReactNode {
       resetSelection();
     };
 
-    subscribe("company-removed", refresh);
+    subscribe("companies-changed", refresh);
     subscribe("tags-changed", refresh);
+
     return () => {
-      unsubscribe("company-removed", refresh);
+      unsubscribe("companies-changed", refresh);
       unsubscribe("tags-changed", refresh); 
     };
   }, []);

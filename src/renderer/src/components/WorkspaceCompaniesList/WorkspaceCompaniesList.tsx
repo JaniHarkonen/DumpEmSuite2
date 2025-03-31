@@ -158,6 +158,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
     });
 
   const {
+    searchCriteria,
     handleCriteriaChange,
     search
   } = useSearch();
@@ -171,7 +172,10 @@ export default function WorkspaceCompaniesList(): ReactNode {
   };
 
   const handleAddCompany = (company: AsString<Company>) => {
-    ifQuerySuccessful(databaseAPI.postNewCompany({ company }), fetchAllCompanies);
+    ifQuerySuccessful(databaseAPI.postNewCompany({ company }), () => {
+      fetchAllCompanies();
+      emit(null, "companies-changed");
+    });
   };
 
   const handleCompanyRemove = () => {
@@ -183,7 +187,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
       fetchAllCompanies();
       delistStocks(...companies.map((company: CompanyWithCurrency) => company.company_id.toString()));
       resetSelection();
-      emit(companies, "company-removed");
+      emit(companies, "companies-changed");
     });
   };
 
@@ -201,7 +205,10 @@ export default function WorkspaceCompaniesList(): ReactNode {
       company: dataCell.data, 
       attributes: changes.columns as (keyof Company)[], 
       values: changes.values
-    }), fetchAllCompanies);
+    }), () => {
+      fetchAllCompanies();
+      emit(null, "companies-changed");
+    });
   };
 
   const handleImport = () => {
@@ -241,6 +248,7 @@ export default function WorkspaceCompaniesList(): ReactNode {
           allowEdit
           allowSearch
           selectionSet={selectionSet}
+          searchInputs={searchCriteria}
           onItemSelect={handleCompanySelection}
           onItemFinalize={handleCompanyChange}
           onColumnSelect={handleSortToggle}

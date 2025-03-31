@@ -16,6 +16,9 @@ customizable giving you full control over how much data you have at your disposa
 - When opening an existing workspace, the macro sectors didn't get loaded in properly.
 - When selecting another company on the "Profiles"-tab, the company profile note didn't change while being edited leading to the previous profile potentially replacing the profile of the selected company.
 - The annual earnings projector markdown widget was sensitive to the order of its configuration tags (`<cashflow>` and `<market-cap>`). Entering the tags in the wrong order caused the markdown to become corrupt when the values of the widget were changed.
+- Changing the caption of a filtration step was not reflected in the filtration step drop menu of submission forms without refresh.
+- Changing the information of a company was not reflected in the stock lists of filtration steps.
+- Changing the profile information of a company was not reflected in the profile found in the fundamental filtration step.
 
 ### Version v.2.0.1 (26.02.2025)
 

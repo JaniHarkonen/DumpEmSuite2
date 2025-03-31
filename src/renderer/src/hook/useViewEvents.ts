@@ -2,6 +2,7 @@ import { ViewEventListenerContext } from "@renderer/context/ViewEventListenerCon
 import removeArrayIndex from "@renderer/utils/removeArrayIndex";
 import { useContext } from "react";
 import { WorkspaceContext } from "@renderer/context/WorkspaceContext";
+import { ViewEvent } from "@renderer/model/viewEvents";
 
 
 type ViewEventListenerMap = {
@@ -16,9 +17,9 @@ export type ViewEventListenerWorkspaceMap = {
 };
 
 type Returns = {
-  subscribe: (eventKey: string, listener: ViewEventListener) => void;
-  unsubscribe: (eventKey: string, listener: ViewEventListener) => void;
-  emit: (result: any, eventKey: string) => void;
+  subscribe: (eventKey: ViewEvent, listener: ViewEventListener) => void;
+  unsubscribe: (eventKey: ViewEvent, listener: ViewEventListener) => void;
+  emit: (result: any, eventKey: ViewEvent) => void;
 };
 
 export type UseViewEventsReturns = Returns;
@@ -27,7 +28,7 @@ export default function useViewEvents(): Returns {
   const {eventListenersRef} = useContext(ViewEventListenerContext);
   const {workspaceConfig} = useContext(WorkspaceContext);
   
-  const subscribe = (eventKey: string, listener: ViewEventListener) => {
+  const subscribe = (eventKey: ViewEvent, listener: ViewEventListener) => {
     if( !eventListenersRef ) {
       return;
     }
@@ -47,7 +48,7 @@ export default function useViewEvents(): Returns {
     }
   };
 
-  const unsubscribe = (eventKey: string, listener: ViewEventListener) => {
+  const unsubscribe = (eventKey: ViewEvent, listener: ViewEventListener) => {
     if( !eventListenersRef ) {
       return;
     }
@@ -65,7 +66,7 @@ export default function useViewEvents(): Returns {
     }
   };
 
-  const emit = (result: any, eventKey: string) => {
+  const emit = (result: any, eventKey: ViewEvent) => {
     if( !eventListenersRef ) {
       return;
     }
