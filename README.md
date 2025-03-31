@@ -8,7 +8,7 @@ customizable giving you full control over how much data you have at your disposa
 ### Version v.2.0.2 (31.3.2025)
 
 **New features**
-- Search fields can now be used to look for items in lists.
+- Search fields can now be used to look for items in lists, such as companies.
 - Company profile selection is now maintained in the extra info of a tab.
 - Changed list sub-bulletpoint to a • from the previous
 
