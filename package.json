@@ -1,6 +1,6 @@
 {
   "name": "dumpem-suite-2",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "DumpEm Suite 2 is a market research app that provides a customizable, flexible UI coupled with useful analysis tools.",
   "main": "./out/main/index.js",
   "author": "Jani Härkönen",

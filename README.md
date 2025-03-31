@@ -1,4 +1,4 @@
-# DumpEm Suite 2 (v2.0.1)
+# DumpEm Suite 2 (v2.0.2)
 
 DumpEm Suite 2 is an investment analysis application I built mainly for my personal use to aid me with the research process. DumpEm Suite 2 lets you carry out a filtration process on a set of candidate companies as well as write analyses via its markdown-based notes complete with custom widgets such as charts and quarterly earnings tables. DumpEm Suite 2 is also highly 
 customizable giving you full control over how much data you have at your disposal at any given time. The Flexible Splits -system lets you view tabs side-by-side or collapse them and simply focus on one view at a time. Hotkeys, that can be used to quickly navigate the program, are also customizable alongside the app theme.
