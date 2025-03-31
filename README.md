@@ -5,7 +5,7 @@ customizable giving you full control over how much data you have at your disposa
 
 ## Change log
 
-### Version v.2.0.2 ()
+### Version v.2.0.2 (31.3.2025)
 
 **New features**
 - Search fields can now be used to look for items in lists.
